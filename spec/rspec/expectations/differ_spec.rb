@@ -23,7 +23,7 @@ end
 describe "Diff" do
   before(:each) do
     @options = OpenStruct.new(:diff_format => :unified, :context_lines => 3)
-    @differ = RSpec::Expectations::Differs::Default.new(@options)
+    @differ = RSpec::Expectations::Differ.new(@options)
   end
 
   it "should output unified diff of two strings" do
