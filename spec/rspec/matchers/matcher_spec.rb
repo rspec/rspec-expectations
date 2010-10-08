@@ -27,6 +27,30 @@ module RSpec
           @matcher.matches?(9)
           @matcher.failure_message_for_should_not.should == "expected 9 not to be a multiple of 3"
         end
+
+        it "does not respond to #does_not_match?" do
+          @matcher.should_not respond_to(:does_not_match?)
+        end
+      end
+
+      context "with a does_not_match block" do
+        let(:matcher) do
+          RSpec::Matchers::Matcher.new(:contain, 1, 2) do |*expected|
+            does_not_match do |actual|
+              expected.none? { |e| actual.include?(e) }
+            end
+          end
+        end
+
+        it "defines an appropriate does_not_match?" do
+          matcher.does_not_match?([1, 2, 3]).should be_false
+          matcher.does_not_match?([4, 5, 6]).should be_true
+        end
+
+        it "provides a default failure message for #should_not" do
+          matcher.does_not_match?([1, 2, 3])
+          matcher.failure_message_for_should_not.should == "expected [1, 2, 3] not to contain 1 and 2"
+        end
       end
 
       it "is not diffable by default" do

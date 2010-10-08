@@ -256,3 +256,31 @@ Feature: define matcher
 
     When I run "rspec scoped_matcher_spec.rb"
     Then the output should contain "3 examples, 0 failures"
+
+  Scenario: matcher with does_not_match
+    Given a file named "matcher_with_does_not_match_spec.rb" with:
+      """
+      RSpec::Matchers.define :contain do |*expected|
+        match do |actual|
+          expected.all? { |e| actual.include?(e) }
+        end
+
+        does_not_match do |actual|
+          expected.none? { |e| actual.include?(e) }
+        end
+      end
+
+      describe [1, 2, 3] do
+        it { should contain(1, 2) }
+        it { should_not contain(4, 5, 6) }
+
+        # deliberate failures
+        it { should contain(1, 4) }
+        it { should_not contain(1, 4) }
+      end
+      """
+    When I run "rspec matcher_with_does_not_match_spec.rb"
+    Then the output should contain all of these:
+      | 4 examples, 2 failures                    |
+      | expected [1, 2, 3] to contain 1 and 4     |
+      | expected [1, 2, 3] not to contain 1 and 4 |

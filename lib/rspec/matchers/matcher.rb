@@ -46,6 +46,16 @@ module RSpec
         @match_block = block
       end
 
+      def does_not_match(&block)
+        @does_not_match_block = block
+        class << self
+          define_method :does_not_match? do |actual|
+            @actual = actual
+            instance_exec(actual, &@does_not_match_block)
+          end
+        end
+      end
+
       # See RSpec::Matchers
       def match_unless_raises(exception=Exception, &block)
         @expected_exception = exception
