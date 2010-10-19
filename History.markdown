@@ -1,5 +1,12 @@
 ## rspec-expectations release history (incomplete)
 
+### 2.0.1 / 2010-10-18
+
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.0.0...v2.0.1)
+
+* Enhancements
+  * Make dependencies on other rspec gems consistent across gems
+
 ### 2.0.0 / 2010-10-10
 
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.0.0.rc...v2.0.0)
