@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency     'diff-lcs',    '>= 1.1.2'
   s.add_development_dependency 'cucumber',    ">= 0.6.2"
   s.add_development_dependency 'aruba',       ">= 0.1.1"
-  s.add_development_dependency 'rspec-core',  "~> 2.0.0"
-  s.add_development_dependency 'rspec-mocks', "~> 2.0.0"
+  s.add_development_dependency 'rspec-core',  "~> 2.0.1"
+  s.add_development_dependency 'rspec-mocks', "~> 2.0.1"
 end
 
