@@ -11,6 +11,7 @@ gem "autotest"
 gem "diff-lcs"
 gem "watchr"
 gem "rcov"
+gem "relish"
 
 case RUBY_VERSION
 when '1.9.2'
