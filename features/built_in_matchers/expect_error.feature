@@ -42,3 +42,18 @@ Feature: expect error
     Then the output should contain "2 examples, 1 failure"
     Then the output should contain "undefined method `non_existent_message'"
 
+  Scenario: expect error with block
+    Given a file named "expect_error_with_block_spec.rb" with:
+      """
+      describe "accessing expected error" do
+        it "should pass the error to the block" do
+          my_error = ArgumentError.new
+          expect{raise my_error}.to raise_error(ArgumentError) do |raised_error|
+            raised_error.should eq my_error
+          end
+        end
+      end
+      """
+      When I run "rspec ./expect_error_with_block_spec.rb"
+      Then the output should contain "1 example, 0 failures"
+
