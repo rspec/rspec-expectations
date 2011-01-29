@@ -41,16 +41,18 @@ Feature: expect error
     When I run "rspec ./expect_no_error_spec.rb"
     Then the output should contain "2 examples, 1 failure"
     Then the output should contain "undefined method `non_existent_message'"
-
+  @wip
   Scenario: expect error with block
     Given a file named "expect_error_with_block_spec.rb" with:
       """
       describe "accessing expected error" do
         it "should pass the error to the block" do
-          my_error = ArgumentError.new
-          expect{raise my_error}.to raise_error(ArgumentError) do |raised_error|
-            raised_error.should eq my_error
-          end
+          expected_error = StandardError.new
+          actual_error = nil
+          expect{raise expected_error}.to raise_error(){|block_error|
+            actual_error = block_error
+          }
+          actual_error.should eq(expected_error)
         end
       end
       """
