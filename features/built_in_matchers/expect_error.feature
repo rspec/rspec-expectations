@@ -49,11 +49,8 @@ Feature: expect error
           it "should match the error message" do
             expect{ raise StandardError, 'my message'}.to raise_error(StandardError, 'my message')
           end
-        end
-
-        #deliberate failure
-        describe "unmatching error message" do
-          it "should match error" do
+          #deliberate failure
+          it "should match the error message" do
             expect{ raise StandardError, 'another message'}.to raise_error(StandardError, 'my message')
           end
         end
@@ -70,10 +67,8 @@ Feature: expect error
           it "should not match errors with a different message" do
             expect{raise StandardError, 'my message'}.to_not raise_error(StandardError, "another message")
           end
-        end
 
-        #deliberate failure
-        describe "mathcing no error with a message" do
+          #deliberate failure
           it "should not match errors with a different message" do
             expect{raise StandardError, "my message"}.to_not raise_error(StandardError, 'my message')
           end
