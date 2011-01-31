@@ -54,7 +54,7 @@ Feature: expect error
         #deliberate failure
         describe "unmatching error message" do
           it "should match error" do
-            expect{ raise StandardError, 'another message'}. to raise_error(StandardError, 'my message')
+            expect{ raise StandardError, 'another message'}.to raise_error(StandardError, 'my message')
           end
         end
       """
