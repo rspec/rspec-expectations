@@ -41,7 +41,28 @@ Feature: expect error
     When I run "rspec ./expect_no_error_spec.rb"
     Then the output should contain "2 examples, 1 failure"
     Then the output should contain "undefined method `non_existent_message'"
-  @wip
+  
+  Scenario: expect error with a message
+    Given a file named "expect_error_with_message.rb" with:
+      """
+        describe "matching error message" do
+          it "should match the error message" do
+            expect{ raise StandardError, 'my message'}.to raise_error(StandardError, 'my message')
+          end
+        end
+
+        #deliberate failure
+        describe "unmatching error message" do
+          it "should match error" do
+            expect{ raise StandardError, 'another message'}. to raise_error(StandardError, 'my message')
+          end
+        end
+      """
+    When I run "rspec ./expect_error_with_message.rb"
+    Then the output should contain all of these:
+      | 2 examples, 1 failure                                                           |
+      | expected StandardError with "my message", got #<StandardError: another message> |
+
   Scenario: expect error with block
     Given a file named "expect_error_with_block_spec.rb" with:
       """
