@@ -60,8 +60,29 @@ Feature: expect error
       """
     When I run "rspec ./expect_error_with_message.rb"
     Then the output should contain all of these:
-      | 2 examples, 1 failure                                                           |
-      | expected StandardError with "my message", got #<StandardError: another message> |
+      | 2 examples, 1 failure                    |
+      | expected StandardError with "my message" |
+
+  Scenario: expect no error with message
+    Given a file named "expect_no_error_with_message.rb" with:
+      """
+        describe "matching no error with message" do
+          it "should not match errors with a different message" do
+            expect{raise StandardError, 'my message'}.to_not raise_error(StandardError, "another message")
+          end
+        end
+
+        #deliberate failure
+        describe "mathcing no error with a message" do
+          it "should not match errors with a different message" do
+            expect{raise StandardError, "my message"}.to_not raise_error(StandardError, 'my message')
+          end
+        end
+      """
+    When I run "rspec ./expect_no_error_with_message.rb"
+    Then the output should contain all of these:
+      | 2 examples, 1 failure                       |
+      | expected no StandardError with "my message" |
 
   Scenario: expect error with block
     Given a file named "expect_error_with_block_spec.rb" with:
