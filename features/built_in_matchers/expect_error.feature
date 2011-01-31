@@ -70,7 +70,7 @@ Feature: expect error
         it "should pass the error to the block" do
           expected_error = StandardError.new
           actual_error = nil
-          expect{raise expected_error}.to raise_error(){|block_error|
+          expect{raise expected_error}.to raise_error{|block_error|
             actual_error = block_error
           }
           actual_error.should eq(expected_error)
