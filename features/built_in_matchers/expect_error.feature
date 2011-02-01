@@ -83,16 +83,25 @@ Feature: expect error
     Given a file named "expect_error_with_block_spec.rb" with:
       """
       describe "accessing expected error" do
+        let(:expected_error){ StandardError.new}
+
         it "should pass the error to the block" do
-          expected_error = StandardError.new
-          actual_error = nil
           expect{raise expected_error}.to raise_error{|block_error|
-            actual_error = block_error
+            block_error.should eq(expected_error)
           }
-          actual_error.should eq(expected_error)
         end
+
+        # deliberate failure to assert block called
+        it "should pass the error to the block" do
+          expect{raise expected_error}.to raise_error{|block_error|
+            block_error.should_not eq(expected_error)
+          }
+        end
+
       end
       """
       When I run "rspec ./expect_error_with_block_spec.rb"
-      Then the output should contain "1 example, 0 failures"
+      Then the output should contain all of these:
+        | 2 examples, 1 failure |
+        | expected #<StandardError: StandardError> not to equal #<StandardError: StandardError> |
 
