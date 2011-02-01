@@ -66,11 +66,11 @@ Feature: raise_error matcher
     When I run "rspec ./expect_no_error_spec.rb"
     Then the output should contain "2 examples, 1 failure"
     Then the output should contain "undefined method `non_existent_message'"
-  
+
   Scenario: expect error with a message
     Given a file named "expect_error_with_message.rb" with:
       """
-        describe "matching error message" do
+        describe "matching error message with string" do
           it "should match the error message" do
             expect{ raise StandardError, 'my message'}.to raise_error(StandardError, 'my message')
           end
@@ -84,6 +84,25 @@ Feature: raise_error matcher
     Then the output should contain all of these:
       | 2 examples, 1 failure                    |
       | expected StandardError with "my message" |
+
+  Scenario: expect error with regular expression
+    Given a file named "expect_error_with_regex.rb" with:
+      """
+      describe "matching error message with regex" do
+        it "should match the error message" do
+          expect{raise StandardError, "my message"}.to raise_error(StandardError, /mess/)
+        end
+
+        # deliberate failure
+        it "should match the error message" do
+          expect{raise StandardError, "my message"}.to raise_error(StandardError, /pass/)
+        end
+      end
+      """
+    When I run "rspec ./expect_error_with_regex.rb"
+    Then the output should contain all of these:
+      | 2 examples, 1 failure                               |
+      | expected StandardError with message matching /pass/ |
 
   Scenario: expect no error with message
     Given a file named "expect_no_error_with_message.rb" with:
