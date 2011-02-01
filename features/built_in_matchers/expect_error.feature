@@ -1,7 +1,32 @@
-Feature: expect error
+Feature: raise_error matcher
 
-  Expect a proc to raise an error when called.
-  
+  The raise_error matcher is used to specify that a block of code
+  raises an error.  The most basic form passes if any error is thrown:
+
+    expect { raise StandardError }.to raise_error
+
+  You'll often want to specify that a particular error is thrown:
+
+    expect { raise ArgumentError }.to raise_error(ArgumentError)
+
+  If you care about the message given to the error, you can specify 
+  that using both strings and regular expressions:
+
+    expect { raise StandardError, "my message" }.to raise_error(StandardError, "my message")
+    expect { raise StandardError, "my message" }.to raise_error(StandardError, /mess/)
+
+  If you want to assert on the error itself you can pass a block to the matcher:
+
+    expect { raise StandardError }.to raise_error{|error| error.should be_a_kind_of(StandardError)}
+
+  You can also assert that the block of code does not raise an error:
+
+    expect { 1 + 1 }.to_not raise_error # fails if any error is raised
+    expect { 1 + 1 }.to_not raise_error(ArgumentError) # passes if anything other than an ArgumentError is raised
+    expect { 1 + 1 }.to_not raise_error(ArgumentError, "my message") # passes if an ArgumentError is raise with a different message
+    expect { 1 + 1 }.to_not raise_error(ArgumentError, /mess/) # passes if an ArgumentError is raised that doesn't match the regexp
+
+
   Scenario: expect error
     Given a file named "expect_error_spec.rb" with:
       """
