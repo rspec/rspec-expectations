@@ -277,10 +277,20 @@ describe "should change(actual, message).from(old)" do
       expect { @instance.some_value = "astring" }.to change(@instance, :some_value).from("string")
     end
 
+    it "passes when the expected regexp =~ attribute before executing block" do
+      expect { @instance.some_value = "astring" }.to change(@instance, :some_value).from(/^string/)
+    end
+
     it "fails when attribute is not == to expected value before executing block" do
       expect do
         expect { @instance.some_value = "knot" }.to change(@instance, :some_value).from("cat")
       end.to fail_with("some_value should have initially been \"cat\", but was \"string\"")
+    end
+
+    it "fails when the expected regexp !~ attribute before executing block" do
+      expect do
+        expect { @instance.some_value = "knot" }.to change(@instance, :some_value).from(/cat/)
+      end.to fail_with("some_value should have initially been /cat/, but was \"string\"")
     end
   end
 end
@@ -295,10 +305,20 @@ describe "should change{ block }.from(old)" do
     expect { @instance.some_value = "astring" }.to change{@instance.some_value}.from("string")
   end
 
+  it "passes when the expected regexp =~ attribute before executing block" do
+    expect { @instance.some_value = "astring" }.to change{@instance.some_value}.from(/^string/)
+  end
+
   it "fails when attribute is not == to expected value before executing block" do
     expect do
       expect { @instance.some_value = "knot" }.to change{@instance.some_value}.from("cat")
     end.to fail_with("result should have initially been \"cat\", but was \"string\"")
+  end
+
+  it "fails when the expected regexp !~ attribute before executing block" do
+    expect do
+      expect { @instance.some_value = "knot" }.to change{@instance.some_value}.from(/cat/)
+    end.to fail_with("result should have initially been /cat/, but was \"string\"")
   end
 end
 
@@ -329,10 +349,20 @@ describe "should change(actual, message).to(new)" do
       expect { @instance.some_value = "cat" }.to change(@instance, :some_value).to("cat")
     end
 
+    it "passes when the expected regexp =~ attribute after executing block" do
+      expect { @instance.some_value = "cat" }.to change(@instance, :some_value).to(/cat/)
+    end
+
     it "fails when attribute is not == to expected value after executing block" do
       expect do
         expect { @instance.some_value = "cat" }.to change(@instance, :some_value).from("string").to("dog")
       end.to fail_with("some_value should have been changed to \"dog\", but is now \"cat\"")
+    end
+
+    it "fails when the expected regexp !~ attribute after executing block" do
+      expect do
+        expect { @instance.some_value = "cat" }.to change(@instance, :some_value).from("string").to(/dog/)
+      end.to fail_with("some_value should have been changed to /dog/, but is now \"cat\"")
     end
   end
 end
@@ -347,10 +377,20 @@ describe "should change{ block }.to(new)" do
     expect { @instance.some_value = "cat" }.to change{@instance.some_value}.to("cat")
   end
 
+  it "passes when the expected regexp =~ attribute after executing block" do
+    expect { @instance.some_value = "cat" }.to change{@instance.some_value}.to(/cat/)
+  end
+
   it "fails when attribute is not == to expected value after executing block" do
     expect do
       expect { @instance.some_value = "cat" }.to change{@instance.some_value}.from("string").to("dog")
     end.to fail_with("result should have been changed to \"dog\", but is now \"cat\"")
+  end
+
+  it "fails when the expected regexp !~ attribute after executing block" do
+    expect do
+      expect { @instance.some_value = "cat" }.to change{@instance.some_value}.from("string").to(/dog/)
+    end.to fail_with("result should have been changed to /dog/, but is now \"cat\"")
   end
 end
 
