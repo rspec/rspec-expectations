@@ -32,9 +32,9 @@ MESSAGE
       end
       
       def failure_message_for_should
-        if @given_from && !matches_pattern?(@from, @before)
+        if @given_from && !given_matches_actual?(@from, @before)
           "#{message} should have initially been #{@from.inspect}, but was #{@before.inspect}"
-        elsif @given_to && !matches_pattern?(@to, @after)
+        elsif @given_to && !given_matches_actual?(@to, @after)
           "#{message} should have been changed to #{@to.inspect}, but is now #{@after.inspect}"
         elsif @amount
           "#{message} should have been changed by #{@amount.inspect}, but was changed by #{actual_delta.inspect}"
@@ -101,15 +101,15 @@ MESSAGE
       end
 
       def matches_before?
-        @given_from ? matches_pattern?(@from, @before) : true
+        @given_from ? given_matches_actual?(@from, @before) : true
       end
 
       def matches_after?
-        @given_to ? matches_pattern?(@to, @after) : true
+        @given_to ? given_matches_actual?(@to, @after) : true
       end
 
-      def matches_pattern?(given, actual)
-        given.is_a?(Regexp) ? (given =~ actual) : (given == actual)
+      def given_matches_actual?(given, actual)
+        given === actual
       end
 
       def matches_amount?
@@ -181,6 +181,11 @@ MESSAGE
     #   lambda {
     #     doctor.leave_office
     #   }.should change(doctor, :sign).from(/is in/).to(/is out/)
+    #
+    #   user = User.new(:type => "admin")
+    #   lambda {
+    #     user.symbolize_type
+    #   }.should change(user, :type).from(String).to(Symbol)
     #
     # == Notes
     #
