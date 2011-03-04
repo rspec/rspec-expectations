@@ -21,15 +21,20 @@ module RSpec
     # elegant, but it fixes the issue.
     def self.included(base)
       base.class_eval do
-        alias_method :method_missing_without_rspec_matchers, :method_missing
-        alias_method :method_missing, :method_missing_with_rspec_matchers
+        unless instance_methods.map { |m| m.to_s }.include?("method_missing_with_rspec_matchers")
+          include MethodMissing
+          alias_method :method_missing_without_rspec_matchers, :method_missing
+          alias_method :method_missing, :method_missing_with_rspec_matchers
+        end
       end
     end
 
-    def method_missing_with_rspec_matchers(method, *args, &block) # :nodoc:
-      return Matchers::BePredicate.new(method, *args, &block) if method.to_s =~ /^be_/
-      return Matchers::Has.new(method, *args, &block) if method.to_s =~ /^have_/
-      method_missing_without_rspec_matchers(method, *args, &block)
+    module MethodMissing
+      def method_missing_with_rspec_matchers(method, *args, &block) # :nodoc:
+        return Matchers::BePredicate.new(method, *args, &block) if method.to_s =~ /^be_/
+        return Matchers::Has.new(method, *args, &block) if method.to_s =~ /^have_/
+        method_missing_without_rspec_matchers(method, *args, &block)
+      end
     end
   end
 end
