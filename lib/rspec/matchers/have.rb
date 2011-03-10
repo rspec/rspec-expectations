@@ -2,6 +2,11 @@ module RSpec
   module Matchers
     class Have #:nodoc:
       def initialize(expected, relativity=:exactly)
+        if expected.nil?
+          relativity = :at_least
+          expected = 1
+        end
+
         @expected = (expected == :no ? 0 : expected)
         @relativity = relativity
         @actual = @collection_name = @plural_collection_name = nil
@@ -89,6 +94,9 @@ EOF
     end
 
     # :call-seq:
+    #   should have.named_collection__or__sugar
+    #   should_not have(number).named_collection__or_sugar
+    #
     #   should have(number).named_collection__or__sugar
     #   should_not have(number).named_collection__or__sugar
     #
@@ -111,6 +119,9 @@ EOF
     #
     # == Examples
     #
+    #   # Passes if team.players.size > 1
+    #   team.should have.players
+    #
     #   # Passes if team.players.size == 11
     #   team.should have(11).players
     #
@@ -119,7 +130,7 @@ EOF
     #
     #   # Passes if "this string".length == 11
     #   "this string".should have(11).characters #"characters" is pure sugar
-    def have(n)
+    def have(n = nil)
       Matchers::Have.new(n)
     end
     alias :have_exactly :have
