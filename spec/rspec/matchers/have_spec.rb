@@ -126,6 +126,20 @@ describe "have matcher" do
     end
   end
 
+  describe "should have.items" do 
+    it "passes if target has a collection of items with n members" do
+      owner = create_collection_owner_with(2)
+      owner.should have.items_in_collection_with_length_method
+      owner.should have.items_in_collection_with_size_method
+    end
+
+    it "passes if target has a collection of items with 0 members" do
+      owner = create_collection_owner_with(0)
+      owner.should_not have.items_in_collection_with_length_method
+      owner.should_not have.items_in_collection_with_size_method
+    end
+  end
+
   describe "should_not have(n).items" do
 
     it "passes if target has a collection of items with < n members" do
