@@ -1,8 +1,6 @@
 module RSpec
   module Matchers
-
     class Has
-
       def initialize(expected, *args)
         @expected, @args = expected, args
       end
@@ -20,16 +18,22 @@ module RSpec
       end
 
       def description
-        "have key #{@args[0].inspect}"
+        [method_description(@expected), args_description(@args)].compact.join(' ')
       end
 
     private
-
       def predicate(sym)
         "#{sym.to_s.sub("have_","has_")}?".to_sym
       end
 
-    end
+      def method_description(method)
+        method.to_s.gsub('_', ' ')
+      end
 
+      def args_description(args)
+        return nil if args.empty?
+        args.map { |arg| arg.inspect }.join(', ')
+      end
+    end
   end
 end

@@ -75,6 +75,22 @@ describe "Matchers should be able to generate their own descriptions" do
     {:a => "a"}.should have_key(:a)
     RSpec::Matchers.generated_description.should == "should have key :a"
   end
+
+  it "should have_some_method" do
+    object = Object.new
+    def object.has_eyes_closed?; true; end
+
+    object.should have_eyes_closed
+    RSpec::Matchers.generated_description.should == 'should have eyes closed'
+  end
+
+  it "should have_some_method(args*)" do
+    object = Object.new
+    def object.has_taste_for?(*args); true; end
+
+    object.should have_taste_for("blood", "victory")
+    RSpec::Matchers.generated_description.should == 'should have taste for "blood", "victory"'
+  end
   
   it "should have n items" do
     team.should have(3).players
