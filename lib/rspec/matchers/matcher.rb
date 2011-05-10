@@ -16,7 +16,7 @@ module RSpec
 
         @messages = {
           :docstrings => lambda { {:positive => "#{name_to_indicative_sentence}#{expected_to_sentence}",
-                                   :negative => "does not #{name_to_sentence}#{expected_to_sentence}".sub("not is", "is not") } },
+                                   :negative => "#{name_to_indicative_sentence(true)}#{expected_to_sentence}"} },
           :description => lambda {"#{name_to_sentence}#{expected_to_sentence}"},
           :failure_message_for_should => lambda {|actual| "expected #{actual.inspect} to #{name_to_sentence}#{expected_to_sentence}"},
           :failure_message_for_should_not => lambda {|actual| "expected #{actual.inspect} not to #{name_to_sentence}#{expected_to_sentence}"}
@@ -158,8 +158,13 @@ module RSpec
         split_words(@name)
       end
 
-      def name_to_indicative_sentence
-        to_indicative(name_to_sentence)
+      def name_to_indicative_sentence(negated=false)
+        if negated
+          indicative = to_indicative(name_to_sentence)
+          indicative =~ /is\s/ ? indicative.sub("is", "is not") : "does not #{name_to_sentence}"
+        else
+          to_indicative(name_to_sentence)
+        end
       end
 
       def expected_to_sentence

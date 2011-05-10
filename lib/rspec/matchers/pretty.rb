@@ -22,6 +22,7 @@ module RSpec
       def to_indicative(infinitive)
         changed = false
         { /be/ => "is",
+          /have/ => "has",
           /match/ => "matches"}.each_pair do |pattern, substitution|
           if infinitive =~ pattern
             infinitive.sub!(pattern, substitution)
