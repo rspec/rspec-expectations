@@ -64,9 +64,12 @@ module RSpec
         "throw #{expected}"
       end
 
-      def docstrings
-        {:positive => "throws #{expected}",
-         :negative => "does not throw #{expected}"}
+      def docstring_for_should
+        "throws #{expected}"
+      end
+
+      def docstring_for_should_not
+        "does not throw #{expected}"
       end
       
       private

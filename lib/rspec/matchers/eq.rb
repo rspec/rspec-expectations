@@ -44,8 +44,8 @@ MESSAGE
           "== #{_expected_}"
         end
 
-        docstrings do
-          {:positive => "== #{_expected_}"}
+        docstring_for_should do
+         "== #{_expected_}"
         end
       end
     end

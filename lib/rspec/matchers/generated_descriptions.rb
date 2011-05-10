@@ -16,14 +16,20 @@ module RSpec
     end
     
   private
-    
+
+    def self.docstring(negative=false)
+      if negative && last_matcher.respond_to?(:docstring_for_should_not)
+        last_matcher.docstring_for_should_not
+      elsif last_matcher.respond_to?(:docstring_for_should)
+        last_matcher.docstring_for_should
+      else
+        nil
+      end
+    end
+
     def self.last_description(negative=false)
-      if last_matcher.respond_to?(:docstrings)
-        if negative
-          last_matcher.docstrings[:negative]
-        else
-          last_matcher.docstrings[:positive]
-        end
+      if doc = docstring(negative)
+        doc
       else 
         last_matcher.respond_to?(:description) ? "#{last_should.to_s.sub("_", " ")} #{last_matcher.description}" : <<-MESSAGE
 When you call a matcher in an example without a String, like this:

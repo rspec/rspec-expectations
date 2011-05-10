@@ -15,8 +15,8 @@ module RSpec
         @match_for_should_not_block = nil
 
         @messages = {
-          :docstrings => lambda { {:positive => "#{name_to_indicative_sentence}#{expected_to_sentence}",
-                                   :negative => "#{name_to_indicative_sentence(true)}#{expected_to_sentence}"} },
+          :docstring_for_should => lambda { "#{name_to_indicative_sentence}#{expected_to_sentence}" },
+          :docstring_for_should_not => lambda { "#{name_to_indicative_sentence(true)}#{expected_to_sentence}" },
           :description => lambda {"#{name_to_sentence}#{expected_to_sentence}"},
           :failure_message_for_should => lambda {|actual| "expected #{actual.inspect} to #{name_to_sentence}#{expected_to_sentence}"},
           :failure_message_for_should_not => lambda {|actual| "expected #{actual.inspect} not to #{name_to_sentence}#{expected_to_sentence}"}
@@ -94,8 +94,13 @@ module RSpec
       end
 
       # See RSpec::Matchers
-      def docstrings(&block)
-        cache_or_call_cached(:docstrings, &block)
+      def docstring_for_should(&block)
+        cache_or_call_cached(:docstring_for_should, &block)
+      end
+
+      # See RSpec::Matchers
+      def docstring_for_should_not(&block)
+        cache_or_call_cached(:docstring_for_should_not, &block)
       end
 
       #Used internally by objects returns by +should+ and +should_not+.

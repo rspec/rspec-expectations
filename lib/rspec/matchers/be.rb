@@ -53,9 +53,12 @@ module RSpec
         "be"
       end
 
-      def docstrings
-        {:positive => "is",
-         :negative => "is not"}
+      def docstring_for_should
+        "is"
+      end
+
+      def docstring_for_should_not
+        "is not"
       end
 
       [:==, :<, :<=, :>=, :>, :===].each do |operator|
@@ -119,9 +122,12 @@ it is a bit confusing.
         "be #{@operator} #{expected_to_sentence}#{args_to_sentence}"
       end
 
-      def docstrings
-        {:positive => "is #{@operator} #{expected_to_sentence}#{args_to_sentence}",
-         :negative => "is not #{@operator} #{expected_to_sentence}#{args_to_sentence}"}
+      def docstring_for_should
+        "is #{@operator} #{expected_to_sentence}#{args_to_sentence}"
+      end
+
+      def docstring_for_should_not
+        "is not #{@operator} #{expected_to_sentence}#{args_to_sentence}"
       end
 
     end
@@ -161,9 +167,12 @@ it is a bit confusing.
         "#{prefix_to_sentence}#{expected_to_sentence}#{args_to_sentence}"
       end
 
-      def docstrings
-        {:positive => "is #{expected_to_sentence}#{args_to_sentence}",
-         :negative => "is not #{expected_to_sentence}#{args_to_sentence}"}
+      def docstring_for_should
+        "is #{expected_to_sentence}#{args_to_sentence}"
+      end
+
+      def docstring_for_should_not
+        "is not #{expected_to_sentence}#{args_to_sentence}"
       end
 
     private

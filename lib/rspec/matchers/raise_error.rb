@@ -68,9 +68,12 @@ module RSpec
         "raise #{expected_error}"
       end
 
-      def docstrings
-        {:positive => "raises #{expected_error}",
-         :negative => "does not raise #{expected_error}"}
+      def docstring_for_should
+        "raises #{expected_error}"
+      end
+
+      def docstring_for_should_not
+        "does not raise #{expected_error}"
       end
       
       private

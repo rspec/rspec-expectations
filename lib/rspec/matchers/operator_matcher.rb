@@ -52,9 +52,12 @@ module RSpec
         "#{@operator} #{@expected.inspect}"
       end
 
-      def docstrings
-        {:positive => description,
-         :negative => "does not #{description}"}
+      def docstring_for_should
+        description
+      end
+
+      def docstring_for_should_not
+        "does not #{description}"
       end
       
     private

@@ -31,8 +31,8 @@ module RSpec
         "contain exactly #{_pretty_print(@expected)}"
       end
 
-      def docstrings
-        {:positive => "contains exactly #{_pretty_print(@expected)}"}
+      def docstring_for_should
+        "contains exactly #{_pretty_print(@expected)}"
       end
 
       private

@@ -103,9 +103,11 @@ Feature: define matcher
         match do |actual|
           actual % expected == 0
         end
-        docstrings do
-          {:positive => "is multiple of #{expected}",
-          :negative => "is not multiple of #{expected}"}
+        docstring_for_should do
+          "is multiple of #{expected}"
+        end
+        docstring_for_should_not do
+          "is not multiple of #{expected}"
         end
       end
 

@@ -21,9 +21,12 @@ module RSpec
         [method_description(@expected), args_description(@args)].compact.join(' ')
       end
 
-      def docstrings
-        {:positive => description.sub(/have/, "has"),
-          :negative => "not #{description}"}
+      def docstring_for_should
+        description.sub(/have/, "has")
+      end
+
+      def docstring_for_should_not
+        "not #{description}"
       end
 
     private

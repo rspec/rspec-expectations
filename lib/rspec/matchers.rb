@@ -94,9 +94,11 @@ module RSpec
   #     description do
   #       # generate and return the appropriate string.
   #     end
-  #     docstrings do
-  #       # generate and return appropriate positive and negative
-  #       # strings as a hash
+  #     docstring_for_should do
+  #       # generate and return the appropriate string.
+  #     end
+  #     docstring_for_should_not do
+  #       # generate and return the appropriate string.
   #     end
   #   end
   #
