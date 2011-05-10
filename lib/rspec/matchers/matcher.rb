@@ -93,6 +93,7 @@ module RSpec
         cache_or_call_cached(:description, &block)
       end
 
+      # See RSpec::Matchers
       def docstrings(&block)
         cache_or_call_cached(:docstrings, &block)
       end

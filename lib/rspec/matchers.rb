@@ -94,6 +94,10 @@ module RSpec
   #     description do
   #       # generate and return the appropriate string.
   #     end
+  #     docstrings do
+  #       # generate and return appropriate positive and negative
+  #       # strings as a hash
+  #     end
   #   end
   #
   # Each of the message-generation methods has access to the block arguments
