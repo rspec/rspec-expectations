@@ -15,6 +15,8 @@ module RSpec
         @match_for_should_not_block = nil
 
         @messages = {
+          :docstrings => lambda { {:positive => "#{name_to_indicative_sentence}#{expected_to_sentence}",
+                                   :negative => "does not #{name_to_sentence}#{expected_to_sentence}".sub("not is", "is not") } },
           :description => lambda {"#{name_to_sentence}#{expected_to_sentence}"},
           :failure_message_for_should => lambda {|actual| "expected #{actual.inspect} to #{name_to_sentence}#{expected_to_sentence}"},
           :failure_message_for_should_not => lambda {|actual| "expected #{actual.inspect} not to #{name_to_sentence}#{expected_to_sentence}"}
@@ -91,6 +93,10 @@ module RSpec
         cache_or_call_cached(:description, &block)
       end
 
+      def docstrings(&block)
+        cache_or_call_cached(:docstrings, &block)
+      end
+
       #Used internally by objects returns by +should+ and +should_not+.
       def diffable?
         @diffable
@@ -149,6 +155,10 @@ module RSpec
 
       def name_to_sentence
         split_words(@name)
+      end
+
+      def name_to_indicative_sentence
+        to_indicative(name_to_sentence)
       end
 
       def expected_to_sentence

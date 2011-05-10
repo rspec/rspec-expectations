@@ -66,6 +66,11 @@ EOF
       def description
         "have #{relative_expectation} #{@collection_name}"
       end
+
+      def docstrings
+        {:positive => "has #{relative_expectation} #{@collection_name}",
+         :negative => "does not have #{relative_expectation} #{@collection_name}"}
+      end
       
       def respond_to?(sym)
         @expected.respond_to?(sym) || super

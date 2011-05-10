@@ -47,6 +47,11 @@ Compared using equal?, which compares object identity.
 
 MESSAGE
         end
+
+        docstrings do
+          {:positive => "equals #{_expected_.inspect}",
+           :negative => "does not equal #{_expected_.inspect}"}
+        end
       end
     end
   end

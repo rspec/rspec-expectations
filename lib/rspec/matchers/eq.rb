@@ -43,6 +43,10 @@ MESSAGE
         description do
           "== #{_expected_}"
         end
+
+        docstrings do
+          {:positive => "== #{_expected_}"}
+        end
       end
     end
   end

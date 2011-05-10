@@ -53,6 +53,11 @@ module RSpec
         "be"
       end
 
+      def docstrings
+        {:positive => "is",
+         :negative => "is not"}
+      end
+
       [:==, :<, :<=, :>=, :>, :===].each do |operator|
         define_method operator do |operand|
           BeComparedTo.new(operand, operator)
@@ -114,6 +119,11 @@ it is a bit confusing.
         "be #{@operator} #{expected_to_sentence}#{args_to_sentence}"
       end
 
+      def docstrings
+        {:positive => "is #{@operator} #{expected_to_sentence}#{args_to_sentence}",
+         :negative => "is not #{@operator} #{expected_to_sentence}#{args_to_sentence}"}
+      end
+
     end
 
     class BePredicate < Be
@@ -149,6 +159,11 @@ it is a bit confusing.
 
       def description
         "#{prefix_to_sentence}#{expected_to_sentence}#{args_to_sentence}"
+      end
+
+      def docstrings
+        {:positive => "is #{expected_to_sentence}#{args_to_sentence}",
+         :negative => "is not #{expected_to_sentence}#{args_to_sentence}"}
       end
 
     private

@@ -27,6 +27,11 @@ module RSpec
         "respond to #{pp_names}#{with_arity}"
       end
       
+      def docstrings
+        {:positive => "responds to #{pp_names}#{with_arity}",
+         :negative => "does not respond to #{pp_names}#{with_arity}"}        
+      end
+
       def with(n)
         @expected_arity = n
         self
