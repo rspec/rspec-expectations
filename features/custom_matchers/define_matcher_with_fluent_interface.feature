@@ -21,4 +21,4 @@ Feature: define matcher with fluent interface
       """
     When I run `rspec between_spec.rb --format documentation`
     Then the output should contain "1 example, 0 failures"
-    And  the output should contain "should be bigger than 4"
+    And  the output should contain "is bigger than 4"
