@@ -11,13 +11,21 @@ module RSpec
 
     def self.generated_description
       return nil if last_should.nil?
-      "#{last_should.to_s.gsub('_',' ')} #{last_description}"
+      negative = last_should.to_s =~ /not/
+      last_description(negative)
     end
     
   private
     
-    def self.last_description
-      last_matcher.respond_to?(:description) ? last_matcher.description : <<-MESSAGE
+    def self.last_description(negative=false)
+      if last_matcher.respond_to?(:docstrings)
+        if negative
+          last_matcher.docstrings[:negative]
+        else
+          last_matcher.docstrings[:positive]
+        end
+      else 
+        last_matcher.respond_to?(:description) ? "#{last_should.to_s.sub("_", " ")} #{last_matcher.description}" : <<-MESSAGE
 When you call a matcher in an example without a String, like this:
 
 specify { object.should matcher }
@@ -30,6 +38,7 @@ RSpec expects the matcher to have a #description method. You should either
 add a String to the example this matcher is being used in, or give it a
 description method. Then you won't have to suffer this lengthy warning again.
 MESSAGE
+      end
     end
   end
 end
