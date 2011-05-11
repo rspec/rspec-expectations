@@ -1,3 +1,4 @@
+require 'rspec/core'
 require 'rspec/expectations/extensions'
 require 'rspec/matchers'
 require 'rspec/expectations/fail_with'
@@ -35,5 +36,6 @@ module RSpec
   # RSpec ships with a standard set of useful matchers, and writing your own
   # matchers is quite simple. See RSpec::Matchers for details.
   module Expectations
+    RSpec.configuration.add_setting :generated_docstring_format, :default => :modal
   end
 end
