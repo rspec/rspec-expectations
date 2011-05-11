@@ -5,6 +5,10 @@ Feature: define matcher with fluent interface
   Scenario: chained method with argumetn
     Given a file named "between_spec.rb" with:
       """
+      require 'rspec/expectations'
+
+      RSpec.configuration.generated_docstring_format = :indicative
+
       RSpec::Matchers.define :be_bigger_than do |first|
         match do |actual|
           (actual > first) && (actual < @second)

@@ -8,6 +8,7 @@ Feature: define matcher
     Given a file named "matcher_with_default_message_spec.rb" with:
       """
       require 'rspec/expectations'
+      RSpec.configuration.generated_docstring_format = :indicative
 
       RSpec::Matchers.define :be_a_multiple_of do |expected|
         match do |actual|
@@ -98,6 +99,7 @@ Feature: define matcher
     Given a file named "matcher_overriding_description_spec.rb" with:
       """
       require 'rspec/expectations'
+      RSpec.configuration.generated_docstring_format = :indicative
 
       RSpec::Matchers.define :be_a_multiple_of do |expected|
         match do |actual|
@@ -129,6 +131,7 @@ Feature: define matcher
     Given a file named "matcher_with_no_args_spec.rb" with:
       """
       require 'rspec/expectations'
+      RSpec.configuration.generated_docstring_format = :indicative
 
       RSpec::Matchers.define :have_7_fingers do
         match do |thing|
@@ -153,6 +156,7 @@ Feature: define matcher
     Given a file named "matcher_with_multiple_args_spec.rb" with:
       """
       require 'rspec/expectations'
+      RSpec.configuration.generated_docstring_format = :indicative
 
       RSpec::Matchers.define :be_the_sum_of do |a,b,c,d|
         match do |sum|

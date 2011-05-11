@@ -28,7 +28,7 @@ module RSpec
     end
 
     def self.last_description(negative=false)
-      if doc = docstring(negative)
+      if RSpec.configuration.generated_docstring_format == :indicative && doc = docstring(negative)
         doc
       else 
         last_matcher.respond_to?(:description) ? "#{last_should.to_s.sub("_", " ")} #{last_matcher.description}" : <<-MESSAGE

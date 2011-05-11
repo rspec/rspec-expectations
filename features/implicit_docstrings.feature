@@ -21,7 +21,7 @@ Feature: implicit docstrings
     When I run `rspec ./implicit_docstrings_spec.rb -fdoc`
 
     Then the output should contain "should be < 5"
-    And the output should contain "should be 2"
+    And the output should contain "should include 2"
     And the output should contain "should respond to #size"
 
   Scenario: run failing examples
