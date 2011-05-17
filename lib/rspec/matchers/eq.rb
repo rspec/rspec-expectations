@@ -43,6 +43,10 @@ MESSAGE
         description do
           "== #{_expected_}"
         end
+
+        docstring_for_should do
+         "== #{_expected_}"
+        end
       end
     end
   end

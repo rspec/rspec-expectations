@@ -63,6 +63,14 @@ module RSpec
       def description
         "throw #{expected}"
       end
+
+      def docstring_for_should
+        "throws #{expected}"
+      end
+
+      def docstring_for_should_not
+        "does not throw #{expected}"
+      end
       
       private
 

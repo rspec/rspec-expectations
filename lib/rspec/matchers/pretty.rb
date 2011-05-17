@@ -19,6 +19,19 @@ module RSpec
         end
       end
 
+      def to_indicative(infinitive)
+        changed = false
+        { /be/ => "is",
+          /have/ => "has",
+          /match/ => "matches"}.each_pair do |pattern, substitution|
+          if infinitive =~ pattern
+            infinitive.sub!(pattern, substitution)
+            changed = true
+          end
+        end
+        changed ? infinitive : infinitive.to_s + 's'
+      end
+
       def _pretty_print(array)
         result = ""
         array.each_with_index do |item, index|

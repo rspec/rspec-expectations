@@ -66,6 +66,14 @@ EOF
       def description
         "have #{relative_expectation} #{@collection_name}"
       end
+
+      def docstring_for_should
+        "has #{relative_expectation} #{@collection_name}"
+      end
+
+      def docstring_for_should_not
+        "does not have #{relative_expectation} #{@collection_name}"
+      end
       
       def respond_to?(sym)
         @expected.respond_to?(sym) || super

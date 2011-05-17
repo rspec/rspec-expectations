@@ -47,6 +47,14 @@ Compared using equal?, which compares object identity.
 
 MESSAGE
         end
+
+        docstring_for_should do
+          "equals #{_expected_.inspect}"
+        end
+
+        docstring_for_should_not do
+          "does not equal #{_expected_.inspect}"
+        end
       end
     end
   end

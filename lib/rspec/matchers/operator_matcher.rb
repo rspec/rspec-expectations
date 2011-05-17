@@ -51,6 +51,14 @@ module RSpec
       def description
         "#{@operator} #{@expected.inspect}"
       end
+
+      def docstring_for_should
+        description
+      end
+
+      def docstring_for_should_not
+        "does not #{description}"
+      end
       
     private
       

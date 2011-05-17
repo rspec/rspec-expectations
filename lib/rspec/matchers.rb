@@ -94,6 +94,12 @@ module RSpec
   #     description do
   #       # generate and return the appropriate string.
   #     end
+  #     docstring_for_should do
+  #       # generate and return the appropriate string.
+  #     end
+  #     docstring_for_should_not do
+  #       # generate and return the appropriate string.
+  #     end
   #   end
   #
   # Each of the message-generation methods has access to the block arguments

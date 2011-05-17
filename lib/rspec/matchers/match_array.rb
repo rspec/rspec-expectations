@@ -31,6 +31,10 @@ module RSpec
         "contain exactly #{_pretty_print(@expected)}"
       end
 
+      def docstring_for_should
+        "contains exactly #{_pretty_print(@expected)}"
+      end
+
       private
 
         def safe_sort(array)
