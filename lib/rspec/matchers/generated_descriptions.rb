@@ -17,21 +17,16 @@ module RSpec
     
   private
 
-    def self.docstring(negative=false)
+    def self.indicative_docstring(negative=false)
       if negative && last_matcher.respond_to?(:docstring_for_should_not)
         last_matcher.docstring_for_should_not
       elsif last_matcher.respond_to?(:docstring_for_should)
         last_matcher.docstring_for_should
-      else
-        nil
       end
     end
 
-    def self.last_description(negative=false)
-      if RSpec.configuration.generated_docstring_format == :indicative && doc = docstring(negative)
-        doc
-      else 
-        last_matcher.respond_to?(:description) ? "#{last_should.to_s.sub("_", " ")} #{last_matcher.description}" : <<-MESSAGE
+    def self.modal_docstring
+      last_matcher.respond_to?(:description) ? "#{last_should.to_s.sub("_", " ")} #{last_matcher.description}" : <<-MESSAGE
 When you call a matcher in an example without a String, like this:
 
 specify { object.should matcher }
@@ -44,8 +39,14 @@ RSpec expects the matcher to have a #description method. You should either
 add a String to the example this matcher is being used in, or give it a
 description method. Then you won't have to suffer this lengthy warning again.
 MESSAGE
+    end
+
+    def self.last_description(negative=false)
+      if RSpec.configuration.generated_docstring_format == :indicative
+        self.indicative_docstring(negative)
+      else 
+        self.modal_docstring
       end
     end
   end
 end
-      
