@@ -1,0 +1,35 @@
+require 'spec_helper'
+
+module Rspec
+  module Matchers
+    shared_examples_for "a json matcher" do
+      it "passes if matches" do
+        if ENV['GET_FAILURE_MESSAGE']
+          puts failure_message
+          failing.should be_json_equal expected
+        else
+          actual.should be_json_equal expected
+        end
+      end
+
+      it "fails if doesn't match" do
+        lambda { failing.should be_json_equal expected }.should fail_with failure_message
+      end unless ENV['GET_FAILURE_MESSAGE']
+    end
+
+    describe "actual.should be_json_equal(expected)" do
+
+      # Assume the match_hash matcher works, so don't need a bunch of test cases.
+      context "a json string against a regex" do
+        let(:expected) { {'x' => {'a' => /[A-Z]{3}/ }} }
+        let(:actual  ) { '{ "x" : {"a" : "ABC"}}'      }
+        let(:failing)  { '{ "x" : {"a" : "123"}}'      }
+        let(:failure_message) {
+          "\e[0m{\n\e[0m  \"x\" => \e[0m{\n  \e[0m  \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[0m\e[32m+ \e[1m\"123\"\e[0m\e[0m\e[0m\n  \e[0m}\e[0m\n\e[0m}\n"
+        }
+
+        it_should_behave_like "a json matcher"
+      end
+    end
+  end
+end
