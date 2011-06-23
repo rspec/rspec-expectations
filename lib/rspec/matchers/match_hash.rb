@@ -45,6 +45,10 @@ module Diff
       left == right
     end
 
+    def matched_to_s(item)
+      yellow "~ #{bold item}"
+    end
+
     def missing_to_s(item)
       red "- #{bold item}"
     end
@@ -157,24 +161,19 @@ module Diff
 
   class DefaultDiffer < BaseDiff
     def match?
-      result = if right.is_a?(Regexp) 
+      if right.is_a?(Regexp) 
         left.is_a?(String) ? !!left.match(right) : !!left.inspect.match(right)
       else
         left == right
       end
-      result
     end
 
     def to_s
-      match? ? left_to_s : missing_to_s(right_to_s) + additional_to_s(left_to_s)
-    end
-
-    def matched_to_s
-      '"'+@left.sub(@right, yellow(bold(@left[@right, 0])))+'"'
+      match? ? left_to_s : missing_to_s(right_to_s) + left_to_s
     end
 
     def left_to_s
-      @right.is_a?(Regexp) ? matched_to_s : @left.inspect
+      (@right.is_a?(Regexp) && match?) ? matched_to_s(@left.sub(@right, "[#{@left[@right, 0]}]")) : additional_to_s(@left.inspect)
     end
 
     def right_to_s
