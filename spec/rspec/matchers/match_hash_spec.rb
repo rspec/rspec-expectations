@@ -4,11 +4,12 @@ module Rspec
   module Matchers
     shared_examples_for "a matcher" do
       it "passes if matches" do
+        #puts failure_message
         actual.should =~ expected
       end
 
       it "fails if doesn't match" do
-        lambda { failing.should =~ expected }.should fail_with failure_message
+       lambda { failing.should =~ expected }.should fail_with failure_message
       end
     end
 
@@ -71,7 +72,7 @@ module Rspec
         let(:actual          ) { { "b" => "expected2", "a" => "expected1"} }
         let(:failing         ) { { "a" => "unexpected1", "b" => "expected2"} }
         let(:failure_message ) {
-          "\e[0m{\n\e[0m  \"b\" => \e[32m+ \e[1m\"expected2\"\e[0m\e[0m\e[0m,\n\e[0m  \"a\" => \e[31m- \e[1m\"expected1\"\e[0m\e[0m\e[32m+ \e[1m\"unexpected1\"\e[0m\e[0m\e[0m\n\e[0m}\n"
+          "\e[0m{\n\e[0m  \"b\" => \"expected2\"\e[0m,\n\e[0m  \"a\" => \e[31m- \e[1m\"expected1\"\e[0m\e[0m\e[32m+ \e[1m\"unexpected1\"\e[0m\e[0m\e[0m\n\e[0m}\n"
         }
 
         it_should_behave_like "a matcher"
@@ -82,7 +83,7 @@ module Rspec
         let(:actual          ) { { "expected2" => "expected2", "expected1" => "expected1"} }
         let(:failing         ) { { "unexpected1" => "unexpected1", "expected2" => "expected2"} }
         let(:failure_message ) {
-          "\e[0m{\n\e[0m  \"expected2\" => \e[32m+ \e[1m\"expected2\"\e[0m\e[0m\e[0m,\n\e[0m\e[31m- \e[1m\"expected1\" => \"expected1\"\e[0m\e[0m\e[0m,\n\e[0m\e[32m+ \e[1m\"unexpected1\" => \"unexpected1\"\e[0m\e[0m\e[0m\n\e[0m}\n"
+          "\e[0m{\n\e[0m  \"expected2\" => \"expected2\"\e[0m,\n\e[0m\e[31m- \e[1m\"expected1\" => \"expected1\"\e[0m\e[0m\e[0m,\n\e[0m\e[32m+ \e[1m\"unexpected1\" => \"unexpected1\"\e[0m\e[0m\e[0m\n\e[0m}\n"
         }
 
         it_should_behave_like "a matcher"
@@ -93,7 +94,7 @@ module Rspec
         let(:actual          ) { { "x" => {"b" => "BBC", "a" => "ABC"}} }
         let(:failing         ) { { "x" => {"a" => "DEF", "b" => "BBC"}} }
         let(:failure_message ) {
-          "\e[0m{\n\e[0m  \"x\" => \e[0m{\n  \e[0m  \"b\" => \e[32m+ \e[1m\"BBC\"\e[0m\e[0m\e[0m,\n  \e[0m  \"a\" => \e[31m- \e[1m\"ABC\"\e[0m\e[0m\e[32m+ \e[1m\"DEF\"\e[0m\e[0m\e[0m\n  \e[0m}\e[0m\n\e[0m}\n"
+          "\e[0m{\n\e[0m  \"x\" => \e[0m{\n  \e[0m  \"b\" => \"BBC\"\e[0m,\n  \e[0m  \"a\" => \e[31m- \e[1m\"ABC\"\e[0m\e[0m\e[32m+ \e[1m\"DEF\"\e[0m\e[0m\e[0m\n  \e[0m}\e[0m\n\e[0m}\n"
         }
 
         it_should_behave_like "a matcher"
@@ -106,7 +107,7 @@ module Rspec
         let(:failure_message ) {
           <<-MESSAGE
 \e[0m{
-\e[0m  \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[0m\e[32m+ \e[1m\"abc\"\e[0m\e[0m\e[0m
+\e[0m  \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[0m\e[33m~ \e[1mabc\e[0m\e[0m\e[0m
 \e[0m}
           MESSAGE
         }
@@ -121,7 +122,7 @@ module Rspec
           <<-MESSAGE
 \e[0m{
 \e[0m  \"x\" => \e[0m{
-  \e[0m  \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[0m\e[32m+ \e[1m\"abc\"\e[0m\e[0m\e[0m
+  \e[0m  \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[0m\e[33m~ \e[1mabc\e[0m\e[0m\e[0m
   \e[0m}\e[0m
 \e[0m}
           MESSAGE
@@ -134,7 +135,7 @@ module Rspec
         let(:actual          ) { { "x" => {"a" => "ABC", "b" => "BBC", "c" => "CBC"}} }
         let(:failing         ) { { "x" => {"a" => "ABC", "b" => "bbc", "c" => "CBC"}} }
         let(:failure_message ) {
-          "\e[0m{\n\e[0m  \"x\" => \e[0m{\n  \e[0m  \"a\" => \e[33m~ \e[1m[A]BC\e[0m\e[0m\e[0m,\n  \e[0m  \"c\" => \e[33m~ \e[1m[CBC]\e[0m\e[0m\e[0m,\n  \e[0m  \"b\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[0m\e[32m+ \e[1m\"bbc\"\e[0m\e[0m\e[0m\n  \e[0m}\e[0m\n\e[0m}\n"
+          "\e[0m{\n\e[0m  \"x\" => \e[0m{\n  \e[0m  \"a\" => \e[33m~ \e[1m[A]BC\e[0m\e[0m\e[0m,\n  \e[0m  \"c\" => \e[33m~ \e[1m[CBC]\e[0m\e[0m\e[0m,\n  \e[0m  \"b\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[0m\e[33m~ \e[1mbbc\e[0m\e[0m\e[0m\n  \e[0m}\e[0m\n\e[0m}\n"
         }
 
         it_should_behave_like "a matcher"
@@ -217,7 +218,7 @@ module Rspec
           end
         else
           let(:failure_message) {
-            "\e[0m{\n\e[0m  \"href\" => \e[33m~ \e[1m[http://puge.example.org/api/goals/games/635/matches/832]\e[0m\e[0m\e[0m,\n\e[0m  \"scheduled_start\" => \e[33m~ \e[1m[2010-01-01T00:00:00Z]\e[0m\e[0m\e[0m,\n\e[0m  \"end_date\" => \e[33m~ \e[1m[2010-01-01T01:00:00Z]\e[0m\e[0m\e[0m,\n\e[0m  \"networks\" => \e[0m[\e[0m\"abc\", \e[31m- \e[1m\"nbc\"\e[0m\e[0m\e[32m+ \e[1m\"cnn\"\e[0m\e[0m, \e[31m- \e[1m\"cnn\"\e[0m\e[0m\e[32m+ \e[1m\"yyy\"\e[0m\e[0m, \e[32m+ \e[1m\"zzz\"\e[0m\e[0m]\e[0m,\n\e[0m  \"home_team\" => \e[0m{\n  \e[0m  \"short_name\" => \e[32m+ \e[1m\"FLA\"\e[0m\e[0m\e[0m,\n  \e[0m  \"link\" => \e[0m[\e[0m{\"href\"=>\"http://puge.example.org/api/goals/teams/FLA/players\", \"rel\"=>\"players\"}]\e[0m,\n  \e[0m  \"href\" => \e[32m+ \e[1m\"http://puge.example.org/api/goals/teams/FLA\"\e[0m\e[0m\e[0m,\n  \e[0m  \"name\" => \e[31m- \e[1m\"flames\"\e[0m\e[0m\e[32m+ \e[1m\"unexpected1\"\e[0m\e[0m\e[0m\n  \e[0m}\e[0m,\n\e[0m  \"away_team\" => \e[0m{\n  \e[0m  \"name\" => \e[32m+ \e[1m\"sharks\"\e[0m\e[0m\e[0m,\n  \e[0m  \"link\" => \e[0m[\e[0m{\"href\"=>\"http://puge.example.org/api/goals/teams/SHA/players\", \"rel\"=>\"players\"}]\e[0m,\n  \e[0m  \"href\" => \e[32m+ \e[1m\"http://puge.example.org/api/goals/teams/SHA\"\e[0m\e[0m\e[0m,\n  \e[0m  \"short_name\" => \e[31m- \e[1m\"SHA\"\e[0m\e[0m\e[32m+ \e[1m\"unexpected2\"\e[0m\e[0m\e[0m\n  \e[0m}\e[0m,\n\e[0m\e[31m- \e[1m\"expected_key\" => \"expected_value\"\e[0m\e[0m\e[0m,\n\e[0m\e[32m+ \e[1m\"unexpected_key\" => \"unexpected_value\"\e[0m\e[0m\e[0m\n\e[0m}\n"
+            "\e[0m{\n\e[0m  \"href\" => \e[33m~ \e[1m[http://puge.example.org/api/goals/games/635/matches/832]\e[0m\e[0m\e[0m,\n\e[0m  \"scheduled_start\" => \e[33m~ \e[1m[2010-01-01T00:00:00Z]\e[0m\e[0m\e[0m,\n\e[0m  \"end_date\" => \e[33m~ \e[1m[2010-01-01T01:00:00Z]\e[0m\e[0m\e[0m,\n\e[0m  \"networks\" => \e[0m[\e[0m\"abc\", \e[31m- \e[1m\"nbc\"\e[0m\e[0m\e[32m+ \e[1m\"cnn\"\e[0m\e[0m, \e[31m- \e[1m\"cnn\"\e[0m\e[0m\e[32m+ \e[1m\"yyy\"\e[0m\e[0m, \e[32m+ \e[1m\"zzz\"\e[0m\e[0m]\e[0m,\n\e[0m  \"home_team\" => \e[0m{\n  \e[0m  \"short_name\" => \"FLA\"\e[0m,\n  \e[0m  \"link\" => \e[0m[\e[0m{\"href\"=>\"http://puge.example.org/api/goals/teams/FLA/players\", \"rel\"=>\"players\"}]\e[0m,\n  \e[0m  \"href\" => \"http://puge.example.org/api/goals/teams/FLA\"\e[0m,\n  \e[0m  \"name\" => \e[31m- \e[1m\"flames\"\e[0m\e[0m\e[32m+ \e[1m\"unexpected1\"\e[0m\e[0m\e[0m\n  \e[0m}\e[0m,\n\e[0m  \"away_team\" => \e[0m{\n  \e[0m  \"name\" => \"sharks\"\e[0m,\n  \e[0m  \"link\" => \e[0m[\e[0m{\"href\"=>\"http://puge.example.org/api/goals/teams/SHA/players\", \"rel\"=>\"players\"}]\e[0m,\n  \e[0m  \"href\" => \"http://puge.example.org/api/goals/teams/SHA\"\e[0m,\n  \e[0m  \"short_name\" => \e[31m- \e[1m\"SHA\"\e[0m\e[0m\e[32m+ \e[1m\"unexpected2\"\e[0m\e[0m\e[0m\n  \e[0m}\e[0m,\n\e[0m\e[31m- \e[1m\"expected_key\" => \"expected_value\"\e[0m\e[0m\e[0m,\n\e[0m\e[32m+ \e[1m\"unexpected_key\" => \"unexpected_value\"\e[0m\e[0m\e[0m\n\e[0m}\n"
           }
 
           it_should_behave_like "a matcher"

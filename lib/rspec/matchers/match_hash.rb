@@ -234,7 +234,11 @@ module Diff
     end
 
     def left_to_s
-      (@right.is_a?(Regexp) && match?) ? matched_to_s(@left.sub(@right, "[#{@left[@right, 0]}]")) : additional_to_s(@left.inspect)
+      if match?
+        @right.is_a?(Regexp) ? matched_to_s(@left.sub(@right, "[#{@left[@right, 0]}]")) : @left.inspect
+      else
+        @right.is_a?(Regexp) ? matched_to_s(@left.sub(@right, "[#{@left[@right, 0]}]")) : additional_to_s(@left.inspect)
+      end
     end
 
     def right_to_s
