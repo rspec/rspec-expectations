@@ -4,17 +4,12 @@ module Rspec
   module Matchers
     shared_examples_for "a json matcher" do
       it "passes if matches" do
-        if ENV['GET_FAILURE_MESSAGE']
-          puts failure_message
-          failing.should be_json_equal expected
-        else
-          actual.should be_json_equal expected
-        end
+        actual.should be_json_equal expected
       end
 
       it "fails if doesn't match" do
         lambda { failing.should be_json_equal expected }.should fail_with failure_message
-      end unless ENV['GET_FAILURE_MESSAGE']
+      end
     end
 
     describe "actual.should be_json_equal(expected)" do

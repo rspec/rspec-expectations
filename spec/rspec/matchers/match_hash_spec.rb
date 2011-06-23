@@ -4,17 +4,12 @@ module Rspec
   module Matchers
     shared_examples_for "a matcher" do
       it "passes if matches" do
-        if ENV['GET_FAILURE_MESSAGE']
-          puts failure_message
-          failing.should =~ expected
-        else
-          actual.should =~ expected
-        end
+        actual.should =~ expected
       end
 
       it "fails if doesn't match" do
         lambda { failing.should =~ expected }.should fail_with failure_message
-      end unless ENV['GET_FAILURE_MESSAGE']
+      end
     end
 
     describe "actual.should =~ expected, when expected hash" do

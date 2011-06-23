@@ -8,6 +8,6 @@ RSpec::Matchers.define :be_json_equal do |expected|
   end
 
   failure_message_for_should do
-    ENV['GET_FAILURE_MESSAGE'] ? @difference.to_s.inspect: @difference.to_s
+    @difference.to_s
   end
 end

@@ -13,7 +13,6 @@ module RSpec
       end
 
       def failure_message_for_should
-        return @difference.to_s.inspect if ENV['GET_FAILURE_MESSAGE']
         @difference.to_s
       end
     end
