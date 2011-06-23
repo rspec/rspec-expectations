@@ -18,6 +18,32 @@ module RSpec
     end
 
     OperatorMatcher.register(Hash, '=~', RSpec::Matchers::MatchHash)
+
+    def be_hash_matching(expected)
+      Matcher.new :be_hash_matching, expected do |_expected_|
+        match do |actual|
+          @difference = Diff.diff(actual, _expected_)
+          @difference.match?
+        end
+
+        failure_message_for_should do
+          @difference.to_s
+        end
+      end
+    end
+
+    def be_hash_including(expected)
+      Matcher.new :be_hash_including, expected do |_expected_|
+        match do |actual|
+          @difference = Diff.diff(actual, _expected_)
+          @difference.include?
+        end
+
+        failure_message_for_should do
+          "No match for #{expected}"
+        end
+      end
+    end
   end
 end
 
@@ -62,7 +88,28 @@ module Diff
     end
   end
 
+
   class HashDiffer < BaseDiff
+    def include?
+      # For an exact match of the hash..
+      #!!left.keys.detect { |k|
+      #  difference = Diff.diff(left[k], right)
+      #  difference.match? ? difference : difference.include?
+      #}
+
+      # For a partial match of the hash..
+      if correct_values.keys == right.keys
+        return self 
+      else
+        left.keys.each { |k|
+          difference = Diff.diff(left[k], right)
+          return true if difference.include?
+        }
+        return false
+      end
+
+    end
+
     def match?
       diffed_wrong_values.size + missing_items.size + additional_items.size == 0
     end
@@ -79,11 +126,11 @@ module Diff
       "}\n"
     end
 
-    private
-
     def correct_values
       Hash[right.select {|k, v| (right.keys & left.keys).include?(k) && Diff.diff(left[k], v).match? }]
     end
+
+    private
 
     def diffed_correct_values
       Hash[correct_values.map {|k, v| [k, Diff.diff(left[k], v)]}]
@@ -106,7 +153,16 @@ module Diff
     end
   end
 
+
   class ArrayDiffer < BaseDiff
+    def include?
+      # For an exact match of the array..
+      !!left.detect { |item|
+        difference = Diff.diff(item, right)
+        difference.match? ? difference : difference.include?
+      }
+    end
+
     def match?
       # refactor this with pretty_items
       m = true
@@ -159,7 +215,12 @@ module Diff
     end
   end
 
+
   class DefaultDiffer < BaseDiff
+    def include?
+      false
+    end
+
     def match?
       if right.is_a?(Regexp) 
         left.is_a?(String) ? !!left.match(right) : !!left.inspect.match(right)
