@@ -262,12 +262,23 @@ module Rspec
 
     describe "actual.should be_hash_partially_matching(expected)" do
 
-      context "has an array with missing items" do
+      context "contains a hash with missing items" do
         let(:expected        ) { { "x" => { "a" => [1,2,3]                       } } }
         let(:actual          ) { { "x" => { "a" => [1,2,3] , "b" => "unexpected" } } }
         let(:failing         ) { { "x" => { "a" => [1,2  ] , "b" => "unexpected" } } }
         let(:failure_message) { 
           "\e[0m{\n\e[0m  \"x\" => \e[0m{\n  \e[0m  \"a\" => \e[0m[\e[0m1, 2, \e[31m- \e[1m3\e[0m\e[0m]\e[0m,\n  \e[0m\e[32m+ \e[1m\"b\" => \"unexpected\"\e[0m\e[0m\e[0m\n  \e[0m}\e[0m\n\e[0m}\n"
+        }
+
+        it_should_behave_like "a partial matcher"
+      end
+
+      context "is a hash inside the expected" do
+        let(:expected        ) { { "a" => { "b" => { "c" => 1 } } } }
+        let(:actual          ) { { "a" => { "b" => { "c" => 1 } } } }
+        let(:failing         ) {          { "b" => { "c" => 1 } }   }
+        let(:failure_message) { 
+          "\e[0m{\n\e[0m\e[31m- \e[1m\"a\" => {\"b\"=>{\"c\"=>1}}\e[0m\e[0m\e[0m,\n\e[0m\e[32m+ \e[1m\"b\" => {\"c\"=>1}\e[0m\e[0m\e[0m\n\e[0m}\n"
         }
 
         it_should_behave_like "a partial matcher"
