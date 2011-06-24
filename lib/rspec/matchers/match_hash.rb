@@ -32,15 +32,15 @@ module RSpec
       end
     end
 
-    def be_hash_including(expected)
-      Matcher.new :be_hash_including, expected do |_expected_|
+    def be_hash_partially_matching(expected)
+      Matcher.new :be_hash_partially_matching, expected do |_expected_|
         match do |actual|
           @difference = Diff.diff(actual, _expected_)
-          @difference.include?
+          @difference.partial_match?
         end
 
         failure_message_for_should do
-          "No match for #{expected}"
+          @difference.to_s
         end
       end
     end
@@ -69,6 +69,10 @@ module Diff
 
     def match?
       left == right
+    end
+
+    def partial_match?
+      match?
     end
 
     def matched_to_s(item)
@@ -114,6 +118,10 @@ module Diff
       diffed_wrong_values.size + missing_items.size + additional_items.size == 0
     end
 
+    def partial_match?
+      diffed_partially_wrong_values.size + missing_items.size == 0
+    end
+
     def to_s
       reset("{\n") +
       (
@@ -142,6 +150,14 @@ module Diff
 
     def additional_items
       Hash[left.select {|k, v| !right.keys.include? k}]
+    end
+
+    def partially_wrong_values
+      Hash[right.select {|k, v| (right.keys & left.keys).include?(k) && !Diff.diff(left[k], v).partial_match?} ]
+    end
+
+    def diffed_partially_wrong_values
+      Hash[partially_wrong_values.map {|k, v| [k, Diff.diff(left[k], v)]}]
     end
 
     def wrong_values

@@ -4,12 +4,21 @@ module Rspec
   module Matchers
     shared_examples_for "a matcher" do
       it "passes if matches" do
-        #puts failure_message
         actual.should =~ expected
       end
 
       it "fails if doesn't match" do
        lambda { failing.should =~ expected }.should fail_with failure_message
+      end
+    end
+
+    shared_examples_for "a partial matcher" do
+      it "passes if matches" do
+        actual.should be_hash_partially_matching expected
+      end
+
+      it "fails if doesn't match" do
+       lambda { failing.should be_hash_partially_matching expected }.should fail_with failure_message
       end
     end
 
@@ -251,28 +260,26 @@ module Rspec
       end
     end
 
-    describe "actual.should be_hash_including(expected)" do
+    describe "actual.should be_hash_partially_matching(expected)" do
 
       context "has an array with missing items" do
-        let(:expected        ) {          { "a" => [1,2,3] }   }
-        let(:actual          ) { { "x" => { "a" => [1,2,3] } } }
-        let(:failing         ) { { "x" => { "a" => [1,2  ] } } }
-        let(:failure_message) { 'No match for {"a"=>[1, 2, 3]}' }
+        let(:expected        ) { { "x" => { "a" => [1,2,3]                       } } }
+        let(:actual          ) { { "x" => { "a" => [1,2,3] , "b" => "unexpected" } } }
+        let(:failing         ) { { "x" => { "a" => [1,2  ] , "b" => "unexpected" } } }
+        let(:failure_message) { 
+          "\e[0m{\n\e[0m  \"x\" => \e[0m{\n  \e[0m  \"a\" => \e[0m[\e[0m1, 2, \e[31m- \e[1m3\e[0m\e[0m]\e[0m,\n  \e[0m\e[32m+ \e[1m\"b\" => \"unexpected\"\e[0m\e[0m\e[0m\n  \e[0m}\e[0m\n\e[0m}\n"
+        }
 
-        it "passes if include" do
-          actual.should be_hash_including(expected)
-        end
-
-        it "fails if doesn't include" do
-          lambda { failing.should be_hash_including(expected) }.should fail_with failure_message
-        end
+        it_should_behave_like "a partial matcher"
       end
 
       context "has lots of stuff" do
         let(:expected) {
           {
-            "name" => "flames",
-            "short_name" => /^[A-Z]{3}$/
+            "home_team" => {
+              "name" => "flames",
+              "short_name" => /^[A-Z]{3}$/
+            }
           }
         }
         let(:actual) {
@@ -309,16 +316,13 @@ module Rspec
             }
           }
         }
-        let(:failure_message) { 'No match for {"name"=>"flames", "short_name"=>/^[A-Z]{3}$/}' }
+        let(:failure_message) {
+          "\e[0m{\n\e[0m  \"home_team\" => \e[0m{\n  \e[0m  \"short_name\" => \e[33m~ \e[1m[FLA]\e[0m\e[0m\e[0m,\n  \e[0m  \"name\" => \e[31m- \e[1m\"flames\"\e[0m\e[0m\e[32m+ \e[1m\"unexpected1\"\e[0m\e[0m\e[0m,\n  \e[0m\e[32m+ \e[1m\"href\" => \"http://puge.example.org/api/goals/teams/FLA\"\e[0m\e[0m\e[0m\n  \e[0m}\e[0m,\n\e[0m\e[32m+ \e[1m\"href\" => \"http://puge.example.org/api/goals/games/635/matches/832\"\e[0m\e[0m\e[0m,\n\e[0m\e[32m+ \e[1m\"scheduled_start\" => \"2010-01-01T00:00:00Z\"\e[0m\e[0m\e[0m,\n\e[0m\e[32m+ \e[1m\"end_date\" => \"2010-01-01T01:00:00Z\"\e[0m\e[0m\e[0m,\n\e[0m\e[32m+ \e[1m\"away_team\" => {\"name\"=>\"sharks\", \"short_name\"=>\"unexpected2\", \"href\"=>\"http://puge.example.org/api/goals/teams/SHA\"}\e[0m\e[0m\e[0m\n\e[0m}\n"
+        }
 
-        it "passes if include" do
-          actual.should be_hash_including(expected)
-        end
-
-        it "fails if doesn't include" do
-          lambda { failing.should be_hash_including(expected) }.should fail_with failure_message
-        end
+        it_should_behave_like "a partial matcher"
       end
+
     end
 
   end
