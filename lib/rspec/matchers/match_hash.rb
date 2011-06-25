@@ -48,27 +48,29 @@ module RSpec
 end
 
 module Diff
-  def self.diff left, right
-    differ_name = "#{left.class}Differ"
-    differ = Diff.constants.map(&:to_s).include?(differ_name) ? Diff.const_get(differ_name) : Diff::DefaultDiffer
-    differ.new left, right
+  def self.diff expected, actual
+    case expected
+    when Array; ArrayDiffer
+    when Hash ; HashDiffer
+    else DefaultDiffer
+    end.new(expected, actual)
   end
 
   class BaseDiff
     include Term::ANSIColor
-    attr_reader :left, :right
+    attr_reader :expected, :actual
 
-    def self.diff left, right
-      new left, right
+    def self.diff(expected, actual)
+      new(expected, actual)
     end
 
-    def initialize left, right
-      @left = left
-      @right = right
+    def initialize(expected, actual)
+      @expected = expected
+      @actual = actual
     end
 
     def match?
-      left == right
+      expected == actual
     end
 
     def partial_match?
@@ -87,39 +89,19 @@ module Diff
       green "+ #{bold item}"
     end
 
-    def indent str
-      str.split("\n").map {|s| "  #{s}"}.join("\n")
+    def indent(item)
+      item.split("\n").map {|s| "  #{s}"}.join("\n")
     end
   end
 
 
   class HashDiffer < BaseDiff
-    def include?
-      # For an exact match of the hash..
-      #!!left.keys.detect { |k|
-      #  difference = Diff.diff(left[k], right)
-      #  difference.match? ? difference : difference.include?
-      #}
-
-      # For a partial match of the hash..
-      if correct_values.keys == right.keys
-        return self 
-      else
-        left.keys.each { |k|
-          difference = Diff.diff(left[k], right)
-          return true if difference.include?
-        }
-        return false
-      end
-
-    end
-
     def match?
       diffed_wrong_values.size + missing_items.size + additional_items.size == 0
     end
 
     def partial_match?
-      diffed_partially_wrong_values.size + missing_items.size == 0
+      diffed_wrong_values(:partial_match?).size + missing_items.size == 0
     end
 
     def to_s
@@ -134,63 +116,47 @@ module Diff
       "}\n"
     end
 
-    def correct_values
-      Hash[right.select {|k, v| (right.keys & left.keys).include?(k) && Diff.diff(left[k], v).match? }]
+    def missing_items
+      Hash[actual.select {|k, v| !expected.keys.include? k}]
+    end
+
+    def additional_items
+      Hash[expected.select {|k, v| !actual.keys.include? k}]
+    end
+
+    def diffed_correct_values
+      _diffed_values(:match?, false)
+    end
+
+    def diffed_wrong_values(match_method = :match?)
+      _diffed_values(match_method, true)
     end
 
     private
 
-    def diffed_correct_values
-      Hash[correct_values.map {|k, v| [k, Diff.diff(left[k], v)]}]
-    end
-
-    def missing_items
-      Hash[right.select {|k, v| !left.keys.include? k}]
-    end
-
-    def additional_items
-      Hash[left.select {|k, v| !right.keys.include? k}]
-    end
-
-    def partially_wrong_values
-      Hash[right.select {|k, v| (right.keys & left.keys).include?(k) && !Diff.diff(left[k], v).partial_match?} ]
-    end
-
-    def diffed_partially_wrong_values
-      Hash[partially_wrong_values.map {|k, v| [k, Diff.diff(left[k], v)]}]
-    end
-
-    def wrong_values
-      Hash[right.select {|k, v| (right.keys & left.keys).include?(k) && !Diff.diff(left[k], v).match?} ]
-    end
-
-    def diffed_wrong_values
-      Hash[wrong_values.map {|k, v| [k, Diff.diff(left[k], v)]}]
+    def _diffed_values(match_method, not_match)
+      actual.inject({}) {|h, (k, v)|
+        diff = Diff.diff(expected[k], v)
+        h[k] = diff if expected.keys.include?(k) && (not_match ? !diff.send(match_method) : diff.send(match_method))
+        h
+      }
     end
   end
 
 
   class ArrayDiffer < BaseDiff
-    def include?
-      # For an exact match of the array..
-      !!left.detect { |item|
-        difference = Diff.diff(item, right)
-        difference.match? ? difference : difference.include?
-      }
-    end
-
     def match?
       # refactor this with pretty_items
       m = true
-      right.each_with_index do |item, index|
+      actual.each_with_index do |item, index|
         if additional? index, item
           m = false
         elsif !(correct?(index, item))
           m = false
         end
       end
-      if left.size > right.size
-        left.slice(right.size..-1).each do |item|
+      if expected.size > actual.size
+        expected.slice(actual.size..-1).each do |item|
           m = false
         end
       end
@@ -205,17 +171,17 @@ module Diff
 
     def pretty_items
       [].tap do |l|
-        right.each_with_index do |item, index|
+        actual.each_with_index do |item, index|
           if additional? index, item
             l << missing_to_s(item.inspect)
           elsif correct? index, item
             l << item.inspect
           else
-            l << Diff.diff(left[index], item)
+            l << Diff.diff(expected[index], item)
           end
         end
-        if left.size > right.size
-          left.slice(right.size..-1).each do |item|
+        if expected.size > actual.size
+          expected.slice(actual.size..-1).each do |item|
             l << additional_to_s(item.inspect)
           end
         end
@@ -223,42 +189,35 @@ module Diff
     end
 
     def additional? index, value
-      index >= left.size
+      index >= expected.size
     end
 
     def correct? index, value
-      Diff.diff(left[index], value).match?
+      Diff.diff(expected[index], value).match?
     end
   end
 
 
   class DefaultDiffer < BaseDiff
-    def include?
-      false
-    end
-
     def match?
-      if right.is_a?(Regexp) 
-        left.is_a?(String) ? !!left.match(right) : !!left.inspect.match(right)
+      if actual.is_a?(Regexp) 
+        expected.is_a?(String) ? !!expected.match(actual) : !!expected.inspect.match(actual)
       else
-        left == right
+        expected == actual
       end
     end
 
     def to_s
-      match? ? left_to_s : missing_to_s(right_to_s) + left_to_s
+      # refactor
+      match? ? expected_to_s : missing_to_s(@actual.inspect) + expected_to_s
     end
 
-    def left_to_s
+    def expected_to_s
       if match?
-        @right.is_a?(Regexp) ? matched_to_s(@left.sub(@right, "[#{@left[@right, 0]}]")) : @left.inspect
+        @actual.is_a?(Regexp) ? matched_to_s(@expected.sub(@actual, "[#{@expected[@actual, 0]}]")) : @expected.inspect
       else
-        @right.is_a?(Regexp) ? matched_to_s(@left.sub(@right, "[#{@left[@right, 0]}]")) : additional_to_s(@left.inspect)
+        @actual.is_a?(Regexp) ? matched_to_s(@expected.sub(@actual, "[#{@expected[@actual, 0]}]")) : additional_to_s(@expected.inspect)
       end
-    end
-
-    def right_to_s
-      @right.inspect
     end
   end
 end
