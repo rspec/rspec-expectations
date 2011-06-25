@@ -78,19 +78,24 @@ module Diff
     end
 
     def matched_to_s(item)
-      yellow "~ #{bold item}"
+      color_enabled? ? yellow("~ #{bold item}") : "~ #{item}"
     end
 
     def missing_to_s(item)
-      red "- #{bold item}"
+      color_enabled? ? red("- #{bold item}") : "- #{item}"
     end
 
     def additional_to_s(item)
-      green "+ #{bold item}"
+      color_enabled? ? green("+ #{bold item}") : "+ #{item}"
     end
 
     def indent(item)
       item.split("\n").map {|s| "  #{s}"}.join("\n")
+    end
+
+    private
+    def color_enabled?
+      RSpec.configuration.color_enabled?
     end
   end
 
