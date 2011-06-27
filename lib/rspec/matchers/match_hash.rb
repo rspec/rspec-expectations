@@ -13,7 +13,7 @@ module RSpec
       end
 
       def failure_message_for_should
-        @difference.to_s
+        "#{"\e[0m" if RSpec.configuration.color_enabled?}" + @difference.to_s
       end
     end
 
@@ -27,7 +27,7 @@ module RSpec
         end
 
         failure_message_for_should do
-          @difference.to_s
+          "#{"\e[0m" if RSpec.configuration.color_enabled?}" + @difference.to_s
         end
       end
     end
@@ -40,7 +40,7 @@ module RSpec
         end
 
         failure_message_for_should do
-          @difference.to_s
+          "#{"\e[0m" if RSpec.configuration.color_enabled?}" + @difference.to_s
         end
       end
     end
@@ -77,25 +77,19 @@ module Diff
       match?
     end
 
-    def matched_to_s(item)
-      color_enabled? ? yellow("~ #{bold item}") : "~ #{item}"
-    end
-
-    def missing_to_s(item)
-      color_enabled? ? red("- #{bold item}") : "- #{item}"
-    end
-
-    def additional_to_s(item)
-      color_enabled? ? green("+ #{bold item}") : "+ #{item}"
-    end
-
     def indent(item)
       item.split("\n").map {|s| "  #{s}"}.join("\n")
     end
 
-    private
-    def color_enabled?
-      RSpec.configuration.color_enabled?
+    def markup(item_type, item)
+      bold = "\e[1m"
+      reset = "\e[0m"
+      (color, prefix) = case item_type
+        when :matched   ; ["\e[33m", "~"]
+        when :missing   ; ["\e[31m", "-"]
+        when :additional; ["\e[32m", "+"]
+      end
+      RSpec.configuration.color_enabled?  ? "#{color}#{prefix} #{bold}#{item}#{reset}" : "#{prefix} #{item}"
     end
   end
 
@@ -110,14 +104,14 @@ module Diff
     end
 
     def to_s
-      reset("{\n") +
+      "{\n" +
       (
-        diffed_correct_values.map {|ck, cv| indent          "#{ck.inspect} => #{cv}"} +
-        diffed_wrong_values.map   {|wk, wv| indent          "#{wk.inspect} => #{wv}"} +
-        missing_items.map         {|mk, mv| missing_to_s    "#{mk.inspect} => #{mv.inspect}"} +
-        additional_items.map      {|ak, av| additional_to_s "#{ak.inspect} => #{av.inspect}"}
-      ).join(reset ",\n") +
-      reset("\n") +
+        diffed_correct_values.map {|ck, cv| indent               "#{ck.inspect} => #{cv}"        } +
+        diffed_wrong_values.map   {|wk, wv| indent               "#{wk.inspect} => #{wv}"        } +
+        missing_items.map         {|mk, mv| markup :missing    , "#{mk.inspect} => #{mv.inspect}"} +
+        additional_items.map      {|ak, av| markup :additional , "#{ak.inspect} => #{av.inspect}"}
+      ).join(",\n") +
+      "\n" +
       "}\n"
     end
 
@@ -169,7 +163,7 @@ module Diff
     end
 
     def to_s
-      reset("[") + pretty_items.join(", ") + "]"
+      "[" + pretty_items.join(", ") + "]"
     end
 
     private
@@ -178,7 +172,7 @@ module Diff
       [].tap do |l|
         actual.each_with_index do |item, index|
           if additional? index, item
-            l << missing_to_s(item.inspect)
+            l << markup(:missing, item.inspect)
           elsif correct? index, item
             l << item.inspect
           else
@@ -187,7 +181,7 @@ module Diff
         end
         if expected.size > actual.size
           expected.slice(actual.size..-1).each do |item|
-            l << additional_to_s(item.inspect)
+            l << markup(:additional, item.inspect)
           end
         end
       end
@@ -214,14 +208,14 @@ module Diff
 
     def to_s
       # refactor
-      match? ? expected_to_s : missing_to_s(@actual.inspect) + expected_to_s
+      match? ? expected_to_s : markup(:missing, @actual.inspect) + expected_to_s
     end
 
     def expected_to_s
       if match?
-        @actual.is_a?(Regexp) ? matched_to_s(@expected.sub(@actual, "[#{@expected[@actual, 0]}]")) : @expected.inspect
+        @actual.is_a?(Regexp) ? markup(:matched, @expected.sub(@actual, "[#{@expected[@actual, 0]}]")) : @expected.inspect
       else
-        @actual.is_a?(Regexp) ? matched_to_s(@expected.sub(@actual, "[#{@expected[@actual, 0]}]")) : additional_to_s(@expected.inspect)
+        @actual.is_a?(Regexp) ? markup(:matched, @expected.sub(@actual, "[#{@expected[@actual, 0]}]")) : markup(:additional, expected.inspect)
       end
     end
   end
