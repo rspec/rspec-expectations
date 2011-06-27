@@ -16,7 +16,7 @@ module Rspec
     describe "actual.should be_json_matching(expected)" do
 
       # Assume the match_hash matcher works, so don't need a bunch of test cases.
-      context "a json string against a regex" do
+      context "a json string against a hash with a regex" do
         let(:expected       ) {  { 'x' => {'a' => /[A-Z]{3}/ } }  }
         let(:actual         ) { '{ "x" :  {"a" :  "ABC"      } }' }
         let(:failing        ) { '{ "x" :  {"a" :  "123"      } }' }
@@ -26,12 +26,21 @@ module Rspec
 
         it_should_behave_like "a json matcher"
       end
+
+      context "a hash against a hash with a regex" do
+        let(:expected       ) {  { 'x' => {'a' => "ABC" } }  }
+        let(:failing        ) {  { 'x' => {'a' => "ABC" } }  }
+
+        it "should raise an exception about not using a JSON String" do
+          lambda { failing.should be_json_matching expected }.should raise_error /can't convert Hash into String/
+        end
+      end
     end
 
     describe "actual.should be_json_partially_matching(expected)" do
 
       # Assume the match_hash matcher works, so don't need a bunch of test cases.
-      context "a json string against a regex" do
+      context "a json string against a hash with a regex" do
         let(:expected       ) {  { 'x' => { 'a' => /[A-Z]{3}/           } }  }
         let(:actual         ) { '{ "x" :  { "a" : "ABC"       , "b" : 1 } }' }
         let(:failing        ) { '{ "x" :  { "a" : "abc"       , "b" : 1 } }' }
