@@ -21,5 +21,4 @@ Gem::Specification.new do |s|
   s.require_path     = "lib"
 
   s.add_runtime_dependency     'diff-lcs',    '~> 1.1.2'
-  s.add_runtime_dependency     'term-ansicolor', '~> 1.0.5'
 end
