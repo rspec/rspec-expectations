@@ -213,9 +213,9 @@ module Diff
 
     def expected_to_s
       if match?
-        @actual.is_a?(Regexp) ? markup(:matched, @expected.sub(@actual, "[#{@expected[@actual, 0]}]")) : @expected.inspect
+        @actual.is_a?(Regexp) ? markup(:matched, (@expected.is_a?(String) and not @expected.nil?) ? @expected.sub(@actual, "[#{@expected[@actual, 0]}]") : @expected.inspect) : @expected.inspect
       else
-        @actual.is_a?(Regexp) ? markup(:additional, @expected.nil? ? @expected.inspect : @expected.sub(@actual, "[#{@expected[@actual, 0]}]") ) : markup(:additional, @expected.inspect)
+        markup(:additional, (@actual.is_a?(Regexp) and @actual.is_a?(String) and not @expected.nil?) ? @expected.sub(@actual, "[#{@expected[@actual, 0]}]") : @expected.inspect)
       end
     end
   end

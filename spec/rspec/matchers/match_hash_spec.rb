@@ -158,7 +158,7 @@ module RSpec
         let(:failure_message ) {
           paint <<-MESSAGE
 \e[0m{
-  \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1mabc\e[0m
+  \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1m\"abc\"\e[0m
 }
           MESSAGE
         }
@@ -173,7 +173,7 @@ module RSpec
           paint <<-MESSAGE
 \e[0m{
   \"x\" => {
-    \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1mabc\e[0m
+    \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1m\"abc\"\e[0m
   }
 }
           MESSAGE
@@ -183,11 +183,11 @@ module RSpec
       end
 
       context "has multiple regexes" do
-        let(:expected        ) { {'x' => {'a' => /[A-Z]/ , 'b' => /[A-Z]{3}/, 'c' => /^[A-Z]{3}$/ }} }
-        let(:actual          ) { { "x" => {"a" => "ABC", "b" => "BBC", "c" => "CBC"}} }
-        let(:failing         ) { { "x" => {"a" => "ABC", "b" => "bbc", "c" => "CBC"}} }
+        let(:expected        ) { { "x" => {"a" => /[A-Z]/ , 'b' => /[A-Z]{3}/, 'c' => /^[A-Z]{3}$/ }} }
+        let(:actual          ) { { "x" => {"a" => "ABC"   , "b" => "BBC"     , "c" => "CBC"        }} }
+        let(:failing         ) { { "x" => {"a" => "ABC"   , "b" => "bbc"     , "c" => "CBC"        }} }
         let(:failure_message ) {
-          paint "\e[0m{\n  \"x\" => {\n    \"a\" => \e[33m~ \e[1m[A]BC\e[0m,\n    \"c\" => \e[33m~ \e[1m[CBC]\e[0m,\n    \"b\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1mbbc\e[0m\n  }\n}\n"
+          paint "\e[0m{\n  \"x\" => {\n    \"a\" => \e[33m~ \e[1m[A]BC\e[0m,\n    \"c\" => \e[33m~ \e[1m[CBC]\e[0m,\n    \"b\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1m\"bbc\"\e[0m\n  }\n}\n"
         }
 
         it_should_behave_like "a matcher"
@@ -360,12 +360,23 @@ module RSpec
         it_should_behave_like "a partial matcher#{' in ruby 1.8' if RUBY_VERSION.to_f == 1.8}"
       end
 
-      context "contains a hash with a nil" do
+      context "has a hash with a nil" do
         let(:expected        ) { { "a" => /[A-Z]/, "b" => /\d+/} }
         let(:actual          ) { { "a" => "ABC"  , "b" => 1    } }
         let(:failing         ) { { "a" => "ABC"  , "b" => nil  } }
         let(:failure_message ) {
           paint "\e[0m{\n  \"a\" => \e[33m~ \e[1m[A]BC\e[0m,\n  \"b\" => \e[31m- \e[1m/\\d+/\e[0m\e[32m+ \e[1mnil\e[0m\n}\n"
+        }
+
+        it_should_behave_like "a partial matcher"
+      end
+
+      context "has a hash with a missing regexed key" do
+        let(:expected        ) { { "a" => /[A-Z]/, "b" => /\d+/} }
+        let(:actual          ) { { "a" => "ABC"  , "b" => 1    } }
+        let(:failing         ) { { "a" => "ABC"                } }
+        let(:failure_message ) {
+          paint "\e[0m{\n  \"a\" => \e[33m~ \e[1m[A]BC\e[0m,\n\e[31m- \e[1m\"b\" => /\\d+/\e[0m\n}\n"
         }
 
         it_should_behave_like "a partial matcher"
