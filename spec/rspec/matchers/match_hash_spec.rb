@@ -3,10 +3,6 @@ require 'spec_helper'
 module RSpec
   module Matchers
 
-    def paint(msg)
-      RSpec.configuration.color_enabled? ? msg : msg.gsub(/\e\[\d+m/, '')
-    end
-
     # refactor start
     shared_examples_for "a matcher" do
       it "passes if matches" do
@@ -170,9 +166,9 @@ module RSpec
       end
 
       context "has a hash with a regex" do
-        let(:expected        ) { { "x" => { "a" => /[A-Z]{3}/ }} }
-        let(:actual          ) { { "x" => {"a" => "ABC"}} }
-        let(:failing         ) { { "x" => {"a" => "abc"}} }
+        let(:expected        ) { { "x" => { "a" => /[A-Z]{3}/ } } }
+        let(:actual          ) { { "x" => {"a" => "ABC"       } } }
+        let(:failing         ) { { "x" => {"a" => "abc"       } } }
         let(:failure_message ) {
           paint <<-MESSAGE
 \e[0m{

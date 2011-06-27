@@ -1,5 +1,6 @@
 require 'json'
 
+# XXX refactor - this has much repeated code from match_hash.rb
 RSpec::Matchers.define :be_json_matching do |expected|
   match do |actual|
     @actual = JSON.parse(actual)
@@ -8,18 +9,19 @@ RSpec::Matchers.define :be_json_matching do |expected|
   end
 
   failure_message_for_should do
-    @difference.to_s
+    "#{"\e[0m" if RSpec.configuration.color_enabled?}" + @difference.to_s
   end
 end
 
-RSpec::Matchers.define :be_json_including do |expected|
+# XXX refactor - this has much repeated code from match_hash.rb
+RSpec::Matchers.define :be_json_partially_matching do |expected|
   match do |actual|
     @actual = JSON.parse(actual)
     @difference = Diff.diff(@actual, expected)
-    @difference.include?
+    @difference.partial_match?
   end
 
   failure_message_for_should do
-    "No match for #{expected}"
+    "#{"\e[0m" if RSpec.configuration.color_enabled?}" + @difference.to_s
   end
 end
