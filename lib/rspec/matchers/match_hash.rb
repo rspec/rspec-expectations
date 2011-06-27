@@ -215,7 +215,7 @@ module Diff
       if match?
         @actual.is_a?(Regexp) ? markup(:matched, @expected.sub(@actual, "[#{@expected[@actual, 0]}]")) : @expected.inspect
       else
-        @actual.is_a?(Regexp) ? markup(:matched, @expected.sub(@actual, "[#{@expected[@actual, 0]}]")) : markup(:additional, expected.inspect)
+        @actual.is_a?(Regexp) ? markup(:additional, @expected.nil? ? @expected.inspect : @expected.sub(@actual, "[#{@expected[@actual, 0]}]") ) : markup(:additional, @expected.inspect)
       end
     end
   end
