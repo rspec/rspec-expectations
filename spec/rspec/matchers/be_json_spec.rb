@@ -21,7 +21,7 @@ module Rspec
         let(:actual         ) { '{ "x" :  {"a" :  "ABC"      } }' }
         let(:failing        ) { '{ "x" :  {"a" :  "123"      } }' }
         let(:failure_message) {
-          paint "\e[0m{\n  \"x\" => {\n    \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[33m~ \e[1m123\e[0m\n  }\n}\n"
+          paint "\e[0m{\n  \"x\" => {\n    \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1m\"123\"\e[0m\n  }\n}\n"
         }
 
         it_should_behave_like "a json matcher"
@@ -54,7 +54,7 @@ module Rspec
         let(:actual         ) { '{ "x" :  { "a" : "ABC"       , "b" : 1 } }' }
         let(:failing        ) { '{ "x" :  { "a" : "abc"       , "b" : 1 } }' }
         let(:failure_message) {
-          paint "\e[0m{\n  \"x\" => {\n    \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[33m~ \e[1mabc\e[0m,\n  \e[32m+ \e[1m\"b\" => 1\e[0m\n  }\n}\n"
+          paint "\e[0m{\n  \"x\" => {\n    \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1m\"abc\"\e[0m,\n  \e[32m+ \e[1m\"b\" => 1\e[0m\n  }\n}\n"
         }
 
 				it "passes if include" do
