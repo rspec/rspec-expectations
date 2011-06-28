@@ -74,6 +74,17 @@ module RSpec
 
     describe "actual.should =~ expected, when expected hash" do
 
+      context "has values of unmatching classes" do
+        let(:expected        ) { { "a" => { "b" => 1 } } }
+        let(:actual          ) { { "a" => { "b" => 1 } } }
+        let(:failing         ) { { "a" => [ "b", 1   ] } }
+        let(:failure_message ) {
+          paint "\e[0m{\n  \"a\" => \e[31m- \e[1m{\"b\"=>1}\e[0m\e[32m+ \e[1m[\"b\", 1]\e[0m\n}\n"
+        }
+
+        it_should_behave_like "a matcher"
+      end
+
       context "has an array with missing items" do
         let(:expected        ) { { "a" => [1,2,3  ] } }
         let(:actual          ) { { "a" => [1,2, 3 ] } }

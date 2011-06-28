@@ -49,9 +49,9 @@ end
 
 module Diff
   def self.diff expected, actual
-    case expected
-    when Array; ArrayDiffer
-    when Hash ; HashDiffer
+    differ = case [expected.class, actual.class]
+    when [Array, Array]; ArrayDiffer
+    when [Hash , Hash ]; HashDiffer
     else DefaultDiffer
     end.new(expected, actual)
   end
