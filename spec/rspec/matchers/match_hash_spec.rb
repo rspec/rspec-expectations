@@ -85,6 +85,17 @@ module RSpec
         it_should_behave_like "a matcher"
       end
 
+      context "has a value that is validated by a proc" do
+        let(:expected        ) { { "a" => { "b" => lambda { |x| [FalseClass, TrueClass].include? x.class  } } } }
+        let(:actual          ) { { "a" => { "b" => true                                                     } } }
+        let(:failing         ) { { "a" => { "b" => 'true'                                                   } } }
+        let(:failure_message ) {
+          paint /#{Regexp.escape("\e[0m{\n  \"a\" => {\n    \"b\" => \e[31m- \e[1m#<Proc")}.*?#{Regexp.escape("\e[32m+ \e[1m\"true\"\e[0m\n  }\n}\n")}/
+        }
+
+        it_should_behave_like "a matcher"
+      end
+
       context "has an array with missing items" do
         let(:expected        ) { { "a" => [1,2,3  ] } }
         let(:actual          ) { { "a" => [1,2, 3 ] } }

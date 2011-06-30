@@ -199,8 +199,10 @@ module Diff
 
   class DefaultDiffer < BaseDiff
     def match?
-      if actual.is_a?(Regexp) 
+      if actual.is_a?(Regexp)
         expected.is_a?(String) ? !!expected.match(actual) : !!expected.inspect.match(actual)
+      elsif actual.is_a?(Proc)
+        actual.call(expected)
       else
         expected == actual
       end
