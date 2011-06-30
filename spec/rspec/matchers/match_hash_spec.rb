@@ -85,6 +85,17 @@ module RSpec
         it_should_behave_like "a matcher"
       end
 
+      context "has a value that matches a Class" do
+        let(:expected        ) { { "a" => { "b" => Fixnum  } } }
+        let(:actual          ) { { "a" => { "b" => 3       } } }
+        let(:failing         ) { { "a" => { "b" => '3'     } } }
+        let(:failure_message ) {
+          paint "\e[0m{\n  \"a\" => {\n    \"b\" => \e[31m- \e[1mFixnum\e[0m\e[32m+ \e[1m\"3\"\e[0m\n  }\n}\n"
+        }
+
+        it_should_behave_like "a matcher"
+      end
+
       context "has a value that is validated by a proc" do
         let(:expected        ) { { "a" => { "b" => lambda { |x| [FalseClass, TrueClass].include? x.class  } } } }
         let(:actual          ) { { "a" => { "b" => true                                                     } } }

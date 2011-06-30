@@ -203,6 +203,8 @@ module Diff
         expected.is_a?(String) ? !!expected.match(actual) : !!expected.inspect.match(actual)
       elsif actual.is_a?(Proc)
         actual.call(expected)
+      elsif actual.is_a?(Class)
+        expected.is_a?(actual)
       else
         expected == actual
       end
