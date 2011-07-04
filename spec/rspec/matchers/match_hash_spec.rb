@@ -107,6 +107,17 @@ module RSpec
         it_should_behave_like "a matcher"
       end
 
+      context "has an array of items that match a Class" do
+        let(:expected        ) { { "a" => { "b" => [ Fixnum , Fixnum ] } } }
+        let(:actual          ) { { "a" => { "b" => [ 3      , 4      ] } } }
+        let(:failing         ) { { "a" => { "b" => [ 3      , '4'    ] } } }
+        let(:failure_message ) {
+          "\e[0m{\n\e[0m  \"a\" => {\n\e[0m    \"b\" => [\e[34m: \e[1m3\e[0m, \e[31m- \e[1mFixnum\e[0m\e[32m+ \e[1m\"4\"\e[0m]\n\e[0m  }\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m1 additional\e[0m, \e[34m: \e[1m1 match_class\e[0m"
+        }
+
+        it_should_behave_like "a matcher"
+      end
+
       context "has a value that is validated by a proc" do
         let(:expected        ) { { "a" => { "b" => lambda { |x| [FalseClass, TrueClass].include? x.class  } } } }
         let(:actual          ) { { "a" => { "b" => true                                                     } } }
@@ -229,11 +240,11 @@ module RSpec
       end
 
       context "has multiple regexes" do
-        let(:expected        ) { { "x" => {"a" => /[A-Z]/ , 'b' => /[A-Z]{3}/, 'c' => /^[A-Z]{3}$/ }} }
+        let(:expected        ) { { "x" => {"a" => /[B-Z]/ , 'b' => /[A-Z]{3}/, 'c' => /^[A-Z]{3}$/ }} }
         let(:actual          ) { { "x" => {"a" => "ABC"   , "b" => "BBC"     , "c" => "CBC"        }} }
         let(:failing         ) { { "x" => {"a" => "ABC"   , "b" => "bbc"     , "c" => "CBC"        }} }
         let(:failure_message ) {
-          "\e[0m{\n\e[0m  \"x\" => {\n\e[0m    \"a\" => \e[33m~ \e[1m[A]BC\e[0m,\n\e[0m    \"c\" => \e[33m~ \e[1m[CBC]\e[0m,\n\e[0m    \"b\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1m\"bbc\"\e[0m\n\e[0m  }\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m1 additional\e[0m, \e[33m~ \e[1m2 match_regex\e[0m"
+          "\e[0m{\n\e[0m  \"x\" => {\n\e[0m    \"a\" => \e[33m~ \e[0mA\e[33m(\e[1mB\e[0m\e[33m)\e[0mC\e[0m,\n\e[0m    \"c\" => \e[33m~ \e[0m\e[33m(\e[1mCBC\e[0m\e[33m)\e[0m\e[0m,\n\e[0m    \"b\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1m\"bbc\"\e[0m\n\e[0m  }\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m1 additional\e[0m, \e[33m~ \e[1m2 match_regex\e[0m"
         }
 
         it_should_behave_like "a matcher"
@@ -306,7 +317,7 @@ module RSpec
         }
 
         let(:failure_message) {
-          "\e[0m{\n\e[0m  \"href\" => \e[33m~ \e[1m[http://puge.example.org/api/goals/games/635/matches/832]\e[0m,\n\e[0m  \"scheduled_start\" => \e[33m~ \e[1m[2010-01-01T00:00:00Z]\e[0m,\n\e[0m  \"end_date\" => \e[33m~ \e[1m[2010-01-01T01:00:00Z]\e[0m,\n\e[0m  \"home_team\" => {\n\e[0m    \"name\" => \e[34m: \e[1m\"flames\"\e[0m,\n\e[0m    \"short_name\" => \e[36m{ \e[1m\"FLA\"\e[0m,\n\e[0m    \"link\" => [{\"href\"=>\"http://puge.example.org/api/goals/teams/FLA/players\", \"rel\"=>\"players\"}],\n\e[0m    \"href\" => \"http://puge.example.org/api/goals/teams/FLA\"\n\e[0m  },\n\e[0m  \"networks\" => [\"abc\", \e[31m- \e[1m\"nbc\"\e[0m\e[32m+ \e[1m\"cnn\"\e[0m, \e[31m- \e[1m\"cnn\"\e[0m\e[32m+ \e[1m\"yyy\"\e[0m, \e[32m+ \e[1m\"zzz\"\e[0m],\n\e[0m  \"away_team\" => {\n\e[0m    \"name\" => \"sharks\",\n\e[0m    \"link\" => [{\"href\"=>\"http://puge.example.org/api/goals/teams/SHA/players\", \"rel\"=>\"players\"}],\n\e[0m    \"href\" => \"http://puge.example.org/api/goals/teams/SHA\",\n\e[0m    \"short_name\" => \e[31m- \e[1m\"SHA\"\e[0m\e[32m+ \e[1m\"unexpected2\"\e[0m\n\e[0m  },\n\e[0m\e[31m- \e[1m\"expected_key\" => \"expected_value\"\e[0m,\n\e[0m\e[32m+ \e[1m\"unexpected_key\" => \"unexpected_value\"\e[0m\n\e[0m}\nWhere, \e[31m- \e[1m4 missing\e[0m, \e[32m+ \e[1m5 additional\e[0m, \e[33m~ \e[1m3 match_regex\e[0m, \e[34m: \e[1m1 match_class\e[0m, \e[36m{ \e[1m1 match_proc\e[0m"
+          "\e[0m{\n\e[0m  \"href\" => \e[33m~ \e[0m\e[33m(\e[1mhttp://puge.example.org/api/goals/games/635/matches/832\e[0m\e[33m)\e[0m\e[0m,\n\e[0m  \"scheduled_start\" => \e[33m~ \e[0m\e[33m(\e[1m2010-01-01T00:00:00Z\e[0m\e[33m)\e[0m\e[0m,\n\e[0m  \"end_date\" => \e[33m~ \e[0m\e[33m(\e[1m2010-01-01T01:00:00Z\e[0m\e[33m)\e[0m\e[0m,\n\e[0m  \"home_team\" => {\n\e[0m    \"name\" => \e[34m: \e[1m\"flames\"\e[0m,\n\e[0m    \"short_name\" => \e[36m{ \e[1m\"FLA\"\e[0m,\n\e[0m    \"link\" => [{\n\e[0m      \"href\" => \"http://puge.example.org/api/goals/teams/FLA/players\",\n\e[0m      \"rel\" => \"players\"\n\e[0m    }\n\e[0m    ],\n\e[0m    \"href\" => \"http://puge.example.org/api/goals/teams/FLA\"\n\e[0m  },\n\e[0m  \"networks\" => [\"abc\", \e[31m- \e[1m\"nbc\"\e[0m\e[32m+ \e[1m\"cnn\"\e[0m, \e[31m- \e[1m\"cnn\"\e[0m\e[32m+ \e[1m\"yyy\"\e[0m, \e[32m+ \e[1m\"zzz\"\e[0m],\n\e[0m  \"away_team\" => {\n\e[0m    \"name\" => \"sharks\",\n\e[0m    \"link\" => [{\n\e[0m      \"href\" => \"http://puge.example.org/api/goals/teams/SHA/players\",\n\e[0m      \"rel\" => \"players\"\n\e[0m    }\n\e[0m    ],\n\e[0m    \"href\" => \"http://puge.example.org/api/goals/teams/SHA\",\n\e[0m    \"short_name\" => \e[31m- \e[1m\"SHA\"\e[0m\e[32m+ \e[1m\"unexpected2\"\e[0m\n\e[0m  },\n\e[0m\e[31m- \e[1m\"expected_key\" => \"expected_value\"\e[0m,\n\e[0m\e[32m+ \e[1m\"unexpected_key\" => \"unexpected_value\"\e[0m\n\e[0m}\nWhere, \e[31m- \e[1m4 missing\e[0m, \e[32m+ \e[1m5 additional\e[0m, \e[33m~ \e[1m3 match_regex\e[0m, \e[34m: \e[1m1 match_class\e[0m, \e[36m{ \e[1m1 match_proc\e[0m"
         }
 
         it_should_behave_like "a matcher#{' in ruby 1.8' if RUBY_VERSION.to_f == 1.8}"
@@ -396,7 +407,7 @@ module RSpec
           }
         }
         let(:failure_message) {
-          "\e[0m{\n\e[0m  \"home_team\" => {\n\e[0m    \"short_name\" => \e[33m~ \e[1m[FLA]\e[0m,\n\e[0m    \"name\" => \e[31m- \e[1m\"flames\"\e[0m\e[32m+ \e[1m\"unexpected1\"\e[0m,\n\e[0m  \e[32m+ \e[1m\"href\" => \"http://puge.example.org/api/goals/teams/FLA\"\e[0m\n\e[0m  },\n\e[0m\e[32m+ \e[1m\"href\" => \"http://puge.example.org/api/goals/games/635/matches/832\"\e[0m,\n\e[0m\e[32m+ \e[1m\"scheduled_start\" => \"2010-01-01T00:00:00Z\"\e[0m,\n\e[0m\e[32m+ \e[1m\"end_date\" => \"2010-01-01T01:00:00Z\"\e[0m,\n\e[0m\e[32m+ \e[1m\"away_team\" => {\"name\"=>\"sharks\", \"short_name\"=>\"unexpected2\", \"href\"=>\"http://puge.example.org/api/goals/teams/SHA\"}\e[0m\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m6 additional\e[0m, \e[33m~ \e[1m1 match_regex\e[0m"
+          "\e[0m{\n\e[0m  \"home_team\" => {\n\e[0m    \"short_name\" => \e[33m~ \e[0m\e[33m(\e[1mFLA\e[0m\e[33m)\e[0m\e[0m,\n\e[0m    \"name\" => \e[31m- \e[1m\"flames\"\e[0m\e[32m+ \e[1m\"unexpected1\"\e[0m,\n\e[0m  \e[32m+ \e[1m\"href\" => \"http://puge.example.org/api/goals/teams/FLA\"\e[0m\n\e[0m  },\n\e[0m\e[32m+ \e[1m\"href\" => \"http://puge.example.org/api/goals/games/635/matches/832\"\e[0m,\n\e[0m\e[32m+ \e[1m\"scheduled_start\" => \"2010-01-01T00:00:00Z\"\e[0m,\n\e[0m\e[32m+ \e[1m\"end_date\" => \"2010-01-01T01:00:00Z\"\e[0m,\n\e[0m\e[32m+ \e[1m\"away_team\" => {\"name\"=>\"sharks\", \"short_name\"=>\"unexpected2\", \"href\"=>\"http://puge.example.org/api/goals/teams/SHA\"}\e[0m\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m6 additional\e[0m, \e[33m~ \e[1m1 match_regex\e[0m"
         }
 
         it_should_behave_like "a partial matcher#{' in ruby 1.8' if RUBY_VERSION.to_f == 1.8}"
@@ -407,7 +418,7 @@ module RSpec
         let(:actual          ) { { "a" => "ABC"  , "b" => 1    } }
         let(:failing         ) { { "a" => "ABC"  , "b" => nil  } }
         let(:failure_message ) {
-          "\e[0m{\n\e[0m  \"a\" => \e[33m~ \e[1m[A]BC\e[0m,\n\e[0m  \"b\" => \e[31m- \e[1m/\\d+/\e[0m\e[32m+ \e[1mnil\e[0m\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m1 additional\e[0m, \e[33m~ \e[1m1 match_regex\e[0m"
+          "\e[0m{\n\e[0m  \"a\" => \e[33m~ \e[0m\e[33m(\e[1mA\e[0m\e[33m)\e[0mBC\e[0m,\n\e[0m  \"b\" => \e[31m- \e[1m/\\d+/\e[0m\e[32m+ \e[1mnil\e[0m\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m1 additional\e[0m, \e[33m~ \e[1m1 match_regex\e[0m"
         }
 
         it_should_behave_like "a partial matcher"
@@ -418,7 +429,7 @@ module RSpec
         let(:actual          ) { { "a" => "ABC"  , "b" => 1    } }
         let(:failing         ) { { "a" => "ABC"                } }
         let(:failure_message ) {
-          "\e[0m{\n\e[0m  \"a\" => \e[33m~ \e[1m[A]BC\e[0m,\n\e[0m\e[31m- \e[1m\"b\" => /\\d+/\e[0m\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[33m~ \e[1m1 match_regex\e[0m"
+          "\e[0m{\n\e[0m  \"a\" => \e[33m~ \e[0m\e[33m(\e[1mA\e[0m\e[33m)\e[0mBC\e[0m,\n\e[0m\e[31m- \e[1m\"b\" => /\\d+/\e[0m\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[33m~ \e[1m1 match_regex\e[0m"
         }
 
         it_should_behave_like "a partial matcher"

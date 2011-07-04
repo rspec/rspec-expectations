@@ -83,14 +83,14 @@ module Diff
 
     def markup(item_type, item)
       color, prefix = color_scheme[item_type]
-      "#{color}#{prefix+' ' if color}#{bold if color}#{item}#{reset if color}"
+      "#{color}#{prefix+' ' if color}#{bold if color and item_type != :match_regex}#{reset if item_type == :match_regex}#{item}#{reset if color}"
     end
 
     def summary
       msg = "\e[0m" + to_s.split("\n").join("\n\e[0m")
       where = [:missing, :additional, :match_regex, :match_class, :match_proc].collect { |item_type|
         color, prefix = color_scheme[item_type]
-        count = msg.scan(color).size
+        count = msg.scan("#{color}#{prefix}").size
         "#{color}#{prefix} #{bold}#{count} #{item_type}#{reset}" if count > 0
       }.compact.join(", ")
       msg <<  "\nWhere, #{where}" if where.size > 0
@@ -187,13 +187,12 @@ module Diff
 
     private
 
+    # refactor this
     def pretty_items
       [].tap do |l|
         actual.each_with_index do |item, index|
           if additional? index, item
             l << markup(:missing, item.inspect)
-          elsif correct? index, item
-            l << item.inspect
           else
             l << Diff.diff(expected[index], item)
           end
@@ -239,7 +238,8 @@ module Diff
 
     def expected_to_s
       if match?
-        markup(match_with, @actual.is_a?(Regexp) ? (@expected.is_a?(String) and not @expected.nil?) ? @expected.sub(@actual, "[#{@expected[@actual, 0]}]") : @expected.inspect : @expected.inspect)
+        color, prefix = color_scheme[:match_regex]
+        markup(match_with, @actual.is_a?(Regexp) ? (@expected.is_a?(String) and not @expected.nil?) ? @expected.sub(@actual, "#{color}(\e[1m#{@expected[@actual, 0]}#{reset}#{color})#{reset}") : @expected.inspect : @expected.inspect)
       else
         markup(:additional, (@actual.is_a?(Regexp) and @actual.is_a?(String) and not @expected.nil?) ? @expected.sub(@actual, "[#{@expected[@actual, 0]}]") : @expected.inspect)
       end
