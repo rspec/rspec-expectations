@@ -9,7 +9,7 @@ RSpec::Matchers.define :be_json_matching do |expected|
   end
 
   failure_message_for_should do
-    "#{"\e[0m" if RSpec.configuration.color_enabled?}" + @difference.to_s
+    @difference.summary
   end
 end
 
@@ -22,6 +22,6 @@ RSpec::Matchers.define :be_json_partially_matching do |expected|
   end
 
   failure_message_for_should do
-    "#{"\e[0m" if RSpec.configuration.color_enabled?}" + @difference.to_s
+    @difference.summary
   end
 end
