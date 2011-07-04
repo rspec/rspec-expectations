@@ -24,8 +24,3 @@ RSpec::configure do |config|
   config.filter_run :focused => true
   config.run_all_when_everything_filtered = true
 end
-
-def paint(msg)
-  RSpec.configuration.color_enabled? ? msg : msg.gsub(/\e\[\d+m/, '')
-end
-

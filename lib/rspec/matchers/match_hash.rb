@@ -13,7 +13,7 @@ module RSpec
       end
 
       def failure_message_for_should
-        "#{"\e[0m" if RSpec.configuration.color_enabled?}" + @difference.to_s
+        @difference.summary
       end
     end
 
@@ -27,7 +27,7 @@ module RSpec
         end
 
         failure_message_for_should do
-          "#{"\e[0m" if RSpec.configuration.color_enabled?}" + @difference.to_s
+          @difference.summary
         end
       end
     end
@@ -40,7 +40,7 @@ module RSpec
         end
 
         failure_message_for_should do
-          "#{"\e[0m" if RSpec.configuration.color_enabled?}" + @difference.to_s
+          @difference.summary
         end
       end
     end
@@ -82,14 +82,33 @@ module Diff
     end
 
     def markup(item_type, item)
-      bold = "\e[1m"
-      reset = "\e[0m"
-      (color, prefix) = case item_type
-        when :matched   ; ["\e[33m", "~"]
-        when :missing   ; ["\e[31m", "-"]
-        when :additional; ["\e[32m", "+"]
-      end
-      RSpec.configuration.color_enabled?  ? "#{color}#{prefix} #{bold}#{item}#{reset}" : "#{prefix} #{item}"
+      color, prefix = color_scheme[item_type]
+      "#{color}#{prefix+' ' if color}#{bold if color}#{item}#{reset if color}"
+    end
+
+    def summary
+      msg = "\e[0m" + to_s.split("\n").join("\n\e[0m")
+      where = [:missing, :additional, :match_regex, :match_class, :match_proc].collect { |item_type|
+        color, prefix = color_scheme[item_type]
+        count = msg.scan(color).size
+        "#{color}#{prefix} #{bold}#{count} #{item_type}#{reset}" if count > 0
+      }.compact.join(", ")
+      msg <<  "\nWhere, #{where}" if where.size > 0
+
+      RSpec.configuration.color_enabled? ? msg : msg.gsub(/\e\[\d+m/, "")
+    end
+
+    private
+    def bold ; "\e[1m"; end
+    def reset; "\e[0m"; end
+    def color_scheme
+      {
+        :missing       => ["\e[31m", "-"],
+        :additional    => ["\e[32m", "+"],
+        :match_regex   => ["\e[33m", "~"],
+        :match_class   => ["\e[34m", ":"],
+        :match_proc    => ["\e[36m", "{"]
+      }
     end
   end
 
@@ -199,14 +218,17 @@ module Diff
 
   class DefaultDiffer < BaseDiff
     def match?
-      if actual.is_a?(Regexp)
+      case match_with
+      when :match_regex
         expected.is_a?(String) ? !!expected.match(actual) : !!expected.inspect.match(actual)
-      elsif actual.is_a?(Proc)
+      when :match_proc
         actual.call(expected)
-      elsif actual.is_a?(Class)
+      when :match_class
         expected.is_a?(actual)
-      else
+      when :match_object
         expected == actual
+      else
+        raise "Shouldn't get here"
       end
     end
 
@@ -217,9 +239,22 @@ module Diff
 
     def expected_to_s
       if match?
-        @actual.is_a?(Regexp) ? markup(:matched, (@expected.is_a?(String) and not @expected.nil?) ? @expected.sub(@actual, "[#{@expected[@actual, 0]}]") : @expected.inspect) : @expected.inspect
+        markup(match_with, @actual.is_a?(Regexp) ? (@expected.is_a?(String) and not @expected.nil?) ? @expected.sub(@actual, "[#{@expected[@actual, 0]}]") : @expected.inspect : @expected.inspect)
       else
         markup(:additional, (@actual.is_a?(Regexp) and @actual.is_a?(String) and not @expected.nil?) ? @expected.sub(@actual, "[#{@expected[@actual, 0]}]") : @expected.inspect)
+      end
+    end
+
+    private
+    def match_with
+      @match_with ||= if actual.is_a?(Regexp)
+        :match_regex
+      elsif actual.is_a?(Proc)
+        :match_proc
+      elsif actual.is_a?(Class)
+        :match_class
+      else
+        :match_object
       end
     end
   end
