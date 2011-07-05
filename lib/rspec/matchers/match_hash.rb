@@ -181,6 +181,11 @@ module Diff
       m
     end
 
+    def partial_match?
+      #(expected.size == actual.size) && actual.each_with_index { |item, index| partially_correct?(index, item) }.all?  # XXX should use something like this
+      to_s.scan(color_scheme[:missing].join('')).size == 0                                                              # but this is working 'for now'
+    end
+
     def to_s
       "[" + pretty_items.join(", ") + "]"
     end
@@ -207,6 +212,10 @@ module Diff
 
     def additional? index, value
       index >= expected.size
+    end
+
+    def partially_correct? index, value
+      Diff.diff(expected[index], value).partial_match?
     end
 
     def correct? index, value

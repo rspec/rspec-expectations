@@ -435,6 +435,16 @@ module RSpec
         it_should_behave_like "a partial matcher"
       end
 
+      context "has an array of hashes, where the hash in the array has extra values" do
+        let(:expected        ) { { "a" => [ { "b" => 1           }, { "d" => 3 } ] } }
+        let(:actual          ) { { "a" => [ { "b" => 1, "c" => 2 }, { "d" => 3 } ] } }
+        let(:failing         ) { { "a" => [ { "b" => 2, "c" => 2 }, { "d" => 3 } ] } }
+        let(:failure_message ) {
+          "\e[0m{\n\e[0m  \"a\" => [{\n\e[0m    \"b\" => \e[31m- \e[1m1\e[0m\e[32m+ \e[1m2\e[0m,\n\e[0m  \e[32m+ \e[1m\"c\" => 2\e[0m\n\e[0m  }\n\e[0m  , {\n\e[0m    \"d\" => 3\n\e[0m  }\n\e[0m  ]\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m2 additional\e[0m"
+        }
+
+        it_should_behave_like "a partial matcher"
+      end
     end
 
   end
