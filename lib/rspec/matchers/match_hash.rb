@@ -48,6 +48,9 @@ module RSpec
 end
 
 module Diff
+  #DEFAULT_ITEM_TYPES = [:incorrect, :missing, :additional]  # ie. Don't show the correct items, just show what's to different
+  DEFAULT_ITEM_TYPES = [:correct, :incorrect, :missing, :additional]
+
   def self.diff expected, actual
     differ = case [expected.class, actual.class]
     when [Array, Array]; ArrayDiffer
@@ -57,7 +60,6 @@ module Diff
   end
 
   class BaseDiff
-    include Term::ANSIColor
     attr_reader :expected, :actual
 
     def self.diff(expected, actual)
@@ -124,7 +126,7 @@ module Diff
     end
 
     def to_s
-      show(:correct, :incorrect, :missing, :additional)
+      show(*DEFAULT_ITEM_TYPES)
     end
 
     def details
