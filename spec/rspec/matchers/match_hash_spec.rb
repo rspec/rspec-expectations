@@ -3,73 +3,43 @@ require 'spec_helper'
 module RSpec
   module Matchers
 
-    # refactor start
-    shared_examples_for "a matcher" do
-      it "passes if matches" do
-        actual.should =~ expected
-      end
-
-      it "fails if doesn't match" do
-        lambda { failing.should =~ expected }.should fail_with failure_message
+    def a_test(m, left, right)
+      case m
+        when "a matcher"         ; left.should =~                         right
+        when "another matcher"   ; left.should be_hash_matching           right
+        when "a partial matcher" ; left.should be_hash_partially_matching right
       end
     end
 
-    shared_examples_for "a matcher in ruby 1.8" do
-      it "passes if matches" do
-        actual.should =~ expected
-      end
+    ["a matcher", "another matcher", "a partial matcher"].each { |matcher_name|
+      ["", " in ruby 1.8"].each { |context|
+        shared_examples_for "#{matcher_name}#{context}" do
+          desc = context == "a partial matcher" ? "partially " : ""
+          it "passes if #{desc}matches" do
+            a_test(matcher_name, actual, expected)
+          end
 
-      # Don't have ordered hashes in ruby 1.8 so can't guarantee what the failure message will look like..
-      # refactor...
-      it "fails if doesn't match" do
-       lambda { failing.should =~ expected }.should fail
-      end
-    end
+          it "fails if doesn't #{desc}match" do
+            lambda { a_test(matcher_name, failing, expected) }.should(
+              if context == " in ruby 1.8"
+                # Don't have ordered hashes in ruby 1.8 so can't guarantee what the failure message will look like..
+                fail
+              else
+                fail_with(
+                  if RSpec.configuration.color_enabled?
+                    failure_message
+                  else
+                    # Have to modify the failure message if color is not enabled, and if its a regex
+                    failure_message.is_a?(Regexp)? /.*/ : failure_message.gsub(/\e\[\d+m/, "")
+                  end
+                )
 
-    shared_examples_for "another matcher" do
-      it "passes if matches" do
-        actual.should be_hash_matching expected
-      end
-
-      it "fails if doesn't match" do
-       lambda { failing.should be_hash_matching expected }.should fail_with failure_message
-      end
-    end
-
-    shared_examples_for "another matcher in ruby 1.8" do
-      it "passes if matches" do
-        actual.should be_hash_matching expected
-      end
-
-      # Don't have ordered hashes in ruby 1.8 so can't guarantee what the failure message will look like..
-      # refactor...
-      it "fails if doesn't match" do
-       lambda { failing.should be_hash_matching expected }.should fail
-      end
-    end
-
-    shared_examples_for "a partial matcher" do
-      it "passes if partially matches" do
-        actual.should be_hash_partially_matching expected
-      end
-
-      it "fails if doesn't partially match" do
-       lambda { failing.should be_hash_partially_matching expected }.should fail_with failure_message
-      end
-    end
-
-    shared_examples_for "a partial matcher in ruby 1.8" do
-      it "passes if partially matches" do
-        actual.should be_hash_partially_matching expected
-      end
-
-      # Don't have ordered hashes in ruby 1.8 so can't guarantee what the failure message will look like..
-      # refactor...
-      it "fails if doesn't partially match" do
-       lambda { failing.should be_hash_partially_matching expected }.should fail
-      end
-    end
-    # refactor end
+              end
+            )
+          end
+        end
+      }
+    }
 
 
     describe "actual.should =~ expected, when expected hash" do

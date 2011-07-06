@@ -13,7 +13,7 @@ module RSpec
       end
 
       def failure_message_for_should
-        @difference.summary
+        @difference.details
       end
     end
 
@@ -27,7 +27,7 @@ module RSpec
         end
 
         failure_message_for_should do
-          @difference.summary
+          @difference.details
         end
       end
     end
@@ -40,7 +40,7 @@ module RSpec
         end
 
         failure_message_for_should do
-          @difference.summary
+          @difference.details
         end
       end
     end
@@ -81,21 +81,13 @@ module Diff
       item.split("\n").map {|s| "  #{s}"}.join("\n")
     end
 
+    def show(*item_types)
+      to_s
+    end
+
     def markup(item_type, item)
       color, prefix = color_scheme[item_type]
       "#{color}#{prefix+' ' if color}#{bold if color and item_type != :match_regex}#{reset if item_type == :match_regex}#{item}#{reset if color}"
-    end
-
-    def summary
-      msg = "\e[0m" + to_s.split("\n").join("\n\e[0m")
-      where = [:missing, :additional, :match_regex, :match_class, :match_proc].collect { |item_type|
-        color, prefix = color_scheme[item_type]
-        count = msg.scan("#{color}#{prefix}").size
-        "#{color}#{prefix} #{bold}#{count} #{item_type}#{reset}" if count > 0
-      }.compact.join(", ")
-      msg <<  "\nWhere, #{where}" if where.size > 0
-
-      RSpec.configuration.color_enabled? ? msg : msg.gsub(/\e\[\d+m/, "")
     end
 
     private
@@ -115,23 +107,36 @@ module Diff
 
   class HashDiffer < BaseDiff
     def match?
-      diffed_wrong_values.size + missing_items.size + additional_items.size == 0
+      incorrect_items(:match?).size + missing_items.size + additional_items.size == 0
     end
 
     def partial_match?
-      diffed_wrong_values(:partial_match?).size + missing_items.size == 0
+      incorrect_items(:partial_match?).size + missing_items.size == 0
+    end
+
+    def show(*item_types)
+      items = []
+      items += correct_items(*item_types).map             {|ck, cv| indent               "#{ck.inspect} => #{cv}"        } if item_types.include? :correct
+      items += incorrect_items(:match?, *item_types).map  {|ik, iv| indent               "#{ik.inspect} => #{iv}"        } if item_types.include? :incorrect
+      items += missing_items.map                          {|mk, mv| markup :missing    , "#{mk.inspect} => #{mv.inspect}"} if item_types.include? :missing
+      items += additional_items.map                       {|ak, av| markup :additional , "#{ak.inspect} => #{av.inspect}"} if item_types.include? :additional
+      "{\n#{items.join(",\n")}\n}\n"
     end
 
     def to_s
-      "{\n" +
-      (
-        diffed_correct_values.map {|ck, cv| indent               "#{ck.inspect} => #{cv}"        } +
-        diffed_wrong_values.map   {|wk, wv| indent               "#{wk.inspect} => #{wv}"        } +
-        missing_items.map         {|mk, mv| markup :missing    , "#{mk.inspect} => #{mv.inspect}"} +
-        additional_items.map      {|ak, av| markup :additional , "#{ak.inspect} => #{av.inspect}"}
-      ).join(",\n") +
-      "\n" +
-      "}\n"
+      show(:correct, :incorrect, :missing, :additional)
+    end
+
+    def details
+      msg = "\e[0m" + to_s.split("\n").join("\n\e[0m")
+      where = [:missing, :additional, :match_regex, :match_class, :match_proc].collect { |item_type|
+        color, prefix = color_scheme[item_type]
+        count = msg.scan("#{color}#{prefix}").size
+        "#{color}#{prefix} #{bold}#{count} #{item_type}#{reset}" if count > 0
+      }.compact.join(", ")
+      msg <<  "\nWhere, #{where}" if where.size > 0
+
+      RSpec.configuration.color_enabled? ? msg : msg.gsub(/\e\[\d+m/, "")
     end
 
     def missing_items
@@ -142,20 +147,21 @@ module Diff
       Hash[expected.select {|k, v| !actual.keys.include? k}]
     end
 
-    def diffed_correct_values
-      _diffed_values(:match?, false)
+    def correct_items(*item_types)
+      _diffed_values(:match?, false, *item_types)
     end
 
-    def diffed_wrong_values(match_method = :match?)
-      _diffed_values(match_method, true)
+    def incorrect_items(match_method = :match?, *item_types)
+      _diffed_values(match_method, true, *item_types)
     end
 
     private
 
-    def _diffed_values(match_method, not_match)
+    def _diffed_values(match_method, not_match, *item_types)
+      item_types = [:correct, :incorrect, :missing, :additional] if item_types.size == 0
       actual.inject({}) {|h, (k, v)|
         diff = Diff.diff(expected[k], v)
-        h[k] = diff if expected.keys.include?(k) && (not_match ? !diff.send(match_method) : diff.send(match_method))
+        h[k] = diff.show(*item_types) if expected.keys.include?(k) && (not_match ? !diff.send(match_method) : diff.send(match_method))
         h
       }
     end

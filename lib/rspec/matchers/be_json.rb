@@ -9,7 +9,7 @@ RSpec::Matchers.define :be_json_matching do |expected|
   end
 
   failure_message_for_should do
-    @difference.summary
+    @difference.details
   end
 end
 
@@ -22,6 +22,6 @@ RSpec::Matchers.define :be_json_partially_matching do |expected|
   end
 
   failure_message_for_should do
-    @difference.summary
+    @difference.details
   end
 end
