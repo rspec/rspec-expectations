@@ -1,5 +1,3 @@
-require 'term/ansicolor'
-
 module RSpec
   module Matchers
     class MatchHash
