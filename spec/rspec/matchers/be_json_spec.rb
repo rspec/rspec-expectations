@@ -13,6 +13,16 @@ module Rspec
       end
     end
 
+    shared_examples_for "a partial json matcher" do
+      it "passes if matches" do
+        actual.should be_json_partially_matching expected
+      end
+
+      it "fails if doesn't match" do
+        lambda { failing.should be_json_partially_matching expected }.should fail_with failure_message
+      end
+    end
+
     describe "actual.should be_json_matching(expected)" do
 
       # Assume the match_hash matcher works, so don't need a bunch of test cases.
@@ -21,7 +31,7 @@ module Rspec
         let(:actual         ) { '{ "x" :  {"a" :  "ABC"      } }' }
         let(:failing        ) { '{ "x" :  {"a" :  "123"      } }' }
         let(:failure_message) {
-          "\e[0m{\n\e[0m  \"x\" => {\n\e[0m    \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1m\"123\"\e[0m\n\e[0m  }\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m1 additional\e[0m"
+          "\e[0m{\n\e[0m  \"x\"=>{\n\e[0m    \"a\"=>\e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1m\"123\"\e[0m\n\e[0m  }\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m1 additional\e[0m"
         }
 
         it_should_behave_like "a json matcher"
@@ -54,16 +64,10 @@ module Rspec
         let(:actual         ) { '{ "x" :  { "a" : "ABC"       , "b" : 1 } }' }
         let(:failing        ) { '{ "x" :  { "a" : "abc"       , "b" : 1 } }' }
         let(:failure_message) {
-          "\e[0m{\n\e[0m  \"x\" => {\n\e[0m    \"a\" => \e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1m\"abc\"\e[0m,\n\e[0m  \e[32m+ \e[1m\"b\" => 1\e[0m\n\e[0m  }\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m2 additional\e[0m"
+          "\e[0m{\n\e[0m  \"x\"=>{\n\e[0m    \"a\"=>\e[31m- \e[1m/[A-Z]{3}/\e[0m\e[32m+ \e[1m\"abc\"\e[0m\n\e[0m  }\n\e[0m}\nWhere, \e[31m- \e[1m1 missing\e[0m, \e[32m+ \e[1m1 additional\e[0m"
         }
 
-				it "passes if include" do
-					actual.should be_json_partially_matching expected
-				end
-
-				it "fails if doesn't include" do
-					lambda { failing.should be_json_partially_matching expected }.should fail_with failure_message
-				end
+        it_should_behave_like "a partial json matcher"
       end
     end
   end

@@ -6,8 +6,8 @@ module RSpec
       end
 
       def matches?(actual)
-        @difference = Diff.diff(actual, @expected)
-        @difference.match?
+        @difference = Differ::Difference.new(@expected, actual)
+        @difference.matches?
       end
 
       def failure_message_for_should
@@ -20,8 +20,8 @@ module RSpec
     def be_hash_matching(expected)
       Matcher.new :be_hash_matching, expected do |_expected_|
         match do |actual|
-          @difference = Diff.diff(actual, _expected_)
-          @difference.match?
+          @difference = Differ::Difference.new(_expected_, actual)
+          @difference.matches?
         end
 
         failure_message_for_should do
@@ -33,8 +33,8 @@ module RSpec
     def be_hash_partially_matching(expected)
       Matcher.new :be_hash_partially_matching, expected do |_expected_|
         match do |actual|
-          @difference = Diff.diff(actual, _expected_)
-          @difference.partial_match?
+          @difference = Differ::PartialDifference.new(_expected_, actual)
+          @difference.matches?
         end
 
         failure_message_for_should do
@@ -42,235 +42,212 @@ module RSpec
         end
       end
     end
-  end
-end
 
-module Diff
-  #DEFAULT_ITEM_TYPES = [:incorrect, :missing, :additional]  # ie. Don't show the correct items, just show what's to different
-  DEFAULT_ITEM_TYPES = [:correct, :incorrect, :missing, :additional]
+    def be_hash_all_matching(expected)
+      Matcher.new :be_hash_all_matching, expected do |_expected_|
+        match do |actual|
+          @difference = Differ::Difference.new(_expected_, actual, :show_all => true)
+          @difference.matches?
+        end
 
-  def self.diff expected, actual
-    differ = case [expected.class, actual.class]
-    when [Array, Array]; ArrayDiffer
-    when [Hash , Hash ]; HashDiffer
-    else DefaultDiffer
-    end.new(expected, actual)
-  end
-
-  class BaseDiff
-    attr_reader :expected, :actual
-
-    def self.diff(expected, actual)
-      new(expected, actual)
-    end
-
-    def initialize(expected, actual)
-      @expected = expected
-      @actual = actual
-    end
-
-    def match?
-      expected == actual
-    end
-
-    def partial_match?
-      match?
-    end
-
-    def indent(item)
-      item.split("\n").map {|s| "  #{s}"}.join("\n")
-    end
-
-    def show(*item_types)
-      to_s
-    end
-
-    def markup(item_type, item)
-      color, prefix = color_scheme[item_type]
-      "#{color}#{prefix+' ' if color}#{bold if color and item_type != :match_regex}#{reset if item_type == :match_regex}#{item}#{reset if color}"
-    end
-
-    private
-    def bold ; "\e[1m"; end
-    def reset; "\e[0m"; end
-    def color_scheme
-      {
-        :missing       => ["\e[31m", "-"],
-        :additional    => ["\e[32m", "+"],
-        :match_regex   => ["\e[33m", "~"],
-        :match_class   => ["\e[34m", ":"],
-        :match_proc    => ["\e[36m", "{"]
-      }
-    end
-  end
-
-
-  class HashDiffer < BaseDiff
-    def match?
-      incorrect_items(:match?).size + missing_items.size + additional_items.size == 0
-    end
-
-    def partial_match?
-      incorrect_items(:partial_match?).size + missing_items.size == 0
-    end
-
-    def show(*item_types)
-      items = []
-      items += correct_items(*item_types).map             {|ck, cv| indent               "#{ck.inspect} => #{cv}"        } if item_types.include? :correct
-      items += incorrect_items(:match?, *item_types).map  {|ik, iv| indent               "#{ik.inspect} => #{iv}"        } if item_types.include? :incorrect
-      items += missing_items.map                          {|mk, mv| markup :missing    , "#{mk.inspect} => #{mv.inspect}"} if item_types.include? :missing
-      items += additional_items.map                       {|ak, av| markup :additional , "#{ak.inspect} => #{av.inspect}"} if item_types.include? :additional
-      "{\n#{items.join(",\n")}\n}\n"
-    end
-
-    def to_s
-      show(*DEFAULT_ITEM_TYPES)
-    end
-
-    def details
-      msg = "\e[0m" + to_s.split("\n").join("\n\e[0m")
-      where = [:missing, :additional, :match_regex, :match_class, :match_proc].collect { |item_type|
-        color, prefix = color_scheme[item_type]
-        count = msg.scan("#{color}#{prefix}").size
-        "#{color}#{prefix} #{bold}#{count} #{item_type}#{reset}" if count > 0
-      }.compact.join(", ")
-      msg <<  "\nWhere, #{where}" if where.size > 0
-
-      RSpec.configuration.color_enabled? ? msg : msg.gsub(/\e\[\d+m/, "")
-    end
-
-    def missing_items
-      Hash[actual.select {|k, v| !expected.keys.include? k}]
-    end
-
-    def additional_items
-      Hash[expected.select {|k, v| !actual.keys.include? k}]
-    end
-
-    def correct_items(*item_types)
-      _diffed_values(:match?, false, *item_types)
-    end
-
-    def incorrect_items(match_method = :match?, *item_types)
-      _diffed_values(match_method, true, *item_types)
-    end
-
-    private
-
-    def _diffed_values(match_method, not_match, *item_types)
-      item_types = [:correct, :incorrect, :missing, :additional] if item_types.size == 0
-      actual.inject({}) {|h, (k, v)|
-        diff = Diff.diff(expected[k], v)
-        h[k] = diff.show(*item_types) if expected.keys.include?(k) && (not_match ? !diff.send(match_method) : diff.send(match_method))
-        h
-      }
-    end
-  end
-
-
-  class ArrayDiffer < BaseDiff
-    def match?
-      # refactor this with pretty_items
-      m = true
-      actual.each_with_index do |item, index|
-        if additional? index, item
-          m = false
-        elsif !(correct?(index, item))
-          m = false
+        failure_message_for_should do
+          @difference.details
         end
       end
-      if expected.size > actual.size
-        expected.slice(actual.size..-1).each do |item|
-          m = false
+    end
+
+    def be_hash_all_partially_matching(expected)
+      Matcher.new :be_hash_all_partially_matching, expected do |_expected_|
+        match do |actual|
+          @difference = Differ::PartialDifference.new(_expected_, actual, :show_all => true)
+          @difference.matches?
+        end
+
+        failure_message_for_should do
+          @difference.details
         end
       end
-      m
     end
 
-    def partial_match?
-      #(expected.size == actual.size) && actual.each_with_index { |item, index| partially_correct?(index, item) }.all?  # XXX should use something like this
-      to_s.scan(color_scheme[:missing].join('')).size == 0                                                              # but this is working 'for now'
-    end
+    module Differ
+      class Difference
+        def initialize(expected, actual, opts={})
+          @show_all = opts[:show_all]
+          @d = difference(expected, actual)
+        end
 
-    def to_s
-      "[" + pretty_items.join(", ") + "]"
-    end
+        def matches?
+          @match ||= @d ? item_types.map { |item_type|
+            color_scheme[item_type]
+          }.reduce(0) { |count, (color, prefix)|
+            count + @d.scan("#{color}#{prefix}").size
+          } == 0 : true
+        end
 
-    private
+        def details
+          if @d
+            msg = "\e[0m" + @d.split("\n").join("\n\e[0m")
+            where = color_scheme_keys.collect { |item_type|
+              color, prefix = color_scheme[item_type]
+              count = msg.scan("#{color}#{prefix}").size
+              "#{color}#{prefix} #{bold}#{count} #{item_type}#{reset}" if count > 0
+            }.compact.join(", ")
+            msg <<  "\nWhere, #{where}" if where.size > 0
 
-    # refactor this
-    def pretty_items
-      [].tap do |l|
-        actual.each_with_index do |item, index|
-          if additional? index, item
-            l << markup(:missing, item.inspect)
+            RSpec.configuration.color_enabled? ? msg : msg.gsub(/\e\[\d+m/, "")
           else
-            l << Diff.diff(expected[index], item)
+            "failed to match"
           end
         end
-        if expected.size > actual.size
-          expected.slice(actual.size..-1).each do |item|
-            l << markup(:additional, item.inspect)
+
+        def to_s
+          @d && @d.gsub(/\e\[\d+m/, "")
+        end
+
+        private
+
+        def item_types
+          [:missing, :additional]
+        end
+
+        def item_types_shown
+          ret = [:different] + item_types
+          ret += [:additional] if @show_all
+          ret.uniq
+        end
+
+        def matches_shown
+          ret = []
+          ret += [:match_class, :match_proc, :match_regexp] if @show_all
+          ret
+        end
+
+        def difference(expected, actual, reverse=false)
+          if actual.is_a? expected.class
+            left = diff(expected, actual, true)
+            right = diff(actual, expected)
+            items_to_s(
+              expected,
+              (item_types_shown).reduce([]) { |a, method|
+                a + send(method, left, right, expected.class).compact.map { |item| markup(method, item) }
+              }
+            )
+          else
+            difference_to_s(expected, actual, reverse)
           end
+        end
+
+        def diff(expected, actual, reverse=false)
+          if expected.is_a?(Hash)
+            expected.keys.reduce({}) { |h, k|
+              h.update(k => actual.has_key?(k) ? difference(actual[k], expected[k], reverse) : expected[k])
+            }
+          elsif expected.is_a?(Array)
+            expected, actual = [expected, actual].map { |x| x.each_with_index.reduce({}) { |h, (v, i)| h.update(i=>v) } }
+            #diff(expected, actual, reverse)  # XXX - is there a test case for this?
+            diff(expected, actual)
+          else
+            actual
+          end if expected.is_a? actual.class
+        end
+
+        def compare(right, expected_class, default=nil)
+          if [Hash, Array].include? expected_class
+            right && right.keys.tap { |keys| keys.sort if expected_class == Array }.map { |k|
+              yield k
+            }
+          else
+            [default]
+          end
+        end
+
+        def different(left, right, expected_class)
+          compare(right, expected_class, difference_to_s(right, left)) { |k|
+            "#{"#{k.inspect}=>" if expected_class == Hash}#{right[k]}" if right[k] and left.has_key?(k)
+          }
+       end
+       
+        def missing(left, right, expected_class)
+          compare(left, expected_class) { |k|
+            "#{"#{k.inspect}=>" if expected_class == Hash}#{left[k].inspect}" unless right.has_key?(k)
+          }
+       end
+
+        def additional(left, right, expected_class)
+          missing(right, left, expected_class)
+        end
+
+        def match?(expected, actual)
+          case expected
+            when Class ; [actual.is_a?(expected)                         , :match_class  ]
+            when Proc  ; [expected.call(actual)                          , :match_proc   ]
+            when Regexp; [actual.is_a?(String) && actual.match(expected) , :match_regexp ]
+            else         [actual == expected                             , :match        ]
+          end
+        end
+
+        def items_to_s(expected, items)
+          case expected
+            when Hash ; "{\n#{items.join(",\n")}\n}\n"
+            when Array; "[\n#{items.join(",\n")}\n]\n"
+            else items.join.strip
+          end if items.size > 0
+        end
+
+        def match_regexp_to_s(expected, actual)
+          if actual.is_a? String
+            color, prefix = color_scheme[:match_regexp]
+            actual.sub(expected, "#{color}(\e[1m#{actual[expected, 0]}#{reset}#{color})#{reset}")
+          end
+        end
+
+        def match_to_s(expected, actual, match_type)
+          actual = match_regexp_to_s(expected, actual) if match_type == :match_regexp
+          markup(match_type, actual) if matches_shown.include? match_type
+        end
+
+        def difference_to_s(expected, actual, reverse=false)
+          match, match_type = match? *(reverse ? [actual, expected] : [expected, actual])
+          if match
+            match_to_s(expected, actual, match_type)
+          else
+            "#{markup(:missing, expected.inspect)}#{markup(:additional, actual.inspect)}"
+          end
+        end
+
+        def bold ; "\e[1m"; end
+        def reset; "\e[0m"; end
+        def color_scheme_keys
+          [:missing, :additional, :match_regexp, :match_class, :match_proc]
+        end
+        def color_scheme
+          {
+            :missing       => ["\e[31m", "-"],
+            :additional    => ["\e[32m", "+"],
+            :match_regexp  => ["\e[33m", "~"],
+            :match_class   => ["\e[34m", ":"],
+            :match_proc    => ["\e[36m", "{"]
+          }
+        end
+
+        def markup(item_type, item)
+          if item_type == :different
+            item.split("\n").map {|line| "  #{line}"}.join("\n") if item
+          else
+            color, prefix = color_scheme[item_type]
+            "#{color}#{prefix+' ' if color}#{bold if color and item_type != :match_regexp}#{reset if item_type == :match_regexp}#{item}#{reset if color}" if item
+          end if item
+        end
+      end
+
+      class PartialDifference < Difference
+        def item_types
+          [:missing]
         end
       end
     end
 
-    def additional? index, value
-      index >= expected.size
-    end
-
-    def partially_correct? index, value
-      Diff.diff(expected[index], value).partial_match?
-    end
-
-    def correct? index, value
-      Diff.diff(expected[index], value).match?
-    end
-  end
-
-
-  class DefaultDiffer < BaseDiff
-    def match?
-      case match_with
-      when :match_regex
-        expected.is_a?(String) ? !!expected.match(actual) : !!expected.inspect.match(actual)
-      when :match_proc
-        actual.call(expected)
-      when :match_class
-        expected.is_a?(actual)
-      when :match_object
-        expected == actual
-      else
-        raise "Shouldn't get here"
-      end
-    end
-
-    def to_s
-      # refactor
-      match? ? expected_to_s : markup(:missing, @actual.inspect) + expected_to_s
-    end
-
-    def expected_to_s
-      if match?
-        color, prefix = color_scheme[:match_regex]
-        markup(match_with, @actual.is_a?(Regexp) ? (@expected.is_a?(String) and not @expected.nil?) ? @expected.sub(@actual, "#{color}(\e[1m#{@expected[@actual, 0]}#{reset}#{color})#{reset}") : @expected.inspect : @expected.inspect)
-      else
-        markup(:additional, (@actual.is_a?(Regexp) and @actual.is_a?(String) and not @expected.nil?) ? @expected.sub(@actual, "[#{@expected[@actual, 0]}]") : @expected.inspect)
-      end
-    end
-
-    private
-    def match_with
-      @match_with ||= if actual.is_a?(Regexp)
-        :match_regex
-      elsif actual.is_a?(Proc)
-        :match_proc
-      elsif actual.is_a?(Class)
-        :match_class
-      else
-        :match_object
-      end
-    end
   end
 end
+
+

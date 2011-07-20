@@ -4,8 +4,8 @@ require 'json'
 RSpec::Matchers.define :be_json_matching do |expected|
   match do |actual|
     @actual = JSON.parse(actual)
-    @difference = Diff.diff(@actual, expected)
-    @difference.match?
+    @difference = Differ::Difference.new(expected, @actual)
+    @difference.matches?
   end
 
   failure_message_for_should do
@@ -17,8 +17,8 @@ end
 RSpec::Matchers.define :be_json_partially_matching do |expected|
   match do |actual|
     @actual = JSON.parse(actual)
-    @difference = Diff.diff(@actual, expected)
-    @difference.partial_match?
+    @difference = Differ::PartialDifference.new(expected, @actual)
+    @difference.matches?
   end
 
   failure_message_for_should do
