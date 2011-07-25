@@ -34,7 +34,7 @@ module RSpec
       end
       
       def to_word(item)
-        item.is_a?(Matcher) ? item.description : item.inspect
+        item.respond_to?(:description) ? item.description : item.inspect
       end
     end
   end
