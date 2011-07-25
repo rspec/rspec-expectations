@@ -28,13 +28,15 @@ module RSpec
         match_for_should_not do |actual|
           perform_match(:none?, :any?, actual, _expected)
         end
-
+        
         def perform_match(predicate, hash_predicate, actual, _expected)
           _expected.send(predicate) do |expected|
             if comparing_hash_values?(actual, expected)
               expected.send(hash_predicate) {|k,v| actual[k] == v}
             elsif comparing_hash_keys?(actual, expected)
               actual.has_key?(expected)
+            elsif comparing_with_matcher?(actual, expected)
+              actual.any? { |value| expected.matches?(value) }
             else
               actual.include?(expected)
             end
@@ -47,6 +49,10 @@ module RSpec
 
         def comparing_hash_values?(actual, expected) # :nodoc:
           actual.is_a?(Hash) && expected.is_a?(Hash)
+        end
+        
+        def comparing_with_matcher?(actual, expected)
+          actual.is_a?(Array) && expected.is_a?(Matcher)
         end
       end
     end
