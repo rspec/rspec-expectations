@@ -1,8 +1,12 @@
 script: "bin/rake --trace 2>&1"
 bundler_args: "--binstubs --without development"
 rvm:
-  - 1.8.6
+#  - 1.8.6  # travis no longer supports this https://twitter.com/#!/travisci/status/114926454122364928
   - 1.8.7
-  - 1.9.1
+#  - 1.9.1  # travis no longer supports this https://twitter.com/#!/travisci/status/114926454122364928
   - 1.9.2
+  - 1.9.3
+  - rbx
+  - rbx-2.0
   - ree
+  - ruby-head
