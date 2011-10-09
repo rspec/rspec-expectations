@@ -47,9 +47,6 @@ to implement your own Formatter class, typically by subclassing
 "ProgressBarFormatter":../rdoc/classes/Spec/Runner/Formatter/ProgressBarFormatter.html or "HtmlFormatter":../rdoc/classes/Spec/Runner/Formatter/HtmlFormatter.html
 (depending on what your editor understands). In your formatter class you 
 can override the <code>backtrace_line</code> method to make the output be something that works with your editor.
-Example:
-
-<% coderay do -%><%= IO.read "../example_rails_app/vendor/plugins/rspec/examples/passing/custom_formatter.rb" %><% end -%>
 
 Then, when the editor plugin launches RSpec, just make sure it uses the <code>--formatter</code> 
 option to specify *your* custom formatter. Note that you will probably have to use <code>--require</code> 

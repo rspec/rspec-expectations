@@ -47,22 +47,15 @@ module Webby
     end
   end
   
-  require File.dirname(__FILE__) + '/../../example_rails_app/vendor/plugins/rspec/lib/spec/version'
-  require File.dirname(__FILE__) + '/../../example_rails_app/vendor/plugins/rspec-rails/lib/spec/rails/version'
-  
   class Renderer
     def rspec_version
-      Spec::VERSION::STRING
+      "2.7.0.rc1"
     end
     
     def rspec_rails_version
-      Spec::Rails::VERSION::STRING
+      "2.7.0.rc1"
     end
 
-    def svn_tag
-      Spec::VERSION::TAG
-    end
-    
     def breadcrumb_menu(page)
       '<div class="breadcrumb-menu">' + breadcrumbs(page) + menu(page) + '</div>'
     end

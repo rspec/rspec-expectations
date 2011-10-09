@@ -28,7 +28,7 @@ h2. Even more "other" frameworks
 
 If you have a different framework that is not supported directly by RSpec, you can easily choose that framework instead by creating an adapter and telling RSpec where to find it. Here is RSpec's own adapter as an example:
 
-<% coderay do -%><%= IO.read "../example_rails_app/vendor/plugins/rspec/lib/spec/adapters/mock_frameworks/rspec.rb" %><% end -%>
+<% coderay do -%><%= IO.read "../rspec-core/lib/rspec/core/mocking/with_rspec.rb" %><% end -%>
 
 This file must require any libraries or resources that implement the framework, and then define a <code>Spec::Plugins::MockFramework</code> module with the following methods:
 
