@@ -12,13 +12,6 @@ filter:
 </a>
 </div>
 
-<font size="5em">
-This is documentation for RSpec-1.<br/><br/>
-For RSpec-2, please see "http://relishapp.com/rspec":http://relishapp.com/rspec
-</font>
-
-We will eventually point http://rspec.info directly to the rspec 2, but we want to support old links from books and blogs. If you're interested in volunteering to write an app to manage redirects, please contact rspec-users@rubyforge.org.
-
 h2. Overview
 
 RSpec is a Behaviour-Driven Development tool for Ruby programmers. BDD is an approach to software development that combines Test-Driven Development, Domain Driven Design, and Acceptance Test-Driven Planning. RSpec helps you do the TDD part of that equation, focusing on the documentation and design aspects of TDD.
@@ -26,25 +19,6 @@ RSpec is a Behaviour-Driven Development tool for Ruby programmers. BDD is an app
 h2. The RSpec Book
 
 The RSpec Book will introduce you to RSpec, Cucumber, and a number of other tools that make up the Ruby BDD family. Replete with tutorials and practical examples, the RSpec Book will help you get your BDD on, taking you from executable requirements to working software that is clean, well tested, well documented, flexible and highly maintainable.
-
-h2. More information
-
-"http://blog.davidchelimsky.net":http://blog.davidchelimsky.net
-
-h3. RSpec-2
-
-"Cucumber features":http://relishapp.com/rspec
-"http://wiki.github.com/rspec/rspec":http://wiki.github.com/rspec/rspec
-"http://github.com/rspec":http://github.com/rspec
-"http://github.com/rspec/rspec-core":http://github.com/rspec/rspec-core
-"http://github.com/rspec/rspec-expectations":http://github.com/rspec/rspec-expectations
-"http://github.com/rspec/rspec-mocks":http://github.com/rspec/rspec-mocks
-"http://github.com/rspec/rspec-rails":http://github.com/rspec/rspec-rails
-
-h3. RSpec-1
-
-"http://wiki.github.com/dchelimsky/rspec":http://wiki.github.com/dchelimsky/rspec
-"http://rspec.lighthouseapp.com":http://rspec.lighthouseapp.com
 
 h2. Get Started Now
 
@@ -68,7 +42,7 @@ describe Bowling, "#score" do
   it "returns 0 for all gutter game" do
     bowling = Bowling.new
     20.times { bowling.hit(0) }
-    bowling.score.should == 0
+    bowling.score.should eq(0)
   end
 end
 <% end -%>
@@ -76,11 +50,8 @@ end
 <p>
   Run the example and watch it fail.
 </p>
-<pre style="color:red;"># rspec-2
+<pre style="color:red;">
 $ rspec bowling_spec.rb
-
-# rspec-1
-$ spec bowling_spec.rb 
 
 ./bowling_spec.rb:4:
   uninitialized constant Bowling
@@ -108,11 +79,7 @@ Run the example and bask in the joy that is green.
 </p>
 
 <pre style="color:green;">
-# rspec-2
 $ rspec bowling_spec.rb --format nested
-
-# rspec-1
-$ spec bowling_spec.rb --format nested
 
 Bowling#score
   returns 0 for all gutter game
@@ -131,4 +98,6 @@ Don't rush ahead with more code. Instead, add another example and let it guide y
 
 h2. Take the first step now!
 
-
+<pre>
+gem install rspec
+</pre>
