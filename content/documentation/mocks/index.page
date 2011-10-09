@@ -1,0 +1,51 @@
+--- 
+title: Mocks and Stubs
+order: 4
+filter:
+  - erb
+  - textile
+--- 
+
+h2. <%= @page.title %>
+
+Mock objects are imitation objects that give you declarative control over their
+behaviour in the course of the execution of an example. Defining "message
+expectations":message_expectations.html and "method stubs":stubs.html on mock
+objects allows you to specify how one object collaborates with others before
+those other objects exist.
+
+You can also use mock objects to isolate your examples from services that are
+complex to set up or expensive to run, thereby keeping your suite of examples
+running quickly.
+
+RSpec ships with a built-in mock object framework that lets you create mock
+objects in your examples or add mock-object-like behaviour to your existing
+objects.
+
+h3. Creating a mock object
+
+You create a mock object with the <code>mock</code> method:
+
+<% coderay do -%>
+my_mock = mock(name)
+<% end -%>
+
+This creates a new mock with the given <code>name</code> (a string) and
+registers it. When the example finishes, all registered mocks are verified.
+
+<% coderay do -%>
+my_mock = mock(name, stubs)
+<% end -%>
+
+As above, but allows you to set stub return values for specific messages.
+
+h3. Notes
+
+There are many different viewpoints about the meaning of mocks and stubs. If
+you are interested in learning more, here is some recommended reading:
+
+* Mock Objects: "http://www.mockobjects.com/":http://www.mockobjects.com/
+* Endo-Testing:"http://www.mockobjects.com/files/endotesting.pdf":http://www.mockobjects.com/files/endotesting.pdf
+* Mock Roles, Not Objects: "http://www.mockobjects.com/files/mockrolesnotobjects.pdf":http://www.mockobjects.com/files/mockrolesnotobjects.pdf
+* Test Double Patterns: "http://xunitpatterns.com/Test%20Double%20Patterns.html":http://xunitpatterns.com/Test%20Double%20Patterns.html
+* Mocks aren't stubs: "http://www.martinfowler.com/articles/mocksArentStubs.html":http://www.martinfowler.com/articles/mocksArentStubs.html

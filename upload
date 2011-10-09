@@ -1,0 +1,2 @@
+#!/bin/sh
+rsync -av --delete output/ david@davidchelimsky.net:/www/rspec.info

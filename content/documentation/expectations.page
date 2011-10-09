@@ -1,0 +1,14 @@
+--- 
+title: Expectations
+order: 2
+filter:
+  - erb
+  - textile
+--- 
+
+h2. Spec::Expectations and Spec::Matchers
+
+When RSpec executes specifications, it defines <code>#should</code> and <code>#should_not</code> on
+every object in the system. These methods are your entry to the magic of RSpec.
+
+See "Spec::Expectations":http://rdoc.info/gems/rspec/<%= rspec_version %>/Spec/Expectations and "Spec::Matchers":http://rdoc.info/gems/rspec/<%= rspec_version %>/Spec/Matchers for more information.

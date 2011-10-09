@@ -1,0 +1,27 @@
+The RSpec website is built with webby-0.9.2. You should be able to build and
+see it with these simple steps (standing in the same directory as this
+README):
+
+== Build the site
+
+webby build
+
+== Rebuild the site
+
+webby rebuild
+
+== Start the webserver
+
+webby heel:start
+
+== Stop the webserver
+
+webby heel:stop
+
+== Learn about other tasks
+
+webby -T
+
+== Learn about the webby command
+
+webby -h

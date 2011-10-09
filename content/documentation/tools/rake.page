@@ -1,0 +1,32 @@
+--- 
+title: Rake Tasks
+order: 2
+filter:
+  - erb
+  - textile
+--- 
+
+h2. <%= @page.title %>
+
+RSpec comes with a "Rake":http://rake.rubyforge.org/ task for executing specs.
+See "Spec::Rake::SpecTask":http://rspec.rubyforge.org/rspec/1.1.12/classes/Spec/Rake/SpecTask.html API for details.
+
+h3. Rake task example
+
+This is a snippet from RSpec's own Rakefile. It creates a task to run the examples.
+
+<% coderay do -%><%= IO.read "../example_rails_app/vendor/plugins/rspec/resources/rake/examples.rake" %><% end -%>
+
+It can be invoked from the command line with:
+
+<pre>
+rake examples
+</pre>
+
+Also see the "RCov":rcov.html page for info about how to generate a coverage report.
+
+h3. Generate HTML report
+
+<% coderay do -%><%= IO.read "../example_rails_app/vendor/plugins/rspec/resources/rake/failing_examples_with_html.rake" %><% end -%>
+
+This will write a HTML file that looks like "this":failing_examples.html.

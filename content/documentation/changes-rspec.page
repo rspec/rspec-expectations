@@ -1,0 +1,8 @@
+--- 
+title: Changelog
+order: 7
+filter:
+  - erb
+  - textile
+---
+<pre><%= IO.read '../example_rails_app/vendor/plugins/rspec/History.rdoc' %></pre>
