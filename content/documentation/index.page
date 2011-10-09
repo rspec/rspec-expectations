@@ -19,8 +19,8 @@ Customer: It should have a balance of $0.
 
 Here's how we express that conversation in RSpec:
 
-<% coderay do -%>describe Account, "when first created" do
-  it "should have a balance of $0" do
+<% coderay do -%>describe Account do
+  it "has a balance of $0 when first created" do
     ...
   end
 end
@@ -34,7 +34,7 @@ When you run this example, RSpec can provide a report like this:
 
 <pre>
 Account when first created
-- should have a balance of $0
+  has a balance of $0 when first created
 </pre>
 
 h2. before() and after()
@@ -55,11 +55,11 @@ You can use <code>before()</code> and/or <code>after()</code> to define code tha
     # :each is the default, so this is the same as before(:each)
   end
 
-  it "should do stuff" do
+  it "does something" do
     ...
   end
 
-  it "should do more stuff" do
+  it "does something else" do
     ...
   end
 

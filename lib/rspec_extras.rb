@@ -93,14 +93,6 @@ module Webby
             <%= p.link %>
           </li>
         <% end %>
-        <% if page.url == '/community/' %>
-          <li>
-            <a href="http://wiki.github.com/dchelimsky/rspec/get-in-touch" target="_blank">Get in Touch</a>
-          </li>
-          <li>
-            <a href="http://wiki.github.com/dchelimsky/rspec/contribute" target="_blank">Contribute</a>
-          </li>
-        <% end %>
         <% if page.url == '/documentation/' %>
           <li>
             <a href="http://github.com/dchelimsky/rspec/wikis/home" target="_blank">Install</a>
