@@ -1,6 +1,6 @@
 --- 
 title: community
-order: 6
+order: 5
 filter:
   - erb
   - textile

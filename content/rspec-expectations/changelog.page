@@ -1,0 +1,8 @@
+--- 
+title: changelog
+order: 5
+filter:
+  - erb
+  - textile
+---
+<pre><%= IO.read '../rspec-expectations/Changelog.md' %></pre>

@@ -1,0 +1,12 @@
+--- 
+title: rake
+order: 2
+filter:
+  - erb
+  - textile
+--- 
+
+h2. <%= @page.title %>
+
+RSpec comes with a "Rake":http://rubygems.org/gems/rake task for executing specs.
+See "RSpec::Core::RakeTask":http://rubydoc.info/gems/rspec-core/RSpec/Core/RakeTask API for details.
