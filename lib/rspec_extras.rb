@@ -49,13 +49,9 @@ module Webby
   
   class Renderer
     def rspec_version
-      "2.7.0.rc1"
+      "2.7"
     end
     
-    def rspec_rails_version
-      "2.7.0.rc1"
-    end
-
     def breadcrumb_menu(page)
       '<div class="breadcrumb-menu">' + breadcrumbs(page) + menu(page) + '</div>'
     end
@@ -95,18 +91,12 @@ module Webby
         <% end %>
         <% if page.url == '/documentation/' %>
           <li>
-            <a href="http://github.com/dchelimsky/rspec/wikis/home" target="_blank">Install</a>
-          </li>
-          <li>
-            <a href="http://rdoc.info/gems/rspec/#{rspec_version}/frames" target="_blank">RDoc</a>
+            <a href="http://rdoc.info/gems/rspec/frames" target="_blank">rdoc</a>
           </li>
         <% end %>
         <% if page.url == '/rails/' -%>
           <li>
-            <a href="http://github.com/dchelimsky/rspec-rails/wikis/home" target="_blank">Install</a>
-          </li>
-          <li>
-            <a href="http://rdoc.info/gems/rspec-rails/#{rspec_rails_version}/frames" target="_blank">RDoc</a>
+            <a href="http://rdoc.info/gems/rspec-rails/frames" target="_blank">rdoc</a>
           </li>
         <% end -%>
         </ul>
