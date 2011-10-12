@@ -23,9 +23,10 @@ Most advanced editors provide a mechanism to launch external processes by
 hitting a keystroke.  Depending on your editor, you may want to launch RSpec
 directly via the `rspec` command (which must be on your `$PATH`).
 Alternatively, if your editor makes it possible to run Ruby scripts directly,
-you may execute RSpec via `RSpec::Core::Runner.run` (which has
-a similar API to the `rspec` command, except you can call it straight
-from Ruby without forking a new Ruby process).
+you may execute RSpec via
+[`RSpec::Core::Runner.run`](http://rubydoc.info/gems/rspec-core/RSpec/Core/Runner.run)
+(which has a similar API to the `rspec` command, except you can call it
+straight from Ruby without forking a new Ruby process).
 
 ### Tell RSpec what spec(s) to run
 
