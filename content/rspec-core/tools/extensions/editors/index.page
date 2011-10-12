@@ -24,19 +24,18 @@ hitting a keystroke.  Depending on your editor, you may want to launch RSpec
 directly via the `rspec` command (which must be on your `$PATH`).
 Alternatively, if your editor makes it possible to run Ruby scripts directly,
 you may execute RSpec via `RSpec::Core::Runner.run` (which has
-a similar API to the `spec` command, except you can call it straight
+a similar API to the `rspec` command, except you can call it straight
 from Ruby without forking a new Ruby process).
 
 ### Tell RSpec what spec(s) to run
 
 You may want to assign different keystrokes to run your specs. You could run
-All specs in your project, the ones in the currently open file or just the one
-you have focussed in the editor.  RSpec's commandline API has a
-`--line` option which will make RSpec run the spec at the current
-line (it also works if the line is inside the spec).  Most editors provide a
-way to query the current file and the line of the cursor when launching an
-external process, and you can use this to feed the right argument to the --line
-option.
+all specs in your project, the ones in the currently open file or just the one
+you have focused in the editor.  RSpec's commandline API has a `--line_number`
+option which will make RSpec run the spec at the current line (it also works if
+the line is inside the spec).  Most editors provide a way to query the current
+file and the line of the cursor when launching an external process, and you can
+use this to feed the right argument to the `--line_number` option.
 
 ### Make the backtrace work with your editor
 
@@ -49,8 +48,8 @@ understands.
 It is possible to customise the backtrace lines of RSpec's output to achieve
 this. All you need to do is to implement your own Formatter class, typically by
 subclassing
-[`ProgressBarFormatter`](../rdoc/classes/Spec/Runner/Formatter/ProgressBarFormatter.html)
-or [HtmlFormatter](../rdoc/classes/Spec/Runner/Formatter/HtmlFormatter.html)
+[`DocumentationFormatter`](http://rubydoc.info/gems/rspec-core/RSpec/Core/Formatters/DocumentationFormatter)
+or [HtmlFormatter](http://rubydoc.info/gems/rspec-core/RSpec/Core/Formatters/HtmlFormatter)
 (depending on what your editor understands). In your formatter class you can
 override the `backtrace_line` method to make the output be something
 that works with your editor.
@@ -58,4 +57,4 @@ that works with your editor.
 Then, when the editor plugin launches RSpec, just make sure it uses the
 `--formatter` option to specify *your* custom formatter. Note that
 you will probably have to use `--require` too, so that the code for
-your custom formatter is loaded. See `spec --help` for details.
+your custom formatter is loaded. See `rspec --help` for details.
