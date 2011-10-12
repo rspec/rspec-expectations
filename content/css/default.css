@@ -2,8 +2,7 @@
 
 body {
   background-color:#fff;
-  font-family:"Trebuchet MS",arial,sans-serif;
-  font-size:62.5%;
+  font-family:arial,sans-serif;
   color:#4C4646;
   margin:0;
   padding:0;
@@ -14,7 +13,7 @@ td {
 }
 
 pre {
-  font-size: 12px;
+  font-size: 1.2em;
   color: #333;
 }
 a {
@@ -29,7 +28,7 @@ acronym {
   border-bottom:1px dotted #ddd;
 }
 #container {
-  font-size:1.2em;
+  font-size:0.9em;
   width:94%;
   margin:0 auto;
   border-right:3px double #000;
@@ -157,6 +156,7 @@ acronym {
 #content code {
     font-family:monospace;
     font-size:1.3em;
+    background-color:#F0F0F0;
 }
 #content pre {
   padding:4px;

@@ -22,7 +22,7 @@ table.CodeRay td { padding: 2px 4px; vertical-align: top }
 .CodeRay .no { padding: 0px 0px }
 .CodeRay .code { width: 100% }
 
-ol.CodeRay { font-size: 10pt }
+/* ol.CodeRay { font-size:  } */
 ol.CodeRay li { white-space: pre }
 
 .CodeRay .code pre { overflow: auto }
