@@ -8,9 +8,7 @@ filter:
 
 h2. Executable Code Examples
 
-RSpec provides a Domain Specific Language with which you can express executable examples of the expected behaviour of your code.
-
-Imagine that you were talking to a customer requesting software for her bank. Part of that conversation might well look like this:
+RSpec helps you express executable examples of the expected behaviour of your code. Imagine you're talking with a customer requesting software for a bank. Part of that conversation might look like this:
 
 <pre>
 You:      Describe an account when it is first created.
@@ -26,11 +24,7 @@ Here's how we express that conversation in RSpec:
 end
 <% end -%>
 
-The <code>describe()</code> method returns an <code>ExampleGroup</code> class, which contains a group of examples of a particular behaviour of the system that you wish to describe.
-
-The <code>it()</code> method returns an instance of the <code>ExampleGroup</code> in which that example is run.
-
-When you run this example, RSpec can provide a report like this:
+The <code>describe</code> method returns an example group, which contains examples of a particular behaviour of the system that you wish to describe.  The <code>it</code> method returns an example.  When you run this example, RSpec can provide a report like this:
 
 <pre>
 Account when first created
