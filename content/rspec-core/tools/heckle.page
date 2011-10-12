@@ -3,9 +3,9 @@ title: heckle
 order: 4
 filter:
   - erb
-  - textile
+  - markdown
 --- 
 
-h2. <%= @page.title %>
+## <%= @page.title %>
 
 RSpec-2 dropped heckle integration since Heckle does not support ruby 1.9. If/when that changes, we'll revisit.

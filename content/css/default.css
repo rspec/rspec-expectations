@@ -8,6 +8,10 @@ body {
   padding:0;
 }
 
+h3 {
+  font-size: 1em;
+}
+
 td {
   vertical-align: top;
 }
@@ -50,7 +54,6 @@ acronym {
 }
 #header h2 {
   margin:30px 0 0 0;
-  font-size:1em;
   font-weight:normal;
   color:#999;
 }
@@ -114,8 +117,8 @@ acronym {
   display:block;
   margin:20px 20px 0 0px;
   padding:0;
-  font-family:"Trebuchet MS",arial,sans-serif;
-  font-size:1.1em;
+  font-family:arial,sans-serif;
+  font-size:1.25em;
   letter-spacing:2px;
   color:#444;
   border-color:#c00;
