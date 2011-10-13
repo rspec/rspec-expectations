@@ -1,0 +1,11 @@
+--- 
+title: routing
+order: 6
+filter:
+  - erb
+  - textile
+--- 
+
+h2. <%= @page.title %>
+
+Coming soon ...

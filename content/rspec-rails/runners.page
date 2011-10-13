@@ -1,6 +1,6 @@
 --- 
 title: runners
-order: 4
+order: 8
 filter:
   - erb
   - textile

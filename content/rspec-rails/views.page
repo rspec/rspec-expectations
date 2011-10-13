@@ -3,32 +3,36 @@ title: views
 order: 2
 filter:
   - erb
-  - textile
+  - markdown
 --- 
 
-h2. <%= @page.title %>
+## <%= @page.title %>
 
-View Examples live in $RAILS_ROOT/spec/views/.
+View examples live in `spec/views/`.
 
-Spec::Rails supports the specification of views in complete isolation from their controllers.
-This allows you to spec and write your views even before their controllers exist,
-or before the related actions have been developed. It also means that bugs introduced
-into controllers will not cause view specs to fail.
+rspec-rails supports the specification of views in complete isolation from
+their controllers.  This allows you to spec and write your views even before
+their controllers exist, or before the related actions have been developed. It
+also means that bugs introduced into controllers will not cause view specs to
+fail.
 
-As noted in the "introduction":index.html, these are great benefits
-but they could hide bugs that exist in the interaction between a controller and its
-view. We strongly recommend combining these isolated view specs with some sort of
-high level integration testing, ideally using "Cucumber":http://github.com/aslakhellesoy/cucumber
+As noted in the "introduction":index.html, these are great benefits but they
+could hide bugs that exist in the interaction between a controller and its
+view. We strongly recommend combining these isolated view specs with some sort
+of application level functional testing, ideally using
+"Cucumber":http://github.com/aslakhellesoy/cucumber
 
-Here are some of the methods available to you, but see "Spec::Rails::Expectations":../../../rdoc-rails/index.html for more detail.
+Here are some of the methods available to you, but see
+"rspec-rails::Expectations":../../../rdoc-rails/index.html for more detail.
 
-h2. Conveniences
+## Conveniences
 
-h3. assigns
+### assigns
 
-Use assigns[:key] to set instance variables to be used in the view. We highly recommend that
-you exploit the mock framework here rather than providing real model objects in order to
-keep the view specs isolated from changes to your models.
+Use assigns[:key] to set instance variables to be used in the view. We highly
+recommend that you exploit the mock framework here rather than providing real
+model objects in order to keep the view specs isolated from changes to your
+models.
 
 <% coderay do -%>
 # example
@@ -43,10 +47,10 @@ assigns[:articles] = [article]
 <!-- etc -->
 <% end -%>
 
-h3. flash, params and session
+### flash, params and session
 
-Use flash[:key], params[:key] and session[:key] to set values in the example that can
-be accessed by the view.
+Use flash[:key], params[:key] and session[:key] to set values in the example
+that can be accessed by the view.
 
 <% coderay do -%>
 # example
@@ -60,13 +64,14 @@ session[:user_id] = "5678"
 <%%= session[:user_id] %>
 <% end -%>
 
-h2. Expectations
+## Expectations
 
-Spec::Rails' View Examples support the following custom expectations.
+rspec-rails' View Examples support the following custom expectations.
 
-h3. response.should have_tag
+### response.should have_tag
 
-This wraps assert_select and is available in both View Examples and Controller Examples run in integration mode.
+This wraps assert_select and is available in both View Examples and Controller
+Examples run in integration mode.
 
 <% coderay do -%>
 response.should have_tag('div') #passes if any div tags appear
@@ -85,9 +90,10 @@ end
 Note that any of the hash values can be either Strings or Regexps and will be
 evaluated accordingly.
 
-h3. response[:capture].should have_tag
+### response[:capture].should have_tag
 
-This way you can access content that has been captured with <tt>content_for</tt>.
+This way you can access content that has been captured with
+<tt>content_for</tt>.
 
 <ruby>
 # example
@@ -99,9 +105,10 @@ response[:sidebar].should have_tag('div')
 &lt;% end %>
 </ruby>
 
-h2. Mocking and stubbing helpers
+## Mocking and stubbing helpers
 
-If you wish to mock or stub helper methods, this must be done on the <tt>template</tt> object:
+If you wish to mock or stub helper methods, this must be done on the
+<tt>template</tt> object:
 
 <% coderay do -%>
 template.should_receive(:current_user).and_return(mock("user"))

@@ -1,6 +1,6 @@
 --- 
 title: changelog
-order: 5
+order: 9
 filter:
   - erb
   - textile

@@ -3,68 +3,38 @@ title: rspec-rails
 order: 4
 filter:
   - erb
-  - textile
+  - markdown
 --- 
 
-h2. <%= @page.title %>
+## <%= @page.title %>
 
-A Rails plugin that brings RSpec to Rails.
+The rspec-rails gem extends rspec-core and Rails' built-in testing framework to
+support full-stack, application-level specs (request specs), as well is
+isolated specs for models, views, controllers, helpers, mailers, and routing.
 
-h3. Features
+## Install
 
-* Use RSpec to independently specify models, views, controllers and helpers.
-* Integrated fixture loading.
-* Special generators for models and controllers that generate specs instead of tests.
-* Special RSpec matchers for even more readable specs.
+First, add rspec-rails to your Gemfile:
 
-h3. Vision
+<% coderay do -%>
+gem "rspec-rails", :group => [:development, :test]
+<% end -%>
 
-For people for whom TDD is a brand new concept, the testing support built into Rails is a huge
-leap forward. The fact that it's built right in is fantastic, and Rails
-apps are generally much easier to maintain than they would have been without such support.
+It needs to be in the `:development` group to expose the generators and rake
+tasks to your development environment. Otherwise you'd have to type
+`RAILS_ENV=test rails generate ....`, and who wants that?
 
-For those of us coming from a history with TDD, and now BDD, the existing support
-presents some problems related to dependencies across specs. To that end, RSpec
-supports 4 types of specs. This is largely inspired by Test::Rails, which is
-the rails testing framework built into "ZenTest":http://zentest.rubyforge.org. 
-We've also built in first class mocking and stubbing support in order to
-break dependencies across these different concerns.
+Now install the bundle and the rspec files and directories:
 
-h2. Different Types of Example Groups
+<% coderay :shell do -%>
+bundle install
+rails generate rspec:install
+<% end -%>
 
-Spec::Rails supports different ExampleGroup subclasses for the following types of specs:
+## Directory structure
 
-h3. Model Examples
-
-These are the equivalent of unit tests in Rails' built in testing. Ironically
-(for the traditional TDD'er) these are the only specs that we feel should actually interact
-with the database. "Learn more ...":writing/models.html.
-
-h3. Controller Examples
-
-These align somewhat with functional tests in rails, except
-that they do not actually render views (though you can force rendering of views
-if you prefer). Instead of setting expectations about what goes on a page, you
-set expectations about what templates get rendered. "Learn more...":writing/controllers.html.
-
-h3. View Examples
-
-This is the other half of Rails' functional testing. View specs allow
-you to set up assigns (thanks to ZenTest). "Learn more ...":writing/views.html.
-
-h3. Helper Examples
-
-... let you specify directly methods that live in your helpers. "Learn more ...":writing/helpers.html.
-
-h2. Fixtures
-
-You can use fixture in any of your specs, be they model, view, controller, or helper. If you have fixtures that you want to use
-globally, you can set them in spec/spec_helper.rb. See that file for more information. 
-
-h2. Naming conventions
-
-For clarity and consistency, RSpec uses a slightly different naming convention
-for directories and Rake tasks than what you get from the Test::Unit testing built into rails.
+rspec-rails uses a directory naming convention based on the component being
+spec'd:
 
 <% coderay do -%>
 project
@@ -81,43 +51,75 @@ project
       |
       +-- helpers
       |
+      +-- mailers
+      |
       +-- models
+      |
+      +-- requests
+      |
+      +-- routing
+      |
+      +-- support
       |
       +-- views
 <% end -%>
 
-The Rake tasks are named accordingly.
+Model, view, controller, helper, mailer, and routing specs each focus on the
+named component.
 
-h2. Introduction to Writing Examples using Spec::Rails
+Request specs wrap Rails' integration tests. These go through the full stack,
+including the router. By themselves, or combined with
+[Capybara](https://github.com/jnicklas/capybara), request specs are a great
+starting point for outside-in development if you're not using another tool like
+[Cucumber](http://cukes.info) or [Fitnesse](http://fitnesse.org).  The name
+"request specs" came out of the Merb project. We use that instead of
+"integration" or "acceptance" due to the lack of consensus on what those names
+mean.
 
-Spec::Rails supports 4 different types of Executable Examples:
+The generated `spec_helper.rb` file requires any `.rb` files in the "support"
+directory, which is the conventional container for helpers, custom matchers,
+etc. 
 
-* "Model Examples":models.html
-* "View Examples":views.html
-* "Controller Examples":controllers.html
-* "Helper Examples":helpers.html
+## Fixtures
 
-Each of these use specialized ExampleGroup subclasses to give you access to
-the appropriate services and methods. The specific type of ExampleGroup is
-determined implicitly by placing the examples in an appropriately named file
-(*_spec.rb) within an appropriately named directory:
-
-<pre>
-spec/controllers/**/*_spec.rb
-spec/helpers/**/*_spec.rb
-spec/models/**/*_spec.rb
-spec/views/**/*_spec.rb
-</pre>
-
-%{color:red;font-weight:bold}WARNING:% If you do not follow these conventions,
-you will not get the correct ExampleGroup subclass. If you prefer to disregard
-this convention, you can get the correct ExampleGroup subclass by passing a
-hash to the describe method:
+While most of the Rails world uses factories these days, you _can_ still use
+Rails fixtures the same way you would use them in the Rails testing framework.
+First, declare their location in `spec_helper.rb`:
 
 <% coderay do -%>
-describe "some model", :type => :model do
-  ...
+RSpec.configure do |config|
+  config.fixture_path = "#{::Rails.root}/spec/fixtures"
 end
 <% end -%>
 
-This works with <code>:model, :view, :controller and :helper</code>.
+Now declare which fixtures you want to use in each example group:
+
+<% coderay do -%>
+describe WidgetsController do
+  fixtures :widgets
+end
+<% end -%>
+
+You can also declare them globally in `spec_helper.rb`:
+
+<% coderay do -%>
+RSpec.configure do |config|
+  config.global_fixtures = [:things, :widgets]
+end
+<% end -%>
+
+## Generators
+
+When you include rspec-rails in the `:development` group in your `Gemfile`,
+rspec-rails registers itself with Rails as the generator for tests. The only
+rspec-specific generator you need to know about is `rspec:install`, mentioned
+above. Otherwise, just run the rails generators and you'll get specs for free:
+
+<% coderay do -%>
+rails generate model thing name:string
+      invoke  active_record
+      create    db/migrate/20111013140413_create_things.rb
+      create    app/models/thing.rb
+      invoke    rspec
+      create      spec/models/thing_spec.rb
+<% end -%>

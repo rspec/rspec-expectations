@@ -158,7 +158,7 @@ acronym {
 }
 #content code {
     font-family:monospace;
-    font-size:1.3em;
+    /* font-size:1.2em; */
     background-color:#F0F0F0;
 }
 #content pre {
