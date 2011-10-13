@@ -123,3 +123,32 @@ rails generate model thing name:string
       invoke    rspec
       create      spec/models/thing_spec.rb
 <% end -%>
+
+## Running specs
+
+### using the `rspec` command
+
+<% coderay do -%>
+rspec path/to/directory/with/specs
+rspec path/to/individual_spec.rb
+rspec glob/pattern/to*/*_be_matched*
+<% end -%>
+
+### using `rake`
+
+When you include rspec-rails in the `:development` group in your `Gemfile`,
+rspec-rails registers several rake tasks
+
+<% coderay do -%>
+$ rake --tasks spec
+rake spec              # Run all specs in spec directory (excluding plugin specs)
+rake spec:controllers  # Run the code examples in spec/controllers
+rake spec:helpers      # Run the code examples in spec/helpers
+rake spec:lib          # Run the code examples in spec/lib
+rake spec:mailers      # Run the code examples in spec/mailers
+rake spec:models       # Run the code examples in spec/models
+rake spec:rcov         # Run all specs with rcov
+rake spec:requests     # Run the code examples in spec/requests
+rake spec:routing      # Run the code examples in spec/routing
+rake spec:views        # Run the code examples in spec/views
+<% end -%>
