@@ -10,6 +10,11 @@ body {
 
 h3 {
   font-size: 1em;
+  padding-left: 20px;
+}
+
+.warning {
+  color: red;
 }
 
 td {
@@ -98,7 +103,7 @@ acronym {
   padding:0;
 }
 #content p {
-  padding:2px 20px;
+  padding:2px 20px 2px 20px;
   text-align:justify;
   line-height:1.4em;
 }
@@ -157,13 +162,13 @@ acronym {
   text-indent:0;
 }
 #content code {
-    font-family:monospace;
-    /* font-size:1.2em; */
-    background-color:#F0F0F0;
+  font-family:monospace;
+  font-size: 1.2em;
+  padding: 2px 4px 2px 4px;
+  background-color:#F0F0F0;
 }
 #content pre {
-  padding:4px;
-  margin:18px;
+  padding:4px 20px 4px 4px;
   border:1px solid #444;
 }
 #content ul {
@@ -198,5 +203,3 @@ acronym {
 #footer a:hover {
   color:#aaa;
 }
-
-/* Ruby code, style similar to vibrant ink */

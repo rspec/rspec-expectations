@@ -6,7 +6,7 @@
 }
 .CodeRay pre { margin: 0px }
 
-div.CodeRay { }
+div.CodeRay { margin: 0px 20px 0px 20px}
 
 span.CodeRay { white-space: pre; border: 0px; padding: 2px }
 

@@ -3,46 +3,99 @@ title: rspec-core
 order: 1
 filter:
   - erb
-  - textile
+  - markdown
 --- 
 
-h2. Executable Code Examples
+## rspec-core
 
-RSpec helps you express executable examples of the expected behaviour of your code. Imagine you're talking with a customer requesting software for a bank. Part of that conversation might look like this:
+rspec-core provides a framework for writing executable examples of the expected
+behaviour of your code. The basic structure consists of _examples_ grouped
+together in _example groups_.
 
-<pre>
-You:      Describe an account when it is first created.
-Customer: It should have a balance of $0.
-</pre>
-
-Here's how we express that conversation in RSpec:
-
-<% coderay do -%>describe Account do
-  it "has a balance of $0 when first created" do
-    ...
+<% coderay :lang => 'ruby' do %>
+describe Account do
+  it "has a balance of $0 when first opened" do
+    account = Account.new
+    account.balance.should eq(Money.new(0, :USD))
   end
 end
-<% end -%>
+<% end %>
 
-The <code>describe</code> method returns an example group, which contains examples of a particular behaviour of the system that you wish to describe.  The <code>it</code> method returns an example.  When you run this example, RSpec can provide a report like this:
+The `describe` method creates an _example group_, and the `it` method creates
+an _example_ within that group. You can run this spec with the `rspec` command,
+like this:
 
-<pre>
-Account when first created
-  has a balance of $0 when first created
-</pre>
+<% coderay :lang => 'shell' do -%>
+$ rspec account_spec.rb 
+.
 
-h2. before() and after()
+1 example, 0 failures
+<% end %>
 
-You can use <code>before()</code> and/or <code>after()</code> to define code that executes before and after each example or only once per <code>ExampleGroup</code>:
+The single dot represents the single example. You can add the `--format` option
+to use different formatters. Probably the most useful value is `documentation`:
+
+<% coderay :lang => 'shell' do -%>
+$ rspec account_spec.rb --format documentation
+
+Account
+  has a balance of $0 when first opened
+
+1 example, 0 failures
+<% end %>
+
+This is a great way to quickly scan the docstrings of all the examples,
+encouraging you to make them readable, and exposing which behaviors you have
+and have not specified at a glance.
+
+See ??? for more information on built-in formatters and extensions that other
+folks have published in their own gems, as well as how to write your own.
+
+## nested groups
+
+An example group can contain any number of examples, and can also be nested
+within other groups:
+
+<% coderay do -%>
+describe Account do
+  describe "when first opened" do
+    it "has a balance of $0" do
+      account = Account.new
+      account.balance.should eq(Money.new(0, :USD))
+    end
+  end
+end
+<% end %>
+
+The `documentation` format indents these nicely:
+
+<% coderay :lang => 'shell' do -%>
+$ rspec account_spec.rb --format documentation
+
+Account
+  when first opened
+    has a balance of $0
+
+1 example, 0 failures
+<% end %>
+
+You can nest groups arbitrarily deeply, but do so carefully because
+nesting can quickly get out of hand and make things difficult to
+understand.
+
+## before and after
+
+Use the `before` and `after` methods to define code that runs before and after
+each example or only once per group:
 
 <% coderay do -%>describe Thing do
   before(:all) do
-    # This is run once and only once, before all of the examples
-    # and before any before(:each) blocks.
+    # this is run once and only once, before all of the examples and before any
+    # before(:each) blocks in this group.
   end
 
   before(:each) do
-    # This is run before each example.
+    # this is run before each example.
   end
 
   before do
@@ -66,16 +119,106 @@ You can use <code>before()</code> and/or <code>after()</code> to define code tha
   end
 
   after(:all) do
-    # this is run once and only once after all of the examples
-    # and after any after(:each) blocks
+    # this is run once and only once, after all of the examples and after any
+    # after(:each) blocks in this group.
   end
   
 end
 <% end -%>
 
-<b>Warning</b>: The use of <code>before(:all)</code> and <code>after(:all)</code> is generally discouraged because it introduces dependencies between the Examples. Still, it might prove useful for very expensive operations if you know what you are doing.
+### before(:each)
 
-h2. Helper Methods
+TODO
+
+### before(:all)
+
+TODO
+
+### after(:each)
+
+`after(:each)` is rarely needed, and should only be used when you're concerned
+that some state might be leaking into your other examples.
+
+### after(:all)
+
+TODO
+
+### before(:all) and after(:all)
+
+For expensive operations, like opening browsers using Spec::Ui, RSpec also allows
+you to set up and tear down state before(:all) and after(:all) examples in any
+given behaviour.
+
+<% coderay :lang => 'ruby' do -%>
+describe "Search page" do
+  before(:all) do
+    @browser = Watir::Browser.new
+  end
+
+  it "should find all contacts" do
+    # ...
+  end
+  
+  after(:all) do
+    @browser.kill! rescue nil
+  end
+end
+<% end -%>
+
+### global after and before hooks
+
+Sometimes you have some generic code you want to run before or after every
+single one of your examples. Such global before and after blocks can be defined
+in the RSpec configuration, which typically lives in a spec_helper.rb file that
+is required from other spec files. Example: 
+
+<% coderay do -%>
+RSpec.configure do |config|
+  config.before(:all) { ... }
+  config.before(:each) { ... }
+  config.after(:all) { ... }
+  config.after(:each) { ... }
+end
+<% end -%>
+
+Global before blocks get run before local ones. Global after blocks get run
+after local ones.
+
+You can also specify that a before or after block should only be weaved into
+certain behaviours, in a similar way to how global includes are declared:
+
+TODO: mention behavior in rspec-rails where you can't access the stuff that
+Rails sets up in global before hooks.
+
+<% coderay do -%>
+RSpec.configure do |config|
+  config.before(:each, :type => :controller) do
+    login_aslak
+  end
+end
+<% end -%>
+
+### errors in before and after hooks
+
+If a before hook raises an error, none of the following before hooks (if any)
+or the example itself will get run.  If an after hook raises an error, the
+remaining ones will still be run.
+
+### <div class="warning">WARNING about `before(:all)` and `after(:all)`</div>
+
+It is very tempting to use before(:all) and after(:all) for situations in which
+it is not appropriate. before(:all) shares some (not all) state across multiple
+examples. This means that the examples become bound together, which is an
+absolute no-no in testing. We recommend that you only use before(:all) to set
+up things that are global collaborators but not the things that you are
+describing in the examples.
+
+The most common cases of abuse are database access and/or fixture setup. Every
+example that accesses the database should start with a clean slate, otherwise
+the examples become brittle and start to lose their value with false negatives
+and, worse, false positives.
+
+## helper methods
 
 You can write helper methods directly within an Example Group:
 
@@ -92,7 +235,7 @@ You can write helper methods directly within an Example Group:
 end
 <% end -%>
 
-h2. Reusable Helper Methods
+## sharing helper methods
 
 You can include helper methods in multiple ExampleGroups by expressing them within a module, and then including that module in your ExampleGroup:
 
@@ -115,7 +258,47 @@ describe "A new account" do
 end
 <% end -%>
 
-h2. Shared Example Groups
+## pending examples
+
+There are three ways to mark an example as "pending."
+
+### use `it` without a block
+
+<% coderay do -%>
+it "should say foo"
+<% end -%>
+
+The example does not get run and the output says `PENDING (Not Yet
+Implemented)`.
+
+### add `pending` to the example
+
+<% coderay do -%>
+it "should say foo" do
+  pending("get the vocal chords working")
+  subject.should say("foo")
+end
+<% end -%>
+
+The code after the `pending` statement does not get run, and output says
+`PENDING (get the vocal chords working)`.
+
+### add `pending` to the example, with a block
+
+<% coderay do -%>
+it "should say foo" do
+  pending("get the vocal chords working") do
+    subject.should say("foo")
+  end
+end
+<% end -%>
+
+The code in the block _does_ get run.  If the block results in any failed
+expectations or other errors, the example is reported as `PENDING (get the
+vocal chords working)`. If there are no failures or errors, the example fails,
+telling you to it is `FIXED`.
+
+## shared example groups
 
 You can create shared example groups and include those groups into other groups.
 
@@ -131,7 +314,7 @@ end
 <% end -%>
 
 then when you need define the behavior for the Large and Small editions,
-reference the shared behavior using the <code>it_should_behave_like()</code>
+reference the shared behavior using the `it_should_behave_like`
 method.
 
 <% coderay do -%>describe "SmallEdition" do
@@ -149,7 +332,7 @@ describe "LargeEdition" do
 end
 <% end -%>
 
-<code>it_should_behave_like</code> will search for an ExampleGroup by its
+`it_should_behave_like` will search for an ExampleGroup by its
 description string, in this case, "all editions"
 
 All of the following are included from a shared group:
@@ -201,37 +384,3 @@ Officer
 - should be optionable
 <% end -%>
 
-h2. Pending Examples
-
-There are three ways to mark an example as "pending."
-
-h3. Leave out the block:
-
-<% coderay do -%>
-it "should say foo"
-<% end -%>
-
-The output will say PENDING (Not Yet Implemented).
-
-h3. Use the pending method with no block:
-
-<% coderay do -%>
-it "should say foo" do
-  pending("get the vocal chords working")
-  subject.should say("foo")
-end
-<% end -%>
-
-The output will say PENDING (get the vocal chords working).
-
-h3. Use the pending method with a block:
-
-<% coderay do -%>
-it "should say foo" do
-  pending("get the vocal chords working") do
-    subject.should say("foo")
-  end
-end
-<% end -%>
-
-The output will say PENDING (get the vocal chords working), and the example will fail telling you to it is FIXED as soon as the body of the block raises no errors.
