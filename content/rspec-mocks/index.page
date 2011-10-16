@@ -3,14 +3,14 @@ title: rspec-mocks
 order: 3
 filter:
   - erb
-  - textile
+  - markdown
 --- 
 
-h2. <%= @page.title %>
+## <%= @page.title %>
 
 Mock objects are imitation objects that give you declarative control over their
-behaviour in the course of the execution of an example. Defining "message
-expectations":message_expectations.html and "method stubs":stubs.html on mock
+behaviour in the course of the execution of an example. Defining [message
+expectations](message-expectations.html) and [method stubs](method-stubs.html) on mock
 objects allows you to specify how one object collaborates with others before
 those other objects exist.
 
@@ -22,7 +22,7 @@ RSpec ships with a built-in mock object framework that lets you create mock
 objects in your examples or add mock-object-like behaviour to your existing
 objects.
 
-h3. Creating a mock object
+### Creating a mock object
 
 You create a mock object with the <code>mock</code> method:
 
@@ -39,7 +39,7 @@ my_mock = mock(name, stubs)
 
 As above, but allows you to set stub return values for specific messages.
 
-h3. Notes
+### Notes
 
 There are many different viewpoints about the meaning of mocks and stubs. If
 you are interested in learning more, here is some recommended reading:
