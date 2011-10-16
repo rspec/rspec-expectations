@@ -6,7 +6,7 @@ module RSpec
       end
 
       def to_sentence(words)
-        words = words.map{|w| w.inspect}
+        words = words.map{|w| to_word(w) }
         case words.length
           when 0
             ""
@@ -31,6 +31,10 @@ module RSpec
           end
         end
         result
+      end
+      
+      def to_word(item)
+        item.respond_to?(:description) ? item.description : item.inspect
       end
     end
   end
