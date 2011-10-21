@@ -196,14 +196,17 @@ module RSpec
       args.empty? ?  Matchers::Be.new : equal(*args)
     end
 
+    # Passes if actual is truthy (anything but false or nil)
     def be_true
       BeTrue.new
     end
 
+    # Passes if actual is falsy (false or nil)
     def be_false
       BeFalse.new
     end
 
+    # Passes if actual is nil
     def be_nil
       BeNil.new
     end
