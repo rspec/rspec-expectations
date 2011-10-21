@@ -86,27 +86,6 @@ module RSpec
 
           symbol_description + arg_description
         end
-
-    end
- 
-    # Given no argument, matches if a proc throws any Symbol.
-    #
-    # Given a Symbol, matches if the given proc throws the specified Symbol.
-    #
-    # Given a Symbol and an arg, matches if the given proc throws the
-    # specified Symbol with the specified arg.
-    #
-    # == Examples
-    #
-    #   lambda { do_something_risky }.should throw_symbol
-    #   lambda { do_something_risky }.should throw_symbol(:that_was_risky)
-    #   lambda { do_something_risky }.should throw_symbol(:that_was_risky, culprit)
-    #
-    #   lambda { do_something_risky }.should_not throw_symbol
-    #   lambda { do_something_risky }.should_not throw_symbol(:that_was_risky)
-    #   lambda { do_something_risky }.should_not throw_symbol(:that_was_risky, culprit)
-    def throw_symbol(expected_symbol=nil, expected_arg=nil)
-      Matchers::ThrowSymbol.new(expected_symbol, expected_arg)
     end
   end
 end

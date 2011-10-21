@@ -67,14 +67,5 @@ module RSpec
         @names.length == 1 ? "##{@names.first}" : @names.inspect
       end
     end
-    
-    # Matches if the target object responds to all of the names
-    # provided. Names can be Strings or Symbols.
-    #
-    # == Examples
-    # 
-    def respond_to(*names)
-      Matchers::RespondTo.new(*names)
-    end
   end
 end

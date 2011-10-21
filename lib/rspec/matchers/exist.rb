@@ -22,9 +22,5 @@ module RSpec
         end
       end
     end
-
-    def exist(*args)
-      Exist.new(*args)
-    end
   end
 end

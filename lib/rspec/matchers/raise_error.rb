@@ -89,28 +89,5 @@ module RSpec
           caller.first(3).find { |s| s =~ /should_not/ }
         end
     end
-    
-    # With no args, matches if any error is raised.
-    # With a named error, matches only if that specific error is raised.
-    # With a named error and messsage specified as a String, matches only if both match.
-    # With a named error and messsage specified as a Regexp, matches only if both match.
-    # Pass an optional block to perform extra verifications on the exception matched
-    #
-    # == Examples
-    #
-    #   lambda { do_something_risky }.should raise_error
-    #   lambda { do_something_risky }.should raise_error(PoorRiskDecisionError)
-    #   lambda { do_something_risky }.should raise_error(PoorRiskDecisionError) { |error| error.data.should == 42 }
-    #   lambda { do_something_risky }.should raise_error(PoorRiskDecisionError, "that was too risky")
-    #   lambda { do_something_risky }.should raise_error(PoorRiskDecisionError, /oo ri/)
-    #
-    #   lambda { do_something_risky }.should_not raise_error
-    #   lambda { do_something_risky }.should_not raise_error(PoorRiskDecisionError)
-    #   lambda { do_something_risky }.should_not raise_error(PoorRiskDecisionError, "that was too risky")
-    #   lambda { do_something_risky }.should_not raise_error(PoorRiskDecisionError, /oo ri/)
-    def raise_error(error=Exception, message=nil, &block)
-      Matchers::RaiseError.new(error, message, &block)
-    end
-    alias_method :raise_exception, :raise_error
   end
 end

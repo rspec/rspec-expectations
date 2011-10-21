@@ -7,15 +7,5 @@ module RSpec
         super(actual).match(expected)
       end
     end
-
-    # Given a Regexp or String, passes if actual.match(pattern)
-    #
-    # == Examples
-    #
-    #   email.should match(/^([^\s]+)((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
-    #   email.should match("@example.com")
-    def match(expected)
-      Match.new(expected)
-    end
   end
 end

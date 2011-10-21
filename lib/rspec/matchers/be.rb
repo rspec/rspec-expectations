@@ -10,20 +10,12 @@ module RSpec
       end
     end
 
-    def be_true
-      BeTrue.new
-    end
-
     class BeFalse
       include BaseMatcher
 
       def matches?(actual)
         !super(actual)
       end
-    end
-
-    def be_false
-      BeFalse.new
     end
 
     class BeNil
@@ -40,10 +32,6 @@ module RSpec
       def failure_message_for_should_not
         "expected: not nil\n     got: nil"
       end
-    end
-
-    def be_nil
-      BeNil.new
     end
 
     class Be
@@ -191,39 +179,7 @@ it is a bit confusing.
       def prefix_to_sentence
         split_words(@prefix)
       end
-
     end
 
-    # @example
-    #   actual.should be_true
-    #   actual.should be_false
-    #   actual.should be_nil
-    #   actual.should be_[arbitrary_predicate](*args)
-    #   actual.should_not be_nil
-    #   actual.should_not be_[arbitrary_predicate](*args)
-    #
-    # Given true, false, or nil, will pass if actual value is true, false or
-    # nil (respectively). Given no args means the caller should satisfy an if
-    # condition (to be or not to be). 
-    #
-    # Predicates are any Ruby method that ends in a "?" and returns true or
-    # false.  Given be_ followed by arbitrary_predicate (without the "?"),
-    # RSpec will match convert that into a query against the target object.
-    #
-    # The arbitrary_predicate feature will handle any predicate prefixed with
-    # "be_an_" (e.g. be_an_instance_of), "be_a_" (e.g. be_a_kind_of) or "be_"
-    # (e.g. be_empty), letting you choose the prefix that best suits the
-    # predicate.
-    def be(*args)
-      args.empty? ?
-        Matchers::Be.new : equal(*args)
-    end
-
-    # passes if target.kind_of?(klass)
-    def be_a(klass)
-      be_a_kind_of(klass)
-    end
-    
-    alias_method :be_an, :be_a
   end
 end
