@@ -22,8 +22,8 @@ module RSpec
 
     private
 
-      def perform_match(predicate, hash_predicate, actual, expected)
-        expected.send(predicate) do |expected|
+      def perform_match(predicate, hash_predicate, actual, expected_list)
+        expected_list.send(predicate) do |expected|
           if comparing_hash_values?(actual, expected)
             expected.send(hash_predicate) {|k,v| actual[k] == v}
           elsif comparing_hash_keys?(actual, expected)
