@@ -3,6 +3,7 @@ module RSpec
     class Change
       def initialize(receiver=nil, message=nil, &block)
         @message = message
+        @receiver = receiver
         @value_proc = block || lambda {receiver.__send__(message)}
         @expected_after = @expected_before = @minimum = @maximum = @expected_delta = nil
         @eval_before = @eval_after = false
@@ -13,6 +14,8 @@ module RSpec
         
         @actual_before = evaluate_value_proc
         event_proc.call
+        @receiver.reload if @receiver.respond_to?(:reload)
+        
         @actual_after = evaluate_value_proc
       
         (!change_expected? || changed?) && matches_before? && matches_after? && matches_expected_delta? && matches_min? && matches_max?
