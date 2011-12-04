@@ -53,57 +53,16 @@ module Webby
     end
     
     def breadcrumb_menu(page)
-      '<div class="breadcrumb-menu">' + breadcrumbs(page) + menu(page) + '</div>'
+      ""
     end
     
     def breadcrumbs(page)
-      b = binding
-      ERB.new(<<-EOF, nil, '-').result(b)
-      <div class="breadcrumbs">
-        <ul>
-        <% page.path_from_root.each do |p| %>
-          <% if p != page %>
-            <li><%= p.link %></li>
-          <% else %>
-            <li class="current"><%= p.link %></li>
-          <% end %>
-        <% end %>
-        </ul>
-      </div>
-      EOF
+      ""
     end
 
     def menu(page)
-      pages = if page.filename == 'index'
-        (page.siblings + page.immediate_children).sort{|a,b| a.order <=> b.order}
-      else
-        []
-      end
-      
-      b = binding
-      ERB.new(<<-EOF, nil, '-').result(b)
-      <div class="menu">
-        <ul>
-        <% pages.each do |p| %>
-          <li>
-            <%= p.link %>
-          </li>
-        <% end %>
-        <% if page.url == '/documentation/' %>
-          <li>
-            <a href="http://rdoc.info/gems/rspec/frames" target="_blank">rdoc</a>
-          </li>
-        <% end %>
-        <% if page.url == '/rails/' -%>
-          <li>
-            <a href="http://rdoc.info/gems/rspec-rails/frames" target="_blank">rdoc</a>
-          </li>
-        <% end -%>
-        </ul>
-      </div>
-      EOF
+      ""
     end
-    
   end
 end
 

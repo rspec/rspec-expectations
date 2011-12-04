@@ -1,9 +1,0 @@
---- 
-title: extensions
-order: 5
-filter:
-  - erb
-  - markdown
---- 
-
-More soon ...

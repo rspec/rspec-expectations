@@ -1,8 +1,0 @@
---- 
-title: changelog
-order: 9
-filter:
-  - erb
-  - textile
----
-<pre><%= IO.read '../rspec-rails/Changelog.md' %></pre>
