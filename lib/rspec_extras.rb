@@ -49,7 +49,7 @@ module Webby
   
   class Renderer
     def rspec_version
-      "2.7"
+      "2"
     end
     
     def breadcrumb_menu(page)

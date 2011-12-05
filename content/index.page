@@ -6,21 +6,17 @@ filter:
   - textile
 --- 
 
-<div style="float:right">
-<a target="_blank" href="http://www.pragprog.com/titles/achbd/the-rspec-book">
-<img width="152" height="182" border="0" title="The RSpec Book" alt="The RSpec Book" src="http://www.pragprog.com/images/covers/190x228/achbd.jpg?1225919437"/>
-</a>
-</div>
-
 h2. Overview
 
-RSpec is a Behaviour-Driven Development tool for Ruby programmers. BDD is an approach to software development that combines Test-Driven Development, Domain Driven Design, and Acceptance Test-Driven Planning. RSpec helps you do the TDD part of that equation, focusing on the documentation and design aspects of TDD.
+RSpec is testing tool for the Ruby programming language. Born under the banner of Behaviour-Driven Development, it is designed to make Test-Driven Development a productive and enjoyable experience with features like:
+
+* a rich command line program (the rspec command)
+* textual descriptions of examples and groups ("rspec-core":http://rubydoc.info/gems/rspec-core/frames)
+* flexible and customizable reporting
+* extensible expectation language ("rspec-expectations":http://rubydoc.info/gems/rspec-expectations/frames)
+* built-in mocking/stubbing framework ("rspec-mocks":http://rubydoc.info/gems/rspec-mocks/frames)
 
 h2. Documentation
-
-Cucumber Features
-
-* "http://relishapp.com/rspec":http://relishapp.com/rspec
 
 RDoc
 
@@ -29,7 +25,21 @@ RDoc
 * "http://rubydoc.info/gems/rspec-mocks":http://rubydoc.info/gems/rspec-mocks/frames
 * "http://rubydoc.info/gems/rspec-rails":http://rubydoc.info/gems/rspec-rails/frames
 
+Cucumber Features
+
+* "http://relishapp.com/rspec":http://relishapp.com/rspec
+
+RSpec-1.x
+
+* "http://old.rspec.info":http://old.rspec.info
+
 h2. The RSpec Book
+
+<div style="float:right">
+<a target="_blank" href="http://www.pragprog.com/titles/achbd/the-rspec-book">
+<img width="152" height="182" border="0" title="The RSpec Book" alt="The RSpec Book" src="http://www.pragprog.com/images/covers/190x228/achbd.jpg?1225919437"/>
+</a>
+</div>
 
 The RSpec Book will introduce you to RSpec, Cucumber, and a number of other tools that make up the Ruby BDD family. Replete with tutorials and practical examples, the RSpec Book will help you get your BDD on, taking you from executable requirements to working software that is clean, well tested, well documented, flexible and highly maintainable.
 
