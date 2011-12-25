@@ -1,6 +1,6 @@
 # RSpec Expectations
 
-[RSpec::Expectations](../RSpec/Expectations) lets you express expected outcomes
+[RSpec::Expectations](http://rubydoc.info/github/rspec/rspec-expectations/master/RSpec/Expectations) lets you express expected outcomes
 on an object in an example.
 
     account.balance.should eq(Money.new(37.42, :USD))
@@ -119,7 +119,7 @@ actual.should be_xxx         # passes if actual.xxx?
 actual.should have_xxx(:arg) # passes if actual.has_xxx?(:arg)
 ```
 
-See [RSpec::Matchers](../RSpec/Matchers) for more about predicate matchers.
+See [RSpec::Matchers](http://rubydoc.info/github/rspec/rspec-expectations/master/RSpec/Matchers) for more about predicate matchers.
 
 ### Ranges (Ruby >= 1.9 only)
 
@@ -144,10 +144,10 @@ actual.should include(expected)
 
 ## Learn more
 
-See [RSpec::Expectations](../RSpec/Expectations) for more information about
+See [RSpec::Expectations](http://rubydoc.info/github/rspec/rspec-expectations/master/RSpec/Expectations) for more information about
 `should` and `should_not` and how they work.
 
-See [RSpec::Matchers](../RSpec/Matchers) for more information about the
+See [RSpec::Matchers](http://rubydoc.info/github/rspec/rspec-expectations/master/RSpec/Matchers) for more information about the
 built-in matchers that ship with rspec-expectations, and how to write your own
 custom matchers.
 
