@@ -1,4 +1,4 @@
-# RSpec Expectations
+# RSpec Expectations [![Build Status](https://secure.travis-ci.org/rspec/rspec-expectations.png)](http://travis-ci.org/rspec/rspec-expectations) [![Dependency Status](https://gemnasium.com/rspec/rspec-expectations.png)](https://gemnasium.com/rspec/rspec-expectations)
 
 [RSpec::Expectations](../RSpec/Expectations) lets you express expected outcomes
 on an object in an example.
