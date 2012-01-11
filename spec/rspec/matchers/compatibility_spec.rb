@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-RSpec::Matchers.define :have_public_instance_method do |method|
+RSpec::Matchers.define :have_public_instance_method do
   match do |klass|
-    klass.public_instance_methods.any? {|m| [method, method.to_sym].include?(m)}
+    klass.public_instance_methods.any? {|m| [expected, expected.to_sym].include?(m)}
   end
 end
 

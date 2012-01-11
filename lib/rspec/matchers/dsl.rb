@@ -4,10 +4,9 @@ module RSpec
       # Defines a custom matcher.
       # @see RSpec::Matchers
       def define(name, &declarations)
-        matcher = RSpec::Matchers::Matcher.new(name, &declarations)
+        matcher = RSpec::Matchers.factory(name, &declarations)
         define_method name do |*expected|
-          $matcher_execution_context = self
-          matcher.for_expected(*expected)
+          RSpec::Matchers.matcher(name).new(self, *expected)
         end
       end
 
