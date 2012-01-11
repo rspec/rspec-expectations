@@ -24,10 +24,10 @@ module RSpec
     describe Matcher do
       context "with an included module" do
         let(:matcher) do
-          RSpec::Matchers::Matcher.new(:be_a_greeting) do
+          RSpec::Matchers.factory(:be_a_greeting) do
             include MatcherHelperModule
             match { |actual| actual == greeting }
-          end.for_expected
+          end.new(self)
         end
 
         it "has access to the module's methods" do
@@ -43,9 +43,9 @@ module RSpec
         end
 
         it 'allows multiple modules to be included at once' do
-          m = RSpec::Matchers::Matcher.new(:multiple_modules) do
+          m = RSpec::Matchers.factory(:multiple_modules) do
             include Enumerable, Comparable
-          end.for_expected
+          end.new(self)
           m.should be_a(Enumerable)
           m.should be_a(Comparable)
         end
@@ -53,11 +53,11 @@ module RSpec
 
       context "without overrides" do
         before(:each) do
-          @matcher = RSpec::Matchers::Matcher.new(:be_a_multiple_of) do |multiple|
+          @matcher = RSpec::Matchers.factory(:be_a_multiple_of) do |multiple|
             match do |actual|
               actual % multiple == 0
             end
-          end.for_expected(3)
+          end.new(self, 3)
         end
 
         it "provides a default description" do
@@ -77,7 +77,7 @@ module RSpec
 
       context "with separate match logic for should and should not" do
         let(:matcher) do
-          RSpec::Matchers::Matcher.new(:to_be_composed_of) do |a, b|
+          RSpec::Matchers.factory(:to_be_composed_of) do |a, b|
             match_for_should do |actual|
               actual == a * b
             end
@@ -85,7 +85,7 @@ module RSpec
             match_for_should_not do |actual|
               actual == a + b
             end
-          end.for_expected(7, 11)
+          end.new(self, 7, 11)
         end
 
         it "invokes the match_for_should block for #matches?" do
@@ -105,32 +105,32 @@ module RSpec
       end
 
       it "allows helper methods to be defined with #define_method to have access to matcher parameters" do
-        matcher = RSpec::Matchers::Matcher.new(:name) do |a, b|
+        matcher = RSpec::Matchers.factory(:name) do |a, b|
           define_method(:sum) { a + b }
-        end.for_expected(3,4)
+        end.new(self, 3,4)
 
         matcher.sum.should == 7
       end
 
       it "is not diffable by default" do
-        matcher = RSpec::Matchers::Matcher.new(:name) {}
+        matcher = RSpec::Matchers.factory(:name) {}
         matcher.should_not be_diffable
       end
 
       it "is diffable when told to be" do
-        matcher = RSpec::Matchers::Matcher.new(:name) { diffable }.for_expected
+        matcher = RSpec::Matchers.factory(:name) { diffable }.new(self)
         matcher.should be_diffable
       end
 
       it "provides expected" do
-        matcher = RSpec::Matchers::Matcher.new(:name) {}.for_expected('expected string')
+        matcher = RSpec::Matchers.factory(:name) {}.new(self, 'expected string')
         matcher.expected.should == ['expected string']
       end
 
       it "provides actual" do
-        matcher = RSpec::Matchers::Matcher.new(:name) do
+        matcher = RSpec::Matchers.factory(:name) do
           match {|actual|}
-        end.for_expected('expected string')
+        end.new(self, 'expected string')
 
         matcher.matches?('actual string')
 
@@ -139,27 +139,27 @@ module RSpec
 
       context "wrapping another expectation (should == ...)" do
         it "returns true if the wrapped expectation passes" do
-          matcher = RSpec::Matchers::Matcher.new(:name) do |expected|
+          matcher = RSpec::Matchers.factory(:name) do |expected|
             match do |actual|
               actual.should == expected
             end
-          end.for_expected('value')
+          end.new(self, 'value')
           matcher.matches?('value').should be_true
         end
 
         it "returns false if the wrapped expectation fails" do
-          matcher = RSpec::Matchers::Matcher.new(:name) do |expected|
+          matcher = RSpec::Matchers.factory(:name) do |expected|
             match do |actual|
               actual.should == expected
             end
-          end.for_expected('value')
+          end.new(self, 'value')
           matcher.matches?('other value').should be_false
         end
       end
 
       context "with overrides" do
         before(:each) do
-          @matcher = RSpec::Matchers::Matcher.new(:be_boolean) do |boolean|
+          @matcher = RSpec::Matchers.factory(:be_boolean) do |boolean|
             match do |actual|
               actual
             end
@@ -172,7 +172,7 @@ module RSpec
             failure_message_for_should_not do |actual|
               "expected #{actual} not to be the boolean #{boolean}"
             end
-          end.for_expected(true)
+          end.new(self, true)
         end
 
         it "does not hide result of match block when true" do
@@ -200,31 +200,31 @@ module RSpec
 
       context "#new" do
         it "passes matches? arg to match block" do
-          matcher = RSpec::Matchers::Matcher.new(:ignore) do
+          matcher = RSpec::Matchers.factory(:ignore) do
             match do |actual|
               actual == 5
             end
-          end.for_expected
+          end.new(self)
           matcher.matches?(5).should be_true
         end
 
         it "exposes arg submitted through #new to matcher block" do
-          matcher = RSpec::Matchers::Matcher.new(:ignore) do |expected|
+          matcher = RSpec::Matchers.factory(:ignore) do |expected|
             match do |actual|
               actual > expected
             end
-          end.for_expected(4)
+          end.new(self, 4)
           matcher.matches?(5).should be_true
         end
       end
 
       context "with no args" do
         before(:each) do
-          @matcher = RSpec::Matchers::Matcher.new(:matcher_name) do
+          @matcher = RSpec::Matchers.factory(:matcher_name) do
             match do |actual|
               actual == 5
             end
-          end.for_expected
+          end.new(self)
         end
 
         it "matches" do
@@ -238,11 +238,11 @@ module RSpec
 
       context "with 1 arg" do
         before(:each) do
-          @matcher = RSpec::Matchers::Matcher.new(:matcher_name) do |expected|
+          @matcher = RSpec::Matchers.factory(:matcher_name) do |expected|
             match do |actual|
               actual == 5 && expected == 1
             end
-          end.for_expected(1)
+          end.new(self, 1)
         end
 
         it "matches" do
@@ -256,11 +256,11 @@ module RSpec
 
       context "with multiple args" do
         before(:each) do
-          @matcher = RSpec::Matchers::Matcher.new(:matcher_name) do |a,b,c,d|
+          @matcher = RSpec::Matchers.factory(:matcher_name) do |a,b,c,d|
             match do |sum|
               a + b + c + d == sum
             end
-          end.for_expected(1,2,3,4)
+          end.new(self, 1,2,3,4)
         end
 
         it "matches" do
@@ -273,7 +273,7 @@ module RSpec
       end
 
       it "supports helper methods" do
-        matcher = RSpec::Matchers::Matcher.new(:be_similar_to) do |sample|
+        matcher = RSpec::Matchers.factory(:be_similar_to) do |sample|
           match do |actual|
             similar?(sample, actual)
           end
@@ -281,33 +281,33 @@ module RSpec
           def similar?(a, b)
             a.sort == b.sort
           end
-        end.for_expected([1,2,3])
+        end.new(self, [1,2,3])
 
         matcher.matches?([2,3,1]).should be_true
       end
 
       it "supports fluent interface" do
-        matcher = RSpec::Matchers::Matcher.new(:first_word) do
+        matcher = RSpec::Matchers.factory(:first_word) do
           def second_word
             self
           end
-        end.for_expected
+        end.new(self)
 
         matcher.second_word.should == matcher
       end
 
       it "treats method missing normally for undeclared methods" do
-        matcher = RSpec::Matchers::Matcher.new(:ignore) { }.for_expected
+        matcher = RSpec::Matchers.factory(:ignore) { }.new(self)
         expect { matcher.non_existent_method }.to raise_error(NoMethodError)
       end
 
       it "has access to other matchers" do
-        matcher = RSpec::Matchers::Matcher.new(:ignore) do |expected|
+        matcher = RSpec::Matchers.factory(:ignore) do |expected|
           match do |actual|
             extend RSpec::Matchers
             actual.should eql(5 + expected)
           end
-        end.for_expected(3)
+        end.new(self, 3)
 
         matcher.matches?(8).should be_true
       end
@@ -323,12 +323,12 @@ module RSpec
           end
           let(:matcher) do
             m = mod
-            RSpec::Matchers::Matcher.new :equal do |expected|
+            RSpec::Matchers.factory :equal do |expected|
               extend m
               match_unless_raises UnexpectedError do
                 assert_equal expected, actual
               end
-            end.for_expected(4)
+            end.new(self, 4)
           end
 
           context "with passing assertion" do
@@ -352,11 +352,11 @@ module RSpec
 
         context "with an unexpected error" do
           let(:matcher) do
-            RSpec::Matchers::Matcher.new :foo do |expected|
+            RSpec::Matchers.factory :foo do |expected|
               match_unless_raises SyntaxError do |actual|
                 raise "unexpected exception"
               end
-            end.for_expected(:bar)
+            end.new(self, :bar)
           end
 
           it "raises the error" do
@@ -369,20 +369,20 @@ module RSpec
       end
 
       it "can define chainable methods" do
-        matcher = RSpec::Matchers::Matcher.new(:name) do
+        matcher = RSpec::Matchers.factory(:name) do
           chain(:expecting) do |expected_value|
             @expected_value = expected_value
           end
           match { |actual| actual == @expected_value }
-        end.for_expected
+        end.new(self)
 
         matcher.expecting('value').matches?('value').should be_true
         matcher.expecting('value').matches?('other value').should be_false
       end
 
       it "prevents name collisions on chainable methods from different matchers" do
-        m1 = RSpec::Matchers::Matcher.new(:m1) { chain(:foo) { raise "foo in m1" } }.for_expected
-        m2 = RSpec::Matchers::Matcher.new(:m2) { chain(:foo) { raise "foo in m2" } }.for_expected
+        m1 = RSpec::Matchers.factory(:m1) { chain(:foo) { raise "foo in m1" } }.new(self)
+        m2 = RSpec::Matchers.factory(:m2) { chain(:foo) { raise "foo in m2" } }.new(self)
 
         expect { m1.foo }.to raise_error("foo in m1")
         expect { m2.foo }.to raise_error("foo in m2")

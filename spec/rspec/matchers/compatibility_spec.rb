@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec::Matchers.define :have_public_instance_method do |method|
   match do |klass|
-    klass.public_instance_methods.any? {|m| [method, method.to_sym].include?(m)}
+    klass.public_instance_methods.any? {|m| [expected[0], expected[0].to_sym].include?(m)}
   end
 end
 
