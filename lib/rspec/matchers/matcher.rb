@@ -185,7 +185,7 @@ module RSpec
       def initialize(context, *expected)
         @name     = self.class.matcher_name
         @actual   = nil
-        @expected = expected
+        @expected = expected.first # TODO: Backwards incompatible
         @context  = context
         @rescued_exception = nil
       end
