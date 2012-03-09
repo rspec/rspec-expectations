@@ -66,5 +66,11 @@ describe RSpec::Expectations, "#fail_with with diff" do
       RSpec::Expectations.fail_with "the message", lambda {}, lambda {}
     }.should fail_with("the message")
   end
+
+  it "accept message as Proc" do
+    lambda {
+      RSpec::Expectations.fail_with lambda { "the message"}
+    }.should fail_with("the message")
+  end
 end
 
