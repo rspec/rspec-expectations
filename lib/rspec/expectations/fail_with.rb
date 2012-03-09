@@ -19,6 +19,10 @@ module RSpec
                                "appropriate failure_message_for_* method to return a string?"
         end
 
+	if message.is_a? Proc
+	  message = message.call
+	end
+
         if actual && expected
           if all_strings?(actual, expected)
             if any_multiline_strings?(actual, expected)
