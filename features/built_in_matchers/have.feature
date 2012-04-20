@@ -101,3 +101,17 @@ Feature: have(n).items matcher
       And the output should contain "expected at least 6 words, got 5"
       And the output should contain "expected at most 4 words, got 5"
 
+  Scenario: have(n).items returns an intellegent error
+    Given a file named "nil_have_items_spec.rb" with:
+      """
+      def foo
+        nil
+      end
+
+      describe "foo" do
+        it { foo.should have(3).items }
+      end
+      """
+    When I run `rspec nil_have_items_spec.rb`
+    Then the output should contain "1 example, 1 failure"
+     And the output should contain "expected 3 items, got 0"
