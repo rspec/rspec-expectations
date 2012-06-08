@@ -1,2 +1,0 @@
-#!/bin/sh
-rsync -av --delete output/ rspec.info:/www/new.rspec.info
