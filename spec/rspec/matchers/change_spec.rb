@@ -481,15 +481,27 @@ describe "should change(actual, message).from(old).to(new)" do
     expect { @instance.some_value = "cat" }.to change(@instance, :some_value).from("string").to("cat")
   end
   
-  it "shows the correct messaging when #after and #to are different" do
+  it "fails when #after and #to are different (#from not supplied)" do
+    expect do
+      expect { @instance.some_value = "cat" }.to change(@instance, :some_value).to("dog")
+    end.to fail_with("some_value should have been changed to \"dog\", but is now \"cat\"")
+  end
+
+  it "fails when #after and #to are different (#from supplied but matching #before)" do
     expect do
       expect { @instance.some_value = "cat" }.to change(@instance, :some_value).from("string").to("dog")
     end.to fail_with("some_value should have been changed to \"dog\", but is now \"cat\"")
   end
   
-  it "shows the correct messaging when #before and #from are different" do
+  it "fails when #before and #from are different (#to not supplied)" do
     expect do
-      expect { @instance.some_value = "cat" }.to change(@instance, :some_value).from("not_string").to("cat")
+      expect { @instance.some_value = "cat" }.to change(@instance, :some_value).from("not_string")
+    end.to fail_with("some_value should have initially been \"not_string\", but was \"string\"")
+  end
+  # The from/before mismatch failure takes precedence over the to/after mismatch
+  it "fails when #before and #from are different (#to supplied but not used)" do
+    expect do
+      expect { @instance.some_value = "cat" }.to change(@instance, :some_value).from("not_string").to("other")
     end.to fail_with("some_value should have initially been \"not_string\", but was \"string\"")
   end
 end
