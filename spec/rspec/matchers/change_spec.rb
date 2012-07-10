@@ -145,7 +145,7 @@ describe "should_not change(actual, message)" do
     expect { }.to_not change(@instance, :some_value)
   end
 
-  it "fails when actual is not modified by the block" do
+  it "fails when actual is modified by the block" do
     expect do
       expect {@instance.some_value = 6}.to_not change(@instance, :some_value)
     end.to fail_with("some_value should not have changed, but did change from 5 to 6")
@@ -185,11 +185,11 @@ describe "should_not change { block }" do
     @instance.some_value = 5
   end
 
-  it "passes when actual is modified by the block" do
+  it "passes when actual is not modified by the block" do
     expect {}.to_not change{ @instance.some_value }
   end
 
-  it "fails when actual is not modified by the block" do
+  it "fails when actual is modified by the block" do
     expect do
       expect {@instance.some_value = 6}.to_not change { @instance.some_value }
     end.to fail_with("result should not have changed, but did change from 5 to 6")
