@@ -481,28 +481,75 @@ describe "should change(actual, message).from(old).to(new)" do
     expect { @instance.some_value = "cat" }.to change(@instance, :some_value).from("string").to("cat")
   end
   
-  it "fails when #after and #to are different (#from not supplied)" do
+  it "fails when @expected_after and @actual_after are different (#from not supplied)" do
     expect do
       expect { @instance.some_value = "cat" }.to change(@instance, :some_value).to("dog")
     end.to fail_with("some_value should have been changed to \"dog\", but is now \"cat\"")
   end
 
-  it "fails when #after and #to are different (#from supplied but matching #before)" do
+  it "fails when @expected_after and @actual_after are different (#from supplied but matching @actual_before)" do
     expect do
       expect { @instance.some_value = "cat" }.to change(@instance, :some_value).from("string").to("dog")
     end.to fail_with("some_value should have been changed to \"dog\", but is now \"cat\"")
   end
   
-  it "fails when #before and #from are different (#to not supplied)" do
+  it "fails when @expected_before and @actual_before are different (#to not supplied)" do
     expect do
       expect { @instance.some_value = "cat" }.to change(@instance, :some_value).from("not_string")
     end.to fail_with("some_value should have initially been \"not_string\", but was \"string\"")
   end
   # The from/before mismatch failure takes precedence over the to/after mismatch
-  it "fails when #before and #from are different (#to supplied but not used)" do
+  it "fails when @expected_before and @actual_before are different (#to supplied but not used)" do
     expect do
       expect { @instance.some_value = "cat" }.to change(@instance, :some_value).from("not_string").to("other")
     end.to fail_with("some_value should have initially been \"not_string\", but was \"string\"")
+  end
+end
+
+describe "should[_not] change(actual, message).from(old).to(new)" do
+  before(:each) do
+    @instance = SomethingExpected.new
+    @instance.some_value = 'initial'
+  end
+
+  it "fails when @expected_before and @actual_before are different (should)" do
+    expect do
+      expect { }.to change(@instance, :some_value).from("other")
+    end.to fail_with("some_value should have initially been \"other\", but was \"initial\"")
+  end
+
+  # #from simply sets an expectation of what the initial value should be before the block is called
+  # so it should behave identically for both should change and should_not change.
+  it "fails when @expected_before and @actual_before are different (should_not)" do
+    expect do
+      expect { }.to_not change(@instance, :some_value).from("other")
+    end.to fail_with(%(some_value should have initially been "other", but was "initial"))
+  end
+
+  # This shows how instead of making the test weaker like the old behavior was, adding a from()
+  # behavior makes the test stronger: it now tests the initial value *in addition* to checking
+  # that the value was not changed at all by the block.
+  it "fails when actual is modified by the block (should_not)" do
+    expect do
+      expect { @instance.some_value = "cat"}.to_not change(@instance, :some_value).from("initial")
+    end.to fail_with(%(some_value should not have changed, but did change from "initial" to "cat"))
+  end
+
+  it "fails when @expected_after and @actual_after are different (should)" do
+    expect do
+      expect { @instance.some_value = "cat" }.to change(@instance, :some_value).to("dog")
+    end.to fail_with(%(some_value should have been changed to "dog", but is now "cat"))
+  end
+
+  it "passes when @expected_after and @actual_after are different (should_not)" do
+    expect { @instance.some_value = "cat" }.to_not change(@instance, :some_value).to("bird")
+    expect { @instance.some_value = "cat" }.to_not change(@instance, :some_value).to("mouse")
+  end
+
+  it "fails when @expected_after and @actual_after are the same (should_not)" do
+    expect do
+      expect { @instance.some_value = "cat" }.to_not change(@instance, :some_value).to("cat")
+    end.to fail_with(%(some_value should not have changed, but did change from "initial" to "cat"))
   end
 end
 
