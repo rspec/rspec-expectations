@@ -122,6 +122,18 @@ describe "have matcher" do
       owner.should have(1).item
     end
 
+    context "when the target defines methods for the singular and plural form of the collection name" do
+
+      it 'uses the plural form' do
+        owner = create_collection_owner_with(1)
+        def owner.item
+          :not_a_collection
+        end
+
+        owner.should have(1).item
+      end
+    end
+
     after(:each) do
       unless @inflector_was_defined
         Object.__send__ :remove_const, :Inflector
