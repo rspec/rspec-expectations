@@ -63,8 +63,8 @@ module RSpec
         3
       end
 
-      def color(str, code)
-        "\e[#{code}m#{str}\e[0m"
+      def color(text, code)
+        "\e[#{code}m#{text}\e[0m"
       end
 
       {
@@ -72,8 +72,8 @@ module RSpec
         :green => 32,
         :blue => 34
       }.each do |name, code|
-        define_method name do |str|
-          color(str, code)
+        define_method name do |text|
+          color(text, code)
         end
       end
 
