@@ -63,30 +63,37 @@ module RSpec
         3
       end
 
-      def color(text, code)
-        "\e[#{code}m#{text}\e[0m"
+      def color(str, code)
+        "\e[#{code}m#{str}\e[0m"
+      end
+
+      def red(str)
+        color(str, 31)
+      end
+
+      def green(str)
+        color(str, 32)
+      end
+
+      def blue(str)
+        color(str, 34)
       end
 
       def color_diff(diff)
         return diff unless RSpec::Matchers.configuration.color?
 
-        red = 31
-        green = 32
-        blue = 34
-
-        lines = diff.lines.map do |line|
+        diff.lines.map { |line|
           case line[0].chr
           when "+"
-            color(line, green)
+            green(line)
           when "-"
-            color(line, red)
+            red(line)
           when "@"
-            line[1].chr == "@" ? color(line, blue) : line
+            line[1].chr == "@" ? blue(line) : line
           else
             line
           end
-        end
-        lines.join
+        }.join
       end
 
       def object_to_string(object)
