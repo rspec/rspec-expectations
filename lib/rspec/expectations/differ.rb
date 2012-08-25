@@ -67,16 +67,14 @@ module RSpec
         "\e[#{code}m#{str}\e[0m"
       end
 
-      def red(str)
-        color(str, 31)
-      end
-
-      def green(str)
-        color(str, 32)
-      end
-
-      def blue(str)
-        color(str, 34)
+      {
+        :red => 31,
+        :green => 32,
+        :blue => 34
+      }.each do |name, code|
+        define_method name do |str|
+          color(str, code)
+        end
       end
 
       def color_diff(diff)
