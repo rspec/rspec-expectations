@@ -26,13 +26,13 @@ describe "time.should =~ other_time" do
   it "fails if actual value is lower than expected by at least 1 second" do
     expect {
       time.should =~ time + 1
-    }.to fail_with("expected 2012-08-25 00:00:00 +0300 to be same time as 2012-08-25 00:00:01 +0300 but it wasn't")
+    }.to fail_with("expected #{time} to be same time as #{time + 1} but it wasn't")
   end
 
   it "fails if actual value is higher than expected by at least 1 second" do
     expect {
       time.should =~ time - 1
-    }.to fail_with("expected 2012-08-25 00:00:00 +0300 to be same time as 2012-08-24 23:59:59 +0300 but it wasn't")
+    }.to fail_with("expected #{time} to be same time as #{time - 1} but it wasn't")
   end
 
   it "can be called on Date objects" do
@@ -53,6 +53,6 @@ describe "time.should_not =~ other_time" do
     time = Time.mktime(2012, 8, 25)
     expect {
       time.should_not =~ time + 0.999
-    }.to fail_with("expected 2012-08-25 00:00:00 +0300 not to be same time as 2012-08-25 00:00:00 +0300 but it was")
+    }.to fail_with("expected #{time} not to be same time as #{time} but it was")
   end
 end
