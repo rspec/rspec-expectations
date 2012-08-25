@@ -71,9 +71,9 @@ module RSpec
         :red => 31,
         :green => 32,
         :blue => 34
-      }.each do |name, code|
-        define_method name do |text|
-          color(text, code)
+      }.each do |color_name, color_code|
+        define_method color_name do |text|
+          color(text, color_code)
         end
       end
 
