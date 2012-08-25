@@ -22,6 +22,7 @@ module RSpec
       autoload :Include,        'rspec/matchers/built_in/include'
       autoload :Match,          'rspec/matchers/built_in/match'
       autoload :MatchArray,     'rspec/matchers/built_in/match_array'
+      autoload :MatchTime,      'rspec/matchers/built_in/match_time'
       autoload :RaiseError,     'rspec/matchers/built_in/raise_error'
       autoload :RespondTo,      'rspec/matchers/built_in/respond_to'
       autoload :StartWith,      'rspec/matchers/built_in/start_and_end_with'
