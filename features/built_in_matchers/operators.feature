@@ -238,10 +238,10 @@ Feature: operator matchers
         And the output should contain:
         """
              Failure/Error: it { should_not =~ subject + 0.999 }
-               expected 2012-08-25 10:37:42 UTC not to be same time as 2012-08-25 10:37:42 UTC but it was
+               expected 2012-08-25 10:37:42 +0000 not to be same time as 2012-08-25 10:37:42 +0000 but it was
         """
         And the output should contain:
         """
              Failure/Error: it { should =~ subject + 1 }
-               expected 2012-08-25 10:37:42 UTC to be same time as 2012-08-25 10:37:43 UTC but it wasn't
+               expected 2012-08-25 10:37:42 +0000 to be same time as 2012-08-25 10:37:43 +0000 but it wasn't
         """

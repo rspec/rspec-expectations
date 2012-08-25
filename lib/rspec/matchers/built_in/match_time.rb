@@ -3,15 +3,15 @@ module RSpec
     module BuiltIn
       class MatchTime < BaseMatcher
         def match(expected, actual)
-          (seconds_of(expected) - seconds_of(actual)).abs < 1
+          (expected - actual).abs < 1
         end
 
         def failure_message_for_should
-          "expected #{actual} to be same time as #{expected} but it wasn't"
+          "expected #{format_time(actual)} to be same time as #{format_time(expected)} but it wasn't"
         end
 
         def failure_message_for_should_not
-          "expected #{actual} not to be same time as #{expected} but it was"
+          "expected #{format_time(actual)} not to be same time as #{format_time(expected)} but it was"
         end
 
         def description
@@ -20,9 +20,8 @@ module RSpec
 
         private
 
-        def seconds_of(time)
-          time = time.to_time if time.respond_to?(:to_time)
-          time.to_f
+        def format_time(time)
+          time.strftime("%Y-%m-%d %H:%M:%S %z")
         end
       end
     end

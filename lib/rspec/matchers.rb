@@ -699,9 +699,7 @@ module RSpec
       BuiltIn::MatchTime.new(time)
     end
 
-    OperatorMatcher.register(Time, '=~', BuiltIn::MatchTime) if defined?(Time)
-    OperatorMatcher.register(Date, '=~', BuiltIn::MatchTime) if defined?(Date)
-    OperatorMatcher.register(DateTime, '=~', BuiltIn::MatchTime) if defined?(DateTime)
+    OperatorMatcher.register(Time, '=~', BuiltIn::MatchTime)
     OperatorMatcher.register(ActiveSupport::TimeWithZone, '=~', BuiltIn::MatchTime) if defined?(ActiveSupport::TimeWithZone)
   end
 end
