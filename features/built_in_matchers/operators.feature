@@ -219,3 +219,29 @@ Feature: operator matchers
              the extra elements were:        [3]
       """
 
+  Scenario: time operator matchers
+      Given a file named "time_operator_matchers_spec.rb" with:
+        """
+        describe Time.utc(2012, 8, 25, 10, 37, 42) do
+          it { should =~ subject + 0.999 }
+          it { should =~ subject - 0.999 }
+          it { should_not =~ subject + 1 }
+          it { should_not =~ subject - 1 }
+
+          # deliberate failures
+          it { should_not =~ subject + 0.999 }
+          it { should =~ subject + 1 }
+        end
+        """
+      When I run `rspec time_operator_matchers_spec.rb`
+      Then the output should contain "6 examples, 2 failures"
+        And the output should contain:
+        """
+             Failure/Error: it { should_not =~ subject + 0.999 }
+               expected 2012-08-25 10:37:42 UTC not to be same time as 2012-08-25 10:37:42 UTC but it was
+        """
+        And the output should contain:
+        """
+             Failure/Error: it { should =~ subject + 1 }
+               expected 2012-08-25 10:37:42 UTC to be same time as 2012-08-25 10:37:43 UTC but it wasn't
+        """
