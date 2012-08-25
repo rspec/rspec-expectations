@@ -64,7 +64,7 @@ module RSpec
       end
 
       def color(text, color_code)
-        "\e[#{code}m#{text}\e[0m"
+        "\e[#{color_code}m#{text}\e[0m"
       end
 
       {
