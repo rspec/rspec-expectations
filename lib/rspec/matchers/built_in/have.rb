@@ -34,10 +34,10 @@ module RSpec
         alias == matches?
 
         def determine_collection(collection_or_owner)
-          if collection_or_owner.respond_to?(@collection_name)
-            collection_or_owner.send(@collection_name, *@args, &@block)
-          elsif (@plural_collection_name && collection_or_owner.respond_to?(@plural_collection_name))
+          if (@plural_collection_name && collection_or_owner.respond_to?(@plural_collection_name))
             collection_or_owner.send(@plural_collection_name, *@args, &@block)
+          elsif collection_or_owner.respond_to?(@collection_name)
+            collection_or_owner.send(@collection_name, *@args, &@block)
           elsif determine_query_method(collection_or_owner)
             collection_or_owner
           else
