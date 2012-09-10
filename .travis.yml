@@ -1,4 +1,4 @@
-script: "script/test_all && bin/rake cucumber --trace 2>&1"
+script: "script/test_all"
 bundler_args: "--binstubs"
 rvm:
   - 1.9.2
