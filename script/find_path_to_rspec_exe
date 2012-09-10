@@ -1,9 +1,15 @@
 #!/usr/bin/env ruby
 
 require File.expand_path('../../bundle/bundler/setup', __FILE__)
+require 'pp'
+pp $LOAD_PATH
+
 $LOAD_PATH.each do |path|
+  puts "Path: #{path}"
   next unless path =~ %r|rspec-core/lib$|
   rspec_exe = File.expand_path('../exe/rspec', path)
+
+  puts "rspec_exe: #{rspec_exe}"
 
   if File.exist?(rspec_exe)
     puts rspec_exe
