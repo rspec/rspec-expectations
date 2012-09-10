@@ -1,19 +1,9 @@
 #!/usr/bin/env ruby
 
 require File.expand_path('../../bundle/bundler/setup', __FILE__)
-require 'pp'
-pp $LOAD_PATH
+# git-sourced gems installed by bundler will be at a path like
+# "{gem_name}-{git_sha}"...
+rspec_core_path = $LOAD_PATH.grep(/rspec-core[^\/]*\/lib$/).first
 
-$LOAD_PATH.each do |path|
-  puts "Path: #{path}"
-  next unless path =~ %r|rspec-core[^/]*/lib$|
-  rspec_exe = File.expand_path('../exe/rspec', path)
-
-  puts "rspec_exe: #{rspec_exe}"
-
-  if File.exist?(rspec_exe)
-    puts rspec_exe
-    exit(0)
-  end
-end
+puts File.expand_path('../exe/rspec', rspec_core_path)
 
