@@ -10,11 +10,16 @@ module RSpec
     end
 
     def self.generated_description
-      return nil if last_should.nil?
-      "#{last_should.to_s.gsub('_',' ')} #{last_description}"
+      if last_should.nil?
+        nil
+      elsif last_matcher.respond_to?(:descriptions)
+        last_matcher.descriptions[last_should =~ /not/ ? :negative : :positive]
+      else
+        "#{last_should.to_s.gsub('_',' ')} #{last_description}"
+      end
     end
 
-  private
+    private
 
     def self.last_description
       last_matcher.respond_to?(:description) ? last_matcher.description : <<-MESSAGE
