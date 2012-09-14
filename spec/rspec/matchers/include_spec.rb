@@ -60,9 +60,10 @@ describe "#include matcher" do
   end
 
   describe "should include(with, multiple, args)" do
-    it "has a description" do
+    it "has docstrings" do
       matcher = include("a")
-      matcher.description.should eq("include \"a\"")
+      matcher.docstring_for_should.should eq("includes \"a\"")
+      matcher.docstring_for_should_not.should eq("does not include \"a\"")
     end
     context "for a string target" do
       it "passes if target includes all items" do

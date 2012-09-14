@@ -8,7 +8,7 @@ module RSpec
 
         def matches?(actual)
           @actual = actual
-          raise needs_expected     unless defined? @expected 
+          raise needs_expected     unless defined? @expected
           raise needs_subtractable unless @actual.respond_to? :-
           (@actual - @expected).abs <= @delta
         end
@@ -20,18 +20,26 @@ module RSpec
         end
 
         def failure_message_for_should
-          "expected #{@actual} to #{description}"
+          "expected #{@actual} to be #{docstring}"
         end
 
         def failure_message_for_should_not
-          "expected #{@actual} not to #{description}"
+          "expected #{@actual} not to be #{docstring}"
         end
 
-        def description
-          "be within #{@delta} of #{@expected}"
+        def docstring_for_should
+          "is #{docstring}"
+        end
+
+        def docstring_for_should_not
+          "is not #{docstring}"
         end
 
         private
+
+        def docstring
+          "within #{@delta} of #{@expected}"
+        end
 
         def needs_subtractable
           ArgumentError.new "The actual value (#{@actual.inspect}) must respond to `-`"

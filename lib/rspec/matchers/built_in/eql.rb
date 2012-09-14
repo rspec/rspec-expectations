@@ -14,6 +14,14 @@ module RSpec
           "\nexpected: value != #{expected.inspect}\n     got: #{actual.inspect}\n\n(compared using eql?)\n"
         end
 
+        def docstring_for_should
+          "eql #{expected.inspect}"
+        end
+
+        def docstring_for_should_not
+          "does not eql #{expected.inspect}"
+        end
+
         def diffable?
           true
         end

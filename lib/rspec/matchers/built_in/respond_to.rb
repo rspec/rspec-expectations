@@ -24,8 +24,12 @@ module RSpec
           failure_message_for_should.sub(/to respond to/, 'not to respond to')
         end
 
-        def description
-          "respond to #{pp_names}#{with_arity}"
+        def docstring_for_should
+          "responds to #{pp_names}#{with_arity}"
+        end
+
+        def docstring_for_should_not
+          "does not respond to #{pp_names}#{with_arity}"
         end
 
         def with(n)

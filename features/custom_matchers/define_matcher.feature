@@ -37,8 +37,8 @@ Feature: define matcher
     When I run `rspec ./matcher_with_default_message_spec.rb --format documentation`
     Then the exit status should not be 0
 
-    And the output should contain "should be a multiple of 3"
-    And the output should contain "should not be a multiple of 4"
+    And the output should contain "is a multiple of 3"
+    And the output should contain "is not a multiple of 4"
     And the output should contain "Failure/Error: it {should be_a_multiple_of(4)}"
     And the output should contain "Failure/Error: it {should_not be_a_multiple_of(3)}"
 
@@ -94,17 +94,19 @@ Feature: define matcher
     And the stdout should contain "1 example, 1 failure"
     And the stdout should contain "expected that 9 would not be a multiple of 3"
 
-  Scenario: overriding the description
+  Scenario: overriding the docstrings
     Given a file named "matcher_overriding_description_spec.rb" with:
       """
       require 'rspec/expectations'
-
       RSpec::Matchers.define :be_a_multiple_of do |expected|
         match do |actual|
           actual % expected == 0
         end
-        description do
-          "be multiple of #{expected}"
+        docstring_for_should do
+          "is multiple of #{expected}"
+        end
+        docstring_for_should_not do
+          "is not multiple of #{expected}"
         end
       end
 
@@ -119,14 +121,13 @@ Feature: define matcher
     When I run `rspec ./matcher_overriding_description_spec.rb --format documentation`
     Then the exit status should be 0
     And the stdout should contain "2 examples, 0 failures"
-    And the stdout should contain "should be multiple of 3"
-    And the stdout should contain "should not be multiple of 4"
+    And the stdout should contain "is multiple of 3"
+    And the stdout should contain "is not multiple of 4"
 
   Scenario: with no args
     Given a file named "matcher_with_no_args_spec.rb" with:
       """
       require 'rspec/expectations'
-
       RSpec::Matchers.define :have_7_fingers do
         match do |thing|
           thing.fingers.length == 7
@@ -144,13 +145,12 @@ Feature: define matcher
     When I run `rspec ./matcher_with_no_args_spec.rb --format documentation`
     Then the exit status should be 0
     And the stdout should contain "1 example, 0 failures"
-    And the stdout should contain "should have 7 fingers"
+    And the stdout should contain "has 7 fingers"
 
   Scenario: with multiple args
     Given a file named "matcher_with_multiple_args_spec.rb" with:
       """
       require 'rspec/expectations'
-
       RSpec::Matchers.define :be_the_sum_of do |a,b,c,d|
         match do |sum|
           a + b + c + d == sum
@@ -164,7 +164,7 @@ Feature: define matcher
     When I run `rspec ./matcher_with_multiple_args_spec.rb --format documentation`
     Then the exit status should be 0
     And the stdout should contain "1 example, 0 failures"
-    And the stdout should contain "should be the sum of 1, 2, 3, and 4"
+    And the stdout should contain "is the sum of 1, 2, 3, and 4"
 
   Scenario: with helper methods
     Given a file named "matcher_with_internal_helper_spec.rb" with:

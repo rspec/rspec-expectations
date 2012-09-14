@@ -61,8 +61,12 @@ module RSpec
           "expected #{expected('no Symbol')}#{' not' if @expected_symbol} to be thrown, got #{caught}"
         end
 
-        def description
-          "throw #{expected}"
+        def docstring_for_should
+          "throws #{expected}"
+        end
+
+        def docstring_for_should_not
+          "does not throw #{expected}"
         end
 
         private

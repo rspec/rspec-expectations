@@ -6,7 +6,8 @@ describe "should satisfy { block }" do
   end
 
   it "describes itself" do
-    satisfy.description.should eq("satisfy block")
+    satisfy.docstring_for_should.should eq("satisfies block")
+    satisfy.docstring_for_should_not.should eq("does not satisfy block")
   end
 
   it "passes if block returns true" do

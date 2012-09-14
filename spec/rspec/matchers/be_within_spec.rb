@@ -57,10 +57,11 @@ module RSpec
         Time.now.should be_within(0.1).of(Time.now)
       end
 
-      it "provides a description" do
+      it "provides docstrings" do
         matcher = be_within(0.5).of(5.0)
         matcher.matches?(5.1)
-        matcher.description.should == "be within 0.5 of 5.0"
+        matcher.docstring_for_should.should eq "is within 0.5 of 5.0"
+        matcher.docstring_for_should_not.should eq "is not within 0.5 of 5.0"
       end
 
       it "raises an error if no expected value is given" do

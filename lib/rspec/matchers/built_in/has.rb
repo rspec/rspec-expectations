@@ -19,11 +19,19 @@ module RSpec
           "expected ##{predicate(@expected)}#{failure_message_args_description} to return false, got true"
         end
 
-        def description
-          [method_description(@expected), args_description].compact.join(' ')
+        def docstring_for_should
+          docstring.sub(/have/, "has")
+        end
+
+        def docstring_for_should_not
+          "not #{docstring}"
         end
 
         private
+
+        def docstring
+          [method_description(@expected), args_description].compact.join(' ')
+        end
 
         def predicate(sym)
           "#{sym.to_s.sub("have_","has_")}?".to_sym

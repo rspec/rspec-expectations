@@ -47,11 +47,19 @@ module RSpec
         RSpec::Expectations.fail_with(message, @expected, @actual)
       end
 
-      def description
-        "#{@operator} #{@expected.inspect}"
+      def docstring_for_should
+        docstring
+      end
+
+      def docstring_for_should_not
+        "does not #{docstring}"
       end
 
       private
+
+      def docstring
+        "#{@operator} #{@expected.inspect}"
+      end
 
       def eval_match(actual, operator, expected)
         ::RSpec::Matchers.last_matcher = self
@@ -66,7 +74,7 @@ module RSpec
           if actual.__send__(operator, expected)
             true
           elsif ['==','===', '=~'].include?(operator)
-            fail_with_message("expected: #{expected.inspect}\n     got: #{actual.inspect} (using #{operator})") 
+            fail_with_message("expected: #{expected.inspect}\n     got: #{actual.inspect} (using #{operator})")
           else
             fail_with_message("expected: #{operator} #{expected.inspect}\n     got: #{operator.gsub(/./, ' ')} #{actual.inspect}")
           end

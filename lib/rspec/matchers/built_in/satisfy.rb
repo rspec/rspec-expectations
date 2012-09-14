@@ -21,8 +21,12 @@ module RSpec
           "expected #{@actual} not to satisfy block"
         end
 
-        def description
-          "satisfy block"
+        def docstring_for_should
+          "satisfies block"
+        end
+
+        def docstring_for_should_not
+          "does not satisfy block"
         end
       end
     end

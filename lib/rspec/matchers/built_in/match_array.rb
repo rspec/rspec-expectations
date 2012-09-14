@@ -20,8 +20,12 @@ module RSpec
           "Matcher does not support should_not"
         end
 
-        def description
-          "contain exactly #{_pretty_print(expected)}"
+        def docstring_for_should
+          "contains exactly #{_pretty_print(@expected)}"
+        end
+
+        def docstring_for_should_not
+          "does not contain exactly #{_pretty_print(@expected)}"
         end
 
         private

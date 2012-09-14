@@ -31,6 +31,14 @@ Compared using equal?, which compares object identity.
 MESSAGE
         end
 
+        def docstring_for_should
+          "equals #{expected.inspect}"
+        end
+
+        def docstring_for_should_not
+          "does not equal #{expected.inspect}"
+        end
+
         def diffable?; true; end
 
         private

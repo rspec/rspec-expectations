@@ -15,6 +15,14 @@ module RSpec
         def failure_message_for_should_not
           "expected: non-true value\n     got: #{actual.inspect}"
         end
+
+        def docstring_for_should
+          "is true"
+        end
+
+        def docstring_for_should_not
+          "is not true"
+        end
       end
 
       class BeFalse < BaseMatcher
@@ -29,6 +37,14 @@ module RSpec
         def failure_message_for_should_not
           "expected: non-false value\n     got: #{actual.inspect}"
         end
+
+        def docstring_for_should
+          "is false"
+        end
+
+        def docstring_for_should_not
+          "is not false"
+        end
       end
 
       class BeNil < BaseMatcher
@@ -42,6 +58,14 @@ module RSpec
 
         def failure_message_for_should_not
           "expected: not nil\n     got: nil"
+        end
+
+        def docstring_for_should
+          "is nil"
+        end
+
+        def docstring_for_should_not
+          "is not nil"
         end
       end
 
@@ -60,6 +84,14 @@ module RSpec
 
         def failure_message_for_should_not
           "expected #{@actual.inspect} to evaluate to false"
+        end
+
+        def docstring_for_should
+          "is"
+        end
+
+        def docstring_for_should_not
+          "is not"
         end
 
         [:==, :<, :<=, :>=, :>, :===].each do |operator|
@@ -117,8 +149,12 @@ it is a bit confusing.
                             "It might be more clearly expressed in the positive?")
         end
 
-        def description
-          "be #{@operator} #{expected_to_sentence}#{args_to_sentence}"
+        def docstring_for_should
+          "is #{@operator} #{expected_to_sentence}#{args_to_sentence}"
+        end
+
+        def docstring_for_should_not
+          "is not #{@operator} #{expected_to_sentence}#{args_to_sentence}"
         end
       end
 
@@ -152,8 +188,12 @@ it is a bit confusing.
           "expected #{predicate}#{args_to_s} to return false, got #{@result.inspect}"
         end
 
-        def description
-          "#{prefix_to_sentence}#{expected_to_sentence}#{args_to_sentence}"
+        def docstring_for_should
+          "is #{expected_to_sentence}#{args_to_sentence}"
+        end
+
+        def docstring_for_should_not
+          "is not #{expected_to_sentence}#{args_to_sentence}"
         end
 
         private

@@ -11,13 +11,22 @@ module RSpec
 
     def self.generated_description
       return nil if last_should.nil?
-      "#{last_should.to_s.gsub('_',' ')} #{last_description}"
+      mode = last_should.to_s =~ /not/ ? :negative : :positive
+      if mode == :positive && last_matcher.respond_to?(:docstring_for_should)
+        last_matcher.docstring_for_should
+      elsif mode == :negative && last_matcher.respond_to?(:docstring_for_should_not)
+        last_matcher.docstring_for_should_not
+      elsif last_matcher.respond_to?(:description)
+        "#{last_should.to_s.gsub('_',' ')} #{last_matcher.description}"
+      else
+        no_description_message
+      end
     end
 
   private
 
-    def self.last_description
-      last_matcher.respond_to?(:description) ? last_matcher.description : <<-MESSAGE
+    def self.no_description_message
+      return <<-MESSAGE
 When you call a matcher in an example without a String, like this:
 
 specify { object.should matcher }

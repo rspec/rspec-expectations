@@ -72,7 +72,7 @@ MESSAGE
         def by_at_most(maximum)
           @maximum = maximum
           self
-        end      
+        end
 
         def to(to)
           @eval_after = true
@@ -86,8 +86,12 @@ MESSAGE
           self
         end
 
-        def description
-          "change ##{message}"
+        def docstring_for_should
+          "changes ##{message}"
+        end
+
+        def docstring_for_should_not
+          "does not change ##{message}"
         end
 
         private

@@ -16,8 +16,12 @@ module RSpec
           perform_match(:none?, :any?, @actual, @expected)
         end
 
-        def description
-          "include#{expected_to_sentence}"
+        def docstring_for_should
+          "includes#{expected_to_sentence}"
+        end
+
+        def docstring_for_should_not
+          "does not include#{expected_to_sentence}"
         end
 
         def diffable?
