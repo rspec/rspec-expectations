@@ -11,6 +11,8 @@ gemspec
   end
 end
 
+gem 'minitest'
+
 ### deps for rdoc.info
 gem 'yard',          '0.8.0', :require => false
 gem 'redcarpet',     '2.1.1'
