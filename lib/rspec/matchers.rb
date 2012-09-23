@@ -492,7 +492,11 @@ module RSpec
     #   email.should match(/^([^\s]+)((?:[-a-z0-9]+\.)+[a-z]{2,})$/i)
     #   email.should match("@example.com")
     def match(expected)
-      BuiltIn::Match.new(expected)
+      if expected.kind_of?(Fixnum)
+        BuiltIn::Match.new(Regexp.new(expected.to_s))
+      else
+        BuiltIn::Match.new(expected)
+      end
     end
 
     # With no args, matches if any error is raised.

@@ -48,3 +48,20 @@ Feature: match matcher
       | expected /foo/ not to match "food" |
       | expected /foo/ to match "drinks"   |
 
+  Scenario: fixnum usage
+    Given a file named "fixnum_match_spec.rb" with:
+      """
+      describe "3 pigs" do
+        it { should match(3) }
+        it { should_not match(10) }
+
+        # deliberate failures
+        it { should_not match(3) }
+        it { should match(40) }
+      end
+      """
+    When I run `rspec fixnum_match_spec.rb`
+    Then the output should contain all of these:
+      | 4 examples, 2 failures             |
+      | expected "3 pigs" not to match /3/ |
+      | expected "3 pigs" to match /40/    |
