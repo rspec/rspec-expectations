@@ -43,7 +43,10 @@ module RSpec
         @default_should_host ||= ::Object.ancestors.last
       end
 
-      MESSAGE_ERR = "The value passed as the message for the expectation was not a string"
+
+      def message_must_be_string
+        "The value passed as the message for the expectation was not a string"
+      end
 
       # @api private
       # Enables the `should` syntax.
@@ -52,12 +55,12 @@ module RSpec
 
         syntax_host.module_eval do
           def should(matcher=nil, message=nil, &block)
-            raise ArgumentError MESSAGE_ERR unless message == nil or message.is_a? String
+            raise message_must_be_string unless message == nil or message.is_a? String
             ::RSpec::Expectations::PositiveExpectationHandler.handle_matcher(self, matcher, message, &block)
           end
 
           def should_not(matcher=nil, message=nil, &block)
-            raise ArgumentError MESSAGE_ERR unless message == nil or message.is_a? String
+            raise message_must_be_string unless message == nil or message.is_a? String
             ::RSpec::Expectations::NegativeExpectationHandler.handle_matcher(self, matcher, message, &block)
           end
         end
