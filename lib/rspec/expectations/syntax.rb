@@ -44,9 +44,6 @@ module RSpec
       end
 
 
-      def message_must_be_string
-        "The value passed as the message for the expectation was not a string"
-      end
 
       # @api private
       # Enables the `should` syntax.
@@ -54,6 +51,10 @@ module RSpec
         return if should_enabled?(syntax_host)
 
         syntax_host.module_eval do
+          def message_must_be_string
+            "The value passed as the message for the expectation was not a string"
+          end
+
           def should(matcher=nil, message=nil, &block)
             raise message_must_be_string unless message == nil or message.is_a? String
             ::RSpec::Expectations::PositiveExpectationHandler.handle_matcher(self, matcher, message, &block)
