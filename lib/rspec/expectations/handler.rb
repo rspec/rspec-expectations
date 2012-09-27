@@ -1,7 +1,13 @@
 module RSpec
   module Expectations
+    def message_must_be_string
+      "The value passed as the message for the expectation was not a string"
+    end
+
     class PositiveExpectationHandler        
+
       def self.handle_matcher(actual, matcher, message=nil, &block)
+        raise message_must_be_string unless message.is_a? String or message == nil
         ::RSpec::Matchers.last_should = :should
         ::RSpec::Matchers.last_matcher = matcher
         return ::RSpec::Matchers::BuiltIn::PositiveOperatorMatcher.new(actual) if matcher.nil?
@@ -23,6 +29,7 @@ module RSpec
 
     class NegativeExpectationHandler
       def self.handle_matcher(actual, matcher, message=nil, &block)
+        raise message_must_be_string unless message.is_a? String or message == nil
         ::RSpec::Matchers.last_should = :should_not
         ::RSpec::Matchers.last_matcher = matcher
         return ::RSpec::Matchers::BuiltIn::NegativeOperatorMatcher.new(actual) if matcher.nil?
