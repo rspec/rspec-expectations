@@ -43,8 +43,6 @@ module RSpec
         @default_should_host ||= ::Object.ancestors.last
       end
 
-
-
       # @api private
       # Enables the `should` syntax.
       def enable_should(syntax_host = default_should_host)
