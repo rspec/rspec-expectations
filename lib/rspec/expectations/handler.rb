@@ -7,7 +7,7 @@ module RSpec
       end
 
       def self.check_message(message=nil)
-        throw message_must_be_string unless message.is_a? String or message == nil
+        raise message_must_be_string unless message.is_a? String or message == nil
       end
     end
 
