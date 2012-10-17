@@ -33,6 +33,21 @@ RSpec-1.x
 
 * "http://old.rspec.info":http://old.rspec.info
 
+h2. RSpec & Ecosystem gem Sources
+
+The sources for the RSpec ecosystem gems, for those wishing to view the source, can be
+found at:
+
+* "https://github.com/rspec":https://github.com/rspec
+
+The individual core gems' sources are here:
+
+* "https://github.com/rspec/rspec-core#readme":https://github.com/rspec/rspec-core#readme
+* "https://github.com/rspec/rspec-expectations#readme":https://github.com/rspec/rspec-expectations#readme
+* "https://github.com/rspec/rspec-mocks#readme":https://github.com/rspec/rspec-mocks#readme
+
+The above URLs redirect you directly to the READMEs for each of the gems.
+
 h2. The RSpec Book
 
 <div style="float:right">
