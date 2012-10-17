@@ -42,11 +42,9 @@ found at:
 
 The individual core gems' sources are here:
 
-* "https://github.com/rspec/rspec-core#readme":https://github.com/rspec/rspec-core#readme
-* "https://github.com/rspec/rspec-expectations#readme":https://github.com/rspec/rspec-expectations#readme
-* "https://github.com/rspec/rspec-mocks#readme":https://github.com/rspec/rspec-mocks#readme
-
-The above URLs redirect you directly to the READMEs for each of the gems.
+* "https://github.com/rspec/rspec-core":https://github.com/rspec/rspec-core
+* "https://github.com/rspec/rspec-expectations":https://github.com/rspec/rspec-expectations
+* "https://github.com/rspec/rspec-mocks":https://github.com/rspec/rspec-mocks
 
 h2. The RSpec Book
 
