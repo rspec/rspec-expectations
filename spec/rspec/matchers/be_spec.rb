@@ -46,6 +46,37 @@ describe "should be_predicate" do
       actual.should be_foo
     }.should raise_error(/aaaah/)
   end
+
+  it 'does not change the type of error method_missing throws for other objects' do
+    # For some reason, our `method_missing` definition (for predicates matchers)
+    # triggers a strange change to Object#method_missing: it changes the error
+    # raised from `NoMethodError` to `NameError`.
+    #
+    # Note that the 3 lines below aren't strictly needed when the entire rspec-expectations
+    # spec suite is run (as other examples use a predicate matcher) but it is needed
+    # for when this example is run in isolation (so a predicate matcher is still used).
+    obj1 = Object.new
+    def obj1.blah?; true; end
+    obj1.should be_blah # commenting out this line fixes the issue.
+
+    obj2 = Object.new
+
+    # These are 3 different ways to trigger method missing.
+    # This first one is the one for which a different error is rasied.
+    # Note, however, that the order apparently matters: if you move
+    # this first one between the other two, it fixes the issue.
+    expect {
+      obj2.method(:method_missing).call(:not_a_method)
+    }.to raise_error(NoMethodError)
+
+    expect {
+      obj2.not_a_method
+    }.to raise_error(NoMethodError)
+
+    expect {
+      obj2.__send__(:method_missing, :not_a_method)
+    }.to raise_error(NoMethodError)
+  end
 end
 
 describe "should_not be_predicate" do
