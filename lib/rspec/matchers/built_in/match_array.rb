@@ -3,15 +3,14 @@ module RSpec
     module BuiltIn
       class MatchArray < BaseMatcher
         def match(expected, actual)
-          return false unless actual.is_a? Array
-
+          return false unless actual.respond_to? :to_ary
           @extra_items = difference_between_arrays(actual, expected)
           @missing_items = difference_between_arrays(expected, actual)
           @extra_items.empty? & @missing_items.empty?
         end
 
         def failure_message_for_should
-          if actual.is_a? Array
+          if actual.respond_to? :to_ary
             message =  "expected collection contained:  #{safe_sort(expected).inspect}\n"
             message += "actual collection contained:    #{safe_sort(actual).inspect}\n"
             message += "the missing elements were:      #{safe_sort(@missing_items).inspect}\n" unless @missing_items.empty?
