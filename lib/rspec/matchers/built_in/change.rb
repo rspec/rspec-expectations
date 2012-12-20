@@ -9,16 +9,28 @@ module RSpec
           @eval_before = @eval_after = false
         end
 
-        def matches?(event_proc)
-          raise_block_syntax_error if block_given?
-
+        def setup_before_matches_or_does_not_match(event_proc)
           @actual_before = evaluate_value_proc
           event_proc.call
           @actual_after = evaluate_value_proc
+          @done_setup = true
+        end
 
+        def matches?(event_proc)
+          raise_block_syntax_error if block_given?
+          setup_before_matches_or_does_not_match(event_proc) unless @done_setup
+            puts %('#{@expected_before}'  actual:'#{@actual_before}')
           (!change_expected? || changed?) && matches_before? && matches_after? && matches_expected_delta? && matches_min? && matches_max?
         end
         alias == matches?
+
+        def does_not_match?(event_proc)
+          raise_block_syntax_error if block_given?
+          setup_before_matches_or_does_not_match(event_proc) unless @done_setup
+
+          return false if !matches_before?
+          !matches?(event_proc)
+        end
 
         def raise_block_syntax_error
           raise SyntaxError.new(<<-MESSAGE)
@@ -56,7 +68,11 @@ MESSAGE
         end
 
         def failure_message_for_should_not
-          "#{message} should not have changed, but did change from #{@actual_before.inspect} to #{@actual_after.inspect}"
+          if @eval_before && !expected_matches_actual?(@expected_before, @actual_before)
+            "#{message} should have initially been #{@expected_before.inspect}, but was #{@actual_before.inspect}"
+          else
+            "#{message} should not have changed, but did change from #{@actual_before.inspect} to #{@actual_after.inspect}"
+          end
         end
 
         def by(expected_delta)
