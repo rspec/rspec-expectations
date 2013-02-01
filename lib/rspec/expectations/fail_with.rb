@@ -44,11 +44,27 @@ module RSpec
       end
 
       def any_multiline_strings?(*args)
-        all_strings?(*args) && args.any? {|a| a =~ /\n/}
+        all_strings?(*args) && args.flatten.any? { |a| multiline?(a) }
       end
 
       def no_numbers?(*args)
         args.flatten.none? {|a| Numeric === a}
+      end
+
+      LINEBREAK = "\n"
+
+      if String.method_defined?(:codepoints)
+        # If the string is a different encoding, we may get Encoding::CompatibilityError
+        # if we try `string.include?("\n")` or `string =~ /\n/`, so we use the codepoints.
+        LINEBREAK_CODEPOINT = LINEBREAK.codepoints.first
+
+        def multiline?(string)
+          string.codepoints.include?(LINEBREAK_CODEPOINT)
+        end
+      else
+        def multiline?(string)
+          string.include?(LINEBREAK)
+        end
       end
     end
   end
