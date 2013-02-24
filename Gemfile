@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 
 gem 'webby', '~> 0.9.4'
 gem 'coderay', '~> 0.9.8'
