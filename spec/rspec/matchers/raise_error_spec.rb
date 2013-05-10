@@ -430,10 +430,8 @@ describe "expect { ... }.to_not raise_error(NamedError, error_message) with Rege
 end
 
 describe "misuse of raise_error, with (), not {}" do
-  it "fails with warning" do
-    ::Kernel.should_receive(:warn).with /`raise_error` was called with non-proc object 1\.7/
-    expect {
-      expect(Math.sqrt(3)).to raise_error
-    }.to fail_with(/nothing was raised/)
+  it "warns that the given object was not proc" do
+    ::Kernel.should_receive(:warn).with /`raise_error` was called with non-proc object 5/
+    expect(5).to raise_error
   end
 end
