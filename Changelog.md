@@ -3,6 +3,7 @@
 
 Enhancements
 
+* Add `have_more_than` and `have_less_than` matchers. (christhekeele)
 * Expand `yield_control` so that you can specify an exact or relative
   number of times: `expect { }.to yield_control.exactly(3).times`,
   `expect { }.to yield_control.at_least(2).times`, etc (Bartek
