@@ -20,6 +20,7 @@ module RSpec
             :at_least => "at least ",
             :at_most => "at most ",
             :more_than => "more than ",
+            :less_than => "less than "
           }
         end
 
@@ -42,6 +43,7 @@ module RSpec
           when :at_least  then @actual >= @expected
           when :at_most   then @actual <= @expected
           when :more_than then @actual >  @expected
+          when :less_than then @actual <  @expected
           else                 @actual == @expected
           end
         end
