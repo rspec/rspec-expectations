@@ -462,6 +462,30 @@ module RSpec
       BuiltIn::Have.new(n, :at_most)
     end
 
+    # Exactly like have() with >.
+    #
+    # @example
+    #   expect("this").to have_more_than(3).letters
+    #
+    # ### Warning:
+    #
+    # `expect(..).not_to have_more_than` is not supported
+    def have_more_than(n)
+      BuiltIn::Have.new(n, :more_than)
+    end
+
+    # Exactly like have() with <.
+    #
+    # @example
+    #   expect("this").to have_less_than(4).letters
+    #
+    # ### Warning:
+    #
+    # `expect(..).not_to have_at_most` is not supported
+    def have_less_than(n)
+      BuiltIn::Have.new(n, :less_than)
+    end
+
     # Passes if actual includes expected. This works for
     # collections and Strings. You can also pass in multiple args
     # and it will only pass if all args are found in collection.

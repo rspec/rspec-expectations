@@ -18,7 +18,9 @@ module RSpec
           @relativities ||= {
             :exactly => "",
             :at_least => "at least ",
-            :at_most => "at most "
+            :at_most => "at most ",
+            :more_than => "more than ",
+            :less_than => "less than "
           }
         end
 
@@ -38,9 +40,11 @@ module RSpec
             @actual = collection.__send__(query_method)
           end
           case @relativity
-          when :at_least then @actual >= @expected
-          when :at_most  then @actual <= @expected
-          else                @actual == @expected
+          when :at_least  then @actual >= @expected
+          when :at_most   then @actual <= @expected
+          when :more_than then @actual >  @expected
+          when :less_than then @actual <  @expected
+          else                 @actual == @expected
           end
         end
         alias == matches?
@@ -70,25 +74,29 @@ module RSpec
         end
 
         def failure_message_for_should_not
-          if @relativity == :exactly
-            return "expected target not to have #{@expected} #{@collection_name}, got #{@actual}"
-          elsif @relativity == :at_most
-            return <<-EOF
-Isn't life confusing enough?
-Instead of having to figure out the meaning of this:
-  #{Expectations::Syntax.negative_expression("actual", "have_at_most(#{@expected}).#{@collection_name}")}
-We recommend that you use this instead:
-  #{Expectations::Syntax.positive_expression("actual", "have_at_least(#{@expected + 1}).#{@collection_name}")}
-EOF
-          elsif @relativity == :at_least
-            return <<-EOF
-Isn't life confusing enough?
-Instead of having to figure out the meaning of this:
-  #{Expectations::Syntax.negative_expression("actual", "have_at_least(#{@expected}).#{@collection_name}")}
-We recommend that you use this instead:
-  #{Expectations::Syntax.positive_expression("actual", "have_at_most(#{@expected - 1}).#{@collection_name}")}
-EOF
+          collective_expectation = "(#{@expected}).#{@collection_name}"
+          case @relativity
+          when :exactly
+            "expected target not to have #{@expected} #{@collection_name}, got #{@actual}"
+          when :at_most
+            contrapositive_message("have_at_most", "have_more_than", collective_expectation)
+          when :at_least
+            contrapositive_message("have_at_least", "have_less_than", collective_expectation)
+          when :more_than
+            contrapositive_message("have_more_than", "have_at_most", collective_expectation)
+          when :less_than
+            contrapositive_message("have_less_than", "have_at_least", collective_expectation)
           end
+        end
+
+        def contrapositive_message(negation, contrapositive, expectation)
+          <<-EOF
+Isn't life confusing enough?
+Instead of having to figure out the meaning of this:
+  #{Expectations::Syntax.negative_expression("actual", negation + expectation)}
+We recommend that you use this instead:
+  #{Expectations::Syntax.positive_expression("actual", contrapositive + expectation)}
+EOF
         end
 
         def description
