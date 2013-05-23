@@ -237,7 +237,7 @@ Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_at_least(3).items_in_collection_with_length_method
 We recommend that you use this instead:
-  expect(actual).to have_more_than(3).items_in_collection_with_length_method
+  expect(actual).to have_less_than(3).items_in_collection_with_length_method
 EOF
 
       expect(size_matcher.failure_message_for_should_not).to eq <<-EOF
@@ -245,14 +245,14 @@ Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_at_least(3).items_in_collection_with_size_method
 We recommend that you use this instead:
-  expect(actual).to have_more_than(3).items_in_collection_with_size_method
+  expect(actual).to have_less_than(3).items_in_collection_with_size_method
 EOF
       expect(count_matcher.failure_message_for_should_not).to eq <<-EOF
 Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_at_least(3).items_in_collection_with_count_method
 We recommend that you use this instead:
-  expect(actual).to have_more_than(3).items_in_collection_with_count_method
+  expect(actual).to have_less_than(3).items_in_collection_with_count_method
 EOF
     end
   end
@@ -303,7 +303,7 @@ Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_at_most(3).items_in_collection_with_length_method
 We recommend that you use this instead:
-  expect(actual).to have_less_than(3).items_in_collection_with_length_method
+  expect(actual).to have_more_than(3).items_in_collection_with_length_method
 EOF
 
       expect(size_matcher.failure_message_for_should_not).to eq <<-EOF
@@ -311,7 +311,7 @@ Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_at_most(3).items_in_collection_with_size_method
 We recommend that you use this instead:
-  expect(actual).to have_less_than(3).items_in_collection_with_size_method
+  expect(actual).to have_more_than(3).items_in_collection_with_size_method
 EOF
 
       expect(count_matcher.failure_message_for_should_not).to eq <<-EOF
@@ -319,7 +319,7 @@ Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_at_most(3).items_in_collection_with_count_method
 We recommend that you use this instead:
-  expect(actual).to have_less_than(3).items_in_collection_with_count_method
+  expect(actual).to have_more_than(3).items_in_collection_with_count_method
 EOF
     end
   end
@@ -377,7 +377,7 @@ Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_more_than(3).items_in_collection_with_length_method
 We recommend that you use this instead:
-  expect(actual).to have_at_least(3).items_in_collection_with_length_method
+  expect(actual).to have_at_most(3).items_in_collection_with_length_method
 EOF
 
       expect(size_matcher.failure_message_for_should_not).to eq <<-EOF
@@ -385,14 +385,14 @@ Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_more_than(3).items_in_collection_with_size_method
 We recommend that you use this instead:
-  expect(actual).to have_at_least(3).items_in_collection_with_size_method
+  expect(actual).to have_at_most(3).items_in_collection_with_size_method
 EOF
       expect(count_matcher.failure_message_for_should_not).to eq <<-EOF
 Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_more_than(3).items_in_collection_with_count_method
 We recommend that you use this instead:
-  expect(actual).to have_at_least(3).items_in_collection_with_count_method
+  expect(actual).to have_at_most(3).items_in_collection_with_count_method
 EOF
     end
   end
@@ -450,7 +450,7 @@ Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_less_than(3).items_in_collection_with_length_method
 We recommend that you use this instead:
-  expect(actual).to have_at_most(3).items_in_collection_with_length_method
+  expect(actual).to have_at_least(3).items_in_collection_with_length_method
 EOF
 
       expect(size_matcher.failure_message_for_should_not).to eq <<-EOF
@@ -458,14 +458,14 @@ Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_less_than(3).items_in_collection_with_size_method
 We recommend that you use this instead:
-  expect(actual).to have_at_most(3).items_in_collection_with_size_method
+  expect(actual).to have_at_least(3).items_in_collection_with_size_method
 EOF
       expect(count_matcher.failure_message_for_should_not).to eq <<-EOF
 Isn't life confusing enough?
 Instead of having to figure out the meaning of this:
   expect(actual).not_to have_less_than(3).items_in_collection_with_count_method
 We recommend that you use this instead:
-  expect(actual).to have_at_most(3).items_in_collection_with_count_method
+  expect(actual).to have_at_least(3).items_in_collection_with_count_method
 EOF
     end
   end

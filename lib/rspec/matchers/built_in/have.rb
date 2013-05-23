@@ -79,13 +79,13 @@ module RSpec
           when :exactly
             "expected target not to have #{@expected} #{@collection_name}, got #{@actual}"
           when :at_most
-            contrapositive_message("have_at_most", "have_less_than", collective_expectation)
+            contrapositive_message("have_at_most", "have_more_than", collective_expectation)
           when :at_least
-            contrapositive_message("have_at_least", "have_more_than", collective_expectation)
+            contrapositive_message("have_at_least", "have_less_than", collective_expectation)
           when :more_than
-            contrapositive_message("have_more_than", "have_at_least", collective_expectation)
+            contrapositive_message("have_more_than", "have_at_most", collective_expectation)
           when :less_than
-            contrapositive_message("have_less_than", "have_at_most", collective_expectation)
+            contrapositive_message("have_less_than", "have_at_least", collective_expectation)
           end
         end
 
