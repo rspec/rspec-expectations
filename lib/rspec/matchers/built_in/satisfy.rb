@@ -2,7 +2,8 @@ module RSpec
   module Matchers
     module BuiltIn
       class Satisfy
-        def initialize(&block)
+        def initialize(failure_message = nil, &block)
+          @failure_message = failure_message
           @block = block
         end
 
@@ -14,11 +15,11 @@ module RSpec
         alias == matches?
 
         def failure_message_for_should
-          "expected #{@actual} to satisfy block"
+          @failure_message || "expected #{@actual} to satisfy block"
         end
 
         def failure_message_for_should_not
-          "expected #{@actual} not to satisfy block"
+          @failure_message || "expected #{@actual} not to satisfy block"
         end
 
         def description

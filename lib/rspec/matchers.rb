@@ -546,8 +546,8 @@ module RSpec
     # @example
     #
     #   expect(5).to satisfy { |n| n > 3 }
-    def satisfy(&block)
-      BuiltIn::Satisfy.new(&block)
+    def satisfy(failure_message=nil, &block)
+      BuiltIn::Satisfy.new(failure_message, &block)
     end
 
     # Matches if the actual value starts with the expected value(s). In the
