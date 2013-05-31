@@ -26,6 +26,18 @@ describe "expect(...).to satisfy { block }" do
       end
     end.to fail_with("expected false to satisfy block")
   end
+  
+  it "fails with custom failure message if block returns false" do
+    expect {
+      expect(false).to satisfy("should be false") { |val| val }
+    }.to fail_with("should be false")
+
+    expect do
+      expect(false).to satisfy("should be false") do |val|
+        val
+      end
+    end.to fail_with("should be false")
+  end
 end
 
 describe "expect(...).not_to satisfy { block }" do
@@ -40,5 +52,11 @@ describe "expect(...).not_to satisfy { block }" do
     expect {
       expect(true).not_to satisfy { |val| val }
     }.to fail_with("expected true not to satisfy block")
+  end
+
+  it "fails with custom failure message if block returns true" do
+    expect {
+      expect(true).not_to satisfy("should not satisty") { |val| val }
+    }.to fail_with("should not satisty")
   end
 end
