@@ -38,7 +38,10 @@ describe "expect(...).to be_predicate" do
           true
         end
     end
-    expect(RSpec).to receive(:deprecate)
+    expect(RSpec).to receive(:deprecate).with(
+      anything,
+      hash_including( :call_site => __FILE__+":#{__LINE__ + 2}" )
+    )
     expect(privately_happy.new).to be_happy
   end
 
