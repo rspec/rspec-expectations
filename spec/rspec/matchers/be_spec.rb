@@ -39,8 +39,9 @@ describe "expect(...).to be_predicate" do
         end
     end
     expect(RSpec).to receive(:deprecate).with(
-      anything,
-      hash_including( :call_site => __FILE__+":#{__LINE__ + 2}" )
+      "matching with be_happy on private method happy?",
+      :replacement => "`expect(object.send(:happy?)).to be_true` or change the method's visibility to public",
+      :call_site => __FILE__+":#{__LINE__ + 2}:in `block (2 levels) in <top (required)>'"
     )
     expect(privately_happy.new).to be_happy
   end

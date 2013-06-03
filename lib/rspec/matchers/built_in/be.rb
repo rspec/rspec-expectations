@@ -139,7 +139,7 @@ it is a bit confusing.
           if is_private_on?( @actual )
             RSpec.deprecate "matching with be_#{predicate.to_s.gsub(/\?$/,'')} on private method #{predicate}",
               :replacement => "`expect(object.send(#{predicate.inspect})).to be_true` or change the method's visibility to public",
-              :call_site => caller(0)[3].gsub(/:in.*/,'')
+              :call_site => caller(0)[3]
           end
 
           begin
