@@ -135,6 +135,13 @@ it is a bit confusing.
 
         def matches?(actual)
           @actual = actual
+
+          if is_private_on?( @actual )
+            RSpec.deprecate "matching with be_#{predicate.to_s.gsub(/\?$/,'')} on private method #{predicate}",
+              :replacement => "`expect(object.send(#{predicate.inspect})).to be_true` or change the method's visibility to public",
+              :call_site => caller(0)[3]
+          end
+
           begin
             return @result = actual.__send__(predicate, *@args, &@block)
           rescue NameError => predicate_missing_error
@@ -161,6 +168,17 @@ it is a bit confusing.
         end
 
         private
+
+        # support 1.8.7
+        if methods.first.is_a? String
+          def is_private_on? actual
+            actual.private_methods.include? predicate.to_s
+          end
+        else
+          def is_private_on? actual
+            actual.private_methods.include? predicate
+          end
+        end
 
         def predicate
           "#{@expected}?".to_sym
