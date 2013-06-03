@@ -41,7 +41,7 @@ describe "expect(...).to be_predicate" do
     expect(RSpec).to receive(:deprecate).with(
       "matching with be_happy on private method happy?",
       :replacement => "`expect(object.send(:happy?)).to be_true` or change the method's visibility to public",
-      :call_site => __FILE__+":#{__LINE__ + 2}:in `block (2 levels) in <top (required)>'"
+      :call_site => RSpec::Mocks::ArgumentMatchers::RegexpMatcher.new(/#{__FILE__}:#{__LINE__ + 2}/)
     )
     expect(privately_happy.new).to be_happy
   end
