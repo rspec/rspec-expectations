@@ -31,6 +31,21 @@ describe "expect(...).to be_predicate" do
     }.to raise_error(NameError, /happy\?/)
   end
 
+  it 'warns of deprecation when :predicate? is private' do
+    privately_happy = Class.new do
+      private
+        def happy?
+          true
+        end
+    end
+    expect(RSpec).to receive(:deprecate).with(
+      "matching with be_happy on private method happy?",
+      :replacement => "`expect(object.send(:happy?)).to be_true` or change the method's visibility to public",
+      :call_site => RSpec::Mocks::ArgumentMatchers::RegexpMatcher.new(/#{__FILE__}:#{__LINE__ + 2}/)
+    )
+    expect(privately_happy.new).to be_happy
+  end
+
   it "fails on error other than NameError" do
     actual = double("actual")
     actual.should_receive(:foo?).and_raise("aaaah")
