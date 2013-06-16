@@ -235,7 +235,15 @@ module RSpec
         end
 
         def include(*args)
-          singleton_class.__send__(:include, *args)
+          if trying_to_include_a_module?(*args)
+            singleton_class.__send__(:include, *args)
+          else
+            BuiltIn::Include.new(*args)
+          end
+        end
+
+        def trying_to_include_a_module?(*args)
+          args.first.is_a?(Module)
         end
 
         def define_method(name, &block)

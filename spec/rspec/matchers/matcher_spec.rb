@@ -327,6 +327,17 @@ module RSpec::Matchers::DSL
       expect(matcher.matches?(8)).to be_true
     end
 
+    it "has access to the built in include matcher" do
+      matcher = RSpec::Matchers::DSL::Matcher.new(:ignore) do |expected|
+        match do |actual|
+          extend RSpec::Matchers
+          expect(actual).to include(expected)
+        end
+      end.for_expected(3)
+
+      expect(matcher.matches?([1, 2, 3])).to be_true
+    end
+
     context 'when multiple instances of the same matcher are used in the same example' do
       RSpec::Matchers.define(:be_like_a) do |expected|
         match { |actual| actual == expected }
