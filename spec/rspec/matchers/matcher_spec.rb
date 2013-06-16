@@ -327,15 +327,18 @@ module RSpec::Matchers::DSL
       expect(matcher.matches?(8)).to be_true
     end
 
-    it "has access to the built in include matcher" do
-      matcher = RSpec::Matchers::DSL::Matcher.new(:ignore) do |expected|
-        match do |actual|
-          extend RSpec::Matchers
-          expect(actual).to include(expected)
+    context "dealing with the clash caused by the private method include" do
+      it "will work as the include matcher when inside the match block" do
+        RSpec::Matchers.define(:descend_from) do |mod|
+          match do |klass|
+            expect(klass.ancestors).to include(mod)
+          end
         end
-      end.for_expected(3)
 
-      expect(matcher.matches?([1, 2, 3])).to be_true
+        expect {
+          expect(Fixnum).to descend_from(BasicObject)
+        }.not_to raise_error
+      end
     end
 
     context 'when multiple instances of the same matcher are used in the same example' do

@@ -39,7 +39,9 @@ module RSpec
             end
             @messages = {}
             making_declared_methods_public do
+              @called_from_define = true
               instance_eval_with_args(*@expected, &@declarations)
+              @called_from_define = false
             end
             self
           end
@@ -246,7 +248,7 @@ module RSpec
         end
 
         def trying_to_include_a_module?(*args)
-          args.first.is_a?(Module)
+          @called_from_define == true
         end
 
         def define_method(name, &block)
