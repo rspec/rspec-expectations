@@ -1,5 +1,5 @@
-### 2.14.0.rc2
-[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.13.0...v2.14.0.rc2)
+### 2.14.0 / 2013-07-06
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.0.rc1...v2.14.0)
 
 Bug fixes
 
