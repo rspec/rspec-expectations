@@ -240,34 +240,73 @@ describe "expect(...).not_to be_predicate(*args, &block)" do
   end
 end
 
-describe "expect(...).to be_true" do
+describe "expect(...).to be_truthy" do
   it "passes when actual equal?(true)" do
-    expect(true).to be_true
+    expect(true).to be_truthy
   end
 
   it "passes when actual is 1" do
-    expect(1).to be_true
+    expect(1).to be_truthy
   end
 
   it "fails when actual equal?(false)" do
     expect {
-      expect(false).to be_true
+      expect(false).to be_truthy
     }.to fail_with("expected: true value\n     got: false")
   end
 end
 
 describe "expect(...).to be_false" do
-  it "passes when actual equal?(false)" do
+  it "is deprecated" do
+    expect(RSpec).to receive(:deprecate).with(/be_false/, /falsey.*false/)
     expect(false).to be_false
   end
 
+  it "still passes" do
+    allow(RSpec).to receive(:deprecate)
+    expect(false).to be_false
+  end
+
+  it "still fails" do
+    allow(RSpec).to receive(:deprecate)
+    expect {
+      expect(true).to be_false
+    }.to fail_with(/expected: false value/)
+  end
+end
+
+describe "expect(...).to be_true" do
+  it "is deprecated" do
+    allow(RSpec).to receive(:deprecate)
+    expect(RSpec).to receive(:deprecate).with(/be_true/, /truthy.*true/)
+    expect(true).to be_true
+  end
+
+  it "still passes" do
+    allow(RSpec).to receive(:deprecate)
+    expect(true).to be_true
+  end
+
+  it "still fails" do
+    allow(RSpec).to receive(:deprecate)
+    expect {
+      expect(false).to be_true
+    }.to fail_with(/expected: true value/)
+  end
+end
+
+describe "expect(...).to be_falsey" do
+  it "passes when actual equal?(false)" do
+    expect(false).to be_falsey
+  end
+
   it "passes when actual equal?(nil)" do
-    expect(nil).to be_false
+    expect(nil).to be_falsey
   end
 
   it "fails when actual equal?(true)" do
     expect {
-      expect(true).to be_false
+      expect(true).to be_falsey
     }.to fail_with("expected: false value\n     got: true")
   end
 end
