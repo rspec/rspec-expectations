@@ -1,5 +1,13 @@
-### 2.14.0.rc2
-[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.13.0...v2.14.0.rc2)
+### Development
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.0...2-99-maintenance)
+
+Deprecations
+
+* Deprecate `be_xyz` predicate matcher when `xyz?` is a private method
+  (Jon Rowe).
+
+### 2.14.0 / 2013-07-06
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.0.rc1...v2.14.0)
 
 Bug fixes
 
