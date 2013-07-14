@@ -23,11 +23,7 @@ module RSpec
                                   "`expect { }.not_to raise_error(message)`"
                                 end
 
-            call_site = caller(0).find{ |site| /lib\/rspec/ !~ site }
-
-            RSpec.deprecate(what_to_deprecate,
-                            :replacement => "`expect { }.not_to raise_error()` (with no args)",
-                            :call_site => call_site)
+            RSpec.deprecate(what_to_deprecate, :replacement => "`expect { }.not_to raise_error()` (with no args)")
           end
           @raised_expected_error = false
           @with_expected_message = false
