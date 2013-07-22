@@ -184,12 +184,12 @@ module RSpec
     end
 
     def be_true
-      RSpec.deprecate("`be_true`", "`be_truthy` or `be true`")
+      RSpec.deprecate("`be_true`", :replacement => "`be_truthy` or `be true`")
       BuiltIn::BeTruthy.new
     end
 
     def be_false
-      RSpec.deprecate("`be_false`", "`be_falsey` or `be false`")
+      RSpec.deprecate("`be_false`", :replacement => "`be_falsey` or `be false`")
       BuiltIn::BeFalsey.new
     end
 

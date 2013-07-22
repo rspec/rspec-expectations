@@ -258,7 +258,7 @@ end
 
 describe "expect(...).to be_false" do
   it "is deprecated" do
-    expect(RSpec).to receive(:deprecate).with(/be_false/, /falsey.*false/)
+    expect(RSpec).to receive(:deprecate).with(/be_false/, :replacement => match(/falsey.*false/))
     expect(false).to be_false
   end
 
@@ -277,8 +277,7 @@ end
 
 describe "expect(...).to be_true" do
   it "is deprecated" do
-    allow(RSpec).to receive(:deprecate)
-    expect(RSpec).to receive(:deprecate).with(/be_true/, /truthy.*true/)
+    expect(RSpec).to receive(:deprecate).with(/be_true/, :replacement => match(/truthy.*true/))
     expect(true).to be_true
   end
 
