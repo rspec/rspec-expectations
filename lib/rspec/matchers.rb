@@ -183,15 +183,27 @@ module RSpec
       obj.respond_to?(:failure_message_for_should) || obj.respond_to?(:failure_message)
     end
 
-    # Passes if actual is truthy (anything but false or nil)
     def be_true
-      BuiltIn::BeTrue.new
+      RSpec.deprecate("`be_true`", "`be_truthy` or `be true`")
+      BuiltIn::BeTruthy.new
+    end
+
+    def be_false
+      RSpec.deprecate("`be_false`", "`be_falsey` or `be false`")
+      BuiltIn::BeFalsey.new
+    end
+
+    # Passes if actual is truthy (anything but false or nil)
+    def be_truthy
+      BuiltIn::BeTruthy.new
     end
 
     # Passes if actual is falsy (false or nil)
-    def be_false
-      BuiltIn::BeFalse.new
+    def be_falsey
+      BuiltIn::BeFalsey.new
     end
+
+    alias_method :be_falsy, :be_falsey
 
     # Passes if actual is nil
     def be_nil
@@ -199,8 +211,8 @@ module RSpec
     end
 
     # @example
-    #   expect(actual).to     be_true
-    #   expect(actual).to     be_false
+    #   expect(actual).to     be_truthy
+    #   expect(actual).to     be_falsey
     #   expect(actual).to     be_nil
     #   expect(actual).to     be_[arbitrary_predicate](*args)
     #   expect(actual).not_to be_nil
