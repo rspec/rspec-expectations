@@ -184,12 +184,18 @@ module RSpec
     end
 
     def be_true
-      RSpec.deprecate("`be_true`", :replacement => "`be_truthy` or `be true`")
+      RSpec.deprecate("`be_true`", :replacement =>
+        "`be_truthy` (for Ruby's conditional semantics) or " +
+        "`be true` (for exact `== true` equality)"
+      )
       BuiltIn::BeTruthy.new
     end
 
     def be_false
-      RSpec.deprecate("`be_false`", :replacement => "`be_falsey` or `be false`")
+      RSpec.deprecate("`be_false`", :replacement =>
+        "`be_falsey` (for Ruby's conditional semantics) or " +
+        "`be false` (for exact `== false` equality)"
+      )
       BuiltIn::BeFalsey.new
     end
 
