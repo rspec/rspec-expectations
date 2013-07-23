@@ -5,8 +5,9 @@ Deprecations
 
 * Deprecate `be_xyz` predicate matcher when `xyz?` is a private method
   (Jon Rowe).
-* Deprecate `be_true` and `be_false` in favour of `be_truthy` and `be_falsey`.
-  (Sam Phippen)
+* Deprecate `be_true`/`be_false` in favour of `be_truthy`/`be_falsey`
+  (for Ruby's conditional semantics) or `be true`/`be false`
+  (for exact equality). (Sam Phippen)
 
 ### 2.14.0 / 2013-07-06
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.0.rc1...v2.14.0)
