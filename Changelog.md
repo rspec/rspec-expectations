@@ -1,5 +1,5 @@
 ### Development
-[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.0...2-99-maintenance)
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.1...2-99-maintenance)
 
 Deprecations
 
@@ -8,6 +8,15 @@ Deprecations
 * Deprecate `be_true`/`be_false` in favour of `be_truthy`/`be_falsey`
   (for Ruby's conditional semantics) or `be true`/`be false`
   (for exact equality). (Sam Phippen)
+
+### 2.14.1 / 2013-08-08
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.0...2.14.1)
+
+Bug fixes
+
+* Ensure diff output uses the same encoding as the encoding of
+  the string being diff'd to prevent `Encoding::UndefinedConversionError`
+  errors (Jon Rowe).
 
 ### 2.14.0 / 2013-07-06
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.0.rc1...v2.14.0)
