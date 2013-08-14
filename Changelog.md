@@ -1,3 +1,15 @@
+### 2.14.2 Development
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.1...2-14-maintenance)
+
+Bug fixes
+
+* Fix `be_<predicate>` matcher to not support operator chaining like the
+  `be` matcher does (e.g. `be == 5`). This led to some odd behaviors
+  since `be_<predicate> == anything` returned a `BeComparedTo` matcher
+  and was thus always truthy. This was a consequence of the implementation
+  (e.g. subclassing the basic `Be` matcher) and was not intended behavior.
+  (Myron Marston).
+
 ### 2.14.1 / 2013-08-08
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.0...2.14.1)
 
