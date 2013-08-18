@@ -8,6 +8,8 @@ Deprecations
 * Deprecate `be_true`/`be_false` in favour of `be_truthy`/`be_falsey`
   (for Ruby's conditional semantics) or `be true`/`be false`
   (for exact equality). (Sam Phippen)
+* Deprecate `have`, `have_at_least` and `have_at_most`, those matchers were
+  extracted to https://github.com/rspec/rspec-collection_matchers. (Hugo Baraúna)
 
 ### 2.14.2 / 2013-08-14
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.1...v2.14.2)

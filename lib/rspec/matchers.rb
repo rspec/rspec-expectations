@@ -460,6 +460,8 @@ module RSpec
     #   # Passes if "this string".length == 11
     #   expect("this string").to have(11).characters #"characters" is pure sugar
     def have(n)
+      RSpec.deprecate("`have`", :replacement => "the rspec-collection_matchers gem")
+
       BuiltIn::Have.new(n)
     end
     alias :have_exactly :have
@@ -473,6 +475,8 @@ module RSpec
     #
     # `expect(..).not_to have_at_least` is not supported
     def have_at_least(n)
+      RSpec.deprecate("`have_at_least`", :replacement => "the rspec-collection_matchers gem")
+
       BuiltIn::Have.new(n, :at_least)
     end
 
@@ -485,6 +489,8 @@ module RSpec
     #
     # `expect(..).not_to have_at_most` is not supported
     def have_at_most(n)
+      RSpec.deprecate("`have_at_most`", :replacement => "the rspec-collection_matchers gem")
+
       BuiltIn::Have.new(n, :at_most)
     end
 
