@@ -268,6 +268,11 @@ describe "expect(...).to be_false" do
     expect(false).to be_false
   end
 
+  it "has the correct call site in the deprecation message" do
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1)
+    expect(false).to be_false
+  end
+
   it "still passes" do
     allow(RSpec).to receive(:deprecate)
     expect(false).to be_false
