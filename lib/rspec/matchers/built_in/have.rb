@@ -11,7 +11,10 @@ module RSpec
                       else expected
                       end
           @relativity = relativity
+
           @actual = @collection_name = @plural_collection_name = nil
+          @target_owns_a_collection = nil
+          @negative_expectation = nil
         end
 
         def relativities
@@ -29,13 +32,20 @@ module RSpec
             for query_method in QUERY_METHODS
               next unless collection.respond_to?(query_method)
               @actual = collection.__send__(query_method)
-              break unless @actual.nil?
+
+              if !@actual.nil?
+                print_deprecation_message(query_method)
+                break
+              end
             end
+
             raise not_a_collection if @actual.nil?
           else
             query_method = determine_query_method(collection)
             raise not_a_collection unless query_method
             @actual = collection.__send__(query_method)
+
+            print_deprecation_message(query_method)
           end
           case @relativity
           when :at_least then @actual >= @expected
@@ -45,10 +55,17 @@ module RSpec
         end
         alias == matches?
 
+        def does_not_match?(collection_or_owner)
+          @negative_expectation = true
+          !matches?(collection_or_owner)
+        end
+
         def determine_collection(collection_or_owner)
           if collection_or_owner.respond_to?(@collection_name)
+            @target_owns_a_collection = true
             collection_or_owner.__send__(@collection_name, *@args, &@block)
           elsif (@plural_collection_name && collection_or_owner.respond_to?(@plural_collection_name))
+            @target_owns_a_collection = true
             collection_or_owner.__send__(@plural_collection_name, *@args, &@block)
           elsif determine_query_method(collection_or_owner)
             collection_or_owner
@@ -117,6 +134,38 @@ EOF
 
         def enumerator_class
           RUBY_VERSION < '1.9' ? Enumerable::Enumerator : Enumerator
+        end
+
+        def print_deprecation_message(query_method, expectation_format_method = "to")
+          deprecation_message = "the rspec-collection_matchers gem "
+          deprecation_message += "or replace your expectation with something like "
+          deprecation_message += "`expect(your_object."
+          deprecation_message += "#{@collection_name}." if @target_owns_a_collection
+
+          case @relativity
+          when :exactly
+            expectation_format_method = "to_not" if @negative_expectation
+
+            deprecation_message += "#{query_method}).#{expectation_format_method} eq(#{@expected})`"
+          when :at_most
+            deprecation_message += "#{query_method}).#{expectation_format_method} "
+
+            if @negative_expectation
+              deprecation_message += "be > #{@expected}`"
+            else
+              deprecation_message += "be <= #{@expected}`"
+            end
+          when :at_least
+            deprecation_message += "#{query_method}).#{expectation_format_method} "
+
+            if @negative_expectation
+              deprecation_message += "be < #{@expected}`"
+            else
+              deprecation_message += "be >= #{@expected}`"
+            end
+          end
+
+          RSpec.deprecate("`have`", :replacement => deprecation_message)
         end
       end
     end
