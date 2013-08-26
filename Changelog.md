@@ -8,6 +8,9 @@ Deprecations
 * Deprecate `be_true`/`be_false` in favour of `be_truthy`/`be_falsey`
   (for Ruby's conditional semantics) or `be true`/`be false`
   (for exact equality). (Sam Phippen)
+
+Bug fixes
+
 * Fix operator matchers (`should` syntax) when `method` is redefined on target.
   (Brandon Turner)
 
