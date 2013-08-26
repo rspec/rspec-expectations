@@ -11,6 +11,8 @@ RSpec::configure do |config|
     $default_expectation_syntax = expectations.syntax
     expectations.syntax = :expect
   end
+
+  config.include SpecHelperMethods
 end
 
 shared_context "with #should enabled", :uses_should do
