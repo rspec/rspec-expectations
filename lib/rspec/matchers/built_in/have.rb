@@ -167,7 +167,19 @@ EOF
             end
           end
 
-          RSpec.deprecate("`have`", :replacement => deprecation_message)
+
+          RSpec.deprecate("`#{matcher_method}`", :replacement => deprecation_message)
+        end
+
+        def matcher_method
+          case @relativity
+          when :exactly
+            "have"
+          when :at_most
+            "have_at_most"
+          when :at_least
+            "have_at_least"
+          end
         end
 
         def rspec_collection_matchers_being_used?

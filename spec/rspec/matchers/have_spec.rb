@@ -556,7 +556,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.size).to be <= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_most`", :replacement => message)
 
         expect([1, 2, 3]).to have_at_most(3).items
       end
@@ -566,7 +566,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.size).to be > 2`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_most`", :replacement => message)
 
         expect([1, 2, 3]).to_not have_at_most(2).items
       end
@@ -586,7 +586,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.words.size).to be <= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_most`", :replacement => message)
 
         target = BagOfWords.new(%w[foo bar baz])
         expect(target).to have_at_most(3).words
@@ -597,7 +597,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.words.size).to be > 2`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_most`", :replacement => message)
 
         target = BagOfWords.new(%w[foo bar baz])
         expect(target).to_not have_at_most(2).words
@@ -611,7 +611,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.count).to be <= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_most`", :replacement => message)
 
         expect(target).to have_at_most(3).letters
       end
@@ -622,7 +622,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.count).to be > 2`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_most`", :replacement => message)
 
         expect(target).to_not have_at_most(2).letters
       end
@@ -644,7 +644,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.size).to be >= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_least`", :replacement => message)
 
         expect([1, 2, 3]).to have_at_least(3).items
       end
@@ -654,7 +654,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.size).to be < 4`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_least`", :replacement => message)
 
         expect([1, 2, 3]).to_not have_at_least(4).items
       end
@@ -674,7 +674,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.words.size).to be >= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_least`", :replacement => message)
 
         target = BagOfWords.new(%w[foo bar baz])
         expect(target).to have_at_least(3).words
@@ -685,7 +685,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.words.size).to be < 4`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_least`", :replacement => message)
 
         target = BagOfWords.new(%w[foo bar baz])
         expect(target).to_not have_at_least(4).words
@@ -699,7 +699,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.count).to be >= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_least`", :replacement => message)
 
         expect(target).to have_at_least(3).letters
       end
@@ -710,7 +710,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(your_object.count).to be < 4`"
 
-        expect(RSpec).to receive(:deprecate).with("`have`", :replacement => message)
+        expect(RSpec).to receive(:deprecate).with("`have_at_least`", :replacement => message)
 
         expect(target).to_not have_at_least(4).letters
       end
