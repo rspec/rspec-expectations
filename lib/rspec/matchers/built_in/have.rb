@@ -137,6 +137,8 @@ EOF
         end
 
         def print_deprecation_message(query_method, expectation_format_method = "to")
+          return if rspec_collection_matchers_being_used?
+
           deprecation_message = "the rspec-collection_matchers gem "
           deprecation_message += "or replace your expectation with something like "
           deprecation_message += "`expect(your_object."
@@ -166,6 +168,10 @@ EOF
           end
 
           RSpec.deprecate("`have`", :replacement => deprecation_message)
+        end
+
+        def rspec_collection_matchers_being_used?
+          defined?(RSpec::CollectionMatchers::Have)
         end
       end
     end

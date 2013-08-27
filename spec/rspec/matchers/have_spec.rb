@@ -454,6 +454,14 @@ EOF
   end
 
   context "deprecations for the have matcher" do
+    it "doesn't print deprecations when rspec-collection_matches is being used" do
+      stub_const("RSpec::CollectionMatchers::Have", "rspec collection matchers")
+
+      expect(RSpec).to_not receive(:deprecate)
+
+      expect([1, 2, 3]).to have(3).items
+    end
+
     context "when the target is a collection" do
       it "prints a specific message for the positive expectation format" do
         message = "the rspec-collection_matchers gem " +
@@ -534,6 +542,14 @@ EOF
   end
 
   context "deprecations for the have_at_most matcher" do
+    it "doesn't print deprecations when rspec-collection_matches is being used" do
+      stub_const("RSpec::CollectionMatchers::Have", "rspec collection matchers")
+
+      expect(RSpec).to_not receive(:deprecate)
+
+      expect([1, 2, 3]).to have_at_most(3).items
+    end
+
     context "when the target is a collection" do
       it "prints a specific message for the positive expectation format" do
         message = "the rspec-collection_matchers gem " +
@@ -614,6 +630,14 @@ EOF
   end
 
   context "deprecations for the have_at_least matcher" do
+    it "doesn't print deprecations when rspec-collection_matches is being used" do
+      stub_const("RSpec::CollectionMatchers::Have", "rspec collection matchers")
+
+      expect(RSpec).to_not receive(:deprecate)
+
+      expect([1, 2, 3]).to have_at_least(3).items
+    end
+
     context "when the target is a collection" do
       it "prints a specific message for the positive expectation format" do
         message = "the rspec-collection_matchers gem " +
