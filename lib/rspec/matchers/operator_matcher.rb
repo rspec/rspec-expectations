@@ -60,11 +60,11 @@ module RSpec
         "#{@operator} #{@expected.inspect}"
       end
 
-      private
+    private
 
       if Method.method_defined?(:owner) # 1.8.6 lacks Method#owner :-(
         def uses_generic_implementation_of?(op)
-          Object.instance_method(:method).bind(@actual).call(op).owner == ::Kernel
+          Expectations.method_handle_for(@actual, op).owner == ::Kernel
         end
       else
         def uses_generic_implementation_of?(op)
@@ -74,7 +74,7 @@ module RSpec
           #
           # In the absence of Method#owner, this is the best we
           # can do to see if the method comes from Kernel.
-          Object.instance_method(:method).bind(@actual).call(op).to_s.include?('(Kernel)')
+          Expectations.method_handle_for(@actual, op).to_s.include?('(Kernel)')
         end
       end
 
