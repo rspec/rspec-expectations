@@ -25,7 +25,7 @@ module RSpec
 
             RSpec.deprecate(
               what_to_deprecate,
-              :replacement => "`expect { }.not_to raise_error()` (with no args)"
+              :replacement => "`expect { }.not_to raise_error` (with no args)"
             )
           end
           @raised_expected_error = false
