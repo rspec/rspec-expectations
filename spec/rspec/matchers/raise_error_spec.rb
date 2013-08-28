@@ -1,5 +1,18 @@
 require 'spec_helper'
 
+module WrapDeprecationCallSite
+  def expect_deprecation_with_call_site(file, line)
+    actual_call_site = nil
+    allow(RSpec.configuration.reporter).to receive(:deprecation) do |options|
+      actual_call_site = options[:call_site]
+    end
+
+    yield
+
+    expect(actual_call_site).to match([file, line].join(':'))
+  end
+end
+
 describe "expect { ... }.to raise_error" do
   it_behaves_like("an RSpec matcher", :valid_value => lambda { raise "boom" },
                                       :invalid_value => lambda { }) do
@@ -146,13 +159,26 @@ describe "expect { ... }.to raise_error(message)" do
 end
 
 describe "expect { ... }.not_to raise_error(message)" do
+  include WrapDeprecationCallSite
+
   before do
     allow(RSpec).to receive(:deprecate)
   end
 
   it "is deprecated" do
-    expect(RSpec).to receive(:deprecate).with(/not_to raise_error\(message\)/, :replacement =>"`expect { }.not_to raise_error()`")
+    expect(RSpec).to receive(:deprecate).with(
+      /not_to raise_error\(message\)/,
+      :replacement =>"`expect { }.not_to raise_error` (with no args)"
+    )
     expect {raise 'blarg'}.not_to raise_error('blah')
+  end
+
+  it 'reports the line number of the deprecated syntax' do
+    allow(RSpec).to receive(:deprecate).and_call_original
+
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1) do
+      expect {raise 'blarg'}.not_to raise_error('blah')
+    end
   end
 
   it "passes if RuntimeError error is raised with the different message" do
@@ -201,13 +227,25 @@ describe "expect { ... }.to raise_error(NamedError)" do
 end
 
 describe "expect { ... }.not_to raise_error(NamedError)" do
+  include WrapDeprecationCallSite
+
   before do
     allow(RSpec).to receive(:deprecate)
   end
 
   it "is deprecated" do
-    expect(RSpec).to receive(:deprecate).with(/not_to raise_error\(SpecificErrorClass\)/, :replacement => "`expect { }.not_to raise_error()`")
+    expect(RSpec).to receive(:deprecate).with(
+      /not_to raise_error\(SpecificErrorClass\)/,
+      :replacement =>"`expect { }.not_to raise_error` (with no args)"
+    )
     expect { }.not_to raise_error(NameError)
+  end
+
+  it 'reports the line number of the deprecated syntax' do
+    allow(RSpec).to receive(:deprecate).and_call_original
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1) do
+      expect { }.not_to raise_error(NameError)
+    end
   end
 
   it "passes if nothing is raised" do
@@ -250,13 +288,25 @@ describe "expect { ... }.to raise_error(NamedError, error_message) with String" 
 end
 
 describe "expect { ... }.not_to raise_error(NamedError, error_message) with String" do
+  include WrapDeprecationCallSite
+
   before do
     allow(RSpec).to receive(:deprecate)
   end
 
   it "is deprecated" do
-    expect(RSpec).to receive(:deprecate).with(/not_to raise_error\(SpecificErrorClass, message\)/, :replacement =>"`expect { }.not_to raise_error()`")
+    expect(RSpec).to receive(:deprecate).with(
+      /not_to raise_error\(SpecificErrorClass, message\)/,
+      :replacement =>"`expect { }.not_to raise_error` (with no args)"
+    )
     expect {}.not_to raise_error(RuntimeError, "example message")
+  end
+
+  it 'reports the line number of the deprecated syntax' do
+    allow(RSpec).to receive(:deprecate).and_call_original
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1) do
+      expect {}.not_to raise_error(RuntimeError, "example message")
+    end
   end
 
   it "passes if nothing is raised" do
