@@ -73,6 +73,7 @@ module RSpec
         end
 
         after do
+          configure_default_syntax
           configure_syntax(@orig_syntax)
         end
 
@@ -106,6 +107,36 @@ module RSpec
 
           configure_syntax :expect
           configure_syntax :expect
+        end
+
+        it "warns when the should syntax is called by default" do
+          expected_arguments = [
+            /Using.*without explicitly enabling/,
+            {:replacement=>"the new `:expect` syntax or explicitly enable `:should`"}
+          ]
+
+          configure_default_syntax
+
+          expect(RSpec).to receive(:deprecate).with(*expected_arguments)
+          3.should eq(3)
+        end
+
+        it "does not warn when only the should syntax is explicitly configured" do
+          configure_syntax(:should)
+          RSpec.should_not_receive(:deprecate)
+          3.should eq(3)
+        end
+
+        it "includes the call site in the deprecation warning by default" do
+          configure_default_syntax
+          expect_deprecation_with_call_site(__FILE__, __LINE__ + 1)
+          3.should eq(3)
+        end
+
+        it "does not warn when both the should and expect syntaxes are explicitly configured" do
+          configure_syntax([:should, :expect])
+          expect(RSpec).not_to receive(:deprecate)
+          3.should eq(3)
         end
 
         it 'can re-enable the :should syntax' do
@@ -172,6 +203,10 @@ module RSpec
           def configured_syntax
             RSpec::Matchers.configuration.syntax
           end
+
+          def configure_default_syntax
+            RSpec::Matchers.configuration.reset_syntaxes_to_default
+          end
         end
       end
 
@@ -185,10 +220,19 @@ module RSpec
             end
           end
 
+
           def configured_syntax
             RSpec.configure do |rspec|
               rspec.expect_with :rspec do |c|
                 return c.syntax
+              end
+            end
+          end
+
+          def configure_default_syntax
+            RSpec.configure do |rspec|
+              rspec.expect_with :rspec do |c|
+                c.reset_syntaxes_to_default
               end
             end
           end
