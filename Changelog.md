@@ -1,5 +1,5 @@
 ### Development
-[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.2...2-99-maintenance)
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.3...2-99-maintenance)
 
 Deprecations
 
@@ -8,6 +8,9 @@ Deprecations
 * Deprecate `be_true`/`be_false` in favour of `be_truthy`/`be_falsey`
   (for Ruby's conditional semantics) or `be true`/`be false`
   (for exact equality). (Sam Phippen)
+
+### 2.14.3 / 2013-09-22
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.2...v2.14.3)
 
 Bug fixes
 
