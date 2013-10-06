@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'spec_helper'
 
 module RSpec
@@ -53,6 +55,24 @@ module RSpec
         expect {
           expect(["a\nb", "c\nd"]).to eq([])
         }.to fail_matching("expected: []")
+      end
+
+      it 'includes microseconds for Time objects' do
+        matcher = eq(Time.gm(2000))
+        matcher.matches?(Time.gm(2000, 1, 1, 0, 0, 0, 1))
+        expect(matcher.failure_message_for_should).to include(
+          "2000-01-01 00:00:00 +0000 (+ 000000 μs)",
+          "2000-01-01 00:00:00 +0000 (+ 000001 μs)"
+        )
+      end
+
+      it 'includes microseconds for DateTime objects' do
+        matcher = eq(DateTime.new(2000))
+        matcher.matches?(DateTime.new(2000, 1, 2))
+        expect(matcher.failure_message_for_should).to include(
+          "2000-01-01 00:00:00 +0000 (+ 000000 μs)",
+          "2000-01-02 00:00:00 +0000 (+ 000000 μs)"
+        )
       end
     end
   end

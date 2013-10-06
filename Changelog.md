@@ -16,6 +16,7 @@ Breaking Changes for 3.0.0:
 Enhancements:
 
 * Support do..end style block with `raise_error` matcher. (Yuji Nakayama)
+* Display microseconds in failure messages when printing Time objects (Ben Moss)
 
 Deprecations:
 
