@@ -1,4 +1,7 @@
+# encoding: UTF-8
+
 require 'spec_helper'
+require 'date'
 
 module RSpec
   module Matchers
@@ -53,6 +56,38 @@ module RSpec
         expect {
           expect(["a\nb", "c\nd"]).to eq([])
         }.to fail_matching("expected: []")
+      end
+
+      it 'includes microseconds for Time objects' do
+        t1 = Time.gm(2000)
+        t2 = Time.gm(2000, 1, 1, 0, 0, 0, 1)
+        matcher = eq(t1)
+        matcher.matches?(t2)
+        expect(matcher.failure_message_for_should).to include(
+          "#{t1.inspect} (+ 000000 μs)",
+          "#{t2.inspect} (+ 000001 μs)"
+        )
+      end
+
+      it 'includes microseconds for DateTime objects' do
+        dt1 = DateTime.new(2000)
+        dt2 = DateTime.new(2000, 1, 2)
+        matcher = eq(dt1)
+        matcher.matches?(dt2)
+        expect(matcher.failure_message_for_should).to include(
+          "#{dt1.inspect} (+ 000000 μs)",
+          "#{dt2.inspect} (+ 000000 μs)"
+        )
+      end
+
+      it 'falls back to `inspect` when not a Time and DateTime is not defined' do
+        matcher = eq("hi")
+        matcher.matches?("there")
+        hide_const("DateTime")
+        expect(matcher.failure_message_for_should).to include(
+          "hi",
+          "there"
+        )
       end
     end
   end
