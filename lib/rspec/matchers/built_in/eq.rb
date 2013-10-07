@@ -22,16 +22,10 @@ module RSpec
 
         def format_object(object)
           if object.is_a?(Time)
-            # This would be simpler as `object.to_f.round(6).to_s.split('.').last` but
-            # 1.8.7 does not support `round(6)`, so this is the best we can do.
-            # This can be changed to the above once we drop support for 1.8.7.
-            microseconds = ("%10.6f" % object.to_f)[-6, 6]
-
-            offset = "#{object.gmt_offset < 0 ? "-" : "+"}%02d%02d" % (object.gmt_offset/60).abs.divmod(60)
-            object.strftime("%Y-%m-%d %H:%M:%S #{offset} (+ #{microseconds} μs)")
+            "#{object.inspect} (+ #{"%06d" % object.usec} μs)"
           elsif defined?(DateTime) && object.is_a?(DateTime)
             microseconds = object.strftime("%6N")[0,6]
-            object.strftime("%Y-%m-%d %H:%M:%S %z (+ #{microseconds} μs)")
+            "#{object.inspect} (+ #{microseconds} μs)"
           else
             object.inspect
           end

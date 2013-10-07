@@ -59,20 +59,24 @@ module RSpec
       end
 
       it 'includes microseconds for Time objects' do
-        matcher = eq(Time.gm(2000))
-        matcher.matches?(Time.gm(2000, 1, 1, 0, 0, 0, 1))
+        t1 = Time.gm(2000)
+        t2 = Time.gm(2000, 1, 1, 0, 0, 0, 1)
+        matcher = eq(t1)
+        matcher.matches?(t2)
         expect(matcher.failure_message_for_should).to include(
-          "2000-01-01 00:00:00 +0000 (+ 000000 μs)",
-          "2000-01-01 00:00:00 +0000 (+ 000001 μs)"
+          "#{t1.inspect} (+ 000000 μs)",
+          "#{t2.inspect} (+ 000001 μs)"
         )
       end
 
       it 'includes microseconds for DateTime objects' do
-        matcher = eq(DateTime.new(2000))
-        matcher.matches?(DateTime.new(2000, 1, 2))
+        dt1 = DateTime.new(2000)
+        dt2 = DateTime.new(2000, 1, 2)
+        matcher = eq(dt1)
+        matcher.matches?(dt2)
         expect(matcher.failure_message_for_should).to include(
-          "2000-01-01 00:00:00 +0000 (+ 000000 μs)",
-          "2000-01-02 00:00:00 +0000 (+ 000000 μs)"
+          "#{dt1.inspect} (+ 000000 μs)",
+          "#{dt2.inspect} (+ 000000 μs)"
         )
       end
 
