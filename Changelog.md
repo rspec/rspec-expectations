@@ -9,6 +9,10 @@ Deprecations
   (for Ruby's conditional semantics) or `be true`/`be false`
   (for exact equality). (Sam Phippen)
 
+Bug fixes:
+
+* Make the `match` matcher produce a diff output (Jon Rowe, Ben Moss)
+
 ### 2.14.3 / 2013-09-22
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.2...v2.14.3)
 
