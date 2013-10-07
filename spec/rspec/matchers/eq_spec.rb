@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 require 'spec_helper'
+require 'date'
 
 module RSpec
   module Matchers
@@ -72,6 +73,16 @@ module RSpec
         expect(matcher.failure_message_for_should).to include(
           "2000-01-01 00:00:00 +0000 (+ 000000 μs)",
           "2000-01-02 00:00:00 +0000 (+ 000000 μs)"
+        )
+      end
+
+      it 'falls back to `inspect` when not a Time and DateTime is not defined' do
+        matcher = eq("hi")
+        matcher.matches?("there")
+        hide_const("DateTime")
+        expect(matcher.failure_message_for_should).to include(
+          "hi",
+          "there"
         )
       end
     end
