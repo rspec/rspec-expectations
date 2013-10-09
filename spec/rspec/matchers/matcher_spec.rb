@@ -363,7 +363,7 @@ module RSpec::Matchers::DSL
             if sum == :use_as_macro
               define_match
             else
-              match { |(a, b)| sum_of(a, b) == sum }
+              match { |summands| sum_of(*summands) == sum }
             end
           end
         end
@@ -381,7 +381,7 @@ module RSpec::Matchers::DSL
             if sum == :use_as_macro
               define_match
             else
-              match { |(a, b)| sum_of(a, b) == sum }
+              match { |summands| sum_of(*summands) == sum }
             end
           end
         end
@@ -425,7 +425,7 @@ module RSpec::Matchers::DSL
             if sum == :use_as_macro
               define_match
             else
-              match { |(a, b)| sum_of(a, b) == sum }
+              match { |summands| sum_of(*summands) == sum }
             end
           end
         end
@@ -443,7 +443,7 @@ module RSpec::Matchers::DSL
             if sum == :use_as_macro
               define_match
             else
-              match { |(a, b)| sum_of(a, b) == sum }
+              match { |summands| sum_of(*summands) == sum }
             end
           end
         end
