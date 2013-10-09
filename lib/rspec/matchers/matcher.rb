@@ -23,6 +23,9 @@ module RSpec
           @expected_exception, @rescued_exception = nil, nil
           @match_for_should_not_block = nil
           @messages = {}
+          @define_block_executed = false
+          @block_method_differentiator = nil
+          @deprecated_methods = Set.new
         end
 
         PERSISTENT_INSTANCE_VARIABLES = [
@@ -39,9 +42,14 @@ module RSpec
               instance_variable_set(ivar, nil) unless (PERSISTENT_INSTANCE_VARIABLES + [:@expected]).include?(ivar)
             end
             @messages = {}
+            @deprecated_methods = Set.new
+
+            @block_method_differentiator = DifferentiateBlockMethodTypes.new(*@expected, &@declarations)
             making_declared_methods_public do
               instance_eval_with_args(*@expected, &@declarations)
             end
+
+            @define_block_executed = true
             self
           end
         end
@@ -238,8 +246,38 @@ module RSpec
           end
         end
 
-        def include(*args)
-          singleton_class.__send__(:include, *args)
+        def include(*modules)
+          return_value = singleton_class.__send__(:include, *modules)
+
+          modules.each do |mod|
+            mod.instance_methods.each do |name|
+              add_deprecation_warning_to(name,
+                "Calling a helper method (`#{name}`) from a module included in a custom matcher as a macro",
+                "`extend #{mod.name || "TheModule"}`",
+                "included in the custom matcher",
+                :unless
+              )
+            end
+          end
+
+          return_value
+        end
+
+        def extend(*modules)
+          return_value = super
+
+          modules.each do |mod|
+            mod.instance_methods.each do |name|
+              add_deprecation_warning_to(name,
+                "Calling a helper method (`#{name}`) from a module extended onto a custom matcher",
+                "`include #{mod.name || "TheModule"}`",
+                "extended onto the custom matcher",
+                :if
+              )
+            end
+          end unless @define_block_executed
+
+          return_value
         end
 
         def define_method(name, &block)
@@ -294,6 +332,50 @@ module RSpec
           def singleton_class
             class << self; self; end
           end
+        end
+
+        def singleton_method_added(name)
+          return unless @block_method_differentiator
+
+          if @block_method_differentiator.instance_methods.include?(name)
+            add_deprecation_warning_to(name,
+              "Calling a helper method (`#{name}`) defined as an instance method (using `def #{name}`) as a macro from a custom matcher `define` block",
+              "`def self.#{name}` (to define it as a singleton method)",
+              "defined in the custom matcher definition block",
+              :unless
+            )
+          elsif @block_method_differentiator.singleton_methods.include?(name)
+            add_deprecation_warning_to(name,
+              "Calling a helper method (`#{name}`) defined as a singleton method (using `def self.#{name}`) on a custom matcher",
+              "`def #{name}` (to define it as an instance method)",
+              "defined in the custom matcher definition block",
+              :if
+            )
+          end
+        end
+
+        def add_deprecation_warning_to(method_name, msg, replacement, extra_call_site_msg, condition)
+          return if @deprecated_methods.include?(method_name)
+          @deprecated_methods << method_name
+
+          aliased_name = aliased_name_for(method_name)
+          singleton_class.__send__(:alias_method, aliased_name, method_name)
+
+          singleton_class.class_eval(<<-EOS, __FILE__, __LINE__ + 1)
+            def #{method_name}(*a, &b)
+              ::RSpec.deprecate(#{msg.inspect},
+                :replacement => #{replacement.inspect},
+                :call_site => CallerFilter.first_non_rspec_line + " and #{extra_call_site_msg} at #{CallerFilter.first_non_rspec_line}"
+              ) #{condition} @define_block_executed
+
+              __send__(#{aliased_name.inspect}, *a, &b)
+            end
+          EOS
+        end
+
+        def aliased_name_for(method_name)
+          target, punctuation = method_name.to_s.sub(/([?!=])$/, ''), $1
+          "#{target}_without_rspec_deprecation_warning#{punctuation}"
         end
       end
     end
