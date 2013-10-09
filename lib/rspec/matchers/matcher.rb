@@ -1,4 +1,5 @@
 require 'set'
+require 'rspec/matchers/differentiate_block_method_types'
 
 module RSpec
   module Matchers
