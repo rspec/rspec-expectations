@@ -327,6 +327,130 @@ module RSpec::Matchers::DSL
       expect(matcher.matches?(8)).to be_truthy
     end
 
+    shared_examples_for "accessing a singleton helper method" do
+      before { allow_deprecation }
+
+      it 'can access the helper method from `match`' do
+        expect([2, 3]).to matcher.for_expected(5)
+        expect([2, 3]).not_to matcher.for_expected(4)
+      end
+
+      it 'prints a deprecation warning when the helper method is accessed `match`' do
+        expect(RSpec).to receive(:deprecate).with(/sum_of/, an_instance_of(Hash))
+        matcher.for_expected(5).matches?([2, 3])
+      end
+
+      it 'includes the call site in the deprecation warning' do
+        expect_deprecation_with_call_site(__FILE__, line)
+        matcher.for_expected(5).matches?([2, 3])
+      end
+
+      it 'does not print a deprecation warning if the helper method is used as a macro' do
+        expect(RSpec).not_to receive(:deprecate)
+        matcher.for_expected(:use_as_macro).matches?([2, 3])
+      end
+    end
+
+    context "when a module of helper methods is extended" do
+      include_examples "accessing a singleton helper method" do
+        let(:matcher) do
+          RSpec::Matchers::DSL::Matcher.new(:sum_to) do |sum|
+            extend Module.new {
+              def sum_of(x, y) x + y end
+              def define_match() match {} end
+            }
+
+            if sum == :use_as_macro
+              define_match
+            else
+              match { |summands| sum_of(*summands) == sum }
+            end
+          end
+        end
+        let(:line) { __LINE__ - 4 }
+      end
+    end
+
+    context "when a helper method is defined using `self.`" do
+      include_examples "accessing a singleton helper method" do
+        let(:matcher) do
+          RSpec::Matchers::DSL::Matcher.new(:sum_to) do |sum|
+            def self.sum_of(x, y) x + y end
+            def self.define_match() match {} end
+
+            if sum == :use_as_macro
+              define_match
+            else
+              match { |summands| sum_of(*summands) == sum }
+            end
+          end
+        end
+        let(:line) { __LINE__ - 4 }
+      end
+    end
+
+    shared_examples_for "accessing an instance helper method" do
+      before { allow_deprecation }
+
+      it 'can access the helper method from `match`' do
+        expect([2, 3]).to matcher.for_expected(5)
+        expect([2, 3]).not_to matcher.for_expected(4)
+      end
+
+      it 'does not print a deprecation warning when the helper method is accessed from `match`' do
+        expect(RSpec).not_to receive(:deprecate)
+        matcher.for_expected(5).matches?([2, 3])
+      end
+
+      it 'prints a deprecation warning if the helper method is used as a macro' do
+        expect(RSpec).to receive(:deprecate).with(/define_match/, an_instance_of(Hash))
+        matcher.for_expected(:use_as_macro).matches?([2, 3])
+      end
+
+      it 'includes the call site in the deprecation warning' do
+        expect_deprecation_with_call_site(__FILE__, line)
+        matcher.for_expected(:use_as_macro).matches?([2, 3])
+      end
+    end
+
+    context "when a module of helper methods is included" do
+      include_examples "accessing an instance helper method" do
+        let(:matcher) do
+          RSpec::Matchers::DSL::Matcher.new(:sum_to) do |sum|
+            include Module.new {
+              def sum_of(x, y) x + y end
+              def define_match() match {} end
+            }
+
+            if sum == :use_as_macro
+              define_match
+            else
+              match { |summands| sum_of(*summands) == sum }
+            end
+          end
+        end
+        let(:line) { __LINE__ - 6 }
+      end
+    end
+
+    context "when a helper method is defined using `def foo`" do
+      include_examples "accessing an instance helper method" do
+        let(:matcher) do
+          RSpec::Matchers::DSL::Matcher.new(:sum_to) do |sum|
+            def sum_of(x, y) x + y end
+            def define_match() match {} end
+
+            if sum == :use_as_macro
+              define_match
+            else
+              match { |summands| sum_of(*summands) == sum }
+            end
+          end
+        end
+        let(:line) { __LINE__ - 6 }
+      end
+    end
+
     context 'when multiple instances of the same matcher are used in the same example' do
       RSpec::Matchers.define(:be_like_a) do |expected|
         match { |actual| actual == expected }
@@ -377,7 +501,7 @@ module RSpec::Matchers::DSL
         let(:matcher) do
           m = mod
           RSpec::Matchers::DSL::Matcher.new :equal do |expected|
-            extend m
+            include m
             match_unless_raises UnexpectedError do
               assert_equal expected, actual
             end

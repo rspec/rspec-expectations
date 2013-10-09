@@ -8,6 +8,16 @@ Deprecations
 * Deprecate `be_true`/`be_false` in favour of `be_truthy`/`be_falsey`
   (for Ruby's conditional semantics) or `be true`/`be false`
   (for exact equality). (Sam Phippen)
+* Deprecate calling helper methods from a custom matcher with the wrong
+  scope. (Myron Marston)
+  * `def self.foo` / `extend Helper` can be used to add macro methods
+    (e.g. methods that call the custom matcher DSL methods), but should
+    not be used to define helper methods called from within the DSL
+    blocks.
+  * `def foo` / `include Helper` is the opposite: it's for helper methods
+    callable from within a DSL block, but not for defining macros.
+  * RSpec 2.x allowed helper methods defined either way to be used for
+    either purpose, but RSpec 3.0 will not.
 
 Bug fixes:
 
