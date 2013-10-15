@@ -13,8 +13,8 @@ module RSpec
           @relativity = relativity
 
           @actual = @collection_name = @plural_collection_name = nil
-          @target_owns_a_collection = nil
-          @negative_expectation = nil
+          @target_owns_a_collection = false
+          @negative_expectation = false
         end
 
         def relativities
@@ -33,7 +33,7 @@ module RSpec
               next unless collection.respond_to?(query_method)
               @actual = collection.__send__(query_method)
 
-              if !@actual.nil?
+              if @actual
                 print_deprecation_message(query_method)
                 break
               end
