@@ -65,7 +65,7 @@ describe "expect(...).to be_predicate" do
   it "does not support operator chaining like a basic `be` matcher does" do
     matcher = be_happy
     value = double(:happy? => false)
-    expect(be_happy == value).to be false
+    expect(matcher == value).to be false
   end
 end
 
@@ -265,6 +265,11 @@ end
 describe "expect(...).to be_false" do
   it "is deprecated" do
     expect(RSpec).to receive(:deprecate).with(/be_false/, :replacement => match(/falsey.*false/))
+    expect(false).to be_false
+  end
+
+  it "has the correct call site in the deprecation message" do
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1)
     expect(false).to be_false
   end
 

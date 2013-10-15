@@ -1,5 +1,25 @@
 Dir['./spec/support/**/*'].each {|f| require f}
 
+module DeprecationHelpers
+  def allow_deprecation
+    allow(RSpec.configuration.reporter).to receive(:deprecation)
+  end
+
+  def expect_deprecation_with_call_site(file, line)
+    expect(RSpec.configuration.reporter).to receive(:deprecation) do |options|
+      matcher = include([file, line].join(':'))
+      unless matcher.matches?(options[:call_site])
+        # RSpec::Expectations::ExpectationNotMetError is rescued in the `match` block
+        # of a custom matcher and returned as `false` from `matches?`. This would
+        # prevent an expectation failure here from surfacing in the test suite if
+        # it's triggered from within a `match` block, so we need to raise
+        # a different error class instead.
+        raise matcher.failure_message_for_should
+      end
+    end
+  end
+end
+
 RSpec::configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.color_enabled = true
@@ -11,6 +31,9 @@ RSpec::configure do |config|
     $default_expectation_syntax = expectations.syntax
     expectations.syntax = :expect
   end
+
+  config.include SpecHelperMethods
+  config.include DeprecationHelpers
 end
 
 shared_context "with #should enabled", :uses_should do

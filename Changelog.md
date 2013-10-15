@@ -1,17 +1,43 @@
 ### Development
-[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.2...2-99-maintenance)
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.3...2-99-maintenance)
 
 Deprecations
 
+* Deprecate `have`, `have_at_least` and `have_at_most`. You can continue using those
+	matchers through https://github.com/rspec/rspec-collection_matchers, or
+	you can rewrite your expectations with something like
+	`expect(your_object.size).to eq(num)` (Hugo Baraúna)
 * Deprecate `be_xyz` predicate matcher when `xyz?` is a private method
   (Jon Rowe).
 * Deprecate `be_true`/`be_false` in favour of `be_truthy`/`be_falsey`
   (for Ruby's conditional semantics) or `be true`/`be false`
   (for exact equality). (Sam Phippen)
-* Deprecate `have`, `have_at_least` and `have_at_most`. You can continue using those
-	matchers through https://github.com/rspec/rspec-collection_matchers, or
-	you can rewrite your expectations with something like
-	`expect(your_object.size).to eq(num)` (Hugo Baraúna)
+* Deprecate calling helper methods from a custom matcher with the wrong
+  scope. (Myron Marston)
+  * `def self.foo` / `extend Helper` can be used to add macro methods
+    (e.g. methods that call the custom matcher DSL methods), but should
+    not be used to define helper methods called from within the DSL
+    blocks.
+  * `def foo` / `include Helper` is the opposite: it's for helper methods
+    callable from within a DSL block, but not for defining macros.
+  * RSpec 2.x allowed helper methods defined either way to be used for
+    either purpose, but RSpec 3.0 will not.
+
+Bug fixes:
+
+* Make the `match` matcher produce a diff output (Jon Rowe, Ben Moss)
+
+### 2.14.3 / 2013-09-22
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.2...v2.14.3)
+
+Bug fixes
+
+* Fix operator matchers (`should` syntax) when `method` is redefined on target.
+  (Brandon Turner)
+* Fix diffing of hashes with object based keys. (Jon Rowe)
+* Fix operator matchers (`should` syntax) when operator is defined via
+  `method_missing` (Jon Rowe)
+>>>>>>> 043359db6a469454cb4f1d7fc58266b7b645ae6f
 
 ### 2.14.2 / 2013-08-14
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.1...v2.14.2)
