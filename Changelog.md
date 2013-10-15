@@ -37,7 +37,6 @@ Bug fixes
 * Fix diffing of hashes with object based keys. (Jon Rowe)
 * Fix operator matchers (`should` syntax) when operator is defined via
   `method_missing` (Jon Rowe)
->>>>>>> 043359db6a469454cb4f1d7fc58266b7b645ae6f
 
 ### 2.14.2 / 2013-08-14
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.1...v2.14.2)
