@@ -140,33 +140,32 @@ EOF
           return if rspec_collection_matchers_being_used?
 
           deprecation_message = "the rspec-collection_matchers gem "
-          deprecation_message += "or replace your expectation with something like "
-          deprecation_message += "`expect(your_object."
-          deprecation_message += "#{@collection_name}." if @target_owns_a_collection
+          deprecation_message << "or replace your expectation with something like "
+          deprecation_message << "`expect(your_object."
+          deprecation_message << "#{@collection_name}." if @target_owns_a_collection
 
           case @relativity
           when :exactly
             expectation_format_method = "to_not" if @negative_expectation
 
-            deprecation_message += "#{query_method}).#{expectation_format_method} eq(#{@expected})`"
+            deprecation_message << "#{query_method}).#{expectation_format_method} eq(#{@expected})`"
           when :at_most
-            deprecation_message += "#{query_method}).#{expectation_format_method} "
+            deprecation_message << "#{query_method}).#{expectation_format_method} "
 
             if @negative_expectation
-              deprecation_message += "be > #{@expected}`"
+              deprecation_message << "be > #{@expected}`"
             else
-              deprecation_message += "be <= #{@expected}`"
+              deprecation_message << "be <= #{@expected}`"
             end
           when :at_least
-            deprecation_message += "#{query_method}).#{expectation_format_method} "
+            deprecation_message << "#{query_method}).#{expectation_format_method} "
 
             if @negative_expectation
-              deprecation_message += "be < #{@expected}`"
+              deprecation_message << "be < #{@expected}`"
             else
-              deprecation_message += "be >= #{@expected}`"
+              deprecation_message << "be >= #{@expected}`"
             end
           end
-
 
           RSpec.deprecate("`#{matcher_method}`", :replacement => deprecation_message)
         end
