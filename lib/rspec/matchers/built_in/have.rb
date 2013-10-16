@@ -143,31 +143,47 @@ EOF
 
           deprecation_message = "the rspec-collection_matchers gem "
           deprecation_message << "or replace your expectation with something like "
-          deprecation_message << "`expect(your_object."
-          deprecation_message << "#{@collection_name}." if @target_owns_a_collection
-
-          case @relativity
-          when :exactly
-            deprecation_message << "#{query_method}).#{@expectation_format_method} eq(#{@expected})`"
-          when :at_most
-            deprecation_message << "#{query_method}).to "
-
-            if @negative_expectation
-              deprecation_message << "be > #{@expected}`"
-            else
-              deprecation_message << "be <= #{@expected}`"
-            end
-          when :at_least
-            deprecation_message << "#{query_method}).to "
-
-            if @negative_expectation
-              deprecation_message << "be < #{@expected}`"
-            else
-              deprecation_message << "be >= #{@expected}`"
-            end
-          end
+          deprecation_message << "`expect(#{cardinality_expression(query_method)}).#{expectation_format_method} #{matcher_expression}`"
 
           RSpec.deprecate("`#{matcher_method}`", :replacement => deprecation_message)
+        end
+
+        def expectation_format_method
+          if @relativity == :exactly
+            @expectation_format_method
+          else
+            "to"
+          end
+        end
+
+        def cardinality_expression(query_method)
+          expression = "your_object."
+          expression << "#{@collection_name}." if @target_owns_a_collection
+          expression << String(query_method)
+        end
+
+        def matcher_expression
+          send("matcher_expression_for_#{@relativity}")
+        end
+
+        def matcher_expression_for_exactly
+          "eq(#{@expected})"
+        end
+
+        def matcher_expression_for_at_most
+          if @negative_expectation
+            "be > #{@expected}"
+          else
+            "be <= #{@expected}"
+          end
+        end
+
+        def matcher_expression_for_at_least
+          if @negative_expectation
+            "be < #{@expected}"
+          else
+            "be >= #{@expected}"
+          end
         end
 
         def matcher_method
