@@ -150,9 +150,17 @@ EOF
 
         def expectation_expression(query_method)
           if @negative_expectation
-            RSpec::Expectations::Syntax.negative_expression('your_object', original_matcher_expression)
+            RSpec::Expectations::Syntax.negative_expression(target_expression, original_matcher_expression)
           else
-            RSpec::Expectations::Syntax.positive_expression('your_object', original_matcher_expression)
+            RSpec::Expectations::Syntax.positive_expression(target_expression, original_matcher_expression)
+          end
+        end
+
+        def target_expression
+          if @target_owns_a_collection
+            'collection_owner'
+          else
+            'collection'
           end
         end
 
@@ -169,7 +177,7 @@ EOF
         end
 
         def cardinality_expression(query_method)
-          expression = "your_object."
+          expression = "#{target_expression}."
           expression << "#{@collection_name}." if @target_owns_a_collection
           expression << String(query_method)
         end

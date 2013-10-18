@@ -464,11 +464,11 @@ EOF
 
     context "when the target is a collection" do
       it "prints a specific message for the positive expectation format" do
-        expectation_expression = "expect(your_object).to have(3).items"
+        expectation_expression = "expect(collection).to have(3).items"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.size).to eq(3)`"
+                  "`expect(collection.size).to eq(3)`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -476,11 +476,11 @@ EOF
       end
 
       it "prints a specific message for the negative expectation format" do
-        expectation_expression = "expect(your_object).not_to have(4).items"
+        expectation_expression = "expect(collection).not_to have(4).items"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.size).to_not eq(4)`"
+                  "`expect(collection.size).to_not eq(4)`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -498,11 +498,11 @@ EOF
       end
 
       it "prints a specific message for the positive expectation format" do
-        expectation_expression = "expect(your_object).to have(3).words"
+        expectation_expression = "expect(collection_owner).to have(3).words"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.words.size).to eq(3)`"
+                  "`expect(collection_owner.words.size).to eq(3)`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -511,11 +511,11 @@ EOF
       end
 
       it "prints a specific message for the negative expectation format" do
-        expectation_expression = "expect(your_object).not_to have(4).words"
+        expectation_expression = "expect(collection_owner).not_to have(4).words"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.words.size).to_not eq(4)`"
+                  "`expect(collection_owner.words.size).to_not eq(4)`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -528,11 +528,11 @@ EOF
       it "prints a specific message for the positive expectation format" do
         target = %w[a b c].to_enum(:each)
 
-        expectation_expression = "expect(your_object).to have(3).letters"
+        expectation_expression = "expect(collection).to have(3).letters"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.count).to eq(3)`"
+                  "`expect(collection.count).to eq(3)`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -542,11 +542,11 @@ EOF
       it "prints a specific message for the negative expectation format" do
         target = %w[a b c].to_enum(:each)
 
-        expectation_expression = "expect(your_object).not_to have(4).letters"
+        expectation_expression = "expect(collection).not_to have(4).letters"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.count).to_not eq(4)`"
+                  "`expect(collection.count).to_not eq(4)`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -566,11 +566,11 @@ EOF
 
     context "when the target is a collection" do
       it "prints a specific message for the positive expectation format" do
-        expectation_expression = "expect(your_object).to have_at_most(3).items"
+        expectation_expression = "expect(collection).to have_at_most(3).items"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.size).to be <= 3`"
+                  "`expect(collection.size).to be <= 3`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -578,11 +578,11 @@ EOF
       end
 
       it "prints a specific message for the negative expectation format" do
-        expectation_expression = "expect(your_object).not_to have_at_most(2).items"
+        expectation_expression = "expect(collection).not_to have_at_most(2).items"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.size).to be > 2`"
+                  "`expect(collection.size).to be > 2`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -600,11 +600,11 @@ EOF
       end
 
       it "prints a specific message for the positive expectation format" do
-        expectation_expression = "expect(your_object).to have_at_most(3).words"
+        expectation_expression = "expect(collection_owner).to have_at_most(3).words"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.words.size).to be <= 3`"
+                  "`expect(collection_owner.words.size).to be <= 3`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -613,11 +613,11 @@ EOF
       end
 
       it "prints a specific message for the negative expectation format" do
-        expectation_expression = "expect(your_object).not_to have_at_most(2).words"
+        expectation_expression = "expect(collection_owner).not_to have_at_most(2).words"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.words.size).to be > 2`"
+                  "`expect(collection_owner.words.size).to be > 2`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -630,11 +630,11 @@ EOF
       it "prints a specific message for the positive expectation format" do
         target = %w[a b c].to_enum(:each)
 
-        expectation_expression = "expect(your_object).to have_at_most(3).letters"
+        expectation_expression = "expect(collection).to have_at_most(3).letters"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.count).to be <= 3`"
+                  "`expect(collection.count).to be <= 3`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -644,11 +644,11 @@ EOF
       it "prints a specific message for the negative expectation format" do
         target = %w[a b c].to_enum(:each)
 
-        expectation_expression = "expect(your_object).not_to have_at_most(2).letters"
+        expectation_expression = "expect(collection).not_to have_at_most(2).letters"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.count).to be > 2`"
+                  "`expect(collection.count).to be > 2`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -668,11 +668,11 @@ EOF
 
     context "when the target is a collection" do
       it "prints a specific message for the positive expectation format" do
-        expectation_expression = "expect(your_object).to have_at_least(3).items"
+        expectation_expression = "expect(collection).to have_at_least(3).items"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.size).to be >= 3`"
+                  "`expect(collection.size).to be >= 3`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -680,11 +680,11 @@ EOF
       end
 
       it "prints a specific message for the negative expectation format" do
-        expectation_expression = "expect(your_object).not_to have_at_least(4).items"
+        expectation_expression = "expect(collection).not_to have_at_least(4).items"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.size).to be < 4`"
+                  "`expect(collection.size).to be < 4`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -702,11 +702,11 @@ EOF
       end
 
       it "prints a specific message for the positive expectation format" do
-        expectation_expression = "expect(your_object).to have_at_least(3).words"
+        expectation_expression = "expect(collection_owner).to have_at_least(3).words"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.words.size).to be >= 3`"
+                  "`expect(collection_owner.words.size).to be >= 3`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -715,11 +715,11 @@ EOF
       end
 
       it "prints a specific message for the negative expectation format" do
-        expectation_expression = "expect(your_object).not_to have_at_least(4).words"
+        expectation_expression = "expect(collection_owner).not_to have_at_least(4).words"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.words.size).to be < 4`"
+                  "`expect(collection_owner.words.size).to be < 4`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -732,11 +732,11 @@ EOF
       it "prints a specific message for the positive expectation format" do
         target = %w[a b c].to_enum(:each)
 
-        expectation_expression = "expect(your_object).to have_at_least(3).letters"
+        expectation_expression = "expect(collection).to have_at_least(3).letters"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.count).to be >= 3`"
+                  "`expect(collection.count).to be >= 3`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
@@ -746,11 +746,11 @@ EOF
       it "prints a specific message for the negative expectation format" do
         target = %w[a b c].to_enum(:each)
 
-        expectation_expression = "expect(your_object).not_to have_at_least(4).letters"
+        expectation_expression = "expect(collection).not_to have_at_least(4).letters"
 
         message = "the rspec-collection_matchers gem " +
                   "or replace your expectation with something like " +
-                  "`expect(your_object.count).to be < 4`"
+                  "`expect(collection.count).to be < 4`"
 
         expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
 
