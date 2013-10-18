@@ -139,8 +139,6 @@ EOF
         end
 
         def print_deprecation_message(query_method)
-          return if rspec_collection_matchers_being_used?
-
           deprecation_message = "the rspec-collection_matchers gem "
           deprecation_message << "or replace your expectation with something like "
           deprecation_message << "`expect(#{cardinality_expression(query_method)}).#{expectation_format_method} #{suggested_matcher_expression}`"
@@ -215,10 +213,6 @@ EOF
           when :at_least
             "have_at_least"
           end
-        end
-
-        def rspec_collection_matchers_being_used?
-          defined?(RSpec::CollectionMatchers::Have)
         end
       end
     end

@@ -454,14 +454,6 @@ EOF
   end
 
   context "deprecations for the have matcher" do
-    it "doesn't print deprecations when rspec-collection_matches is being used" do
-      stub_const("RSpec::CollectionMatchers::Have", "rspec collection matchers")
-
-      expect(RSpec).to_not receive(:deprecate)
-
-      expect([1, 2, 3]).to have(3).items
-    end
-
     it "has the correct call site in the deprecation message" do
       expect_deprecation_with_call_site(__FILE__, __LINE__ + 1)
       expect([1, 2, 3]).to have(3).items
@@ -561,14 +553,6 @@ EOF
   end
 
   context "deprecations for the have_at_most matcher" do
-    it "doesn't print deprecations when rspec-collection_matches is being used" do
-      stub_const("RSpec::CollectionMatchers::Have", "rspec collection matchers")
-
-      expect(RSpec).to_not receive(:deprecate)
-
-      expect([1, 2, 3]).to have_at_most(3).items
-    end
-
     it "has the correct call site in the deprecation message" do
       expect_deprecation_with_call_site(__FILE__, __LINE__ + 1)
       expect([1, 2, 3]).to have_at_most(3).items
@@ -668,14 +652,6 @@ EOF
   end
 
   context "deprecations for the have_at_least matcher" do
-    it "doesn't print deprecations when rspec-collection_matches is being used" do
-      stub_const("RSpec::CollectionMatchers::Have", "rspec collection matchers")
-
-      expect(RSpec).to_not receive(:deprecate)
-
-      expect([1, 2, 3]).to have_at_least(3).items
-    end
-
     it "has the correct call site in the deprecation message" do
       expect_deprecation_with_call_site(__FILE__, __LINE__ + 1)
       expect([1, 2, 3]).to have_at_least(3).items
