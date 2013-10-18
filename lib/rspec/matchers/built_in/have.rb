@@ -143,9 +143,21 @@ EOF
 
           deprecation_message = "the rspec-collection_matchers gem "
           deprecation_message << "or replace your expectation with something like "
-          deprecation_message << "`expect(#{cardinality_expression(query_method)}).#{expectation_format_method} #{matcher_expression}`"
+          deprecation_message << "`expect(#{cardinality_expression(query_method)}).#{expectation_format_method} #{suggested_matcher_expression}`"
 
-          RSpec.deprecate("`#{matcher_method}`", :replacement => deprecation_message)
+          RSpec.deprecate("`#{expectation_expression(query_method)}`", :replacement => deprecation_message)
+        end
+
+        def expectation_expression(query_method)
+          if @negative_expectation
+            RSpec::Expectations::Syntax.negative_expression('your_object', original_matcher_expression)
+          else
+            RSpec::Expectations::Syntax.positive_expression('your_object', original_matcher_expression)
+          end
+        end
+
+        def original_matcher_expression
+          "#{matcher_method}(#{@expected}).#{@collection_name}"
         end
 
         def expectation_format_method
@@ -162,15 +174,15 @@ EOF
           expression << String(query_method)
         end
 
-        def matcher_expression
-          send("matcher_expression_for_#{@relativity}")
+        def suggested_matcher_expression
+          send("suggested_matcher_expression_for_#{@relativity}")
         end
 
-        def matcher_expression_for_exactly
+        def suggested_matcher_expression_for_exactly
           "eq(#{@expected})"
         end
 
-        def matcher_expression_for_at_most
+        def suggested_matcher_expression_for_at_most
           if @negative_expectation
             "be > #{@expected}"
           else
@@ -178,7 +190,7 @@ EOF
           end
         end
 
-        def matcher_expression_for_at_least
+        def suggested_matcher_expression_for_at_least
           if @negative_expectation
             "be < #{@expected}"
           else
