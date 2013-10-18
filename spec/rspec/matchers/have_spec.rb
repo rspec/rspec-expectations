@@ -462,6 +462,11 @@ EOF
       expect([1, 2, 3]).to have(3).items
     end
 
+    it "has the correct call site in the deprecation message" do
+      expect_deprecation_with_call_site(__FILE__, __LINE__ + 1)
+      expect([1, 2, 3]).to have(3).items
+    end
+
     context "when the target is a collection" do
       it "prints a specific message for the positive expectation format" do
         expectation_expression = "expect(collection).to have(3).items"
@@ -564,6 +569,11 @@ EOF
       expect([1, 2, 3]).to have_at_most(3).items
     end
 
+    it "has the correct call site in the deprecation message" do
+      expect_deprecation_with_call_site(__FILE__, __LINE__ + 1)
+      expect([1, 2, 3]).to have_at_most(3).items
+    end
+
     context "when the target is a collection" do
       it "prints a specific message for the positive expectation format" do
         expectation_expression = "expect(collection).to have_at_most(3).items"
@@ -663,6 +673,11 @@ EOF
 
       expect(RSpec).to_not receive(:deprecate)
 
+      expect([1, 2, 3]).to have_at_least(3).items
+    end
+
+    it "has the correct call site in the deprecation message" do
+      expect_deprecation_with_call_site(__FILE__, __LINE__ + 1)
       expect([1, 2, 3]).to have_at_least(3).items
     end
 
