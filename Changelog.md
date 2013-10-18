@@ -3,6 +3,10 @@
 
 Deprecations
 
+* Deprecate `have`, `have_at_least` and `have_at_most`. You can continue using those
+	matchers through https://github.com/rspec/rspec-collection_matchers, or
+	you can rewrite your expectations with something like
+	`expect(your_object.size).to eq(num)` (Hugo Baraúna)
 * Deprecate `be_xyz` predicate matcher when `xyz?` is a private method
   (Jon Rowe).
 * Deprecate `be_true`/`be_false` in favour of `be_truthy`/`be_falsey`

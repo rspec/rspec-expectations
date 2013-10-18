@@ -11,7 +11,11 @@ module RSpec
                       else expected
                       end
           @relativity = relativity
+
           @actual = @collection_name = @plural_collection_name = nil
+          @target_owns_a_collection = false
+          @negative_expectation = false
+          @expectation_format_method = "to"
         end
 
         def relativities
@@ -29,13 +33,20 @@ module RSpec
             for query_method in QUERY_METHODS
               next unless collection.respond_to?(query_method)
               @actual = collection.__send__(query_method)
-              break unless @actual.nil?
+
+              if @actual
+                print_deprecation_message(query_method)
+                break
+              end
             end
+
             raise not_a_collection if @actual.nil?
           else
             query_method = determine_query_method(collection)
             raise not_a_collection unless query_method
             @actual = collection.__send__(query_method)
+
+            print_deprecation_message(query_method)
           end
           case @relativity
           when :at_least then @actual >= @expected
@@ -45,10 +56,18 @@ module RSpec
         end
         alias == matches?
 
+        def does_not_match?(collection_or_owner)
+          @negative_expectation = true
+          @expectation_format_method = "to_not"
+          !matches?(collection_or_owner)
+        end
+
         def determine_collection(collection_or_owner)
           if collection_or_owner.respond_to?(@collection_name)
+            @target_owns_a_collection = true
             collection_or_owner.__send__(@collection_name, *@args, &@block)
           elsif (@plural_collection_name && collection_or_owner.respond_to?(@plural_collection_name))
+            @target_owns_a_collection = true
             collection_or_owner.__send__(@plural_collection_name, *@args, &@block)
           elsif determine_query_method(collection_or_owner)
             collection_or_owner
@@ -117,6 +136,83 @@ EOF
 
         def enumerator_class
           RUBY_VERSION < '1.9' ? Enumerable::Enumerator : Enumerator
+        end
+
+        def print_deprecation_message(query_method)
+          deprecation_message = "the rspec-collection_matchers gem "
+          deprecation_message << "or replace your expectation with something like "
+          deprecation_message << "`expect(#{cardinality_expression(query_method)}).#{expectation_format_method} #{suggested_matcher_expression}`"
+
+          RSpec.deprecate("`#{expectation_expression(query_method)}`", :replacement => deprecation_message)
+        end
+
+        def expectation_expression(query_method)
+          if @negative_expectation
+            RSpec::Expectations::Syntax.negative_expression(target_expression, original_matcher_expression)
+          else
+            RSpec::Expectations::Syntax.positive_expression(target_expression, original_matcher_expression)
+          end
+        end
+
+        def target_expression
+          if @target_owns_a_collection
+            'collection_owner'
+          else
+            'collection'
+          end
+        end
+
+        def original_matcher_expression
+          "#{matcher_method}(#{@expected}).#{@collection_name}"
+        end
+
+        def expectation_format_method
+          if @relativity == :exactly
+            @expectation_format_method
+          else
+            "to"
+          end
+        end
+
+        def cardinality_expression(query_method)
+          expression = "#{target_expression}."
+          expression << "#{@collection_name}." if @target_owns_a_collection
+          expression << String(query_method)
+        end
+
+        def suggested_matcher_expression
+          send("suggested_matcher_expression_for_#{@relativity}")
+        end
+
+        def suggested_matcher_expression_for_exactly
+          "eq(#{@expected})"
+        end
+
+        def suggested_matcher_expression_for_at_most
+          if @negative_expectation
+            "be > #{@expected}"
+          else
+            "be <= #{@expected}"
+          end
+        end
+
+        def suggested_matcher_expression_for_at_least
+          if @negative_expectation
+            "be < #{@expected}"
+          else
+            "be >= #{@expected}"
+          end
+        end
+
+        def matcher_method
+          case @relativity
+          when :exactly
+            "have"
+          when :at_most
+            "have_at_most"
+          when :at_least
+            "have_at_least"
+          end
         end
       end
     end
