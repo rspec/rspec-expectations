@@ -489,7 +489,7 @@ EOF
     end
 
     context "when the target owns a collection" do
-      class BagOfWords
+      class self::BagOfWords
         attr_reader :words
 
         def initialize(words)
@@ -588,7 +588,7 @@ EOF
     end
 
     context "when the target owns a collection" do
-      class BagOfWords
+      class self::BagOfWords
         attr_reader :words
 
         def initialize(words)
