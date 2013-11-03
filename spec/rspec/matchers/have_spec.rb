@@ -10,7 +10,10 @@ describe "have matcher" do
     end
   end
 
-  before(:each) { stub_const("ActiveSupport::Inflector", inflector) }
+  before(:each) do
+    stub_const("ActiveSupport::Inflector", inflector)
+    allow_deprecation
+  end
 
   def create_collection_owner_with(n)
     owner = RSpec::Expectations::Helper::CollectionOwner.new
