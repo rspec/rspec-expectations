@@ -10,7 +10,10 @@ describe "have matcher" do
     end
   end
 
-  before(:each) { stub_const("ActiveSupport::Inflector", inflector) }
+  before(:each) do
+    stub_const("ActiveSupport::Inflector", inflector)
+    allow_deprecation
+  end
 
   def create_collection_owner_with(n)
     owner = RSpec::Expectations::Helper::CollectionOwner.new
@@ -486,7 +489,7 @@ EOF
     end
 
     context "when the target owns a collection" do
-      class BagOfWords
+      class self::BagOfWords
         attr_reader :words
 
         def initialize(words)
@@ -585,7 +588,7 @@ EOF
     end
 
     context "when the target owns a collection" do
-      class BagOfWords
+      class self::BagOfWords
         attr_reader :words
 
         def initialize(words)
