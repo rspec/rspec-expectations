@@ -127,6 +127,8 @@ module RSpec
       if String.method_defined?(:encoding)
         def matching_encoding(string, source)
           string.encode(source.encoding)
+        rescue Encoding::UndefinedConversionError
+          string          
         end
       else
         def matching_encoding(string, source)
