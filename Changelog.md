@@ -6,9 +6,9 @@ Deprecations
 * Deprecate `have`, `have_at_least` and `have_at_most`. You can continue using those
 	matchers through https://github.com/rspec/rspec-collection_matchers, or
 	you can rewrite your expectations with something like
-	`expect(your_object.size).to eq(num)` (Hugo Baraúna)
-* Deprecate `be_xyz` predicate matcher when `xyz?` is a private method
-  (Jon Rowe).
+	`expect(your_object.size).to eq(num)`. (Hugo Baraúna)
+* Deprecate `be_xyz` predicate matcher when `xyz?` is a private method.
+  (Jon Rowe)
 * Deprecate `be_true`/`be_false` in favour of `be_truthy`/`be_falsey`
   (for Ruby's conditional semantics) or `be true`/`be false`
   (for exact equality). (Sam Phippen)
@@ -25,7 +25,7 @@ Deprecations
 
 Bug fixes:
 
-* Make the `match` matcher produce a diff output (Jon Rowe, Ben Moss)
+* Make the `match` matcher produce a diff output. (Jon Rowe, Ben Moss)
 
 ### 2.14.3 / 2013-09-22
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.2...v2.14.3)
