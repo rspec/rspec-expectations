@@ -1,3 +1,6 @@
+### 2.14.5 Development
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.4...2-14-maintenance)
+
 ### 2.14.4 / 2013-11-06
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.3...v2.14.4)
 
