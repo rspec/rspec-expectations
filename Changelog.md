@@ -1,5 +1,5 @@
-### Development
-[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.3...2-99-maintenance)
+### 2.99 Development
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.4...2-99-maintenance)
 
 Deprecations
 
@@ -23,7 +23,10 @@ Deprecations
   * RSpec 2.x allowed helper methods defined either way to be used for
     either purpose, but RSpec 3.0 will not.
 
-Bug fixes:
+### 2.14.4 / 2013-11-06
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.3...v2.14.4)
+
+Bug fixes
 
 * Make the `match` matcher produce a diff output. (Jon Rowe, Ben Moss)
 * Choose encoding for diff's more intelligently, and when all else fails fall
