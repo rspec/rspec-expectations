@@ -26,6 +26,8 @@ Deprecations
 Bug fixes:
 
 * Make the `match` matcher produce a diff output. (Jon Rowe, Ben Moss)
+* Choose encoding for diff's more intelligently, and when all else fails fall
+  back to default internal encoding with replacing characters. (Jon Rowe)
 
 ### 2.14.3 / 2013-09-22
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.2...v2.14.3)
