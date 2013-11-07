@@ -1,5 +1,5 @@
-### 2.99 Development
-[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.4...2-99-maintenance)
+### 2.99.0.beta1 / 2013-11-07
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.4...v2.99.0.beta1)
 
 Deprecations
 
