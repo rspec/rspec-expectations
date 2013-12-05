@@ -247,6 +247,80 @@ describe "expect { ... }.not_to change { block }" do
   end
 end
 
+describe "expect { ... }.not_to change { }.from" do
+  context 'when the value starts at the from value' do
+    it 'passes when the value does not change' do
+      k = 5
+      expect { }.not_to change { k }.from(5)
+    end
+
+    it 'fails when the value does change' do
+      expect {
+        k = 5
+        expect { k += 1 }.not_to change { k }.from(5)
+      }.to fail_with(/but did change from 5 to 6/)
+    end
+
+    it 'does not issue a deprecation warning' do
+      expect(RSpec.configuration.reporter).not_to receive(:deprecation)
+      k = 5
+      expect { }.not_to change { k }.from(5)
+    end
+  end
+
+  context 'when the value starts at a different value' do
+    before { allow_deprecation }
+
+    it 'passes when the value does not change' do
+      k = 6
+      expect { }.not_to change { k }.from(5)
+    end
+
+    it 'passes when the value does change' do
+      k = 6
+      expect { k += 1 }.not_to change { k }.from(5)
+    end
+
+    it 'issues a deprecation warning' do
+      expect_deprecation_with_call_site(__FILE__, __LINE__ + 2, /#{Regexp.escape("expect { }.not_to change { }.from()")}/)
+      k = 6
+      expect { }.not_to change { k }.from(5)
+    end
+  end
+end
+
+describe "expect { ... }.not_to change { }.to" do
+  it 'issues a deprecation warning' do
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /#{Regexp.escape("expect { }.not_to change { }.to()")}/)
+    expect {
+    }.not_to change { }.to(3)
+  end
+end
+
+describe "expect { ... }.not_to change { }.by" do
+  it 'issues a deprecation warning' do
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /#{Regexp.escape("expect { }.not_to change { }.by()")}/)
+    expect {
+    }.not_to change { }.by(3)
+  end
+end
+
+describe "expect { ... }.not_to change { }.by_at_least" do
+  it 'issues a deprecation warning' do
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /#{Regexp.escape("expect { }.not_to change { }.by_at_least()")}/)
+    expect {
+    }.not_to change { }.by_at_least(3)
+  end
+end
+
+describe "expect { ... }.not_to change { }.by_at_most" do
+  it 'issues a deprecation warning' do
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /#{Regexp.escape("expect { }.not_to change { }.by_at_most()")}/)
+    expect {
+    }.not_to change { }.by_at_most(3)
+  end
+end
+
 describe "expect { ... }.to change(actual, message).by(expected)" do
   before(:each) do
     @instance = SomethingExpected.new

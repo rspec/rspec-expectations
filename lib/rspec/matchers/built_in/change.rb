@@ -20,6 +20,41 @@ module RSpec
         end
         alias == matches?
 
+        def does_not_match?(event_proc, &block)
+          expression = if @expected_delta
+            "by()"
+          elsif @minimum
+            "by_at_least()"
+          elsif @maximum
+            "by_at_most()"
+          elsif @eval_after
+            "to()"
+          end
+
+          if expression
+            RSpec.deprecate("`expect { }.not_to change { }.#{expression}`")
+          end
+
+          matched_positively = matches?(event_proc, &block)
+
+          unless matches_before?
+            RSpec.warn_deprecation(<<-EOS.gsub(/^\s+\|/, ''))
+              |--------------------------------------------------------------------
+              |The semantics of `expect { }.not_to change { }.from()` are changing
+              |in RSpec 3. In RSpec 2.x, this would pass if the value changed but
+              |the starting value was not what you specified with `from()`. In
+              |RSpec 3, this will only pass if the starting value matches your
+              |`from()` value _and_ it has not changed.
+              |
+              |You have an expectation that relies upon the old RSpec 2.x semantics
+              |at: #{CallerFilter.first_non_rspec_line}"
+              |--------------------------------------------------------------------
+            EOS
+          end
+
+          !matched_positively
+        end
+
         def raise_block_syntax_error
           raise SyntaxError.new(<<-MESSAGE)
 block passed to should or should_not change must use {} instead of do/end

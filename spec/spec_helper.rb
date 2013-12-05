@@ -5,10 +5,12 @@ module DeprecationHelpers
     allow(RSpec.configuration.reporter).to receive(:deprecation)
   end
 
-  def expect_deprecation_with_call_site(file, line)
+  def expect_deprecation_with_call_site(file, line, snippet = //)
     expect(RSpec.configuration.reporter).to receive(:deprecation) do |options|
       matcher = include([file, line].join(':'))
-      unless matcher.matches?(options[:call_site])
+      call_site = options[:call_site] || options[:message]
+
+      unless matcher.matches?(call_site)
         # RSpec::Expectations::ExpectationNotMetError is rescued in the `match` block
         # of a custom matcher and returned as `false` from `matches?`. This would
         # prevent an expectation failure here from surfacing in the test suite if
@@ -16,6 +18,9 @@ module DeprecationHelpers
         # a different error class instead.
         raise matcher.failure_message_for_should
       end
+
+      deprecated = options[:deprecated] || options[:message]
+      expect(deprecated).to match(snippet)
     end
   end
 end

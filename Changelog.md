@@ -1,7 +1,22 @@
+### 2.99.0.beta2 Development
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0.beta1...v2.99.0.beta2)
+
+Deprecations:
+
+* Deprecate chaining `by`, `by_at_least`, `by_at_most` or `to` off of
+  `expect { }.not_to change { }`. The docs have always said these are
+  not supported for the negative form but now they explicitly raise
+  errors in RSpec 3. (Myron Marston)
+* Change the semantics of `expect { }.not_to change { x }.from(y)`.
+  In RSpec 2.x, this expectation would only fail if `x` started with
+  the value of `y` and changed. If it started with a different value
+  and changed, it would pass. In RSpec 3, it will pass only if the
+  value starts at `y` and it does not change. (Myron Marston)
+
 ### 2.99.0.beta1 / 2013-11-07
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.4...v2.99.0.beta1)
 
-Deprecations
+Deprecations:
 
 * Deprecate `have`, `have_at_least` and `have_at_most`. You can continue using those
 	matchers through https://github.com/rspec/rspec-collection_matchers, or
