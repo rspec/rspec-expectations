@@ -264,7 +264,7 @@ end
 
 describe "expect(...).to be_false" do
   it "is deprecated" do
-    expect(RSpec).to receive(:deprecate).with(/be_false/, :replacement => match(/falsey.*false/))
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /be_false/)
     expect(false).to be_false
   end
 
@@ -288,7 +288,7 @@ end
 
 describe "expect(...).to be_true" do
   it "is deprecated" do
-    expect(RSpec).to receive(:deprecate).with(/be_true/, :replacement => match(/truthy.*true/))
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /be_true/)
     expect(true).to be_true
   end
 
