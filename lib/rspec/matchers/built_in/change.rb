@@ -2,6 +2,8 @@ module RSpec
   module Matchers
     module BuiltIn
       class Change
+        include MatchAliases
+
         def initialize(receiver=nil, message=nil, &block)
           @message = message
           @value_proc = block || lambda {receiver.__send__(message)}
@@ -18,7 +20,6 @@ module RSpec
 
           (!change_expected? || changed?) && matches_before? && matches_after? && matches_expected_delta? && matches_min? && matches_max?
         end
-        alias == matches?
 
         def does_not_match?(event_proc, &block)
           expression = if @expected_delta

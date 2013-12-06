@@ -193,7 +193,8 @@ end
 
 describe "expect { ... }.to change { block }" do
   o = SomethingExpected.new
-  it_behaves_like "an RSpec matcher", :valid_value => lambda { o.some_value = 5 },
+  o.some_value = 1
+  it_behaves_like "an RSpec matcher", :valid_value => lambda { o.some_value += 1 },
                                       :invalid_value => lambda { } do
     let(:matcher) { change { o.some_value } }
   end

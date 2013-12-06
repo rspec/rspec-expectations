@@ -60,24 +60,18 @@ module RSpec::Matchers::BuiltIn
       end
     end
 
-    describe "#==" do
-      it "responds the same way as matches?" do
-        matcher = Class.new(BaseMatcher) do
-          def initialize(expected)
-            @expected = expected
-          end
-
-          def matches?(actual)
-            (@actual = actual) == @expected
-          end
+    it_behaves_like "an RSpec matcher", :valid_value => 3, :invalid_value => 4 do
+      matcher_class = Class.new(BaseMatcher) do
+        def initialize(expected)
+          @expected = expected
         end
 
-        expect(matcher.new(3).matches?(3)).to be_truthy
-        expect(matcher.new(3)).to eq(3)
-
-        expect(matcher.new(3).matches?(4)).to be_falsey
-        expect(matcher.new(3)).not_to eq(4)
+        def matches?(actual)
+          (@actual = actual) == @expected
+        end
       end
+
+      let(:matcher) { matcher_class.new(3) }
     end
   end
 end

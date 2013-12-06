@@ -2,6 +2,8 @@ module RSpec
   module Matchers
     module BuiltIn
       class RaiseError
+        include MatchAliases
+
         def initialize(expected_error_or_message=Exception, expected_message=nil, &block)
           @block = block
           @actual_error = nil
@@ -51,7 +53,6 @@ module RSpec
         ensure
           return (@raised_expected_error & @with_expected_message) ? (@eval_block ? @eval_block_passed : true) : false
         end
-        alias == matches?
 
         def does_not_match?(given_proc)
           !matches?(given_proc, :negative_expectation)
