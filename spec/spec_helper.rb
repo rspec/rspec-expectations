@@ -5,6 +5,10 @@ module DeprecationHelpers
     allow(RSpec.configuration.reporter).to receive(:deprecation)
   end
 
+  def expect_no_deprecation
+    expect(RSpec.configuration.reporter).not_to receive(:deprecation)
+  end
+
   def expect_deprecation_with_call_site(file, line, snippet = //)
     expect(RSpec.configuration.reporter).to receive(:deprecation) do |options|
       matcher = include([file, line].join(':'))

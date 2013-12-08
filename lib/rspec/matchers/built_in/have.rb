@@ -2,6 +2,8 @@ module RSpec
   module Matchers
     module BuiltIn
       class Have
+        include MatchAliases
+
         QUERY_METHODS = [:size, :length, :count].freeze
 
         def initialize(expected, relativity=:exactly)
@@ -54,7 +56,6 @@ module RSpec
           else                @actual == @expected
           end
         end
-        alias == matches?
 
         def does_not_match?(collection_or_owner)
           @negative_expectation = true

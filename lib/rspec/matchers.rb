@@ -1,6 +1,7 @@
 require 'rspec/matchers/extensions/instance_eval_with_args'
 require 'rspec/matchers/pretty'
 
+require 'rspec/matchers/match_aliases'
 require 'rspec/matchers/built_in'
 require 'rspec/matchers/matcher'
 require 'rspec/matchers/operator_matcher'
