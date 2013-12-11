@@ -12,6 +12,7 @@ module RSpec
       autoload :BeAKindOf,      'rspec/matchers/built_in/be_kind_of'
       autoload :BeWithin,       'rspec/matchers/built_in/be_within'
       autoload :Change,         'rspec/matchers/built_in/change'
+      autoload :Compound,       'rspec/matchers/built_in/compound'
       autoload :Cover,          'rspec/matchers/built_in/cover' if (1..2).respond_to?(:cover?)
       autoload :Eq,             'rspec/matchers/built_in/eq'
       autoload :Eql,            'rspec/matchers/built_in/eql'
@@ -31,9 +32,6 @@ module RSpec
       autoload :YieldWithArgs,  'rspec/matchers/built_in/yield'
       autoload :YieldWithNoArgs, 'rspec/matchers/built_in/yield'
       autoload :YieldSuccessiveArgs, 'rspec/matchers/built_in/yield'
-      autoload :Composite,      'rspec/matchers/built_in/composite'
-      autoload :AndComposite,   'rspec/matchers/built_in/and_composite'
-      autoload :OrComposite,    'rspec/matchers/built_in/or_composite'
     end
   end
 end
