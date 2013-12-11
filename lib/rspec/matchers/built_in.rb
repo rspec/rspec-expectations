@@ -31,6 +31,9 @@ module RSpec
       autoload :YieldWithArgs,  'rspec/matchers/built_in/yield'
       autoload :YieldWithNoArgs, 'rspec/matchers/built_in/yield'
       autoload :YieldSuccessiveArgs, 'rspec/matchers/built_in/yield'
+      autoload :Composite,      'rspec/matchers/built_in/composite'
+      autoload :AndComposite,   'rspec/matchers/built_in/and_composite'
+      autoload :OrComposite,    'rspec/matchers/built_in/or_composite'
     end
   end
 end
