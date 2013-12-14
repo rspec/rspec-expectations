@@ -211,21 +211,40 @@ describe "operator matchers", :uses_should do
     let(:custom_subklass) { Class.new(custom_klass) }
 
     after {
-      RSpec::Matchers::OperatorMatcher.unregister(custom_klass, "=~")
+      RSpec::Matchers::BuiltIn::OperatorMatcher.unregister(custom_klass, "=~")
     }
 
     it "allows operator matchers to be registered for types" do
-      RSpec::Matchers::OperatorMatcher.register(custom_klass, "=~", RSpec::Matchers::BuiltIn::Match)
-      expect(RSpec::Matchers::OperatorMatcher.get(custom_klass, "=~")).to eq(RSpec::Matchers::BuiltIn::Match)
+      RSpec::Matchers::BuiltIn::OperatorMatcher.register(custom_klass, "=~", RSpec::Matchers::BuiltIn::Match)
+      expect(RSpec::Matchers::BuiltIn::OperatorMatcher.get(custom_klass, "=~")).to eq(RSpec::Matchers::BuiltIn::Match)
     end
 
     it "considers ancestors when finding an operator matcher" do
-      RSpec::Matchers::OperatorMatcher.register(custom_klass, "=~", RSpec::Matchers::BuiltIn::Match)
-      expect(RSpec::Matchers::OperatorMatcher.get(custom_subklass, "=~")).to eq(RSpec::Matchers::BuiltIn::Match)
+      RSpec::Matchers::BuiltIn::OperatorMatcher.register(custom_klass, "=~", RSpec::Matchers::BuiltIn::Match)
+      expect(RSpec::Matchers::BuiltIn::OperatorMatcher.get(custom_subklass, "=~")).to eq(RSpec::Matchers::BuiltIn::Match)
     end
 
     it "returns nil if there is no matcher registered for a type" do
-      expect(RSpec::Matchers::OperatorMatcher.get(custom_klass, "=~")).to be_nil
+      expect(RSpec::Matchers::BuiltIn::OperatorMatcher.get(custom_klass, "=~")).to be_nil
+    end
+
+    context "when accessing it using the old 2.x const name" do
+      it 'returns the new constant scoped by `BuiltIn`' do
+        allow_deprecation
+        expect(RSpec::Matchers::OperatorMatcher).to be(RSpec::Matchers::BuiltIn::OperatorMatcher)
+      end
+
+      it 'issues a deprecation warning' do
+        expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /OperatorMatcher/)
+        RSpec::Matchers::OperatorMatcher
+      end
+
+      it 'allows other undefined constant to raise errors like normal' do
+        expect_no_deprecation
+        expect {
+          RSpec::Matchers::FooBarBazz
+        }.to raise_error(NameError, /RSpec::Matchers::FooBarBazz/)
+      end
     end
   end
 

@@ -708,6 +708,14 @@ module RSpec
       BuiltIn::MatchArray.new(array)
     end
 
-    OperatorMatcher.register(Enumerable, '=~', BuiltIn::MatchArray)
+    BuiltIn::OperatorMatcher.register(Enumerable, '=~', BuiltIn::MatchArray)
+
+    def self.const_missing(name)
+      return super unless name == :OperatorMatcher
+
+      RSpec.deprecate("RSpec::Matchers::OperatorMatcher",
+                      :replacement => "RSpec::Matchers::BuiltIn::OperatorMatcher")
+      BuiltIn::OperatorMatcher
+    end
   end
 end
