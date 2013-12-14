@@ -14,6 +14,8 @@ Deprecations:
   value starts at `y` and it does not change. (Myron Marston)
 * Deprecate `matcher == value` as an alias for `matcher.matches?(value)`,
   in favor of `matcher === value`. (Myron Marston)
+* Deprecate `RSpec::Matchers::OperatorMatcher` in favor of
+  `RSpec::Matchers::BuiltIn::OperatorMatcher`. (Myron Marston)
 
 ### 2.99.0.beta1 / 2013-11-07
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.4...v2.99.0.beta1)
