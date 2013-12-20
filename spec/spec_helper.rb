@@ -2,7 +2,7 @@ require 'rspec/support/spec'
 
 RSpec::Support::Spec.setup_simplecov do
   minimum_coverage 97
-end
+end unless RUBY_ENGINE == 'rbx'
 
 Dir['./spec/support/**/*'].each {|f| require f}
 
