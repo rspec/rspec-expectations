@@ -16,6 +16,7 @@ module RSpec
 
       if ::RUBY_VERSION.to_f > 1.8
         def respond_to_missing?(name, include_all=false)
+          puts "respond_to_missing?(#{name})" if $log
           super || base_matcher.respond_to?(name, include_all)
         end
       else

@@ -72,7 +72,7 @@ module RSpec
       end
 
       def self.does_not_match?(matcher, actual, &block)
-        if matcher.respond_to?(:does_not_match?)
+        if matcher.respond_to?(:does_not_match?).tap { |v| puts("#{matcher}.respond_to?(:does_not_match) = #{v}") if $log }
           matcher.does_not_match?(actual, &block)
         else
           !matcher.matches?(actual, &block)
