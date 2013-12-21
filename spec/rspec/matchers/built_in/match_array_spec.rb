@@ -261,6 +261,15 @@ describe "Composing `match_array` with other matchers" do
         expect(["food", "fool"]).to match_array([a_string_matching(/fool/), a_string_matching(/foo/)])
       end
     end
+
+    5.upto(10) do |size|
+      expected = Array.new(size) { rand(100) }
+      actual   = Array.new(size) { rand(100) }
+
+      it "works with arrays of #{size} items" do
+        expect(expected).to match_array(actual)
+      end
+    end
   end
 end
 
