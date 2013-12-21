@@ -4,6 +4,7 @@ module RSpec
       class MatchArray < BaseMatcher
         def match(expected, actual)
           return false unless actual.respond_to? :to_ary
+          expected = best_expected_permutation
 
           @extra_items = difference_between_arrays(actual, expected) do |a, e|
             values_match?(e, a)
@@ -54,6 +55,22 @@ module RSpec
 
           remaining
         end
+
+        def best_expected_permutation
+          scored_expected_permutations.max_by(&:match_count).permutation
+        end
+
+        def scored_expected_permutations
+          expected.permutation.map do |expected_perm|
+            score = expected_perm.zip(actual).count do |(e, a)|
+              values_match?(e, a)
+            end
+
+            ScoredPermutation.new(expected_perm, score)
+          end
+        end
+
+        ScoredPermutation = Struct.new(:permutation, :match_count)
       end
     end
   end

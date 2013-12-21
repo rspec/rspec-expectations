@@ -248,9 +248,7 @@ describe "Composing `match_array` with other matchers" do
       end
 
       it 'works when the actual items match in reverse order' do
-        pending "need to figure out a matching algorithm that works for this case" do
-          expect(["fool", "food"]).to match_array([a_string_matching(/foo/), a_string_matching(/fool/)])
-        end
+        expect(["fool", "food"]).to match_array([a_string_matching(/foo/), a_string_matching(/fool/)])
       end
     end
 
