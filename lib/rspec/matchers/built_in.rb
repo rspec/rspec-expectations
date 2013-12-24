@@ -12,6 +12,7 @@ module RSpec
       autoload :BePredicate,             'rspec/matchers/built_in/be'
       autoload :BeAKindOf,               'rspec/matchers/built_in/be_kind_of'
       autoload :BeWithin,                'rspec/matchers/built_in/be_within'
+      autoload :CaptureIo,               'rspec/matchers/built_in/capture_io'
       autoload :Change,                  'rspec/matchers/built_in/change'
       autoload :Compound,                'rspec/matchers/built_in/compound'
       autoload :Cover,                   'rspec/matchers/built_in/cover' if (1..2).respond_to?(:cover?)
