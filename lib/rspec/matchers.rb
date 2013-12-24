@@ -252,6 +252,12 @@ module RSpec
       BuiltIn::BeWithin.new(delta)
     end
 
+    # Passes if <tt>actual.equal?(expected)</tt> (object identity).
+    #
+    def capture_io(expected)
+      BuiltIn::CaptureIo.new(expected)
+    end
+
     # Applied to a proc, specifies that its execution will cause some value to
     # change.
     #
