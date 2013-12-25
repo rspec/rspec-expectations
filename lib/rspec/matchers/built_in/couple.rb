@@ -3,13 +3,13 @@ require 'stringio'
 module RSpec
   module Matchers
     module BuiltIn
-      class CaptureIo < BaseMatcher
+      class Couple < BaseMatcher
         def initialize(expected)
           @expected = expected
         end
 
         def matches?
-          capture_io
+          output_to_stream
         end
 
         def failure_message
@@ -17,7 +17,7 @@ module RSpec
         end
 
         private
-        def capture_io
+        def output_to_stream
           captured_stdout, captured_stderr = StringIO.new, StringIO.new
 
           orig_stdout, orig_stderr = $stdout, $stderr
@@ -33,8 +33,12 @@ module RSpec
         end
       end
 
-      def capture_io(expected)
-        Capture_io.new(expected)
+      def output_to_stdout(expected)
+        Couple.new(expected)
+      end
+
+      def output_to_stderr(expected)
+        Couple.new(expected)
       end
     end
   end
