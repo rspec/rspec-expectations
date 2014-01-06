@@ -274,6 +274,14 @@ describe "expect(...).to be_truthy" do
   end
 end
 
+describe "expect(...).to be_true" do
+  it "fails with a helpful message" do
+    expect {
+      expect(true).to be_true
+    }.to raise_error(NoMethodError, '`be_true` has been removed in favor of `be true` and `be_truthy`.')
+  end
+end
+
 describe "expect(...).to be_falsey" do
   it "passes when actual equal?(false)" do
     expect(false).to be_falsey
@@ -303,6 +311,14 @@ describe "expect(...).to be_falsy" do
     expect {
       expect(true).to be_falsy
     }.to fail_with("expected: falsey value\n     got: true")
+  end
+end
+
+describe "expect(...).to be_false" do
+  it "fails with a helpful message" do
+    expect {
+      expect(false).to be_false
+    }.to raise_error(NoMethodError, '`be_false` has been removed in favor of `be false` and `be_falsey`.')
   end
 end
 
