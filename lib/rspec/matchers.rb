@@ -245,6 +245,10 @@ module RSpec
     end
     alias_matcher :a_truthy_value, :be_truthy
 
+    def be_true
+      raise NoMethodError, '`be_true` has been removed in favor of `be true` and `be_truthy`.'
+    end
+
     # Passes if actual is falsey (false or nil)
     def be_falsey
       BuiltIn::BeFalsey.new
@@ -252,6 +256,10 @@ module RSpec
     alias_matcher :be_falsy,       :be_falsey
     alias_matcher :a_falsey_value, :be_falsey
     alias_matcher :a_falsy_value,  :be_falsey
+
+    def be_false
+      raise NoMethodError, '`be_false` has been removed in favor of `be false` and `be_falsey`.'
+    end
 
     # Passes if actual is nil
     def be_nil
