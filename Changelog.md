@@ -40,6 +40,12 @@ Enhancements:
   long time as a dynamic predicate matcher, but the failure message
   was suboptimal. The new matcher provides a much better failure
   message. (Erik Michaels-Ober)
+* Enhance the `be_between` matcher to allow for `inclusive` or `exclusive`
+  comparison (e.g. inclusive of min/max or exclusive of min/max).
+  (Pedro Gimenez)
+* Make failure message for `not_to be #{operator}` less confusing by
+  only saying it's confusing when comparison operators are used.
+  (Prathamesh Sonpatki)
 
 Breaking Changes for 3.0.0:
 
@@ -61,6 +67,8 @@ Bug Fixes:
 * Fix wrong matcher descriptions with falsey expected value (yujinakayama)
 * Fix `expect { }.not_to change { }.from(x)` so that the matcher only
   passes if the starting value is `x`. (Tyler Rick, Myron Marston)
+* Fix hash diffing, so that it colorizes properly and doesn't consider trailing
+  commas when performing the diff. (Jared Norman)
 
 Deprecations:
 
