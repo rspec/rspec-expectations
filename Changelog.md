@@ -16,6 +16,9 @@ Deprecations:
   in favor of `matcher === value`. (Myron Marston)
 * Deprecate `RSpec::Matchers::OperatorMatcher` in favor of
   `RSpec::Matchers::BuiltIn::OperatorMatcher`. (Myron Marston)
+* Deprecate auto-integration with Test::Unit and minitest.
+  Instead, include `RSpec::Matchers` in the appropriate test case
+  base class yourself. (Myron Marston)
 
 ### 2.99.0.beta1 / 2013-11-07
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.4...v2.99.0.beta1)
