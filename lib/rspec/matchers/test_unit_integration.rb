@@ -3,13 +3,13 @@
 # and a 1.9 bug can lead to infinite recursion from the `super` call in our
 # method_missing hook.  See this gist for more info:
 # https://gist.github.com/845896
-if defined?(MiniTest::Unit::TestCase)
-  MiniTest::Unit::TestCase.add_setup_hook do |instance|
+if defined?(MiniTest::TestCase)
+  MiniTest::TestCase.add_setup_hook do |instance|
     unless ::RSpec::Matchers === instance
       ::RSpec.deprecate("rspec-expectations' built-in integration with minitest < 5.x",
-                        :replacement => "`include RSpec::Matchers` from within `Minitest::Unit::TestCase`")
+                        :replacement => "`include RSpec::Matchers` from within `Minitest::TestCase`")
 
-      MiniTest::Unit::TestCase.send(:include, RSpec::Matchers)
+      MiniTest::TestCase.send(:include, RSpec::Matchers)
     end
   end
 elsif defined?(Test::Unit::TestCase)
