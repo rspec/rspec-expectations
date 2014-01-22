@@ -20,3 +20,13 @@ Then /^the example should fail$/ do
   step %q{the output should contain "1 failure"}
   step %q{the exit status should not be 0}
 end
+
+deprecation_message = /rspec-expectations' built-in integration with (Test::Unit|minitest < 5.x) is deprecated/
+
+Then /^the output should contain a deprecation warning about rspec\-expecations' built\-in integration$/ do
+  expect(all_output).to match(deprecation_message)
+end
+
+Then /^the output should not contain a deprecation warning about rspec\-expecations' built\-in integration$/ do
+  expect(all_output).not_to match(deprecation_message)
+end
