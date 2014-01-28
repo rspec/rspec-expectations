@@ -50,7 +50,7 @@ module RSpec
         expect(Expectations.method_handle_for(object, :foo).call).to eq :bar
       end
 
-      it 'fetches method definitions for basic objects', :if => RUBY_VERSION.to_i >= 2 do
+      it 'fetches method definitions for basic objects', :if => (RUBY_VERSION.to_i >= 2 && RUBY_ENGINE != 'rbx') do
         object = BasicClass.new
         expect(Expectations.method_handle_for(object, :foo).call).to eq :bar
       end
