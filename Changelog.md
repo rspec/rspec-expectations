@@ -1,5 +1,5 @@
-### 2.14.5 Development
-[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.4...2-14-maintenance)
+### 2.14.5 / 2014-02-01
+[full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.4...v2.14.5)
 
 Bug fixes
 
