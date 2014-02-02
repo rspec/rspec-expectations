@@ -37,7 +37,7 @@ module RSpec
 
           while !line
             stack = caller(i, increment)
-            raise "No non-lib lines in stack" unless stack
+            return nil unless stack
 
             line = stack.find { |l| l !~ LIB_REGEX }
 
