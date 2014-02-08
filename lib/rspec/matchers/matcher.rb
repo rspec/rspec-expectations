@@ -11,7 +11,7 @@ module RSpec
         include RSpec::Matchers::Pretty
         include RSpec::Matchers
 
-        attr_reader :expected, :actual, :rescued_exception
+        attr_reader :actual, :rescued_exception
         attr_accessor :matcher_execution_context
 
         # @api private
@@ -33,6 +33,19 @@ module RSpec
           :@match_block, :@match_for_should_not_block,
           :@expected_exception
         ].to_set
+
+        # @api private
+        def expected
+          if @expected.size == 1
+            RSpec.warn_deprecation(
+              "Custom matchers in 3.x will set expected to be a single value "+
+              "(when provided as such) rather than an array. This may change "+
+              "the behaviour of your matcher.\n"+
+              "Called from: #{ RSpec::CallerFilter.first_non_rspec_line }\n\n"
+            )
+          end
+          @expected
+        end
 
         # @api private
         def for_expected(*expected)
