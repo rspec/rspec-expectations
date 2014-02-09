@@ -15,6 +15,14 @@ describe "have matcher" do
     allow_deprecation
   end
 
+  def expect_have_deprecation(expression, message)
+    expect_deprecation_with_type(
+      "`#{expression}`",
+      message,
+      'the have matcher'
+    )
+  end
+
   def create_collection_owner_with(n)
     owner = RSpec::Expectations::Helper::CollectionOwner.new
     (1..n).each do |number|
@@ -470,7 +478,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.size).to eq(3)`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect([1, 2, 3]).to have(3).items
       end
@@ -482,7 +490,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.size).to_not eq(4)`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect([1, 2, 3]).to_not have(4).items
       end
@@ -504,7 +512,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection_owner.words.size).to eq(3)`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         target = BagOfWords.new(%w[foo bar baz])
         expect(target).to have(3).words
@@ -517,7 +525,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection_owner.words.size).to_not eq(4)`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         target = BagOfWords.new(%w[foo bar baz])
         expect(target).to_not have(4).words
@@ -534,7 +542,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.count).to eq(3)`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect(target).to have(3).letters
       end
@@ -548,7 +556,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.count).to_not eq(4)`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect(target).to_not have(4).letters
       end
@@ -569,7 +577,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.size).to be <= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect([1, 2, 3]).to have_at_most(3).items
       end
@@ -581,7 +589,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.size).to be > 2`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect([1, 2, 3]).to_not have_at_most(2).items
       end
@@ -603,7 +611,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection_owner.words.size).to be <= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         target = BagOfWords.new(%w[foo bar baz])
         expect(target).to have_at_most(3).words
@@ -616,7 +624,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection_owner.words.size).to be > 2`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         target = BagOfWords.new(%w[foo bar baz])
         expect(target).to_not have_at_most(2).words
@@ -633,7 +641,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.count).to be <= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect(target).to have_at_most(3).letters
       end
@@ -647,7 +655,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.count).to be > 2`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect(target).to_not have_at_most(2).letters
       end
@@ -668,7 +676,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.size).to be >= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect([1, 2, 3]).to have_at_least(3).items
       end
@@ -680,7 +688,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.size).to be < 4`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect([1, 2, 3]).to_not have_at_least(4).items
       end
@@ -702,7 +710,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection_owner.words.size).to be >= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         target = BagOfWords.new(%w[foo bar baz])
         expect(target).to have_at_least(3).words
@@ -715,7 +723,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection_owner.words.size).to be < 4`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         target = BagOfWords.new(%w[foo bar baz])
         expect(target).to_not have_at_least(4).words
@@ -732,7 +740,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.count).to be >= 3`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect(target).to have_at_least(3).letters
       end
@@ -746,7 +754,7 @@ EOF
                   "or replace your expectation with something like " +
                   "`expect(collection.count).to be < 4`"
 
-        expect(RSpec).to receive(:deprecate).with("`#{expectation_expression}`", :replacement => message)
+        expect_have_deprecation(expectation_expression, message)
 
         expect(target).to_not have_at_least(4).letters
       end
