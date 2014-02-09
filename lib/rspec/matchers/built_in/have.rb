@@ -144,7 +144,10 @@ EOF
           deprecation_message << "or replace your expectation with something like "
           deprecation_message << "`expect(#{cardinality_expression(query_method)}).#{expectation_format_method} #{suggested_matcher_expression}`"
 
-          RSpec.deprecate("`#{expectation_expression(query_method)}`", :replacement => deprecation_message)
+          RSpec.deprecate("`#{expectation_expression(query_method)}`",
+            :replacement => deprecation_message,
+            :type        => "the have matcher"
+          )
         end
 
         def expectation_expression(query_method)
