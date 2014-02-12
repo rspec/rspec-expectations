@@ -143,6 +143,12 @@ module RSpec::Matchers::DSL
       expect(matcher.expected).to eq %w[expected strings]
     end
 
+    it "provides expected as an array" do
+      expect_no_deprecation
+      matcher = RSpec::Matchers::DSL::Matcher.new(:name) {}.for_expected('expected string')
+      expect(matcher.expected_as_array).to eq ['expected string']
+    end
+
     it "warns of deprecation about expected when it's a single value" do
       expect_deprecation_with_call_site __FILE__, __LINE__ + 2
       matcher = RSpec::Matchers::DSL::Matcher.new(:name) {}.for_expected('expected string')

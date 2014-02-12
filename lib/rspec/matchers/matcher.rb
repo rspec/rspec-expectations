@@ -34,16 +34,20 @@ module RSpec
           :@expected_exception
         ].to_set
 
-        # @api private
         def expected
           if @expected.size == 1
             RSpec.warn_deprecation(
               "Custom matchers in 3.x will set expected to be a single value "+
               "(when provided as such) rather than an array. This may change "+
               "the behaviour of your matcher.\n"+
+              "To continue to access this as an array use `expected_array`\n"+
               "Called from: #{ RSpec::CallerFilter.first_non_rspec_line }\n\n"
             )
           end
+          @expected
+        end
+
+        def expected_as_array
           @expected
         end
 
