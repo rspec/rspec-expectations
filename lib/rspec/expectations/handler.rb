@@ -31,7 +31,11 @@ module RSpec
                     matcher.failure_message
 
         if matcher.respond_to?(:diffable?) && matcher.diffable?
-          ::RSpec::Expectations.fail_with message, matcher.expected, matcher.actual
+          if RSpec::Matchers::DSL::Matcher === matcher
+            ::RSpec::Expectations.fail_with message, matcher.expected_as_array, matcher.actual
+          else
+            ::RSpec::Expectations.fail_with message, matcher.expected, matcher.actual
+          end
         else
           ::RSpec::Expectations.fail_with message
         end
