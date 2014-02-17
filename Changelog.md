@@ -19,6 +19,10 @@ Deprecations:
 * Deprecate auto-integration with Test::Unit and minitest.
   Instead, include `RSpec::Matchers` in the appropriate test case
   base class yourself. (Myron Marston)
+* Deprecate treating `#expected` on a DSL-generated custom matcher
+  as an array when only 1 argument is passed to the matcher method.
+  In RSpec 3 it will be the single value in order to make diffs
+  work properly. (Jon Rowe)
 
 ### 2.99.0.beta1 / 2013-11-07
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.14.4...v2.99.0.beta1)
