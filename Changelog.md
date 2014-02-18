@@ -1,4 +1,4 @@
-### 2.99.0.beta2 Development
+### 2.99.0.beta2 / 2014-02-17
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0.beta1...v2.99.0.beta2)
 
 Deprecations:
