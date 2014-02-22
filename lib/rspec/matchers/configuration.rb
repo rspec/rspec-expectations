@@ -1,4 +1,4 @@
-require 'rspec/expectations/syntax'
+require_rspec_expectations 'expectations/syntax'
 
 module RSpec
   module Matchers
