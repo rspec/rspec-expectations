@@ -1,10 +1,10 @@
-require 'rspec/matchers/pretty'
-require 'rspec/matchers/composable'
-require 'rspec/matchers/built_in'
-require 'rspec/matchers/generated_descriptions'
-require 'rspec/matchers/dsl'
-require 'rspec/matchers/matcher_delegator'
-require 'rspec/matchers/aliased_matcher'
+require_rspec_expectations 'matchers/pretty'
+require_rspec_expectations 'matchers/composable'
+require_rspec_expectations 'matchers/built_in'
+require_rspec_expectations 'matchers/generated_descriptions'
+require_rspec_expectations 'matchers/dsl'
+require_rspec_expectations 'matchers/matcher_delegator'
+require_rspec_expectations 'matchers/aliased_matcher'
 
 module RSpec
   # RSpec::Matchers provides a number of useful matchers we use to define

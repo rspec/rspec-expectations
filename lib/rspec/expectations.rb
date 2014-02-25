@@ -1,13 +1,22 @@
+if Kernel.respond_to?(:require_relative)
+  def require_rspec_expectations(path)
+    require_relative path
+  end
+else
+  def require_rspec_expectations(path)
+    require "rspec/#{path}"
+  end
+end
 require 'rspec/support/caller_filter'
 require 'rspec/support/warnings'
 
-require 'rspec/matchers'
-require 'rspec/expectations/expectation_target'
-require 'rspec/matchers/configuration'
-require 'rspec/expectations/fail_with'
-require 'rspec/expectations/handler'
-require 'rspec/expectations/version'
-require 'rspec/expectations/diff_presenter'
+require_rspec_expectations 'matchers'
+require_rspec_expectations 'expectations/expectation_target'
+require_rspec_expectations 'matchers/configuration'
+require_rspec_expectations 'expectations/fail_with'
+require_rspec_expectations 'expectations/handler'
+require_rspec_expectations 'expectations/version'
+require_rspec_expectations 'expectations/diff_presenter'
 
 module RSpec
   # RSpec::Expectations provides a simple, readable API to express

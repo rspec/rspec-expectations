@@ -1,4 +1,4 @@
-require 'rspec/matchers/dsl'
+require_rspec_expectations 'matchers/dsl'
 
 module RSpec
   module Matchers
