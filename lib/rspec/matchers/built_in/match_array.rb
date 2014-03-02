@@ -27,7 +27,7 @@ module RSpec
         end
 
         def description
-          "contain exactly #{to_sentence(expected)}"
+          "contain exactly#{to_sentence(expected)}"
         end
 
         private

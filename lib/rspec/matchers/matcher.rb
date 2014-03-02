@@ -344,15 +344,15 @@ module RSpec
         end
 
         def default_description
-          "#{name_to_sentence}#{expected_to_sentence}"
+          "#{name_to_sentence}#{to_sentence expected_as_array}"
         end
 
         def default_failure_message_for_should
-          "expected #{actual.inspect} to #{name_to_sentence}#{expected_to_sentence}"
+          "expected #{actual.inspect} to #{name_to_sentence}#{to_sentence expected_as_array}"
         end
 
         def default_failure_message_for_should_not
-          "expected #{actual.inspect} not to #{name_to_sentence}#{expected_to_sentence}"
+          "expected #{actual.inspect} not to #{name_to_sentence}#{to_sentence expected_as_array}"
         end
 
         unless method_defined?(:singleton_class)
