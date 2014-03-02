@@ -21,7 +21,8 @@ module RSpec
       end
 
       def _pretty_print(array)
-        RSpec.deprecate("`RSpec::Matchers::Pretty#_pretty_print`")
+        RSpec.deprecate("`RSpec::Matchers::Pretty#_pretty_print`",
+                        :replacement => "`RSpec::Matchers::Pretty#to_sentence`")
         result = ""
         array.each_with_index do |item, index|
           if index < (array.length - 2)
@@ -44,7 +45,8 @@ module RSpec
       end
 
       def expected_to_sentence
-        RSpec.deprecate("`RSpec::Matchers::Pretty#expected_to_sentence`")
+        RSpec.deprecate("`RSpec::Matchers::Pretty#expected_to_sentence`",
+                        :replacement => "`RSpec::Matchers::Pretty#to_sentence(expected)`")
         to_sentence(@expected) if defined?(@expected)
       end
 
