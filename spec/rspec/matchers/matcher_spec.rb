@@ -604,5 +604,34 @@ module RSpec::Matchers::DSL
       end
     end
 
+    describe "#matcher_execution_context" do
+      before { allow_deprecation }
+
+      let(:matcher) do
+        RSpec::Matchers::DSL::Matcher.new :foo do |expected|
+        end.for_expected(:bar)
+      end
+
+      it 'can be set' do
+        expect {
+          matcher.matcher_execution_context = :the_context
+        }.to change(matcher, :matcher_execution_context).to(:the_context)
+      end
+
+      it 'is the target of method_missing delegation' do
+        matcher.matcher_execution_context = double(:abcd => "efg")
+        expect(matcher.abcd).to eq("efg")
+      end
+
+      specify "the writer is deprecated" do
+        expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /matcher_execution_context/)
+        matcher.matcher_execution_context = :the_context
+      end
+
+      specify "the reader is deprecated" do
+        expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /matcher_execution_context/)
+        matcher.matcher_execution_context
+      end
+    end
   end
 end
