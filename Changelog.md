@@ -5,6 +5,7 @@ Deprecations:
 
 * Deprecate `matcher_execution_context` attribute on DSL-defined
   custom matchers. (Myron Marston)
+* Deprecate `RSpec::Matchers::Pretty._pretty_print. (Myron Marston)
 
 ### 2.99.0.beta2 / 2014-02-17
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0.beta1...v2.99.0.beta2)

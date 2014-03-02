@@ -21,6 +21,7 @@ module RSpec
       end
 
       def _pretty_print(array)
+        RSpec.deprecate("`RSpec::Matchers::Pretty#_pretty_print`")
         result = ""
         array.each_with_index do |item, index|
           if index < (array.length - 2)
