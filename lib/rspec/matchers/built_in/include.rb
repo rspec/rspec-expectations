@@ -17,7 +17,7 @@ module RSpec
         end
 
         def description
-          "include#{expected_to_sentence}"
+          "include#{to_sentence expected}"
         end
 
         def diffable?

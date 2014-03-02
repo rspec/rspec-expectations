@@ -12,7 +12,6 @@ module RSpec
         include RSpec::Matchers
 
         attr_reader :actual, :rescued_exception
-        attr_accessor :matcher_execution_context
 
         # @api private
         def initialize(name, &declarations)
@@ -26,6 +25,7 @@ module RSpec
           @define_block_executed = false
           @block_method_differentiator = nil
           @deprecated_methods = Set.new
+          @matcher_execution_context = nil
         end
 
         PERSISTENT_INSTANCE_VARIABLES = [
@@ -49,6 +49,16 @@ module RSpec
 
         def expected_as_array
           @expected
+        end
+
+        def matcher_execution_context=(value)
+          RSpec.deprecate("`matcher_execution_context=` on custom matchers")
+          @matcher_execution_context = value
+        end
+
+        def matcher_execution_context
+          RSpec.deprecate("`matcher_execution_context` on custom matchers")
+          @matcher_execution_context
         end
 
         # @api private
@@ -250,14 +260,14 @@ module RSpec
         end
 
         def respond_to?(method, include_private=false)
-          super || matcher_execution_context.respond_to?(method, include_private)
+          super || @matcher_execution_context.respond_to?(method, include_private)
         end
 
         private
 
         def method_missing(method, *args, &block)
-          if matcher_execution_context.respond_to?(method)
-            matcher_execution_context.__send__ method, *args, &block
+          if @matcher_execution_context.respond_to?(method)
+            @matcher_execution_context.__send__ method, *args, &block
           else
             super(method, *args, &block)
           end
@@ -334,15 +344,15 @@ module RSpec
         end
 
         def default_description
-          "#{name_to_sentence}#{expected_to_sentence}"
+          "#{name_to_sentence}#{to_sentence expected_as_array}"
         end
 
         def default_failure_message_for_should
-          "expected #{actual.inspect} to #{name_to_sentence}#{expected_to_sentence}"
+          "expected #{actual.inspect} to #{name_to_sentence}#{to_sentence expected_as_array}"
         end
 
         def default_failure_message_for_should_not
-          "expected #{actual.inspect} not to #{name_to_sentence}#{expected_to_sentence}"
+          "expected #{actual.inspect} not to #{name_to_sentence}#{to_sentence expected_as_array}"
         end
 
         unless method_defined?(:singleton_class)
