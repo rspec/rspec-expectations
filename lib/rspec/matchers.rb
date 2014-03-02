@@ -711,11 +711,17 @@ module RSpec
     BuiltIn::OperatorMatcher.register(Enumerable, '=~', BuiltIn::MatchArray)
 
     def self.const_missing(name)
-      return super unless name == :OperatorMatcher
-
-      RSpec.deprecate("RSpec::Matchers::OperatorMatcher",
-                      :replacement => "RSpec::Matchers::BuiltIn::OperatorMatcher")
-      BuiltIn::OperatorMatcher
+      case name
+        when :OperatorMatcher
+          RSpec.deprecate("`RSpec::Matchers::OperatorMatcher`",
+                          :replacement => "`RSpec::Matchers::BuiltIn::OperatorMatcher`")
+          BuiltIn::OperatorMatcher
+        when :Configuration
+          RSpec.deprecate("`RSpec::Matchers::Configuration`",
+                          :replacement => "`RSpec::Expectations::Configuration`")
+          Expectations::Configuration
+        else super
+      end
     end
   end
 end

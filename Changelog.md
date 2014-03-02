@@ -7,6 +7,8 @@ Deprecations:
   custom matchers. (Myron Marston)
 * Deprecate `RSpec::Matchers::Pretty#_pretty_print`. (Myron Marston)
 * Deprecate `RSpec::Matchers::Pretty#expected_to_sentence`. (Myron Marston)
+* Deprecate `RSpec::Matchers::Configuration` in favor of
+  `RSpec::Expectations::Configuration`. (Myron Marston)
 
 ### 2.99.0.beta2 / 2014-02-17
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0.beta1...v2.99.0.beta2)

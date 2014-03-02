@@ -1,7 +1,7 @@
 require 'rspec/expectations/syntax'
 
 module RSpec
-  module Matchers
+  module Expectations
     # Provides configuration options for rspec-expectations.
     class Configuration
       # Configures the supported syntax.
@@ -94,11 +94,13 @@ module RSpec
         end
       end
     end
+  end
 
+  module Matchers
     # The configuration object
-    # @return [RSpec::Matchers::Configuration] the configuration object
+    # @return [RSpec::Expectations::Configuration] the configuration object
     def self.configuration
-      @configuration ||= Configuration.new
+      @configuration ||= Expectations::Configuration.new
     end
 
     # set default syntax
