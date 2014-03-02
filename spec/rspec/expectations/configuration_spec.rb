@@ -2,16 +2,35 @@ require 'spec_helper'
 require 'delegate'
 
 module RSpec
-  module Matchers
+  module Expectations
     describe "RSpec::Matchers.configuration" do
       it 'returns a memoized configuration instance' do
-        expect(RSpec::Matchers.configuration).to be_a(RSpec::Matchers::Configuration)
+        expect(RSpec::Matchers.configuration).to be_a(RSpec::Expectations::Configuration)
         expect(RSpec::Matchers.configuration).to be(RSpec::Matchers.configuration)
       end
     end
 
     describe Configuration do
       let(:config) { Configuration.new }
+
+      context "when accessing it using the old 2.x const name" do
+        it 'returns the new constant' do
+          allow_deprecation
+          expect(RSpec::Matchers::Configuration).to be(RSpec::Expectations::Configuration)
+        end
+
+        it 'issues a deprecation warning' do
+          expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /RSpec::Matchers::Configuration/)
+          RSpec::Matchers::Configuration
+        end
+
+        it 'allows other undefined constant to raise errors like normal' do
+          expect_no_deprecation
+          expect {
+            RSpec::Matchers::FooBarBazz
+          }.to raise_error(NameError, /RSpec::Matchers::FooBarBazz/)
+        end
+      end
 
       describe "#backtrace_formatter" do
         let(:original_backtrace) { %w[ clean-me/a.rb other/file.rb clean-me/b.rb ] }
