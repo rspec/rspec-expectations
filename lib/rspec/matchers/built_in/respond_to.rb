@@ -19,8 +19,6 @@ module RSpec
         # @example
         #   expect(obj).to respond_to(:message).with(1).argument
         #   expect(obj).to respond_to(:message).with(3).arguments
-        #   expect(obj).to respond_to(:message).with(:x).keyword_argument
-        #   expect(obj).to respond_to(:message).with(:x, :y).keyword_arguments
         def with(n)
           @expected_args = Array.new(n)
           @expected_arity = n
