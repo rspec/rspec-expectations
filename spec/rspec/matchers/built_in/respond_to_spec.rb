@@ -288,3 +288,42 @@ describe "expect(...).not_to respond_to(:sym).with(2).arguments" do
   end
 end
 
+describe "support for keyword arguments", :if => RSpec::Support::RubyFeatures.kw_args_supported? do
+  describe "expect(...).to respond_to(:sym).with_keyword_argument(:x)" do
+    it "passes if target responds to :sym with :x keyword arg" do
+      obj = Object.new
+      eval("def obj.foo(x: nil); end")
+      puts obj.method(:foo).parameters
+      expect(obj).to respond_to(:foo).with_keyword_argument(:x => nil)
+    end
+
+    it "passes if target responds to one or more arguments" do
+      obj = Object.new
+      eval("def obj.foo(x: nil, y: nil); end")
+      expect(obj).to respond_to(:foo).with_keyword_argument(:x => nil)
+    end
+
+    it "fails if target does not respond to :sym" do
+      obj = Object.new
+      expect {
+        expect(obj).to respond_to(:foo).with_keyword_argument(:x => nil)
+      }.to fail_with(/expected .* to respond to :foo/)
+    end
+
+    it "fails if :sym expects 0 args" do
+      obj = Object.new
+      def obj.foo; end
+      expect {
+        expect(obj).to respond_to(:foo).with_keyword_argument(:x => nil)
+      }.to fail_with(/expected #<Object.*> to respond to :foo with argument x: nil/)
+    end
+
+    it "fails if :sym expects diffrent keyword args" do
+      obj = Object.new
+      eval("def obj.foo(y: nil, z: nil); end")
+      expect {
+        expect(obj).to respond_to(:foo).with_keyword_argument(:x => nil)
+      }.to fail_with(/expected #<Object.*> to respond to :foo with argument x: nil/)
+    end
+  end
+end
