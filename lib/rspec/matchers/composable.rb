@@ -36,6 +36,24 @@ module RSpec
         BuiltIn::Compound::Or.new self, matcher
       end
 
+      # Creates a negative `~` expectation. The matcher will
+      # negate the current matcher.
+      #
+      # @example
+      #   expect(stoplight.color).to ~eq("blue")
+      #   expect(stoplight.color).to !eq("pink")
+      #
+      # This can be chained together to form an arbitrarily long
+      # chain of matchers.
+      #
+      # @example
+      #   expect(stoplight.color).to ~( eq("blue").or eq("pink") )
+      #   expect(stoplight.color).to ( ~eq("blue" ).or ( ~eq("pink") )
+      def ~
+        BuiltIn::Negation.new self
+      end
+      alias :! :~
+
       # Delegates to `#matches?`. Allows matchers to be used in composable
       # fashion and also supports using matchers in case statements.
       def ===(value)
