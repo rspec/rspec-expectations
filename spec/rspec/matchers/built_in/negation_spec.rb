@@ -58,11 +58,19 @@ module RSpec::Matchers::BuiltIn
     end
 
     context 'expect(...).to ~(~matcher)' do
+
       it 'can pass' do
-        expect('A').to ~~eq('A')
+        expect('A').to ~(~eq('A'))
       end
+
       it 'can pass' do
         expect('A').to !!eq('A')
+      end
+
+      it 'returns the original matcher' do
+        original_matcher = eq('A')
+        double_negate_matcher = ~(~original_matcher)
+        expect(original_matcher).to eq double_negate_matcher
       end
     end
 

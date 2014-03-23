@@ -50,7 +50,11 @@ module RSpec
       #   expect(stoplight.color).to ~( eq("blue").or eq("pink") )
       #   expect(stoplight.color).to ( ~eq("blue" ).or ( ~eq("pink") )
       def ~
-        BuiltIn::Negation.new self
+        if self.is_a?(BuiltIn::Negation)
+          self.matcher
+        else
+          BuiltIn::Negation.new self
+        end
       end
       alias :! :~
 

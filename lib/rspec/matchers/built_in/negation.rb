@@ -4,7 +4,7 @@ module RSpec
       # @api private
       # Base class for `~` and `!` compound matchers.
       class Negation < BaseMatcher
-        attr_reader :matcher
+        attr_accessor :matcher
 
         def initialize(matcher)
           @matcher = matcher
