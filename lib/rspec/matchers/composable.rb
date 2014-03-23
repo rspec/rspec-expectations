@@ -36,8 +36,7 @@ module RSpec
         BuiltIn::Compound::Or.new self, matcher
       end
 
-      # Creates a negative expectation.
-      # The matcher will negate the current matcher.
+      # Negates a matcher.
       #
       # @example
       #   expect(stoplight.color).to ~eq("blue")
