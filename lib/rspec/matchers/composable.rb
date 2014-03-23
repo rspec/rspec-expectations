@@ -56,6 +56,7 @@ module RSpec
         end
       end
       alias :! :~
+      alias :not :~
 
       # Delegates to `#matches?`. Allows matchers to be used in composable
       # fashion and also supports using matchers in case statements.
