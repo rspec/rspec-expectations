@@ -22,18 +22,26 @@ module RSpec
           matcher.failure_message
         end
 
+        def does_not_match?(actual)
+          matcher.matches?(actual)
+        end
+
       private
 
         def match(_, actual)
+          if matcher.respond_to?(:does_not_match?)
+            matcher.does_not_match?(actual)
+          else
+            reverse_matches?(actual)
+          end
+        end
+
+        def reverse_matches?(actual)
           if matcher.matches?(actual)
             false
           else
             true
           end
-        end
-
-        def does_not_match?(actual)
-          matcher.matches?(actual)
         end
 
       end
