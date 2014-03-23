@@ -1,5 +1,5 @@
 module RSpec::Matchers::BuiltIn
-  describe Negation do
+  describe Negation, :if => (RUBY_VERSION.to_f > 1.8) do
 
     describe :description do
       it 'provides a description' do
