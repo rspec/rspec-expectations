@@ -98,6 +98,43 @@ module RSpec
       def expect_enabled?(syntax_host = ::RSpec::Matchers)
         syntax_host.method_defined?(:expect)
       end
+
+      BOOLEAN_OPERATORS = [:|, :&, :!]
+
+      # @api private
+      # Enables the matcher boolean operators `|`, `&`, `!` syntax.
+      def enable_matcher_boolean_operators(syntax_host = ::RSpec::Matchers::Composable)
+        return if matcher_boolean_operators_enabled?(syntax_host)
+
+        syntax_host.module_exec do
+          alias :& :and
+          alias :| :or
+          alias :! :~
+        end
+      end
+
+      # @api private
+      # Disables the matcher boolean operators `|`, `&`, `!` syntax.
+      def disable_matcher_boolean_operators(syntax_host = ::RSpec::Matchers::Composable)
+        return unless matcher_boolean_operators_enabled?(syntax_host)
+
+        syntax_host.module_exec do
+          matcher_boolean_operators.each{ |method_name| remove_method(method_name) }
+        end
+      end
+
+      # @api private
+      # Indicates whether or not the matcher boolean operators `|`, `&`, `!` syntax is enabled.
+      def matcher_boolean_operators_enabled?(syntax_host = ::RSpec::Matchers::Composable)
+        matcher_boolean_operators.any?{ |method_name| syntax_host.method_defined?(method_name)}
+      end
+
+      # @api private
+      # see: RSpec::Matchers::Composable
+      def matcher_boolean_operators
+        @matcher_boolean_operators ||= [:|, :&, :!]
+      end
+
     end
   end
 end

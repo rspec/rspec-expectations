@@ -57,6 +57,14 @@ module RSpec
         syntaxes
       end
 
+      def enable_matcher_boolean_operators=(is_enabled)
+        if is_enabled
+          Expectations::Syntax.enable_matcher_boolean_operators
+        else
+          Expectations::Syntax.disable_matcher_boolean_operators
+        end
+      end
+
       if ::RSpec.respond_to?(:configuration)
         def color?
           ::RSpec.configuration.color_enabled?
