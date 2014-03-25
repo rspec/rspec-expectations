@@ -109,9 +109,9 @@ module RSpec
         return if matcher_boolean_operators_enabled?(syntax_host)
 
         syntax_host.module_exec do
-          alias :& :and
-          alias :| :or
-          alias :! :~
+          alias & and
+          alias | or
+          alias ! ~
         end
       end
 
