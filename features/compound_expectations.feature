@@ -43,6 +43,22 @@ Feature: Compound Expectations
     When I run `rspec stoplight_spec.rb`
     Then the example should pass
 
+  Scenario: Use `~` to negate an expectation
+    Given a file named "negate_spec.rb" with:
+      """ruby
+      RSpec.describe "negate an expectation" do
+        let(:string) { "foo bar bazz" }
+        it "passes" do
+          expect('A').to ~eq('B')
+        end
+        it "passes when negating twice" do
+          expect('A').to ~~eq('A')
+        end
+      end
+      """
+    When I run `rspec negate_spec.rb`
+    Then the example should pass
+
   Scenario: Explicitly enable matcher boolean operators `|`, `&`, `!` syntax.
     Given a file named "boolean_operators_spec.rb" with:
       """ruby
