@@ -43,3 +43,26 @@ Feature: Compound Expectations
     When I run `rspec stoplight_spec.rb`
     Then the example should pass
 
+  Scenario: Explicitly enable matcher boolean operators `|`, `&`, `!` syntax.
+    Given a file named "boolean_operators_spec.rb" with:
+      """ruby
+      RSpec.configure do |config|
+        config.expect_with :rspec do |c|
+          c.enable_matcher_boolean_operators = true
+        end
+      end
+
+      RSpec.describe 'using matcher boolean operators' do
+        it "allows using boolean OR operator '|'" do
+          expect('A').to eq('A') | eq('B')
+        end
+        it "allows using boolean AND operator '&'" do
+          expect('A').to eq('A') & be_a(String)
+        end
+        it "allows using boolean NOT operator '!'" do
+          expect('A').to !eq('B')
+        end
+      end
+      """
+    When I run `rspec boolean_operators_spec.rb`
+    Then the example should pass

@@ -210,7 +210,7 @@ module RSpec
         def configured_matcher_boolean_operators(is_enabled)
           RSpec.configure do |config|
             config.expect_with :rspec do |c|
-              return c.enable_matcher_boolean_operators = is_enabled
+              c.enable_matcher_boolean_operators = is_enabled
             end
           end
         end
@@ -222,11 +222,13 @@ module RSpec
                 expect('A').to eq('A') | eq('B')
               }.to raise_error(NameError)
             end
+
             it "disables using boolean AND operator '&'" do
               expect {
                 expect('A').to eq('A') & be_a(String)
               }.to raise_error(NameError)
             end
+
             it "disables using boolean NOT operator '!'" do
               expect {
                 expect('A').to !eq('B')
@@ -252,6 +254,7 @@ module RSpec
             it "allows using boolean AND operator '&'" do
               expect('A').to eq('A') & be_a(String)
             end
+
             it "allows using boolean NOT operator '!'" do
               expect('A').to !eq('B')
             end
