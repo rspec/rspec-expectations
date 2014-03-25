@@ -57,6 +57,8 @@ module RSpec
         syntaxes
       end
 
+      # Enables the matcher boolean operators `|`, `&`, `!` syntax.
+      # @param is_enabled [Boolean]
       def enable_matcher_boolean_operators=(is_enabled)
         if is_enabled
           Expectations::Syntax.enable_matcher_boolean_operators

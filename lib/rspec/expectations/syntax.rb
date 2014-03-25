@@ -7,6 +7,10 @@ module RSpec
       module_function
 
       # @api private
+      # see: RSpec::Matchers::Composable
+      BOOLEAN_OPERATORS = [:|, :&, :!]
+
+      # @api private
       # Determines where we add `should` and `should_not`.
       def default_should_host
         @default_should_host ||= ::Object.ancestors.last
@@ -99,8 +103,6 @@ module RSpec
         syntax_host.method_defined?(:expect)
       end
 
-      BOOLEAN_OPERATORS = [:|, :&, :!]
-
       # @api private
       # Enables the matcher boolean operators `|`, `&`, `!` syntax.
       def enable_matcher_boolean_operators(syntax_host = ::RSpec::Matchers::Composable)
@@ -119,20 +121,14 @@ module RSpec
         return unless matcher_boolean_operators_enabled?(syntax_host)
 
         syntax_host.module_exec do
-          matcher_boolean_operators.each{ |method_name| remove_method(method_name) }
+          BOOLEAN_OPERATORS.each{ |method_name| remove_method(method_name) }
         end
       end
 
       # @api private
       # Indicates whether or not the matcher boolean operators `|`, `&`, `!` syntax is enabled.
       def matcher_boolean_operators_enabled?(syntax_host = ::RSpec::Matchers::Composable)
-        matcher_boolean_operators.any?{ |method_name| syntax_host.method_defined?(method_name)}
-      end
-
-      # @api private
-      # see: RSpec::Matchers::Composable
-      def matcher_boolean_operators
-        @matcher_boolean_operators ||= [:|, :&, :!]
+        BOOLEAN_OPERATORS.any?{ |method_name| syntax_host.method_defined?(method_name)}
       end
 
     end

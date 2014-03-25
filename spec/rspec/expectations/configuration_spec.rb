@@ -204,6 +204,60 @@ module RSpec
         # in $default_expectation_syntax so we can use it here.
         expect($default_expectation_syntax).to contain_exactly(:expect, :should)
       end
+
+      describe 'configuring using the matcher boolean operators' do
+
+        def configured_matcher_boolean_operators(is_enabled)
+          RSpec.configure do |config|
+            config.expect_with :rspec do |c|
+              return c.enable_matcher_boolean_operators = is_enabled
+            end
+          end
+        end
+
+        context 'by default' do
+          describe 'matcher boolean operators are disabled' do
+            it "disables using boolean OR operator '|'" do
+              expect {
+                expect('A').to eq('A') | eq('B')
+              }.to raise_error(NameError)
+            end
+            it "disables using boolean AND operator '&'" do
+              expect {
+                expect('A').to eq('A') & be_a(String)
+              }.to raise_error(NameError)
+            end
+            it "disables using boolean NOT operator '!'" do
+              expect {
+                expect('A').to !eq('B')
+              }.to raise_error(ArgumentError)
+            end
+          end
+        end
+
+        context 'when the :enable_matcher_boolean_operators flag is on' do
+          describe 'matcher boolean operators are enabled' do
+            before(:all) do
+              configured_matcher_boolean_operators(true)
+            end
+
+            after(:all) do
+              configured_matcher_boolean_operators(false)
+            end
+
+            it "allows using boolean OR operator '|'" do
+              expect('A').to eq('A') | eq('B')
+            end
+
+            it "allows using boolean AND operator '&'" do
+              expect('A').to eq('A') & be_a(String)
+            end
+            it "allows using boolean NOT operator '!'" do
+              expect('A').to !eq('B')
+            end
+          end
+        end
+      end
     end
   end
 end
