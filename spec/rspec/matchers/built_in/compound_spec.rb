@@ -37,10 +37,6 @@ module RSpec::Matchers::BuiltIn
         it 'passes' do
           expect(3).to eq(3).and be >= 2
         end
-
-        it 'passes' do
-          expect(3).to eq(3) & be_an(Integer)
-        end
       end
 
       it 'has a description composed of both matcher descriptions' do
@@ -167,9 +163,6 @@ module RSpec::Matchers::BuiltIn
       context 'when both matchers pass' do
         it 'passes' do
           expect("foo").to start_with("f").or end_with("o")
-        end
-        it 'passes' do
-          expect("foo").to start_with("f") | end_with("o")
         end
       end
 
