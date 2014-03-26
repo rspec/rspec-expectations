@@ -1,11 +1,47 @@
 module RSpec::Matchers::BuiltIn
   describe Negation, :if => (RUBY_VERSION.to_f > 1.8) do
 
+    def configured_matcher_boolean_operators(is_enabled)
+      RSpec.configure do |config|
+        config.expect_with :rspec do |c|
+          c.enable_matcher_boolean_operators = is_enabled
+        end
+      end
+    end
+
+    before(:all) do
+      configured_matcher_boolean_operators(true)
+    end
+
+    after(:all) do
+      configured_matcher_boolean_operators(false)
+    end
+
     describe :description do
       it 'provides a description' do
         matcher = ~eq('A')
         matcher.matches?('A')
         expect(matcher.description).to eq 'not eq "A"'
+      end
+    end
+
+    describe 'failure message' do
+      let(:inner_matcher) { eq('A') }
+
+      it 'returns the matcher negated failure message' do
+        inner_matcher.matches?('A')
+        expect {
+          expect('A').to ~inner_matcher
+        }.to fail_with(inner_matcher.failure_message_when_negated)
+      end
+
+      context 'when negated' do
+        it 'returns the matcher negated failure message' do
+          inner_matcher.matches?('B')
+          expect {
+            expect('B').to_not ~inner_matcher
+          }.to fail_with(inner_matcher.failure_message)
+        end
       end
     end
 

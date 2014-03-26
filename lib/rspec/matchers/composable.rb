@@ -57,7 +57,7 @@ module RSpec
           BuiltIn::Negation.new self
         end
       end
-      alias :not :~
+      alias not ~
 
       # Delegates to `#matches?`. Allows matchers to be used in composable
       # fashion and also supports using matchers in case statements.
