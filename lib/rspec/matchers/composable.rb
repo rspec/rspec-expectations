@@ -45,12 +45,18 @@ module RSpec
       #   expect(stoplight.color).to !eq("pink")
       #   expect(stoplight.color).to ~~eq("red")
       #
-      # This can be chained together to form an arbitrarily long
-      # chain of matchers.
+      # On an individual matcher (as shown above) this is equivalent to using
+      # `expect(...).not_to`, and isn't particularly useful.
+      # Where it becomes quite useful is when using it in compound matcher expressions.
+      # It saves you from having to define a custom matcher for the negated form.
       #
       # @example
-      #   expect(stoplight.color).to ~( eq("blue").or eq("pink") )
-      #   expect(stoplight.color).to ( ~eq("blue" ).or ( ~eq("pink") )
+      #   expect(colors).to be_a(Set).and ~include(:cyan)
+      #
+      # @note The `!` and `not` forms are only available on 1.9+ and only if you have
+      #   set the `enable_matcher_boolean_operators` config option.
+      #
+      # @see RSpec::Expectations::Configuration#enable_matcher_boolean_operators
       def ~
         BuiltIn::Negation.new self
       end
