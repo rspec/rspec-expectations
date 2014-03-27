@@ -54,6 +54,10 @@ module RSpec::Matchers::BuiltIn
         expect('A').to !eq('B')
       end
 
+      it 'can pass' do
+        expect('A').to not(eq('B'))
+      end
+
       context 'when the matcher responds to :does_not_match?' do
         it 'can pass - with :does_not_match?' do
           actual = ['A', 'B']
@@ -82,6 +86,9 @@ module RSpec::Matchers::BuiltIn
       it 'can pass' do
         expect('A').to_not !eq('A')
       end
+      it 'can pass' do
+        expect('A').to_not not(eq('A'))
+      end
     end
 
     context 'expect(...).to (~matcher_1).and (~matcher_2)' do
@@ -101,6 +108,10 @@ module RSpec::Matchers::BuiltIn
 
       it 'can pass' do
         expect('A').to !!eq('A')
+      end
+
+      it 'can pass' do
+        expect('A').to not(not(eq('A')))
       end
 
       it 'returns the original matcher' do
