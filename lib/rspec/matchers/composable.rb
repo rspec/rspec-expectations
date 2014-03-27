@@ -43,6 +43,7 @@ module RSpec
       # @example
       #   expect(stoplight.color).to ~eq("blue")
       #   expect(stoplight.color).to !eq("pink")
+      #   expect(stoplight.color).to ~~eq("red")
       #
       # This can be chained together to form an arbitrarily long
       # chain of matchers.
@@ -51,13 +52,8 @@ module RSpec
       #   expect(stoplight.color).to ~( eq("blue").or eq("pink") )
       #   expect(stoplight.color).to ( ~eq("blue" ).or ( ~eq("pink") )
       def ~
-        if self.is_a?(BuiltIn::Negation)
-          self.matcher
-        else
-          BuiltIn::Negation.new self
-        end
+        BuiltIn::Negation.new self
       end
-      alias not ~
 
       # Delegates to `#matches?`. Allows matchers to be used in composable
       # fashion and also supports using matchers in case statements.

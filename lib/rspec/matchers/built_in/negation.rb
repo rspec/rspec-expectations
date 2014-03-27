@@ -4,10 +4,17 @@ module RSpec
       # @api private
       # Base class for `~` and `!` compound matchers.
       class Negation < BaseMatcher
-        attr_accessor :matcher
+        attr_reader :matcher
 
         def initialize(matcher)
           @matcher = matcher
+        end
+
+        # return the original matcher when negated twice
+        # @example
+        #   expect(stoplight.color).to ~~eq("green")
+        def ~
+          matcher
         end
 
         def description
@@ -32,15 +39,7 @@ module RSpec
           if matcher.respond_to?(:does_not_match?)
             matcher.does_not_match?(actual)
           else
-            reverse_matches?(actual)
-          end
-        end
-
-        def reverse_matches?(actual)
-          if matcher.matches?(actual)
-            false
-          else
-            true
+            !matcher.matches?(actual)
           end
         end
 
@@ -48,4 +47,3 @@ module RSpec
     end
   end
 end
-

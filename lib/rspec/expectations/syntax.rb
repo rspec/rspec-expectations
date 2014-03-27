@@ -111,7 +111,9 @@ module RSpec
         syntax_host.module_exec do
           alias & and
           alias | or
-          alias ! ~
+          def !
+            self.~
+          end
         end
       end
 
