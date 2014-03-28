@@ -16,3 +16,16 @@ time (for i in {1..50}; do DISABLE_AUTOLOAD=1 ruby -I./lib:../rspec-support/lib:
 #real  0m1.772s
 #user  0m1.402s
 #sys 0m0.323s
+
+# Again, using require_relative
+#With autoloading
+
+#real  0m1.250s
+#user  0m0.960s
+#sys 0m0.244s
+
+#Without autoloading
+
+#real  0m1.791s
+#user  0m1.418s
+#sys 0m0.328s

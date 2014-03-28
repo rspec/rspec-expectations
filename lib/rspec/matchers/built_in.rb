@@ -11,7 +11,7 @@ module RSpec
     # not using.
     module BuiltIn
       def self.autoload(_, file)
-        require file
+        require_relative file.sub("rspec/matchers/", "")
       end if ENV['DISABLE_AUTOLOAD']
 
       autoload :BeAKindOf,               'rspec/matchers/built_in/be_kind_of'
