@@ -10,6 +10,10 @@ module RSpec
     # rspec-matchers to boot faster, and avoiding loading matchers the user is
     # not using.
     module BuiltIn
+      def self.autoload(_, file)
+        require file
+      end if ENV['DISABLE_AUTOLOAD']
+
       autoload :BeAKindOf,               'rspec/matchers/built_in/be_kind_of'
       autoload :BeAnInstanceOf,          'rspec/matchers/built_in/be_instance_of'
       autoload :BeBetween,               'rspec/matchers/built_in/be_between'
