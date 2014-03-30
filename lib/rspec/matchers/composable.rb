@@ -43,6 +43,7 @@ module RSpec
       # @example
       #   expect(stoplight.color).to ~eq("blue")
       #   expect(stoplight.color).to !eq("pink")
+      #   expect(stoplight.color).to not(eq("pink"))
       #   expect(stoplight.color).to ~~eq("red")
       #
       # On an individual matcher (as shown above) this is equivalent to using

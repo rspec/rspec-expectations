@@ -79,6 +79,9 @@ Feature: Compound Expectations
         it "allows using boolean NOT operator '!'" do
           expect('A').to !eq('B')
         end
+        it "allows using boolean NOT operator 'not'" do
+          expect('A').to not(eq('B'))
+        end
       end
       """
     When I run `rspec boolean_operators_spec.rb`
