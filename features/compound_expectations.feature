@@ -59,6 +59,7 @@ Feature: Compound Expectations
     When I run `rspec negate_spec.rb`
     Then the example should pass
 
+  @ruby-1.9
   Scenario: Explicitly enable matcher boolean operators `|`, `&`, `!` syntax.
     Given a file named "boolean_operators_spec.rb" with:
       """ruby

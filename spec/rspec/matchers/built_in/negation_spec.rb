@@ -1,5 +1,5 @@
 module RSpec::Matchers::BuiltIn
-  describe Negation, :if => (RUBY_VERSION.to_f > 1.8) do
+  describe Negation do
 
     def configured_matcher_boolean_operators(is_enabled)
       RSpec.configure do |config|
@@ -50,11 +50,11 @@ module RSpec::Matchers::BuiltIn
         expect('A').to ~eq('B')
       end
 
-      it 'can pass' do
+      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to !eq('B')
       end
 
-      it 'can pass' do
+      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to not(eq('B'))
       end
 
@@ -83,10 +83,10 @@ module RSpec::Matchers::BuiltIn
       it 'can pass' do
         expect('A').to_not ~eq('A')
       end
-      it 'can pass' do
+      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to_not !eq('A')
       end
-      it 'can pass' do
+      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to_not not(eq('A'))
       end
     end
@@ -95,8 +95,11 @@ module RSpec::Matchers::BuiltIn
       it 'can pass' do
         expect('A').to (~eq('B')).and (~eq('C'))
       end
-      it 'can pass' do
+      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to (!eq('B')).and (!eq('C'))
+      end
+      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
+        expect('A').to (not(eq('B'))).and (not(eq('C')))
       end
     end
 
@@ -106,11 +109,11 @@ module RSpec::Matchers::BuiltIn
         expect('A').to ~(~eq('A'))
       end
 
-      it 'can pass' do
+      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to !!eq('A')
       end
 
-      it 'can pass' do
+      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to not(not(eq('A')))
       end
 
