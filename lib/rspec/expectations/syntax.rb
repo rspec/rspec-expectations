@@ -8,7 +8,7 @@ module RSpec
 
       # @api private
       # see: RSpec::Matchers::Composable
-      BOOLEAN_OPERATORS = [:|, :&, :!]
+      BOOLEAN_OPERATORS = ['|', '&', '!'].map(&:to_sym)
 
       # @api private
       # Determines where we add `should` and `should_not`.
