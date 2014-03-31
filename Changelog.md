@@ -29,6 +29,13 @@ Enhancements:
 * Document the remaining public APIs. rspec-expectations now has 100% of
   the public API documented and will remain that way (as new undocumented
   methods will fail the build). (Myron Marston)
+* Add support for negative form compound matcher expressions using `~`.
+    * `expect(stoplight.color).to ~eq("blue")`
+* Add support for matcher boolean operators using `|`, `&`, `!` syntax.
+  * `expect('A').to eq('A') | eq('B')`
+  * `expect('A').to eq('A') & be_a(String)`
+  Disabled by default, enable by doing:
+  * `RSpec.configuration.expect_with(:rspec) { |c| c.enable_matcher_boolean_operators = true }`
 
 ### 3.0.0.beta2 / 2014-02-17
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.0.beta1...v3.0.0.beta2)
