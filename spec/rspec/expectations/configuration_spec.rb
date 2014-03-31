@@ -210,11 +210,7 @@ module RSpec
         def configured_matcher_boolean_operators(is_enabled)
           RSpec.configure do |config|
             config.expect_with :rspec do |c|
-              if is_enabled
-                c.enable_matcher_boolean_operators!
-              else
-                c.disable_matcher_boolean_operators!
-              end
+              c.matcher_boolean_operators = is_enabled
             end
           end
         end
@@ -241,7 +237,7 @@ module RSpec
           end
         end
 
-        context 'when using the :enable_matcher_boolean_operators!', :if => (RUBY_VERSION.to_f > 1.8) do
+        context 'when the :matcher_boolean_operators flag is on', :if => (RUBY_VERSION.to_f > 1.8) do
           describe 'matcher boolean operators are enabled' do
             before(:all) do
               configured_matcher_boolean_operators(true)

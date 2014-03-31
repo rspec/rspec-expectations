@@ -58,18 +58,18 @@ module RSpec
       end
 
       # Enables the matcher boolean operators `|`, `&`, `!` syntax.
+      # @param is_enabled [Boolean]
       # @note this feature is only supported if
-      def enable_matcher_boolean_operators!
+      def matcher_boolean_operators=(is_enabled)
         if ::RUBY_VERSION.to_f < 1.9
           raise NotImplementedError, 'matcher boolean operators is only supported from MRI > 1.9'
         else
-          Expectations::Syntax.enable_matcher_boolean_operators
+          if is_enabled
+            Expectations::Syntax.enable_matcher_boolean_operators
+          else
+            Expectations::Syntax.disable_matcher_boolean_operators
+          end
         end
-      end
-
-      # Disables the matcher boolean operators `|`, `&`, `!` syntax.
-      def disable_matcher_boolean_operators!
-        Expectations::Syntax.disable_matcher_boolean_operators
       end
 
       if ::RSpec.respond_to?(:configuration)

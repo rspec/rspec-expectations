@@ -65,7 +65,7 @@ Feature: Compound Expectations
       """ruby
       RSpec.configure do |config|
         config.expect_with :rspec do |c|
-          c.enable_matcher_boolean_operators!
+          c.matcher_boolean_operators = true
         end
       end
 

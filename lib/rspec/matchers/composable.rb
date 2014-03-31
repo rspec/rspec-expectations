@@ -55,9 +55,9 @@ module RSpec
       #   expect(colors).to be_a(Set).and ~include(:cyan)
       #
       # @note The `!` and `not` forms are only available on 1.9+ and only if you have
-      #   set the `enable_matcher_boolean_operators` config option.
+      #   set the `matcher_boolean_operators` config option.
       #
-      # @see RSpec::Expectations::Configuration#enable_matcher_boolean_operators
+      # @see RSpec::Expectations::Configuration#matcher_boolean_operators=
       def ~
         BuiltIn::Negation.new self
       end
