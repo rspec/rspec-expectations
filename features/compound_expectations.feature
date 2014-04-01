@@ -47,12 +47,18 @@ Feature: Compound Expectations
     Given a file named "negate_spec.rb" with:
       """ruby
       RSpec.describe "negate an expectation" do
-        let(:string) { "foo bar bazz" }
         it "passes" do
-          expect('A').to ~eq('B')
+          expect(3..15).to ~cover(20)
         end
-        it "passes when negating twice" do
-          expect('A').to ~~eq('A')
+        it "passes with compound matcher" do
+          expect(3..15).to cover(12).and ~cover(20)
+        end
+        it "passes with compound matcher" do
+          colors = [:green, :yellow, :red]
+          expect(colors).to include(:red).and ~include(:blue)
+        end
+        it "passes with compound matcher" do
+          expect(7.1).to be_within(0.1).of(7.0).and ~(be_within(0.5).of(8.0))
         end
       end
       """

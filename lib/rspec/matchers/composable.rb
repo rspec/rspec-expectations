@@ -41,10 +41,9 @@ module RSpec
       # Negates a matcher.
       #
       # @example
-      #   expect(stoplight.color).to ~eq("blue")
-      #   expect(stoplight.color).to !eq("pink")
-      #   expect(stoplight.color).to not(eq("pink"))
-      #   expect(stoplight.color).to ~~eq("red")
+      #   expect(stoplight.colors).to ~include(:blue)
+      #   expect(3..15).to ~cover(20)
+      #   expect(7.1).to ~(be_within(0.5).of(8.0))
       #
       # On an individual matcher (as shown above) this is equivalent to using
       # `expect(...).not_to`, and isn't particularly useful.
@@ -52,7 +51,9 @@ module RSpec
       # It saves you from having to define a custom matcher for the negated form.
       #
       # @example
-      #   expect(colors).to be_a(Set).and ~include(:cyan)
+      #   expect(stoplight.colors).to include(:red).and ~include(:blue)
+      #   expect(3..15).to cover(12).and ~cover(20)
+      #   expect(7.1).to be_within(0.1).of(7.0).and ~(be_within(0.5).of(8.0))
       #
       # @note The `!` and `not` forms are only available on 1.9+ and only if you have
       #   set the `matcher_boolean_operators` config option.
