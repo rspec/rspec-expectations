@@ -111,6 +111,9 @@ module RSpec
         syntax_host.module_exec do
           alias & and
           alias | or
+          # RSpec::Matchers::BuiltIn::Negation defines `~`, to handle double negated matchers.
+          # We define `!` and not alias it, since an alias would be bound directly to this implementation of `~`
+          # and not call Negation's implementation
           def !
             self.~
           end
