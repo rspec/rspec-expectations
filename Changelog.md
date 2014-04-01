@@ -36,6 +36,7 @@ Enhancements:
   * `expect('A').to eq('A') & be_a(String)`
   Disabled by default, enable by doing:
   * `RSpec.configuration.expect_with(:rspec) { |c| c.matcher_boolean_operators = true }`
+  (Adam Farhi)
 
 ### 3.0.0.beta2 / 2014-02-17
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.0.beta1...v3.0.0.beta2)
