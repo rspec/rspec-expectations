@@ -2,7 +2,7 @@ module RSpec
   module Matchers
     module BuiltIn
       # @api private
-      # Base class for `~` and `!` compound matchers.
+      # Wraps and negates a matcher
       class Negation < BaseMatcher
         attr_reader :matcher
 
