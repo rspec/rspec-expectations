@@ -7,10 +7,6 @@ module RSpec
       module_function
 
       # @api private
-      # see: RSpec::Matchers::Composable
-      BOOLEAN_OPERATORS = ['|', '&', '!'].map(&:to_sym)
-
-      # @api private
       # Determines where we add `should` and `should_not`.
       def default_should_host
         @default_should_host ||= ::Object.ancestors.last
@@ -104,13 +100,11 @@ module RSpec
       end
 
       # @api private
-      # Enables the matcher boolean operators `|`, `&`, `!` syntax.
-      def enable_matcher_boolean_operators(syntax_host = ::RSpec::Matchers::Composable)
-        return if matcher_boolean_operators_enabled?(syntax_host)
+      # Enables the matcher boolean negation operator `!` syntax.
+      def enable_matcher_boolean_negation_operator(syntax_host = ::RSpec::Matchers::Composable)
+        return if matcher_boolean_negation_operator_enabled?(syntax_host)
 
         syntax_host.module_exec do
-          alias & and
-          alias | or
           # BuiltIn::Negation defines `~`, to handle double negated matchers.
           # We define `!` and not alias it, since an alias would be bound directly to this implementation of `~`
           # and not call Negation's implementation
@@ -121,19 +115,19 @@ module RSpec
       end
 
       # @api private
-      # Disables the matcher boolean operators `|`, `&`, `!` syntax.
-      def disable_matcher_boolean_operators(syntax_host = ::RSpec::Matchers::Composable)
-        return unless matcher_boolean_operators_enabled?(syntax_host)
+      # Disables the matcher boolean negation operator `!` syntax.
+      def disable_matcher_boolean_negation_operator(syntax_host = ::RSpec::Matchers::Composable)
+        return unless matcher_boolean_negation_operator_enabled?(syntax_host)
 
         syntax_host.module_exec do
-          BOOLEAN_OPERATORS.each{ |method_name| remove_method(method_name) }
+          remove_method(:!)
         end
       end
 
       # @api private
-      # Indicates whether or not the matcher boolean operators `|`, `&`, `!` syntax is enabled.
-      def matcher_boolean_operators_enabled?(syntax_host = ::RSpec::Matchers::Composable)
-        BOOLEAN_OPERATORS.any?{ |method_name| syntax_host.method_defined?(method_name)}
+      # Indicates whether or not the matcher boolean negation operator `!` syntax is enabled.
+      def matcher_boolean_negation_operator_enabled?(syntax_host = ::RSpec::Matchers::Composable)
+        syntax_host.method_defined?(:!)
       end
 
     end

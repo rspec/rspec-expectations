@@ -22,6 +22,7 @@ module RSpec
       def and(matcher)
         BuiltIn::Compound::And.new self, matcher
       end
+      alias & and
 
       # Creates a compound `or` expectation. The matcher will
       # pass if either sub-matcher passes.
@@ -37,6 +38,7 @@ module RSpec
       def or(matcher)
         BuiltIn::Compound::Or.new self, matcher
       end
+      alias | or
 
       # Negates a matcher.
       #

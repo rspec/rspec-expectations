@@ -207,28 +207,25 @@ module RSpec
 
       describe 'configuring using the matcher boolean operators' do
 
-        def configured_matcher_boolean_operators(is_enabled)
+        def configured_boolean_negation_operator(is_enabled)
           RSpec.configure do |config|
             config.expect_with :rspec do |c|
-              c.matcher_boolean_operators = is_enabled
+              c.matcher_boolean_negation_operator = is_enabled
             end
           end
         end
 
         context 'by default' do
-          describe 'matcher boolean operators are disabled' do
-            it "disables using boolean OR operator '|'" do
-              expect {
-                expect('A').to eq('A') | eq('B')
-              }.to raise_error(NameError)
-            end
 
-            it "disables using boolean AND operator '&'" do
-              expect {
-                expect('A').to eq('A') & be_a(String)
-              }.to raise_error(NameError)
-            end
+          it "allows using boolean OR operator '|'" do
+            expect('A').to eq('A') | eq('B')
+          end
 
+          it "allows using boolean AND operator '&'" do
+            expect('A').to eq('A') & be_a(String)
+          end
+
+          describe 'matcher boolean negation operator is disabled' do
             it "disables using boolean NOT operator '!'" do
               expect {
                 expect('A').to !eq('B')
@@ -237,27 +234,17 @@ module RSpec
           end
         end
 
-        context 'when the :matcher_boolean_operators flag is on', :if => (RUBY_VERSION.to_f > 1.8) do
-          describe 'matcher boolean operators are enabled' do
-            before(:all) do
-              configured_matcher_boolean_operators(true)
-            end
+        context 'when the :matcher_boolean_negation_operator flag is on', :if => (RUBY_VERSION.to_f > 1.8) do
+          before(:all) do
+            configured_boolean_negation_operator(true)
+          end
 
-            after(:all) do
-              configured_matcher_boolean_operators(false)
-            end
+          after(:all) do
+            configured_boolean_negation_operator(false)
+          end
 
-            it "allows using boolean OR operator '|'" do
-              expect('A').to eq('A') | eq('B')
-            end
-
-            it "allows using boolean AND operator '&'" do
-              expect('A').to eq('A') & be_a(String)
-            end
-
-            it "allows using boolean NOT operator '!'" do
-              expect('A').to !eq('B')
-            end
+          it "allows using boolean NOT operator '!'" do
+            expect('A').to !eq('B')
           end
         end
       end

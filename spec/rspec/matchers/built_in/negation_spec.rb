@@ -1,20 +1,20 @@
 module RSpec::Matchers::BuiltIn
   describe Negation do
 
-    def configured_matcher_boolean_operators(is_enabled)
+    def configured_matcher_boolean_negation_operator(is_enabled)
       RSpec.configure do |config|
         config.expect_with :rspec do |c|
-          c.matcher_boolean_operators = is_enabled
+          c.matcher_boolean_negation_operator = is_enabled
         end
       end
     end
 
     before(:all) do
-      configured_matcher_boolean_operators(true)
+      configured_matcher_boolean_negation_operator(true)
     end
 
     after(:all) do
-      configured_matcher_boolean_operators(false)
+      configured_matcher_boolean_negation_operator(false)
     end
 
     describe :description do
