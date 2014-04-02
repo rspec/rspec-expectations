@@ -18,7 +18,7 @@ module RSpec
         end
 
         def description
-          "not #{matcher.description}"
+          matcher.description_when_negated
         end
 
         def failure_message

@@ -77,5 +77,24 @@ module RSpec::Matchers::BuiltIn
         expect(matcher.new(3)).not_to be === 4
       end
     end
+
+    describe "#description_when_negated" do
+
+      base = Class.new(BaseMatcher) do
+        def initialize(expected)
+          @expected = expected
+        end
+        def description
+          'matcher description'
+        end
+      end
+
+      let(:matcher) { base.new(3) }
+
+      it 'provides generic negative description' do
+        expect(matcher.description_when_negated).to eq "not #{matcher.description}"
+      end
+    end
+
   end
 end

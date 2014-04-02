@@ -77,6 +77,14 @@ module RSpec
         end
 
         # @api private
+        # Generates a generic negative description. Based on `description`.
+        # When subclassing, if you are not satisfied with this description
+        # override this method to specify a better negative description.
+        def description_when_negated
+          "not #{description}"
+        end
+
+        # @api private
         # Matchers are not diffable by default. Override this to make your
         # subclass diffable.
         def diffable?

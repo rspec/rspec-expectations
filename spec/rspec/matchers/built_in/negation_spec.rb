@@ -18,10 +18,11 @@ module RSpec::Matchers::BuiltIn
     end
 
     describe :description do
-      it 'provides a description' do
-        matcher = ~eq('A')
+      it 'returns the matcher a description when negated' do
+        inner_matcher = eq('A')
+        matcher = ~inner_matcher
         matcher.matches?('A')
-        expect(matcher.description).to eq 'not eq "A"'
+        expect(matcher.description).to eq inner_matcher.description_when_negated
       end
     end
 
