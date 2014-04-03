@@ -1,28 +1,54 @@
 module RSpec::Matchers::BuiltIn
   describe Negation do
 
-    def configured_matcher_boolean_negation_operator(is_enabled)
+    def configure_boolean_negation_matcher(enable)
       RSpec.configure do |config|
         config.expect_with :rspec do |c|
-          c.matcher_boolean_negation_operator = is_enabled
+          c.enable_boolean_negation_matcher = enable
         end
       end
     end
 
     before(:all) do
-      configured_matcher_boolean_negation_operator(true)
+      configure_boolean_negation_matcher(true)
     end
 
     after(:all) do
-      configured_matcher_boolean_negation_operator(false)
+      configure_boolean_negation_matcher(false)
     end
 
     describe :description do
-      it 'returns the matcher a description when negated' do
-        inner_matcher = eq('A')
-        matcher = ~inner_matcher
-        matcher.matches?('A')
-        expect(matcher.description).to eq inner_matcher.description_when_negated
+
+      let(:matcher) { ~inner_matcher }
+
+      context 'when the matcher responds to :description_when_negated' do
+        let(:inner_matcher) {
+          base = Class.new(BaseMatcher) do
+            def description_when_negated
+              'matcher description when negated'
+            end
+          end
+          base.new
+        }
+
+        it 'returns the matcher a description when negated' do
+          expect(matcher.description).to eq inner_matcher.description_when_negated
+        end
+      end
+
+      context "when the matcher doesn't responds to :description_when_negated" do
+        let(:inner_matcher) {
+          base = Class.new(BaseMatcher) do
+            def description
+              'matcher description'
+            end
+          end
+          base.new
+        }
+
+        it 'returns the matcher a description when negated' do
+          expect(matcher.description).to eq "not #{inner_matcher.description}"
+        end
       end
     end
 
@@ -47,15 +73,15 @@ module RSpec::Matchers::BuiltIn
     end
 
     context 'expect(...).to ~(matcher)' do
-      it 'can pass' do
+      it 'can pass when using `~`' do
         expect('A').to ~eq('B')
       end
 
-      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'can pass when using `!`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to !eq('B')
       end
 
-      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'can pass when using `not`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to not(eq('B'))
       end
 
@@ -81,47 +107,47 @@ module RSpec::Matchers::BuiltIn
     end
 
     context 'expect(...).to_not ~(matcher)' do
-      it 'can pass' do
+      it 'can pass when using `~`' do
         expect('A').to_not ~eq('A')
       end
-      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'can pass when using `!`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to_not !eq('A')
       end
-      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'can pass when using `not`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to_not not(eq('A'))
       end
     end
 
     context 'expect(...).to (~matcher_1).and (~matcher_2)' do
-      it 'can pass' do
+      it 'can pass when using `~`' do
         expect('A').to (~eq('B')).and (~eq('C'))
       end
-      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'can pass when using `!`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to (!eq('B')).and (!eq('C'))
       end
-      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'can pass when using `not`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to (not(eq('B'))).and (not(eq('C')))
       end
     end
 
     context 'expect(...).to ~(~matcher)' do
 
-      it 'can pass' do
+      it 'can pass when using `~~`' do
         expect('A').to ~(~eq('A'))
       end
 
-      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'can pass when using `!!`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to !!eq('A')
       end
 
-      it 'can pass', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'can pass when using `not(not())`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to not(not(eq('A')))
       end
 
       it 'returns the original matcher' do
         original_matcher = eq('A')
         double_negate_matcher = ~(~original_matcher)
-        expect(original_matcher).to eq double_negate_matcher
+        expect(original_matcher).to equal double_negate_matcher
       end
     end
 

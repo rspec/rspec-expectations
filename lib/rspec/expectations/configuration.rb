@@ -57,14 +57,14 @@ module RSpec
         syntaxes
       end
 
-      # Enables the matcher boolean negation operator `!` syntax.
-      # @param is_enabled [Boolean]
+      # Enables the boolean negation matcher `!` syntax.
+      # @param enable [Boolean]
       # @note this feature is only supported if
-      def matcher_boolean_negation_operator=(is_enabled)
+      def enable_boolean_negation_matcher=(enable)
         if ::RUBY_VERSION.to_f < 1.9
-          raise NotImplementedError, 'matcher boolean operators is only supported from MRI > 1.9'
+          raise NotImplementedError, 'The boolean negation matcher is not supported on ruby 1.8.'
         else
-          if is_enabled
+          if enable
             Expectations::Syntax.enable_matcher_boolean_negation_operator
           else
             Expectations::Syntax.disable_matcher_boolean_negation_operator

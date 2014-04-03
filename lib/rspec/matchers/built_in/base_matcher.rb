@@ -53,7 +53,7 @@ module RSpec
 
         # @api private
         # Provides a good generic failure message. Based on `description`.
-        # When subclassing, if you are not satisfied with this failure message
+        # When subclassing, if you are not satisifed with this failure message
         # you often only need to override `description`.
         def failure_message
           assert_ivars :@actual
@@ -62,7 +62,7 @@ module RSpec
 
         # @api private
         # Provides a good generic negative failure message. Based on `description`.
-        # When subclassing, if you are not satisfied with this failure message
+        # When subclassing, if you are not satisifed with this failure message
         # you often only need to override `description`.
         def failure_message_when_negated
           assert_ivars :@actual
@@ -74,14 +74,6 @@ module RSpec
         def description
           return name_to_sentence unless defined?(@expected)
           "#{name_to_sentence}#{to_sentence @expected}"
-        end
-
-        # @api private
-        # Generates a generic negative description. Based on `description`.
-        # When subclassing, if you are not satisfied with this description
-        # override this method to specify a better negative description.
-        def description_when_negated
-          "not #{description}"
         end
 
         # @api private

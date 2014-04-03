@@ -10,15 +10,22 @@ module RSpec
           @matcher = matcher
         end
 
-        # return the original matcher when negated twice
+        # Return the original matcher when negated twice
         # @example
         #   expect(stoplight.color).to ~~eq("green")
         def ~
           matcher
         end
 
+        # @api private
+        # Return the matcher `description_when_negated` method, when implemented.
+        # Or defaults to a generic negative description
         def description
-          matcher.description_when_negated
+          if matcher.respond_to?(:description_when_negated)
+            matcher.description_when_negated
+          else
+            default_negated_description
+          end
         end
 
         def failure_message
@@ -41,6 +48,12 @@ module RSpec
           else
             !matcher.matches?(actual)
           end
+        end
+
+        # @api private
+        # Generates a generic negative description, based on `description`.
+        def default_negated_description
+          "not #{matcher.description}"
         end
 
       end

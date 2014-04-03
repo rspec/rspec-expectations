@@ -15,32 +15,12 @@ Bug Fixes:
 * Fix `NoMethodError` triggered by beta2 when `YARD` was loaded in
   the test environment. (Myron Marston)
 * Fix `be_xyz` matcher to accept a `do...end` block. (Myron Marston)
-* Fix composable matcher failure message generation logic
-  so that it does not blow up when given `$stdout` or `$stderr`.
-  (Myron Marston)
-* Fix `change` matcher to work properly with `IO` objects.
-  (Myron Marston)
-* Fix `exist` matcher so that it can be used in composed matcher
-  expressions involving objects that do not implement `exist?` or
-  `exists?`. (Daniel Fone)
 
 Enhancements:
 
 * Document the remaining public APIs. rspec-expectations now has 100% of
   the public API documented and will remain that way (as new undocumented
   methods will fail the build). (Myron Marston)
-* Add support for matcher boolean AND `&`, OR `|` syntax.
-    * `expect('A').to eq('A') | eq('B')`
-    * `expect('A').to eq('A') & be_a(String)`
-    (Adam Farhi)
-* Add support for negative form compound matcher expressions using `~`.
-    * `expect(stoplight.color).to ~eq("blue")`
-    (Adam Farhi)
-* Add support for matcher boolean negation operator `!` syntax.
-    * `expect(stoplight.color).to !eq("blue")`
-    Disabled by default, enable by doing:
-    * `RSpec.configuration.expect_with(:rspec) { |c| c.matcher_boolean_negation_operator = true }`
-    (Adam Farhi)
 
 ### 3.0.0.beta2 / 2014-02-17
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.0.beta1...v3.0.0.beta2)

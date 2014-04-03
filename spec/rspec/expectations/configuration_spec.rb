@@ -205,27 +205,18 @@ module RSpec
         expect($default_expectation_syntax).to contain_exactly(:expect, :should)
       end
 
-      describe 'configuring using the matcher boolean operators' do
+      describe '#enable_boolean_negation_matcher' do
 
-        def configured_boolean_negation_operator(is_enabled)
+        def configure_boolean_negation_matcher(enable)
           RSpec.configure do |config|
             config.expect_with :rspec do |c|
-              c.matcher_boolean_negation_operator = is_enabled
+              c.enable_boolean_negation_matcher = enable
             end
           end
         end
 
         context 'by default' do
-
-          it "allows using boolean OR operator '|'" do
-            expect('A').to eq('A') | eq('B')
-          end
-
-          it "allows using boolean AND operator '&'" do
-            expect('A').to eq('A') & be_a(String)
-          end
-
-          describe 'matcher boolean negation operator is disabled' do
+          describe 'the boolean negation matcher is disabled' do
             it "disables using boolean NOT operator '!'" do
               expect {
                 expect('A').to !eq('B')
@@ -234,13 +225,13 @@ module RSpec
           end
         end
 
-        context 'when the :matcher_boolean_negation_operator flag is on', :if => (RUBY_VERSION.to_f > 1.8) do
+        context 'when the :enable_boolean_negation_matcher flag is on', :if => (RUBY_VERSION.to_f > 1.8) do
           before(:all) do
-            configured_boolean_negation_operator(true)
+            configure_boolean_negation_matcher(true)
           end
 
           after(:all) do
-            configured_boolean_negation_operator(false)
+            configure_boolean_negation_matcher(false)
           end
 
           it "allows using boolean NOT operator '!'" do

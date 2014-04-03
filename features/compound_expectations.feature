@@ -44,7 +44,7 @@ Feature: Compound Expectations
         end
 
         it "passes when using boolean OR `|` alias" do
-          expect(light.color).to eq("green") | (eq("yellow") | eq("red"))
+          expect(light.color).to eq("green") | eq("yellow") | eq("red")
         end
       end
       """
@@ -66,7 +66,7 @@ Feature: Compound Expectations
           expect(colors).to include(:red).and ~include(:blue)
         end
         it "passes with compound matcher" do
-          expect(7.1).to be_within(0.1).of(7.0).and ~(be_within(0.5).of(8.0))
+          expect(7.1).to be_within(0.1).of(7.0).and ~be_within(0.5).of(8.0)
         end
       end
       """
@@ -74,16 +74,16 @@ Feature: Compound Expectations
     Then the example should pass
 
   @ruby-1.9
-  Scenario: Explicitly enable matcher boolean operators `|`, `&`, `!` syntax.
+  Scenario: Explicitly enable boolean negation matcher, `!` syntax.
     Given a file named "boolean_operators_spec.rb" with:
       """ruby
       RSpec.configure do |config|
         config.expect_with :rspec do |c|
-          c.matcher_boolean_negation_operator = true
+          c.enable_boolean_negation_matcher = true
         end
       end
 
-      RSpec.describe 'using matcher boolean negation operator' do
+      RSpec.describe 'using boolean negation matcher' do
         it "allows using boolean NOT operator '!'" do
           expect('A').to !eq('B')
         end
