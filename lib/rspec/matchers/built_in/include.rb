@@ -32,6 +32,12 @@ module RSpec
 
         # @api private
         # @return [String]
+        def description_when_negated
+          "not #{description}"
+        end
+
+        # @api private
+        # @return [String]
         def failure_message
           improve_hash_formatting(super)
         end
