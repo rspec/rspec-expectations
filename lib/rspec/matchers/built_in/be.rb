@@ -149,13 +149,17 @@ it is a bit confusing.
           end
 
           begin
-            return @result = actual.__send__(predicate, *@args, &@block)
+            @result = actual.__send__(predicate, *@args, &@block)
+            check_respond_to(predicate)
+            return @result
           rescue NameError => predicate_missing_error
             "this needs to be here or rcov will not count this branch even though it's executed in a code example"
           end
 
           begin
-            return @result = actual.__send__(present_tense_predicate, *@args, &@block)
+            @result = actual.__send__(present_tense_predicate, *@args, &@block)
+            check_respond_to(present_tense_predicate)
+            return @result
           rescue NameError
             raise predicate_missing_error
           end
@@ -208,6 +212,13 @@ it is a bit confusing.
 
         def prefix_to_sentence
           split_words(@prefix)
+        end
+
+        def check_respond_to(method)
+          RSpec.deprecate(
+            "Matching with #{@prefix}#{@expected} on an object that doesn't respond to `#{method}`",
+            :replacement => "`respond_to_missing?` or `respond_to?` on your object"
+          ) unless actual.respond_to?(method)
         end
       end
     end
