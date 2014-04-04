@@ -9,6 +9,8 @@ Deprecations:
 * Deprecate `RSpec::Matchers::Pretty#expected_to_sentence`. (Myron Marston)
 * Deprecate `RSpec::Matchers::Configuration` in favor of
   `RSpec::Expectations::Configuration`. (Myron Marston)
+* Deprecate `be_xyz` predicate matcher on an object that doesn't respond to
+  `xyz?` or `xyzs?`. (Daniel Fone)
 
 ### 2.99.0.beta2 / 2014-02-17
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0.beta1...v2.99.0.beta2)

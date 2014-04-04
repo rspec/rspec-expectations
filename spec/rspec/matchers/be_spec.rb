@@ -38,6 +38,7 @@ describe "expect(...).to be_predicate" do
           true
         end
     end
+    allow(RSpec).to receive(:deprecate)
     expect(RSpec).to receive(:deprecate).with(
       "matching with be_happy on private method happy?",
       :replacement => "`expect(object.send(:happy?)).to be_true` or change the method's visibility to public",
@@ -66,6 +67,26 @@ describe "expect(...).to be_predicate" do
     matcher = be_happy
     value = double(:happy? => false)
     expect(matcher == value).to be false
+  end
+
+  it 'warns of deprecation when actual does not respond to :predicate?' do
+    oddly_happy_class = Class.new do
+      def method_missing(method)
+        return true if method == :happy?
+      end
+    end
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /Matching with be_happy on an object that doesn't respond to `happy\?`/)
+    expect(oddly_happy_class.new).to be_happy
+  end
+
+  it 'does not warn of deprecation when actual responds to present tense predicate' do
+    present_happy_class = Class.new do
+      def exists?
+        true
+      end
+    end
+    expect_no_deprecation
+    expect(present_happy_class.new).to be_exist
   end
 end
 
