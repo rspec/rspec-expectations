@@ -10,6 +10,11 @@ module RSpec
           @matcher = matcher
         end
 
+        def initialize_copy(other)
+          @matcher = @matcher.clone
+          super
+        end
+
         # Return the original matcher when negated twice
         # @example
         #   expect(stoplight.color).to ~~eq("green")
