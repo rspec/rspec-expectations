@@ -1,6 +1,33 @@
 module RSpec::Matchers::BuiltIn
   describe Negation do
 
+    shared_examples "making a copy" do |copy_methods|
+      copy_methods.each do |copy_method|
+        context "when making a copy via `#{copy_method}`" do
+
+          let(:base_matcher) { include(3) }
+          let(:negation_matcher) { ~base_matcher }
+          let(:copied_matcher) { negation_matcher.__send__(copy_method) }
+
+          it "uses a copy of the base matchers" do
+            expect(copied_matcher).not_to equal(negation_matcher)
+            expect(copied_matcher.matcher).not_to equal(base_matcher)
+            expect(copied_matcher.matcher).to be_a(base_matcher.class)
+            expect(copied_matcher.matcher.expected).to eq([3])
+          end
+
+          it "copies custom matchers properly so they can work even though they have singleton behavior" do
+            expect(copied_matcher).not_to equal(negation_matcher)
+            expect(copied_matcher.matcher).not_to equal(base_matcher)
+            expect([4]).to copied_matcher
+            expect { expect([3]).to copied_matcher }.to fail_matching("expected [3] to not include 3")
+          end
+        end
+      end
+    end
+
+    include_examples "making a copy", [:clone, :dup]
+
     def configure_boolean_negation_matcher(enable)
       RSpec.configure do |config|
         config.expect_with :rspec do |c|
