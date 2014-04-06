@@ -58,9 +58,9 @@ module RSpec
       #   expect(7.1).to be_within(0.1).of(7.0).and ~(be_within(0.5).of(8.0))
       #
       # @note The `!` and `not` forms are only available on 1.9+ and only if you have
-      #   set the `matcher_boolean_operators` config option.
+      #   set the `enable_boolean_negation_matcher` config option.
       #
-      # @see RSpec::Expectations::Configuration#matcher_boolean_operators=
+      # @see RSpec::Expectations::Configuration#enable_boolean_negation_matcher=
       def ~
         BuiltIn::Negation.new self
       end
