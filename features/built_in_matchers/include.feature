@@ -55,12 +55,12 @@ Feature: include matcher
     Then the output should contain all of these:
       | 14 examples, 7 failures                       |
       | expected [1, 3, 7] to include 4               |
-      | expected [1, 3, 7] not to include 1           |
-      | expected [1, 3, 7] not to include 3           |
-      | expected [1, 3, 7] not to include 7           |
-      | expected [1, 3, 7] not to include 1, 3, and 7 |
+      | expected [1, 3, 7] to not include 1           |
+      | expected [1, 3, 7] to not include 3           |
+      | expected [1, 3, 7] to not include 7           |
+      | expected [1, 3, 7] to not include 1, 3, and 7 |
       | expected [1, 3, 7] to include 1 and 9         |
-      | expected [1, 3, 7] not to include 1 and 9     |
+      | expected [1, 3, 7] to not include 1 and 9     |
 
   Scenario: string usage
     Given a file named "string_include_matcher_spec.rb" with:
@@ -82,9 +82,9 @@ Feature: include matcher
     Then the output should contain all of these:
       | 8 examples, 4 failures                             |
       | expected "a string" to include "foo"               |
-      | expected "a string" not to include "str"           |
+      | expected "a string" to not include "str"           |
       | expected "a string" to include "str" and "foo"     |
-      | expected "a string" not to include "str" and "foo" |
+      | expected "a string" to not include "str" and "foo" |
 
   Scenario: hash usage
     Given a file named "hash_include_matcher_spec.rb" with:
