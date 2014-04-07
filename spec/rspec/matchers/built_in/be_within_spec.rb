@@ -55,6 +55,14 @@ module RSpec
         expect(matcher.description).to eq "be within 0.5 of 5.0"
       end
 
+      context 'when negated' do
+        it 'fails when actual > (expected + delta)' do
+          expect {
+            expect(5.1).to ~be_within(0.5).of(5.0)
+          }.to fail_matching('expected 5.1 to not be within 0.5 of 5.0')
+        end
+      end
+
       it "raises an error if no expected value is given" do
         expect {
           expect(5.1).to be_within(0.5)
@@ -104,31 +112,39 @@ module RSpec
       it "fails when actual == expected" do
         expect {
           expect(5.0).not_to be_within(0.5).of(5.0)
-        }.to fail_with("expected 5.0 not to be within 0.5 of 5.0")
+        }.to fail_with("expected 5.0 to not be within 0.5 of 5.0")
       end
 
       it "fails when actual < (expected + delta)" do
         expect {
           expect(5.49).not_to be_within(0.5).of(5.0)
-        }.to fail_with("expected 5.49 not to be within 0.5 of 5.0")
+        }.to fail_with("expected 5.49 to not be within 0.5 of 5.0")
       end
 
       it "fails when actual > (expected - delta)" do
         expect {
           expect(4.51).not_to be_within(0.5).of(5.0)
-        }.to fail_with("expected 4.51 not to be within 0.5 of 5.0")
+        }.to fail_with("expected 4.51 to not be within 0.5 of 5.0")
       end
 
       it "fails when actual == (expected - delta)" do
         expect {
           expect(4.5).not_to be_within(0.5).of(5.0)
-        }.to fail_with("expected 4.5 not to be within 0.5 of 5.0")
+        }.to fail_with("expected 4.5 to not be within 0.5 of 5.0")
       end
 
       it "fails when actual == (expected + delta)" do
         expect {
           expect(5.5).not_to be_within(0.5).of(5.0)
-        }.to fail_with("expected 5.5 not to be within 0.5 of 5.0")
+        }.to fail_with("expected 5.5 to not be within 0.5 of 5.0")
+      end
+
+      context 'when negated' do
+        it 'fails' do
+          expect {
+            expect(5.5).to ~be_within(0.5).of(5.0)
+          }.to fail_matching("expected 5.5 to not be within 0.5 of 5.0")
+        end
       end
 
       it "passes if the actual is not numeric" do

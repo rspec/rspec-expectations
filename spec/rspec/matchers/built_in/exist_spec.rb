@@ -122,6 +122,15 @@ describe "exist matcher" do
     end
   end
 
+  context 'when negated' do
+    subject { double(:exist? => true) }
+    it 'fails' do
+      expect {
+        expect(subject).to ~exist
+      }.to fail_matching(/expected .* not to exist/)
+    end
+  end
+
   it 'passes any provided arguments to the call to #exist?' do
     object = double
     expect(object).to receive(:exist?).with(:foo, :bar) { true }.at_least(:once)

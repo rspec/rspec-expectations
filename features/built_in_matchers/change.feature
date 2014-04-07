@@ -64,4 +64,4 @@ Feature: change matcher
       """
     When I run `rspec spec/example_spec.rb`
     Then the output should contain "2 failures"
-    Then the output should contain "expected result not to have changed, but did change from 1 to 2"
+    Then the output should contain "expected result to not have changed, but did change from 1 to 2"

@@ -51,7 +51,15 @@ module RSpec::Matchers::BuiltIn
       it "fails if target is between min and max" do
         expect {
           expect(5).not_to matcher(1, 10)
-        }.to fail_with("expected 5 not to be between 1 and 10 (#{mode})")
+        }.to fail_with("expected 5 to not be between 1 and 10 (#{mode})")
+      end
+
+      context 'when negated' do
+        fit "fails if target is between min and max" do
+          expect {
+            expect(5).to ~matcher(1, 10)
+          }.to fail_matching("expected 5 to not be between 1 and 10 (#{mode})")
+        end
       end
     end
 

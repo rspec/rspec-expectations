@@ -13,6 +13,12 @@ module RSpec
         end
 
         # @api private
+        # @return [String]
+        def description_when_negated
+          "not #{description}"
+        end
+
+        # @api private
         # @return [Boolean]
         def diffable?
           true

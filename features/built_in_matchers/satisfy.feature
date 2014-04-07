@@ -28,6 +28,6 @@ Feature: satisfy matcher
     When I run `rspec satisfy_matcher_spec.rb`
     Then the output should contain all of these:
       | 4 examples, 2 failures           |
-      | expected 10 not to satisfy block |
+      | expected 10 to not satisfy block |
       | expected 10 to satisfy block     |
 

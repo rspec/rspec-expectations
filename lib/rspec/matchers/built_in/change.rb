@@ -59,7 +59,7 @@ module RSpec
         # @api private
         # @return [String]
         def failure_message_when_negated
-          "expected #{@change_details.message} not to have changed, but did change from #{description_of @change_details.actual_before} to #{description_of @change_details.actual_after}"
+          "expected #{@change_details.message} to not have changed, but did change from #{description_of @change_details.actual_before} to #{description_of @change_details.actual_after}"
         end
 
         # @api private
@@ -169,7 +169,7 @@ module RSpec
         end
 
         def did_change_failure
-          "expected #{@change_details.message} not to have changed, but did change from #{description_of @change_details.actual_before} to #{description_of @change_details.actual_after}"
+          "expected #{@change_details.message} to not have changed, but did change from #{description_of @change_details.actual_before} to #{description_of @change_details.actual_after}"
         end
       end
 

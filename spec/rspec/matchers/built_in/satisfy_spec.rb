@@ -37,6 +37,14 @@ describe "expect(...).not_to satisfy { block }" do
   it "fails if block returns true" do
     expect {
       expect(true).not_to satisfy { |val| val }
-    }.to fail_with("expected true not to satisfy block")
+    }.to fail_with("expected true to not satisfy block")
+  end
+end
+
+context 'when negated' do
+  it 'fails' do
+    expect {
+      expect(true).to ~satisfy { |val| val }
+    }.to fail_matching("expected true to not satisfy block")
   end
 end
