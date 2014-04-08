@@ -146,7 +146,7 @@ module RSpec::Matchers::BuiltIn
     end
 
     context 'expect(...).to (~matcher_1).and (~matcher_2)' do
-      it 'can pass when using `~`' do
+      it 'can pass when using `~`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to (~(eq('B'))).and (~eq('C'))
       end
       it 'can pass when using `!`', :if => (RUBY_VERSION.to_f > 1.8) do
