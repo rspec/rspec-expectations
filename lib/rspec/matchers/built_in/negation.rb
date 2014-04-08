@@ -10,11 +10,6 @@ module RSpec
           @matcher = matcher
         end
 
-        def initialize_copy(other)
-          @matcher = @matcher.clone
-          super
-        end
-
         # Return the original matcher when negated twice
         # @example
         #   expect(stoplight.color).to ~~eq("green")
@@ -59,6 +54,11 @@ module RSpec
         # Generates a generic negative description, based on `description`.
         def default_negated_description
           "not #{matcher.description}"
+        end
+
+        def initialize_copy(other)
+          @matcher = @matcher.clone
+          super
         end
 
       end
