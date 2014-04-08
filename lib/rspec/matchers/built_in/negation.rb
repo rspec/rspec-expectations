@@ -4,6 +4,8 @@ module RSpec
       # @api private
       # Wraps and negates a matcher
       class Negation < BaseMatcher
+
+        # @api private
         attr_reader :matcher
 
         def initialize(matcher)
