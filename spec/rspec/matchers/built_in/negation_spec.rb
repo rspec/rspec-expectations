@@ -109,7 +109,7 @@ module RSpec::Matchers::BuiltIn
       end
 
       it 'can pass when using `not`', :if => (RUBY_VERSION.to_f > 1.8) do
-        expect('A').to not(eq('B'))
+        expect('A').to (not(eq('B')))
       end
 
       context 'when the matcher responds to :does_not_match?' do
@@ -141,7 +141,7 @@ module RSpec::Matchers::BuiltIn
         expect('A').to_not !eq('A')
       end
       it 'can pass when using `not`', :if => (RUBY_VERSION.to_f > 1.8) do
-        expect('A').to_not not(eq('A'))
+        expect('A').to_not (not(eq('A')))
       end
     end
 
@@ -168,7 +168,7 @@ module RSpec::Matchers::BuiltIn
       end
 
       it 'can pass when using `not(not())`', :if => (RUBY_VERSION.to_f > 1.8) do
-        expect('A').to not(not(eq('A')))
+        expect('A').to (not(not(eq('A'))))
       end
 
       it 'returns the original matcher' do
