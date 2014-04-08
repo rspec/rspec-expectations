@@ -120,14 +120,14 @@ module RSpec
         return unless matcher_boolean_negation_operator_enabled?(syntax_host)
 
         syntax_host.module_exec do
-          remove_method(:!)
+          remove_method('!')
         end
       end
 
       # @api private
       # Indicates whether or not the matcher boolean negation operator `!` syntax is enabled.
       def matcher_boolean_negation_operator_enabled?(syntax_host = ::RSpec::Matchers::Composable)
-        syntax_host.method_defined?(:!)
+        syntax_host.method_defined?('!')
       end
 
     end
