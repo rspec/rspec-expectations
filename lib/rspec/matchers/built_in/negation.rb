@@ -28,14 +28,19 @@ module RSpec
           end
         end
 
+        # @api private
+        # @return [String]
         def failure_message
           matcher.failure_message_when_negated
         end
 
+        # @api private
+        # @return [String]
         def failure_message_when_negated
           matcher.failure_message
         end
 
+        # @private
         def does_not_match?(actual)
           matcher.matches?(actual)
         end
