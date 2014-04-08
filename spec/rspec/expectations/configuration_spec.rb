@@ -210,7 +210,7 @@ module RSpec
         def configure_boolean_negation_matcher(enable)
           RSpec.configure do |config|
             config.expect_with :rspec do |c|
-              c.enable_boolean_negation_matcher = enable
+              c.enable_boolean_negation_matcher = enable if RUBY_VERSION.to_f > 1.8
             end
           end
         end
