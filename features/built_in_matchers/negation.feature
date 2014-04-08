@@ -6,14 +6,11 @@ Feature: Negation Matcher
     Given a file named "negate_spec.rb" with:
       """ruby
       RSpec.describe "negate an expectation" do
+        let(:colors) { [:green, :yellow, :red] }
         it "passes" do
-          expect(3..15).to ~cover(20)
+          expect(colors).to ~include(:blue)
         end
         it "passes with compound matcher" do
-          expect(3..15).to cover(12).and ~cover(20)
-        end
-        it "passes with compound matcher" do
-          colors = [:green, :yellow, :red]
           expect(colors).to include(:red).and ~include(:blue)
         end
         it "passes with compound matcher" do
