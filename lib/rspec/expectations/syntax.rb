@@ -104,13 +104,11 @@ module RSpec
       def enable_matcher_boolean_negation_operator(syntax_host = ::RSpec::Matchers::Composable)
         return if matcher_boolean_negation_operator_enabled?(syntax_host)
 
-        syntax_host.module_exec do
-          # BuiltIn::Negation defines `~`, to handle double negated matchers.
-          # We define `!` and not alias it, since an alias would be bound directly to this implementation of `~`
-          # and not call Negation's implementation
-          def !
-            self.~
-          end
+        # BuiltIn::Negation defines `~`, to handle double negated matchers.
+        # We define `!` and not alias it, since an alias would be bound directly to this implementation of `~`
+        # and not call Negation's implementation
+        syntax_host.define_method('!') do
+          self.~
         end
       end
 
@@ -118,10 +116,7 @@ module RSpec
       # Disables the matcher boolean negation operator `!` syntax.
       def disable_matcher_boolean_negation_operator(syntax_host = ::RSpec::Matchers::Composable)
         return unless matcher_boolean_negation_operator_enabled?(syntax_host)
-
-        syntax_host.module_exec do
-          remove_method('!')
-        end
+        syntax_host.remove_method('!')
       end
 
       # @api private
