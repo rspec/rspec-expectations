@@ -57,6 +57,16 @@ describe "expect(...).to have_sym(*args)" do
       expect(o).to have_sym(:foo)
     }.to raise_error("Funky exception")
   end
+
+  it 'warns of deprecation when actual does not respond to #has_sym?' do
+    foo_class = Class.new do
+      def method_missing(method)
+        return true if method == :has_foo?
+      end
+    end
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /Matching with have_foo on an object that doesn't respond to `has_foo\?`/)
+    expect(foo_class.new).to have_foo
+  end
 end
 
 describe "expect(...).not_to have_sym(*args)" do

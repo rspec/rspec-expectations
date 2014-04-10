@@ -9,7 +9,10 @@ module RSpec
         end
 
         def matches?(actual)
-          actual.__send__(predicate(@expected), *@args)
+          method = predicate(@expected)
+          result = actual.__send__(method, *@args)
+          check_respond_to(actual, method)
+          result
         end
 
         def failure_message_for_should
@@ -42,6 +45,13 @@ module RSpec
         def failure_message_args_description
           desc = args_description
           "(#{desc})" if desc
+        end
+
+        def check_respond_to(actual, method)
+          RSpec.deprecate(
+            "Matching with #{@expected} on an object that doesn't respond to `#{method}`",
+            :replacement => "`respond_to_missing?` or `respond_to?` on your object"
+          ) unless actual.respond_to?(method)
         end
       end
     end

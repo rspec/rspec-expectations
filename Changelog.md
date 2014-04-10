@@ -11,6 +11,8 @@ Deprecations:
   `RSpec::Expectations::Configuration`. (Myron Marston)
 * Deprecate `be_xyz` predicate matcher on an object that doesn't respond to
   `xyz?` or `xyzs?`. (Daniel Fone)
+* Deprecate `have_xyz` matcher on an object that doesn't respond to `has_xyz?`.
+  (Daniel Fone)
 
 ### 2.99.0.beta2 / 2014-02-17
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0.beta1...v2.99.0.beta2)
