@@ -20,7 +20,7 @@ module RSpec::Matchers::BuiltIn
             expect(copied_matcher).not_to equal(negation_matcher)
             expect(copied_matcher.matcher).not_to equal(base_matcher)
             expect([4]).to copied_matcher
-            expect { expect([3]).to copied_matcher }.to fail_matching("expected [3] to not include 3")
+            expect { expect([3]).to copied_matcher }.to fail_matching("expected [3] not to include 3")
           end
         end
       end
