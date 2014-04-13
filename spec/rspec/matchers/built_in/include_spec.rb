@@ -32,14 +32,6 @@ describe "#include matcher" do
           expect("abc\ndef").to include("g", "h")
         }.to fail_matching("expected \"abc\\ndef\" to include \"g\" and \"h\"\nDiff")
       end
-
-      context 'when negated' do
-        it "fails if target does include expected" do
-          expect {
-            expect("abc").to ~include("a")
-          }.to fail_matching("expected \"abc\" to not include \"a\"")
-        end
-      end
     end
 
     context "for an array target" do
@@ -153,7 +145,7 @@ describe "#include matcher" do
       it "fails if target includes expected" do
         expect {
           expect("abc").not_to include("c")
-        }.to fail_with("expected \"abc\" to not include \"c\"")
+        }.to fail_with("expected \"abc\" not to include \"c\"")
       end
     end
 
@@ -165,7 +157,7 @@ describe "#include matcher" do
       it "fails if target includes expected" do
         expect {
           expect([1,2,3]).not_to include(3)
-        }.to fail_with("expected [1, 2, 3] to not include 3")
+        }.to fail_with("expected [1, 2, 3] not to include 3")
       end
 
       it 'passes when given differing null doubles' do
@@ -177,7 +169,7 @@ describe "#include matcher" do
 
         expect {
           expect([dbl]).not_to include(dbl)
-        }.to fail_matching("expected [#{dbl.inspect}] to not include")
+        }.to fail_matching("expected [#{dbl.inspect}] not to include")
       end
     end
 
@@ -189,7 +181,7 @@ describe "#include matcher" do
       it "fails if target includes expected key" do
         expect {
           expect({:key => 'value'}).not_to include(:key)
-        }.to fail_matching(%Q|expected {:key => "value"} to not include :key|)
+        }.to fail_matching(%Q|expected {:key => "value"} not to include :key|)
       end
     end
 
@@ -204,13 +196,13 @@ describe "#include matcher" do
       it "fails if the target includes all of the expected" do
         expect {
           expect("abc").not_to include("c", "a")
-        }.to fail_with('expected "abc" to not include "c" and "a"')
+        }.to fail_with('expected "abc" not to include "c" and "a"')
       end
 
       it "fails if the target includes some (but not all) of the expected" do
         expect {
           expect("abc").not_to include("d", "a")
-        }.to fail_with(%q{expected "abc" to not include "d" and "a"})
+        }.to fail_with(%q{expected "abc" not to include "d" and "a"})
       end
     end
 
@@ -222,13 +214,13 @@ describe "#include matcher" do
       it "fails if the target includes all of the expected keys" do
         expect {
           expect({ :a => 1, :b => 2 }).not_to include(:a, :b)
-        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 2} to not include :a and :b|)
+        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 2} not to include :a and :b|)
       end
 
       it "fails if the target includes some (but not all) of the expected keys" do
         expect {
           expect({ :a => 1, :b => 2 }).not_to include(:d, :b)
-        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 2} to not include :d and :b|)
+        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 2} not to include :d and :b|)
       end
     end
 
@@ -240,13 +232,13 @@ describe "#include matcher" do
       it "fails if the target includes all of the expected" do
         expect {
           expect([1, 2, 3]).not_to include(3, 1)
-        }.to fail_with(%q{expected [1, 2, 3] to not include 3 and 1})
+        }.to fail_with(%q{expected [1, 2, 3] not to include 3 and 1})
       end
 
       it "fails if the target includes some (but not all) of the expected" do
         expect {
           expect([1, 2, 3]).not_to include(4, 1)
-        }.to fail_with(%q{expected [1, 2, 3] to not include 4 and 1})
+        }.to fail_with(%q{expected [1, 2, 3] not to include 4 and 1})
       end
     end
   end
@@ -292,13 +284,13 @@ describe "#include matcher" do
       it "fails if target includes the key/value pair" do
         expect {
           expect({:key => 'value'}).not_to include(:key => 'value')
-        }.to fail_matching(%Q|expected {:key => "value"} to not include {:key => "value"}|)
+        }.to fail_matching(%Q|expected {:key => "value"} not to include {:key => "value"}|)
       end
 
       it "fails if target includes the key/value pair among others" do
         expect {
           expect({:key => 'value', :other => 'different'}).not_to include(:key => 'value')
-        }.to fail_matching(%r|expected #{hash_inspect :key => "value", :other => "different"} to not include \{:key => "value"\}|)
+        }.to fail_matching(%r|expected #{hash_inspect :key => "value", :other => "different"} not to include \{:key => "value"\}|)
       end
 
       it "passes if target has a different value for key" do
@@ -318,7 +310,7 @@ describe "#include matcher" do
       it "fails if the target contains the given hash" do
         expect {
           expect(['a', { :key => 'value' } ]).not_to include(:key => 'value')
-        }.to fail_matching(%Q|expected ["a", {:key => "value"}] to not include {:key => "value"}|)
+        }.to fail_matching(%Q|expected ["a", {:key => "value"}] not to include {:key => "value"}|)
       end
     end
   end
@@ -376,20 +368,20 @@ describe "#include matcher" do
       it "fails if target includes the key/value pairs" do
         expect {
           expect({:a => 1, :b => 2}).not_to include(:a => 1, :b => 2)
-        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 2} to not include #{hash_inspect :a => 1, :b => 2}|)
+        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 2} not to include #{hash_inspect :a => 1, :b => 2}|)
       end
 
       it "fails if target includes the key/value pairs among others" do
         hash = {:a => 1, :b => 2, :c => 3}
         expect {
           expect(hash).not_to include(:a => 1, :b => 2)
-        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 2, :c => 3} to not include #{hash_inspect :a => 1, :b => 2}|)
+        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 2, :c => 3} not to include #{hash_inspect :a => 1, :b => 2}|)
       end
 
       it "fails if target has a different value for one of the keys" do
         expect {
           expect({:a => 1, :b => 2}).not_to include(:a => 2, :b => 2)
-        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 2} to not include #{hash_inspect :a => 2, :b => 2}|)
+        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 2} not to include #{hash_inspect :a => 2, :b => 2}|)
       end
 
       it "passes if target has a different value for both of the keys" do
@@ -399,7 +391,7 @@ describe "#include matcher" do
       it "fails if target lacks one of the keys" do
         expect {
           expect({:a => 1, :b => 1}).not_to include(:a => 1, :c => 1)
-        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 1} to not include #{hash_inspect :a => 1, :c => 1}|)
+        }.to fail_matching(%r|expected #{hash_inspect :a => 1, :b => 1} not to include #{hash_inspect :a => 1, :c => 1}|)
       end
 
       it "passes if target lacks both of the keys" do
@@ -415,7 +407,7 @@ describe "#include matcher" do
       it "fails if the target contains the given hash" do
         expect {
           expect(['a', { :a => 1, :b => 2 } ]).not_to include(:a => 1, :b => 2)
-        }.to fail_matching(%r|expected \["a", #{hash_inspect :a => 1, :b => 2}\] to not include #{hash_inspect :a => 1, :b => 2}|)
+        }.to fail_matching(%r|expected \["a", #{hash_inspect :a => 1, :b => 2}\] not to include #{hash_inspect :a => 1, :b => 2}|)
       end
     end
   end
@@ -524,13 +516,13 @@ describe "#include matcher" do
       it 'fails if all of the matchers are satisfied by one of the target values' do
         expect {
           expect(['foo', 'bar', 'baz']).not_to include(a_string_containing("ar"), a_string_containing('az'))
-        }.to fail_matching(%Q|expected #{['foo', 'bar', 'baz'].inspect} to not include (a string containing 'ar') and (a string containing 'az')|)
+        }.to fail_matching(%Q|expected #{['foo', 'bar', 'baz'].inspect} not to include (a string containing 'ar') and (a string containing 'az')|)
       end
 
       it 'fails if the some (but not all) of the matchers are satisifed' do
         expect {
           expect(['foo', 'bar', 'baz']).not_to include(a_string_containing("ar"), a_string_containing('bz'))
-        }.to fail_matching(%Q|expected #{['foo', 'bar', 'baz'].inspect} to not include (a string containing 'ar') and (a string containing 'bz')|)
+        }.to fail_matching(%Q|expected #{['foo', 'bar', 'baz'].inspect} not to include (a string containing 'ar') and (a string containing 'bz')|)
       end
     end
   end

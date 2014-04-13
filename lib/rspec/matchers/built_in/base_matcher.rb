@@ -69,11 +69,7 @@ module RSpec
         # @return [String]
         def failure_message_when_negated
           assert_ivars :@actual
-          if respond_to?(:description_when_negated)
-            "expected #{@actual.inspect} to #{description_when_negated}"
-          else
-            "expected #{@actual.inspect} not to #{description}"
-          end
+          "expected #{@actual.inspect} not to #{description}"
         end
 
         # @api private
