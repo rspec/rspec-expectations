@@ -108,10 +108,6 @@ module RSpec::Matchers::BuiltIn
         expect('A').to !eq('B')
       end
 
-      it 'can pass when using `not`', :if => (RUBY_VERSION.to_f > 1.8) do
-      expect('A').to( not(eq('B')) )
-      end
-
       context 'when the matcher responds to :does_not_match?' do
         it 'can pass - with :does_not_match?' do
           actual = ['A', 'B']
