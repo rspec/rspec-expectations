@@ -58,12 +58,6 @@ module RSpec
           "be between #{@min.inspect} and #{@max.inspect} (#{@mode})"
         end
 
-        # @api private
-        # @return [String]
-        def description_when_negated
-          "not #{description}"
-        end
-
       private
 
         def comparable?

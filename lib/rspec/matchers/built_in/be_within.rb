@@ -46,7 +46,7 @@ module RSpec
         # @api private
         # @return [String]
         def failure_message_when_negated
-          "expected #{@actual.inspect} to not #{description}"
+          "expected #{@actual.inspect} not to #{description}"
         end
 
         # @api private

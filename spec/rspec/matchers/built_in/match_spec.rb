@@ -80,18 +80,10 @@ describe "expect(...).not_to match(expected)" do
     }.to fail
   end
 
-  context 'when negated' do
-    it "fails when target (String) matches expected (Regexp)" do
-      expect {
-        expect("string").to ~match(/tri/)
-      }.to fail_matching("expected \"string\" to not match /tri/")
-    end
-  end
-
   it "provides message, expected and actual on failure" do
     matcher = match(/tri/)
     matcher.matches?("string")
-    expect(matcher.failure_message_when_negated).to eq "expected \"string\" to not match /tri/"
+    expect(matcher.failure_message_when_negated).to eq "expected \"string\" not to match /tri/"
   end
 
   context "when passed a data structure with matchers" do
@@ -102,7 +94,7 @@ describe "expect(...).not_to match(expected)" do
     it 'fails when the matchers do not match' do
       expect {
         expect(["fod", 1.1]).not_to match([ a_string_matching(/fod/), a_value_within(0.2).of(1) ])
-      }.to fail_with('expected ["fod", 1.1] to not match [(a string matching /fod/), (a value within 0.2 of 1)]')
+      }.to fail_with('expected ["fod", 1.1] not to match [(a string matching /fod/), (a value within 0.2 of 1)]')
     end
   end
 end

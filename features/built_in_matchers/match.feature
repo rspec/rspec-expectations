@@ -29,7 +29,7 @@ Feature: match matcher
     When I run `rspec string_match_spec.rb`
     Then the output should contain all of these:
       | 4 examples, 2 failures                 |
-      | expected "a string" to not match /str/ |
+      | expected "a string" not to match /str/ |
       | expected "a string" to match /foo/     |
 
   Scenario: regular expression usage
@@ -47,5 +47,5 @@ Feature: match matcher
     When I run `rspec regexp_match_spec.rb`
     Then the output should contain all of these:
       | 4 examples, 2 failures             |
-      | expected /foo/ to not match "food" |
+      | expected /foo/ not to match "food" |
       | expected /foo/ to match "drinks"   |

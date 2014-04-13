@@ -27,7 +27,7 @@ module RSpec
         # @api private
         # @return [String]
         def failure_message_when_negated
-          "expected #{@actual} to not satisfy block"
+          "expected #{@actual} not to satisfy block"
         end
 
         # @api private

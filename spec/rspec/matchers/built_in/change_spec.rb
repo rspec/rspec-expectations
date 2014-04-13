@@ -192,7 +192,7 @@ describe "expect { ... }.not_to change(actual, message)" do
   it "fails when actual is not modified by the block" do
     expect do
       expect {@instance.some_value = 6}.not_to change(@instance, :some_value)
-    end.to fail_with("expected #some_value to not have changed, but did change from 5 to 6")
+    end.to fail_with("expected #some_value not to have changed, but did change from 5 to 6")
   end
 end
 
@@ -244,7 +244,7 @@ describe "expect { ... }.not_to change { block }" do
   it "fails when actual is not modified by the block" do
     expect do
       expect {@instance.some_value = 6}.not_to change { @instance.some_value }
-    end.to fail_with("expected result to not have changed, but did change from 5 to 6")
+    end.to fail_with("expected result not to have changed, but did change from 5 to 6")
   end
 
   it "warns if passed a block using do/end instead of {}" do

@@ -42,7 +42,7 @@ Feature: be_within matcher
     When I run `rspec be_within_matcher_spec.rb`
     Then the output should contain all of these:
       | 10 examples, 4 failures                     |
-      | expected 27.5 to not be within 0.5 of 28   |
-      | expected 27.5 to not be within 0.5 of 27   |
+      | expected 27.5 not to be within 0.5 of 28   |
+      | expected 27.5 not to be within 0.5 of 27   |
       | expected 27.5 to be within 0.5 of 28.1     |
       | expected 27.5 to be within 0.5 of 26.9     |
