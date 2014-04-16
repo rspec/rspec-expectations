@@ -108,6 +108,12 @@ module RSpec::Matchers::BuiltIn
         expect('A').to !eq('B')
       end
 
+      it 'can pass when using `not`', :if => (RUBY_VERSION.to_f > 1.8) do
+        eval <<-RUBY
+          expect('A').to not(eq('B'))
+        RUBY
+      end
+
       context 'when the matcher responds to :does_not_match?' do
         it 'can pass - with :does_not_match?' do
           actual = ['A', 'B']
@@ -136,6 +142,11 @@ module RSpec::Matchers::BuiltIn
       it 'can pass when using `!`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to_not !eq('A')
       end
+      it 'can pass when using `not`', :if => (RUBY_VERSION.to_f > 1.8) do
+        eval <<-RUBY
+          expect('A').to_not not(eq('A'))
+        RUBY
+      end
     end
 
     context 'expect(...).to (~matcher_1).and (~matcher_2)' do
@@ -144,6 +155,11 @@ module RSpec::Matchers::BuiltIn
       end
       it 'can pass when using `!`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to (!eq('B')).and (!eq('C'))
+      end
+      it 'can pass when using `not`', :if => (RUBY_VERSION.to_f > 1.8) do
+        eval <<-RUBY
+          expect('A').to( ( not(eq('B')) ).and( not(eq('C')) ) )
+        RUBY
       end
     end
 
@@ -155,6 +171,12 @@ module RSpec::Matchers::BuiltIn
 
       it 'can pass when using `!!`', :if => (RUBY_VERSION.to_f > 1.8) do
         expect('A').to !!eq('A')
+      end
+
+      it 'can pass when using `not(not())`', :if => (RUBY_VERSION.to_f > 1.8) do
+        eval <<-RUBY
+          expect('A').to not(not(eq('A')))
+        RUBY
       end
 
       it 'returns the original matcher' do

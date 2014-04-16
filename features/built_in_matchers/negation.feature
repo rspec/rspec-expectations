@@ -35,9 +35,6 @@ Feature: Negation Matcher
         it "allows using boolean NOT operator '!'" do
           expect(3..15).to cover(12).and !cover(20)
         end
-        it "allows using boolean NOT operator 'not'" do
-          expect(3..15).to cover(12).and not(cover(20))
-        end
       end
       """
     When I run `rspec boolean_operators_spec.rb`
