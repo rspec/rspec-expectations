@@ -204,6 +204,41 @@ module RSpec
         # in $default_expectation_syntax so we can use it here.
         expect($default_expectation_syntax).to contain_exactly(:expect, :should)
       end
+
+      describe '#enable_boolean_negation_matcher' do
+
+        def configure_boolean_negation_matcher(enable)
+          RSpec.configure do |config|
+            config.expect_with :rspec do |c|
+              c.enable_boolean_negation_matcher = enable if RUBY_VERSION.to_f > 1.8
+            end
+          end
+        end
+
+        context 'by default' do
+          describe 'the boolean negation matcher is disabled' do
+            it "disables using boolean NOT operator '!'" do
+              expect {
+                expect('A').to !eq('B')
+              }.to raise_error(ArgumentError)
+            end
+          end
+        end
+
+        context 'when the :enable_boolean_negation_matcher flag is on', :if => (RUBY_VERSION.to_f > 1.8) do
+          before(:all) do
+            configure_boolean_negation_matcher(true)
+          end
+
+          after(:all) do
+            configure_boolean_negation_matcher(false)
+          end
+
+          it "allows using boolean NOT operator '!'" do
+            expect('A').to !eq('B')
+          end
+        end
+      end
     end
   end
 end

@@ -25,6 +25,12 @@ module RSpec
           matcher.matches?("this")
           expect(matcher.description).to eq "be a kind of String"
         end
+
+        it "provides a negative description" do
+          matcher = be_a_kind_of(String)
+          negative_matcher = ~matcher
+          expect(negative_matcher.description).to eq "not be a kind of String"
+        end
       end
 
       describe "expect(actual).not_to #{method}(expected)" do

@@ -352,7 +352,13 @@ module RSpec
     def be_between(min, max)
       BuiltIn::BeBetween.new(min, max)
     end
-    alias_matcher :a_value_between, :be_between
+    alias_matcher :a_value_between, :be_between do |desc|
+      if desc.match "not"
+        desc.sub("not be between", "a value not between")
+      else
+        desc.sub("be between", "a value between")
+      end
+    end
 
     # Passes if actual == expected +/- delta
     #

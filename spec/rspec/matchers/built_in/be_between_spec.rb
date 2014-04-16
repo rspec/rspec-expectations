@@ -153,5 +153,20 @@ module RSpec::Matchers::BuiltIn
         end
       end
     end
+
+    describe 'negative description' do
+      it "provides a negative description (be_between)" do
+        matcher = be_between(1, 10).exclusive
+        negative_matcher = include(~matcher)
+        expect(negative_matcher.description).to eq("include (not be between 1 and 10 (exclusive))")
+      end
+
+      it "provides a negative description (a_value_between)" do
+        matcher = a_value_between(1, 10).exclusive
+        negative_matcher = include(~matcher)
+        expect(negative_matcher.description).to eq("include (a value not between 1 and 10 (exclusive))")
+      end
+    end
+
   end
 end

@@ -72,6 +72,12 @@ module RSpec::Matchers::BuiltIn
         let(:matcher) { eq(3).and be <= 3 }
       end
 
+      context 'when using boolean AND `&` alias' do
+        it_behaves_like "an RSpec matcher", :valid_value => 3, :invalid_value => 4 do
+          let(:matcher) { eq(3) & be_a(Integer) }
+        end
+      end
+
       include_examples "making a copy", :and, :dup
       include_examples "making a copy", :and, :clone
 
@@ -194,6 +200,12 @@ module RSpec::Matchers::BuiltIn
     describe "expect(...).to matcher.or(other_matcher)" do
       it_behaves_like "an RSpec matcher", :valid_value => 3, :invalid_value => 5 do
         let(:matcher) { eq(3).or eq(4) }
+      end
+
+      context 'when using boolean OR `|` alias' do
+        it_behaves_like "an RSpec matcher", :valid_value => 3, :invalid_value => 5 do
+          let(:matcher) { eq(3) | eq(4) }
+        end
       end
 
       include_examples "making a copy", :or, :dup
