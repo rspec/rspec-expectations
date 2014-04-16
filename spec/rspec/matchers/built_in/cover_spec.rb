@@ -1,4 +1,18 @@
 if (1..2).respond_to?(:cover?)
+
+  describe "description" do
+    it "provides a description" do
+      matcher = cover(5)
+      expect(matcher.description).to eq "cover 5"
+    end
+
+    it "provides a negative description" do
+      matcher = cover(5)
+      negative_matcher = ~matcher
+      expect(negative_matcher.description).to eq "not cover 5"
+    end
+  end
+
   describe "expect(...).to cover(expected)" do
     it_behaves_like "an RSpec matcher", :valid_value => (1..10), :invalid_value => (20..30) do
       let(:matcher) { cover(5) }
