@@ -56,7 +56,15 @@ module RSpec
           false
         end
 
-        private
+        # @api private
+        # Most matchers are value matchers (i.e. meant to work with `expect(value)`)
+        # rather than block matchers (i.e. meant to work with `expect { }`), so
+        # this defaults to false. Block matchers must override this to return true.
+        def supports_block_expectations?
+          false
+        end
+
+      private
 
         def assert_ivars *ivars
           raise "#{self.class.name} needs to supply #{to_sentence ivars}" unless ivars.all? { |v| instance_variables.map(&:intern).include? v }

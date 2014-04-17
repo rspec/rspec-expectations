@@ -66,6 +66,29 @@ module RSpec::Matchers::DSL
       end
     end
 
+    context "matching blocks" do
+      it 'warns when matching blocks by default' do
+        matcher = RSpec::Matchers::DSL::Matcher.new(:not_supporting_blocks) do
+          match { true }
+        end.for_expected
+
+        expect_deprecation_with_call_site(__FILE__, __LINE__ + 2, /block expectation/)
+        expect(3).to matcher
+        expect { 3 }.to matcher
+      end
+
+      it 'does not when if it declares `supports_block_expectations`' do
+        matcher = RSpec::Matchers::DSL::Matcher.new(:supporting_blocks) do
+          match { true }
+          supports_block_expectations
+        end.for_expected
+
+        expect_no_deprecation
+        expect(3).to matcher
+        expect { 3 }.to matcher
+      end
+    end
+
     context "without overrides" do
       before(:each) do
         @matcher = RSpec::Matchers::DSL::Matcher.new(:be_a_multiple_of) do |multiple|

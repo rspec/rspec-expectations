@@ -26,6 +26,12 @@ module DeprecationHelpers
     )
   end
 
+  def expect_deprecation_with_replacement(snippet)
+    expect(RSpec).to receive(:deprecate) do |_, options|
+      expect(options[:replacement]).to match(snippet)
+    end
+  end
+
   def allow_deprecation
     allow(RSpec.configuration.reporter).to receive(:deprecation)
   end

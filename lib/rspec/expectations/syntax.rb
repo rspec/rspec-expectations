@@ -79,11 +79,9 @@ module RSpec
       def enable_expect(syntax_host = ::RSpec::Matchers)
         return if expect_enabled?(syntax_host)
 
-        syntax_host.module_eval do
-          def expect(*target, &target_block)
-            target << target_block if block_given?
-            raise ArgumentError.new("You must pass an argument or a block to #expect but not both.") unless target.size == 1
-            ::RSpec::Expectations::ExpectationTarget.new(target.first)
+        syntax_host.module_exec do
+          def expect(value=::RSpec::Expectations::ExpectationTarget::UndefinedValue, &block)
+            ::RSpec::Expectations::ExpectationTarget.for(value, block)
           end
         end
 
