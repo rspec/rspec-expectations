@@ -58,7 +58,7 @@ describe "expect(...).to have_sym(*args)" do
       # prevents double deprecation
       def respond_to?(_); true; end
     end
-    expect_deprecation_with_call_site __FILE__, __LINE__ +1, /matching with have_foo on private method/
+    expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /matching with have_foo on private method/)
     expect(klass.new).to have_foo
   end
 
