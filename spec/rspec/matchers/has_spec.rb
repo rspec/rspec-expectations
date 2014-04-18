@@ -48,6 +48,20 @@ describe "expect(...).to have_sym(*args)" do
     }.to raise_error(NoMethodError)
   end
 
+  it "warns of deprecation if #has_sym?(*args) is private" do
+    klass = Class.new do
+      def has_foo?
+        true
+      end
+      private :has_foo?
+
+      # prevents double deprecation
+      def respond_to?(_); true; end
+    end
+    expect_deprecation_with_call_site __FILE__, __LINE__ +1, /matching with have_foo on private method/
+    expect(klass.new).to have_foo
+  end
+
   it "reraises an exception thrown in #has_sym?(*args)" do
     o = Object.new
     def o.has_sym?(*args)

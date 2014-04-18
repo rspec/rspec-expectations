@@ -9,28 +9,45 @@ module RSpec
         end
 
         def matches?(actual)
-          method = predicate(@expected)
+          method = predicate
+
+          if is_private_on?(actual)
+            RSpec.deprecate "matching with #{@expected} on private method #{predicate}",
+              :replacement => "`expect(object.send(#{predicate.inspect})).to be_true` or change the method's visibility to public"
+          end
+
           result = actual.__send__(method, *@args)
           check_respond_to(actual, method)
           result
         end
 
         def failure_message_for_should
-          "expected ##{predicate(@expected)}#{failure_message_args_description} to return true, got false"
+          "expected ##{predicate}#{failure_message_args_description} to return true, got false"
         end
 
         def failure_message_for_should_not
-          "expected ##{predicate(@expected)}#{failure_message_args_description} to return false, got true"
+          "expected ##{predicate}#{failure_message_args_description} to return false, got true"
         end
 
         def description
           [method_description(@expected), args_description].compact.join(' ')
         end
 
-        private
+      private
 
-        def predicate(sym)
-          "#{sym.to_s.sub("have_","has_")}?".to_sym
+        # support 1.8.7
+        if String === methods.first
+          def is_private_on? actual
+            actual.private_methods.include? predicate.to_s
+          end
+        else
+          def is_private_on? actual
+            actual.private_methods.include? predicate
+          end
+        end
+
+        def predicate
+          "#{@expected.to_s.sub("have_","has_")}?".to_sym
         end
 
         def method_description(method)
