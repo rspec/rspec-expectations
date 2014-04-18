@@ -179,10 +179,10 @@ it is a bit confusing.
           "#{prefix_to_sentence}#{expected_to_sentence}#{args_to_sentence}"
         end
 
-        private
+      private
 
         # support 1.8.7
-        if methods.first.is_a? String
+        if String === methods.first
           def is_private_on? actual
             actual.private_methods.include? predicate.to_s
           end
