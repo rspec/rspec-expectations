@@ -126,6 +126,10 @@ MESSAGE
           "change ##{message}"
         end
 
+        def supports_block_expectations?
+          true
+        end
+
         private
 
         def failure_message_for_expected_after

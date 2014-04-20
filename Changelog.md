@@ -15,6 +15,9 @@ Deprecations:
   (Daniel Fone)
 * Deprecate `have_xyz` matcher on an object that has a private method `has_xyz?`.
   (Jon Rowe)
+* Issue a deprecation warning when a block expectation expression is
+  used with a matcher that doesn't explicitly support block expectations
+  via `supports_block_expectations?`. (Myron Marston)
 
 ### 2.99.0.beta2 / 2014-02-17
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0.beta1...v2.99.0.beta2)

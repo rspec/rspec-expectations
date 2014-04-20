@@ -22,6 +22,12 @@ module RSpec
           }.to raise_error(ArgumentError)
         end
 
+        it 'raises a wrong number of args ArgumentError when given two args' do
+          expect {
+            expect(1, 2)
+          }.to raise_error(ArgumentError, /wrong number of arg/)
+        end
+
         it 'raises an ArgumentError when given neither an argument nor a block' do
           expect {
             expect
@@ -74,6 +80,62 @@ module RSpec
           expect {
             expect(3).not_to == 4
           }.to raise_error(ArgumentError)
+        end
+      end
+
+      context "when passed a block" do
+        it 'can be used with a block matcher' do
+          expect { }.not_to raise_error
+        end
+
+        context 'when passed a value matcher' do
+          it 'issues a warning to instruct the user to use a value expression or fix the matcher (for `to`)' do
+            expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /block expectation/)
+            expect { }.to be_an(Object)
+          end
+
+          it 'issues a warning to instruct the user to use a value expression or fix the matcher (for `not_to`)' do
+            expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /block expectation/)
+            expect { }.not_to be_an(String)
+          end
+
+          it 'issues a warning to instruct the user to use a value expression or fix the matcher (for `to_not`)' do
+            expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /block expectation/)
+            expect { }.to_not be_an(String)
+          end
+
+          it 'assumes a custom matcher that does not define `supports_block_expectations?` is not a block matcher (since it is relatively rare)' do
+            custom_matcher = Module.new do
+              def self.matches?(value); true; end
+              def self.description; "foo"; end
+            end
+
+            expect_deprecation_with_call_site(__FILE__, __LINE__ + 2, /block expectation/)
+            expect(3).to custom_matcher # to show the custom matcher can be used as a matcher
+            expect { 3 }.to custom_matcher
+          end
+
+          it "uses the matcher's `description` in the warning" do
+            custom_matcher = Module.new do
+              def self.matches?(value); true; end
+              def self.description; "matcher-description"; end
+            end
+
+            expect_deprecation_with_replacement(/\(matcher-description\)/)
+            expect { }.to custom_matcher
+          end
+
+          context 'when the matcher does not define `description` (since it is an optional part of the protocol)' do
+            it 'uses `inspect` in the warning instead' do
+              custom_matcher = Module.new do
+                def self.matches?(value); true; end
+                def self.inspect; "matcher-inspect"; end
+              end
+
+              expect_deprecation_with_replacement(/\(matcher-inspect\)/)
+              expect { }.to custom_matcher
+            end
+          end
         end
       end
     end

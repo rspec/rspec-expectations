@@ -32,6 +32,10 @@ describe Object, "#should" do
           true
         end
 
+        def respond_to?(name, include_all=false)
+          super || name == :proxied? || @target.respond_to?(name, include_all)
+        end
+
         def method_missing(name, *args)
           @target.send(name, *args)
         end

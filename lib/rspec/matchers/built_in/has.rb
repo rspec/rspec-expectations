@@ -33,6 +33,11 @@ module RSpec
           [method_description(@expected), args_description].compact.join(' ')
         end
 
+        # @private
+        def supports_block_expectations?
+          false
+        end
+
       private
 
         # support 1.8.7

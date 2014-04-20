@@ -41,7 +41,12 @@ module RSpec
           "be within #{@delta}#{@unit} of #{@expected}"
         end
 
-        private
+        # @private
+        def supports_block_expectations?
+          false
+        end
+
+      private
 
         def needs_subtractable
           ArgumentError.new "The actual value (#{@actual.inspect}) must respond to `-`"

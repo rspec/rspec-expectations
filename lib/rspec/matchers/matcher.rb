@@ -19,6 +19,7 @@ module RSpec
           @declarations = declarations
           @actual       = nil
           @diffable     = false
+          @supports_block_expectations = false
           @expected_exception, @rescued_exception = nil, nil
           @match_for_should_not_block = nil
           @messages = {}
@@ -30,6 +31,7 @@ module RSpec
 
         PERSISTENT_INSTANCE_VARIABLES = [
           :@name, :@declarations, :@diffable,
+          :@supports_block_expectations,
           :@match_block, :@match_for_should_not_block,
           :@expected_exception
         ].to_set
@@ -219,6 +221,10 @@ module RSpec
           @diffable = true
         end
 
+        def supports_block_expectations
+          @supports_block_expectations = true
+        end
+
         # Convenience for defining methods on this matcher to create a fluent
         # interface. The trick about fluent interfaces is that each method must
         # return self in order to chain methods together. `chain` handles that
@@ -248,6 +254,11 @@ module RSpec
         # Used internally by objects returns by +should+ and +should_not+.
         def diffable?
           @diffable
+        end
+
+        # @api private
+        def supports_block_expectations?
+          @supports_block_expectations
         end
 
         # @api private

@@ -91,6 +91,11 @@ module RSpec
           "raise #{expected_error}"
         end
 
+        # @private
+        def supports_block_expectations?
+          true
+        end
+
         private
 
         def expected_error
