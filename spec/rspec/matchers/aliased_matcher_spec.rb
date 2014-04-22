@@ -1,17 +1,19 @@
 module RSpec
   module Matchers
-    describe AliasedMatcher do
-      RSpec::Matchers.define :my_base_matcher do
-        match { |actual| actual == foo }
 
-        def foo
-          13
-        end
+    RSpec::Matchers.define :my_base_matcher do
+      match { |actual| actual == foo }
 
-        def description
-          "my base matcher description"
-        end
+      def foo
+        13
       end
+
+      def description
+        "my base matcher description"
+      end
+    end
+
+    describe AliasedMatcher do
 
       shared_examples "making a copy" do |copy_method|
         context "when making a copy via `#{copy_method}`" do
@@ -73,6 +75,49 @@ module RSpec
         matcher = my_blockless_override
         expect(matcher.description).to eq("my blockless override description")
       end
+    end
+
+    describe AliasedNegatedMatcher do
+
+      # RSpec::Matchers.define_negated_matcher :my_negated_base_matcher, :my_base_matcher
+
+
+
+
+      RSpec::Matchers.define_negated_matcher :a_value_not_between, :be_between do |desc|
+        desc  + " (overriden)"
+      end
+
+      fit 'can get a method object for delegated methods', :if => (RUBY_VERSION.to_f > 1.8) do
+        # expect(14).to negated_matcher
+
+        expect(44).to a_value_not_between(3, 15)
+        # expect(14).to a_value_between(3, 13)
+      end
+
+
+
+
+      it 'can get a method object for delegated methods', :if => (RUBY_VERSION.to_f > 1.8) do
+        # expect(14).to negated_matcher
+
+        expect(14).to my_negated_base_matcher
+      end
+
+      it 'overrides the description with the provided block' do
+        negated_matcher = my_negated_base_matcher
+        expect(negated_matcher.description).to eq("my negated base matcher description")
+      end
+
+      # RSpec::Matchers.define_negated_matcher :my_negated_base_matcher, :my_base_matcher do |desc|
+      #   desc + " (overriden)"
+      # end
+      #
+      # it 'overrides the description with the provided block' do
+      #   matcher = my_negated_base_matcher
+      #   expect(matcher.description).to eq("my negated base matcher description (overriden)")
+      # end
+
     end
   end
 end

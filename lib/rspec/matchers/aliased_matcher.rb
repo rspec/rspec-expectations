@@ -37,5 +37,23 @@ module RSpec
         @description_block.call(super)
       end
     end
+
+    # @api private
+    class AliasedNegatedMatcher < AliasedMatcher
+
+      # Negates the current matcher
+      # @api private
+      def match(expected, actual)
+        !super(expected, actual)
+      end
+
+      # def matches?(actual)
+      #   !super
+      # end
+      #
+      # def does_not_match?(actual)
+      #   !super
+      # end
+    end
   end
 end

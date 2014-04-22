@@ -249,13 +249,39 @@ module RSpec
     #   @!parse
     #     alias $1 $2
     def self.alias_matcher(new_name, old_name, &description_override)
-      description_override ||= lambda do |old_desc|
-        old_desc.gsub(Pretty.split_words(old_name), Pretty.split_words(new_name))
-      end
+      description_override ||= build_description_override(new_name, old_name)
 
       define_method(new_name) do |*args, &block|
         matcher = __send__(old_name, *args, &block)
         AliasedMatcher.new(matcher, description_override)
+      end
+    end
+
+    # Defines a negated matcher. The returned matcher's `description` will be overriden
+    # to reflect the phrasing of the new name, which will be used in failure messages
+    # when passed as an argument to another matcher in a composed matcher expression.
+    #
+    # @param negated_name [Symbol] the new name for the negated matcher
+    # @param base_name [Symbol] the original name for the matcher to negate
+    #
+    # @example
+    #
+    #   RSpec::Matchers.define_negated_matcher :a_value_not_between, :a_value_between
+    #   a_value_between(3, 5).description # => "a value between 1 and 10"
+    #   a_value_not_between(3).description # => "a value not between 1 and 10"
+    def self.define_negated_matcher(negated_name, base_name, &description_override)
+      description_override ||= build_description_override(negated_name, base_name)
+
+      define_method(negated_name) do |*args, &block|
+        matcher = __send__(base_name, *args, &block)
+        AliasedMatcher.new(~matcher, description_override)
+      end
+    end
+
+    # @private
+    def self.build_description_override(new_name, old_name)
+      lambda do |old_desc|
+        old_desc.gsub(Pretty.split_words(old_name), Pretty.split_words(new_name))
       end
     end
 

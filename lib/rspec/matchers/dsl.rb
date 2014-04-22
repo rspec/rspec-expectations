@@ -11,15 +11,6 @@ module RSpec
       end
       alias_method :matcher, :define
 
-      # Defines a custom negated matcher.
-      # @see RSpec::Matchers
-      def define_negated_matcher(name, base_matcher, &declarations)
-        define_method name do |*expected|
-          RSpec::Matchers::DSL::Matcher.new(name, declarations, self, *expected)
-        end
-      end
-      alias_method :negated_matcher, :define_negated_matcher
-
       if RSpec.respond_to?(:configure)
         RSpec.configure {|c| c.extend self}
       end
