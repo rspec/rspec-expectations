@@ -103,12 +103,25 @@ module RSpec
           RSpec::Expectations::PositiveExpectationHandler.handle_matcher(actual, matcher, "custom")
         end
 
-        it "uses the custom failure message when one is provided as a callable object" do
+        it "uses the custom failure message when one is provided as a callable object with no argument" do
           matcher = double("matcher", :failure_message => "message", :matches? => false)
           actual = Object.new
 
-          failure_message = double("failure message", :call => "custom")
+          failure_message = double("failure message", :arity => 0)
 
+          expect(failure_message).to receive(:call).with(no_args).and_return("custom")
+          expect(::RSpec::Expectations).to receive(:fail_with).with("custom")
+
+          RSpec::Expectations::PositiveExpectationHandler.handle_matcher(actual, matcher, failure_message)
+        end
+
+        it "uses the custom failure message when one is provided as a callable object with an argument" do
+          matcher = double("matcher", :failure_message => "message", :matches? => false)
+          actual = Object.new
+
+          failure_message = double("failure message", :arity => 1)
+
+          expect(failure_message).to receive(:call).with(matcher).and_return("custom")
           expect(::RSpec::Expectations).to receive(:fail_with).with("custom")
 
           RSpec::Expectations::PositiveExpectationHandler.handle_matcher(actual, matcher, failure_message)
@@ -165,12 +178,25 @@ module RSpec
           RSpec::Expectations::NegativeExpectationHandler.handle_matcher(actual, matcher, "custom")
         end
 
-        it "uses the custom failure message when one is provided as a callable object" do
+        it "uses the custom failure message when one is provided as a callable object with no argument" do
+          matcher = double("matcher", :failure_message => "message", :matches? => false)
+          actual = Object.new
+
+          failure_message = double("failure message", :arity => 0)
+
+          expect(failure_message).to receive(:call).with(no_args).and_return("custom")
+          expect(::RSpec::Expectations).to receive(:fail_with).with("custom")
+
+          RSpec::Expectations::PositiveExpectationHandler.handle_matcher(actual, matcher, failure_message)
+        end
+
+        it "uses the custom failure message when one is provided as a callable object with an argument" do
           matcher = double("matcher", :failure_message_when_negated => "message", :matches? => true)
           actual = Object.new
 
-          failure_message = double("failure message", :call => "custom")
+          failure_message = double("failure message", :arity => 1)
 
+          expect(failure_message).to receive(:call).with(matcher).and_return("custom")
           expect(::RSpec::Expectations).to receive(:fail_with).with("custom")
 
           RSpec::Expectations::NegativeExpectationHandler.handle_matcher(actual, matcher, failure_message)
