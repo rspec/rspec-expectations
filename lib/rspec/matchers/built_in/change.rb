@@ -40,7 +40,6 @@ module RSpec
 
           unless matches_before?
             RSpec.warn_deprecation(<<-EOS.gsub(/^\s+\|/, ''))
-              |--------------------------------------------------------------------
               |The semantics of `expect { }.not_to change { }.from()` are changing
               |in RSpec 3. In RSpec 2.x, this would pass if the value changed but
               |the starting value was not what you specified with `from()`. In
@@ -49,7 +48,6 @@ module RSpec
               |
               |You have an expectation that relies upon the old RSpec 2.x semantics
               |at: #{CallerFilter.first_non_rspec_line}"
-              |--------------------------------------------------------------------
             EOS
           end
 
