@@ -274,7 +274,8 @@ module RSpec
 
       define_method(negated_name) do |*args, &block|
         matcher = __send__(base_name, *args, &block)
-        AliasedMatcher.new(~matcher, description_override)
+        aliased = AliasedMatcher.new(matcher, description_override)
+        BuiltIn::Negation.new(aliased)
       end
     end
 
