@@ -25,6 +25,7 @@ module RSpec
   #     does_not_match?(actual)
   #     failure_message_when_negated
   #     description
+  #     supports_block_expectations?
   #
   # ## Predicates
   #
@@ -606,6 +607,26 @@ module RSpec
     alias_matcher :a_string_including,     :include
     alias_matcher :a_hash_including,       :include
     alias_matcher :including,              :include
+
+    # Passes if actual all expected objects pass. This works for
+    # any enumerable object.
+    #
+    # @example
+    #
+    #   expect([1, 3, 5]).to all be_odd
+    #   expect([1, 3, 6]).to all be_odd # fails
+    #
+    # @note The negative form `not_to all` is not supported. Instead
+    #   use `not_to include` or pass a negative form of a matcher
+    #   as the argument (e.g. `all exclude(:foo)`).
+    #
+    # @note You can also use this with compound matchers as well.
+    #
+    # @example
+    #   expect([1, 3, 5]).to all( be_odd.and be_an(Integer) )
+    def all(expected)
+      BuiltIn::All.new(expected)
+    end
 
     # Given a `Regexp` or `String`, passes if `actual.match(pattern)`
     # Given an arbitrary nested data structure (e.g. arrays and hashes),

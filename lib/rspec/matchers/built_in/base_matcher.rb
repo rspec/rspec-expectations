@@ -54,7 +54,7 @@ module RSpec
 
         # @api private
         # Provides a good generic failure message. Based on `description`.
-        # When subclassing, if you are not satisifed with this failure message
+        # When subclassing, if you are not satisfied with this failure message
         # you often only need to override `description`.
         # @return [String]
         def failure_message
@@ -64,7 +64,7 @@ module RSpec
 
         # @api private
         # Provides a good generic negative failure message. Based on `description`.
-        # When subclassing, if you are not satisifed with this failure message
+        # When subclassing, if you are not satisfied with this failure message
         # you often only need to override `description`.
         # @return [String]
         def failure_message_when_negated
@@ -84,6 +84,14 @@ module RSpec
         # Matchers are not diffable by default. Override this to make your
         # subclass diffable.
         def diffable?
+          false
+        end
+
+        # @api private
+        # Most matchers are value matchers (i.e. meant to work with `expect(value)`)
+        # rather than block matchers (i.e. meant to work with `expect { }`), so
+        # this defaults to false. Block matchers must override this to return true.
+        def supports_block_expectations?
           false
         end
 

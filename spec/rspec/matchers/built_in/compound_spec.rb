@@ -1,8 +1,5 @@
 module RSpec::Matchers::BuiltIn
   describe Compound do
-    RSpec::Matchers.define :custom_include do |*args|
-      match { |actual| expect(actual).to include(*args) }
-    end
 
     shared_examples "making a copy" do |compound_method, copy_method|
       context "when making a copy via `#{copy_method}`" do
@@ -68,8 +65,14 @@ module RSpec::Matchers::BuiltIn
 
     describe "expect(...).to matcher.and(other_matcher)" do
 
-      it_behaves_like "an RSpec matcher", :valid_value => 3, :invalid_value => 4 do
+      it_behaves_like "an RSpec matcher", :valid_value => 3, :invalid_value => 4, :disallows_negation => true do
         let(:matcher) { eq(3).and be <= 3 }
+      end
+
+      context 'when using boolean AND `&` alias' do
+        it_behaves_like "an RSpec matcher", :valid_value => 3, :invalid_value => 4, :disallows_negation => true do
+          let(:matcher) { eq(3) & be_a(Integer) }
+        end
       end
 
       include_examples "making a copy", :and, :dup
@@ -192,8 +195,14 @@ module RSpec::Matchers::BuiltIn
     end
 
     describe "expect(...).to matcher.or(other_matcher)" do
-      it_behaves_like "an RSpec matcher", :valid_value => 3, :invalid_value => 5 do
+      it_behaves_like "an RSpec matcher", :valid_value => 3, :invalid_value => 5, :disallows_negation => true do
         let(:matcher) { eq(3).or eq(4) }
+      end
+
+      context 'when using boolean OR `|` alias' do
+        it_behaves_like "an RSpec matcher", :valid_value => 3, :invalid_value => 5, :disallows_negation => true do
+          let(:matcher) { eq(3) | eq(4) }
+        end
       end
 
       include_examples "making a copy", :or, :dup

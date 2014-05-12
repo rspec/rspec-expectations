@@ -9,6 +9,10 @@ Breaking Changes for 3.0.0:
 * Remove `RSpec::Matchers::Pretty#expected_to_sentence`. (Myron Marston)
 * Rename `RSpec::Matchers::Configuration` constant to
   `RSpec::Expectations::Configuration`. (Myron Marston)
+* Prevent `have_xyz` predicate matchers using private methods.
+  (Adrian Gonzalez)
+* Block matchers must now implement `supports_block_expectations?`.
+  (Myron Marston)
 
 Bug Fixes:
 
@@ -41,6 +45,13 @@ Enhancements:
 * Improve the failure message for `be_xyz` predicate matchers so
   that it includes the `inspect` output of the receiver.
   (Erik Michaels-Ober, Sam Phippen)
+* Add `all` matcher, to allow you to specify that a given matcher
+  matches all elements in a collection:
+  `expect([1, 3, 5]).to all( be_odd )`. (Adam Farhi)
+* Add boolean aliases (`&`/`|`) for compound operators (`and`/`or`). (Adam Farhi)
+* Give users a clear error when they wrongly use a value matcher
+  in a block expectation expression (e.g. `expect { 3 }.to eq(3)`)
+  or vice versa.  (Myron Marston)
 
 ### 3.0.0.beta2 / 2014-02-17
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.0.beta1...v3.0.0.beta2)
