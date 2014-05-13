@@ -18,6 +18,8 @@ Deprecations:
 * Issue a deprecation warning when a block expectation expression is
   used with a matcher that doesn't explicitly support block expectations
   via `supports_block_expectations?`. (Myron Marston)
+* Deprecate `require 'rspec-expectations'`. Use
+  `require 'rspec/expectations'` instead. (Myron Marston)
 
 ### 2.99.0.beta2 / 2014-02-17
 [full changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0.beta1...v2.99.0.beta2)

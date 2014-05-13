@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 module RSpec
   describe Expectations do
     def file_contents_for(lib, filename)
@@ -12,6 +14,11 @@ module RSpec
       core         = file_contents_for("core",         "rspec/core/caller_filter.rb")
 
       expect(expectations).to eq(core)
+    end
+
+    it 'prints a deprecation warning when the root file is loaded' do
+      expect_deprecation_with_call_site(__FILE__, __LINE__ + 1, /rspec-expectations/)
+      load "rspec-expectations.rb"
     end
 
     describe '.method_handle_for(object, method_name)' do
