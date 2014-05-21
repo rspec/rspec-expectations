@@ -142,7 +142,15 @@ EOF
         def print_deprecation_message(query_method)
           deprecation_message = "the rspec-collection_matchers gem "
           deprecation_message << "or replace your expectation with something like "
-          deprecation_message << "`expect(#{cardinality_expression(query_method)}).#{expectation_format_method} #{suggested_matcher_expression}`"
+          if defined?(RSpec::Rails) && /\.errors_on/ =~ original_matcher_expression
+            deprecation_message << "\n\n"
+            deprecation_message << "    #{target_expression}.valid?"
+            deprecation_message << "\n"
+            deprecation_message << "    expect(#{cardinality_expression(query_method)}).#{expectation_format_method} #{suggested_matcher_expression}"
+            deprecation_message << "\n\n"
+          else
+            deprecation_message << "`expect(#{cardinality_expression(query_method)}).#{expectation_format_method} #{suggested_matcher_expression}`"
+          end
 
           RSpec.deprecate("`#{expectation_expression(query_method)}`",
             :replacement => deprecation_message,

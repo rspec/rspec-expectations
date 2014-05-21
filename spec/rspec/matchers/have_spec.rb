@@ -532,6 +532,58 @@ EOF
       end
     end
 
+    context "when the target is a Rails record" do
+      class TheModel
+        attr_reader :errors
+
+        def initialize(errors)
+          @errors = {}
+          @errors[:attr] = Array(errors)
+        end
+
+        def errors_on(attr, _ignore_opts = {})
+          Array(@errors[attr]).flatten.compact
+        end
+      end
+
+      it "prints a specific message for the positive expectation format" do
+        stub_const "RSpec::Rails", Module.new
+
+        expectation_expression = "expect(collection_owner).to have(2).errors_on"
+
+        message = "the rspec-collection_matchers gem " +
+                  "or replace your expectation with something like " +
+                  "\n\n" +
+                  "    collection_owner.valid?\n" +
+                  "    expect(collection_owner.errors_on.size).to eq(2)" +
+                  "\n\n"
+
+        expect_have_deprecation(expectation_expression, message)
+
+        target = TheModel.new(%w(foo bar))
+        expect(target).to have(2).errors_on(:attr)
+      end
+
+      it "prints a specific message for the negative expectation format" do
+        stub_const "RSpec::Rails", Module.new
+
+        expectation_expression = "expect(collection_owner).not_to have(2).errors_on"
+
+        message = "the rspec-collection_matchers gem " +
+                  "or replace your expectation with something like " +
+                  "\n\n" +
+                  "    collection_owner.valid?\n" +
+                  "    expect(collection_owner.errors_on.size).to_not eq(2)" +
+                  "\n\n"
+
+
+        expect_have_deprecation(expectation_expression, message)
+
+        target = TheModel.new('foo')
+        expect(target).not_to have(2).errors_on(:attr)
+      end
+    end
+
     context "when the target is an enumerator" do
       it "prints a specific message for the positive expectation format" do
         target = %w[a b c].to_enum(:each)
