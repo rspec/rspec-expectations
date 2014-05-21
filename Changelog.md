@@ -1,3 +1,11 @@
+### 2.99.0 Development
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0.rc1...master)
+
+Enhancements:
+
+* Special case deprecation message for `errors_on` with `rspec-rails` to be more useful.
+  (Aaron Kromer)
+
 ### 2.99.0.rc1 / 2014-05-18
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0.beta2...2.99.0.rc1)
 
