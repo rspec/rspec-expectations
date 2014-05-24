@@ -142,27 +142,37 @@ EOF
         def print_deprecation_message(query_method)
           deprecation_message = "the rspec-collection_matchers gem "
           deprecation_message << "or replace your expectation with something like "
-          if defined?(RSpec::Rails) && /\.errors_on/ =~ original_matcher_expression
-            deprecation_message << "\n\n"
-            deprecation_message << "    #{target_expression}.valid?"
-            deprecation_message << "\n"
-            deprecation_message << "    expect(#{cardinality_expression(query_method)}).#{expectation_format_method} #{suggested_matcher_expression}"
-            deprecation_message << "\n\n"
+          if for_rspec_rails_error_on?
+            # It is supposed to be safe to be able to convert the args array to
+            # a string. This is because the `errors_on` method only takes two
+            # valid arguments: attribute name (symbol/string) and a hash
+            deprecated_call = expectation_expression(query_method, "record")
+            deprecated_call << "(#{errors_on_args_list})" unless @args.empty?
+
+            deprecation_message << <<-EOS.gsub(/^\s+\|/, '')
+              |
+              |
+              |    #{record_valid_expression}
+              |    expect(#{record_errors_expression(query_method)}).#{expectation_format_method} #{suggested_matcher_expression}
+              |
+            EOS
           else
+            deprecated_call = expectation_expression(query_method)
             deprecation_message << "`expect(#{cardinality_expression(query_method)}).#{expectation_format_method} #{suggested_matcher_expression}`"
           end
 
-          RSpec.deprecate("`#{expectation_expression(query_method)}`",
+          RSpec.deprecate("`#{deprecated_call}`",
             :replacement => deprecation_message,
             :type        => "the have matcher"
           )
         end
 
-        def expectation_expression(query_method)
+        def expectation_expression(query_method, target = nil)
+          target ||= target_expression
           if @negative_expectation
-            RSpec::Expectations::Syntax.negative_expression(target_expression, original_matcher_expression)
+            RSpec::Expectations::Syntax.negative_expression(target, original_matcher_expression)
           else
-            RSpec::Expectations::Syntax.positive_expression(target_expression, original_matcher_expression)
+            RSpec::Expectations::Syntax.positive_expression(target, original_matcher_expression)
           end
         end
 
@@ -225,6 +235,37 @@ EOF
           when :at_least
             "have_at_least"
           end
+        end
+
+        # RSpec Rails `errors_on` specific helpers
+        def for_rspec_rails_error_on?
+          defined?(RSpec::Rails) &&
+            /\.errors?_on\b/ =~ original_matcher_expression
+        end
+
+        def errors_on_args_list
+          list = @args.first.inspect
+          context = validation_context
+          list << ", :context => #{context}" if context
+          list
+        end
+
+        def record_valid_expression
+          expression = "record.valid?"
+          if on_context = validation_context
+            expression << "(#{on_context})"
+          end
+          expression
+        end
+
+        def validation_context
+          return unless Hash === @args.last
+          @args.last[:context].inspect
+        end
+
+        def record_errors_expression(query_method)
+          attribute = (@args.first || :attr)
+          "record.errors[#{attribute.inspect}].#{String(query_method)}"
         end
       end
     end
