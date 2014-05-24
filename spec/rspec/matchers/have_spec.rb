@@ -544,19 +544,27 @@ EOF
         def errors_on(attr, _ignore_opts = {})
           Array(@errors[attr]).flatten.compact
         end
+        alias_method :error_on, :errors_on
+      end
+
+      let(:message_preamble) do
+        "the rspec-collection_matchers gem " +
+          "or replace your expectation with something like "
+      end
+
+      before do
+        stub_const "RSpec::Rails", Module.new
       end
 
       it "prints a specific message for the positive expectation format" do
-        stub_const "RSpec::Rails", Module.new
-
-        expectation_expression = "expect(collection_owner).to have(2).errors_on"
-
-        message = "the rspec-collection_matchers gem " +
-                  "or replace your expectation with something like " +
-                  "\n\n" +
-                  "    collection_owner.valid?\n" +
-                  "    expect(collection_owner.errors_on.size).to eq(2)" +
-                  "\n\n"
+        expectation_expression = "expect(record).to have(2).errors_on(:attr)"
+        message = message_preamble + <<-EOS.gsub(/^\s+\|/, '')
+          |
+          |
+          |    record.valid?
+          |    expect(record.errors[:attr].size).to eq(2)
+          |
+        EOS
 
         expect_have_deprecation(expectation_expression, message)
 
@@ -565,22 +573,52 @@ EOF
       end
 
       it "prints a specific message for the negative expectation format" do
-        stub_const "RSpec::Rails", Module.new
-
-        expectation_expression = "expect(collection_owner).not_to have(2).errors_on"
-
-        message = "the rspec-collection_matchers gem " +
-                  "or replace your expectation with something like " +
-                  "\n\n" +
-                  "    collection_owner.valid?\n" +
-                  "    expect(collection_owner.errors_on.size).to_not eq(2)" +
-                  "\n\n"
-
+        expectation_expression = "expect(record).not_to have(2).errors_on(:attr)"
+        message = message_preamble + <<-EOS.gsub(/^\s+\|/, '')
+          |
+          |
+          |    record.valid?
+          |    expect(record.errors[:attr].size).to_not eq(2)
+          |
+        EOS
 
         expect_have_deprecation(expectation_expression, message)
 
         target = TheModel.new('foo')
         expect(target).not_to have(2).errors_on(:attr)
+      end
+
+      it "prints message for singular form: `error_on`" do
+        expectation_expression = "expect(record).to have(1).error_on(:attr)"
+        message = message_preamble + <<-EOS.gsub(/^\s+\|/, '')
+          |
+          |
+          |    record.valid?
+          |    expect(record.errors[:attr].size).to eq(1)
+          |
+        EOS
+
+        expect_have_deprecation(expectation_expression, message)
+
+        target = TheModel.new('foo')
+        expect(target).to have(1).error_on(:attr)
+      end
+
+      it "includes a validation context when provided" do
+        expectation_expression = "expect(record).to have(2).errors_on(:attr, :context => :spec)"
+        message = message_preamble + <<-EOS.gsub(/^\s+\|/, '')
+          |
+          |
+          |    record.valid?(:spec)
+          |    expect(record.errors[:attr].size).to eq(2)
+          |
+        EOS
+
+        expect_have_deprecation(expectation_expression, message)
+
+        target = TheModel.new(%w(foo bar))
+        options = {:context => :spec, :should_be_ignored => true}
+        expect(target).to have(2).errors_on(:attr, options)
       end
     end
 
