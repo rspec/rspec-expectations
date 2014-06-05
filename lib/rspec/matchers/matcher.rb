@@ -42,7 +42,7 @@ module RSpec
               "Custom matchers in 3.x will set expected to be a single value "+
               "(when provided as such) rather than an array. This may change "+
               "the behaviour of your matcher.\n"+
-              "To continue to access this as an array use `expected_array`\n"+
+              "To continue to access this as an array use `expected_as_array`\n"+
               "Called from: #{ RSpec::CallerFilter.first_non_rspec_line }\n\n"
             )
           end
