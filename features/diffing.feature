@@ -25,7 +25,7 @@ Feature: diffing
     Then the output should contain:
       """
              Diff:
-             @@ -1,4 +1,4 @@
+             @@ -1,5 +1,5 @@
               this is the
              -  expected
              +  actual
@@ -51,7 +51,7 @@ Feature: diffing
     Then the output should contain:
       """
              Diff:
-             @@ -1,2 +1,4 @@
+             @@ -1,2 +1,5 @@
              -/expected/m
              +this is the
              +  actual
