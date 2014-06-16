@@ -1,3 +1,11 @@
+### 3.0.2 Development
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.1...3-0-maintenance)
+
+Bug Fixes:
+
+* Fix regression in `contain_exactly` (AKA `match_array`) that caused it
+  to wrongly pass when the expected array was empty. (Myron Marston, #581)
+
 ### 3.0.1 / 2014-06-12
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.0...v3.0.1)
 
