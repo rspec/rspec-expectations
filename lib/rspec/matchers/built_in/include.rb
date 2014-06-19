@@ -5,7 +5,8 @@ module RSpec
       # Provides the implementation for `include`.
       # Not intended to be instantiated directly.
       class Include < BaseMatcher
-        def initialize(*expected)
+        def initialize(deeply, *expected)
+          @deeply   = deeply
           @expected = expected
         end
 
@@ -13,6 +14,7 @@ module RSpec
         # @return [Boolean]
         def matches?(actual)
           @actual = actual
+          @method = :matches?
           perform_match(:all?, :all?)
         end
 
@@ -20,6 +22,7 @@ module RSpec
         # @return [Boolean]
         def does_not_match?(actual)
           @actual = actual
+          @method = :does_not_match?
           perform_match(:none?, :any?)
         end
 
@@ -70,7 +73,27 @@ module RSpec
 
         def actual_hash_includes?(expected_key, expected_value)
           actual_value = actual.fetch(expected_key) { return false }
-          values_match?(expected_value, actual_value)
+
+          if @deeply && values_are_deeply_comparable?(expected_value, actual_value)
+            deeply_compared_values_match?(expected_value, actual_value)
+          else
+            values_match?(expected_value, actual_value)
+          end
+        end
+
+        def values_are_deeply_comparable?(expected_value, actual_value)
+          return false unless actual_value.class == expected_value.class
+
+          [Hash, Array].include? actual_value.class
+        end
+
+        def deeply_compared_values_match?(expected_value, actual_value)
+          case actual_value
+          when Hash
+            self.class.new(true, expected_value).__send__(@method, actual_value)
+          when Array
+            self.class.new(true, *expected_value).__send__(@method, actual_value)
+          end
         end
 
         def comparing_hash_keys?(expected_item)

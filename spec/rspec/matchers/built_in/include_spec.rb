@@ -77,6 +77,151 @@ RSpec.describe "#include matcher" do
         }.to fail_matching(%Q|expected {} to include {:something => nil}|)
       end
 
+      context 'when deeply compared' do
+        it 'passes for a Hash with a partial subhash' do
+          @actual_hash = {
+            foo: 'bar',
+            baz: {
+              'hello'   => 1,
+              'goodbye' => 2,
+            }
+          }
+
+          expect(@actual_hash).to deeply_include(
+            foo: 'bar',
+            baz: {
+              'hello' => 1,
+            }
+          )
+        end
+
+        it 'passes for a Hash with a very deeply nested partial subhash' do
+          @actual_hash = {
+            foo:      'bar',
+            baz:      {
+              'hello'   => {
+                '1'       => {
+                  '2'       => 'yes',
+                  '3'       => 'no',
+                  '4'       => [
+                    1,
+                    2,
+                  ]
+                }
+              },
+            }
+          }
+
+          expect(@actual_hash).to deeply_include(
+            foo:      'bar',
+            baz:      {
+              'hello'   => {
+                '1'       => {
+                  '2'       => 'yes',
+                  '3'       => 'no',
+                  '4'       => [
+                    1,
+                    2,
+                  ]
+                }
+              },
+            }
+          )
+        end
+
+        it 'passes for a Hash with a very deeply nested partial Array' do
+          @actual_hash = {
+            foo:      'bar',
+            baz:      {
+              'hello'   => {
+                '1'       => {
+                  '2'       => 'yes',
+                  '3'       => 'no',
+                  '4'       => [
+                    1,
+                    2,
+                  ]
+                }
+              },
+            }
+          }
+
+          expect(@actual_hash).to deeply_include(
+            foo: 'bar',
+            baz: {
+              'hello'   => {
+                '1'       => {
+                  '2'       => 'yes',
+                  '3'       => 'no',
+                  '4'       => [
+                    2,
+                  ]
+                }
+              },
+            }
+          )
+        end
+
+        it 'fails for a Hash with an incorrect partial subhash' do
+          @actual_hash = {
+            foo: 'bar',
+            baz: {
+              'hello'   => 1,
+              'goodbye' => 2,
+            }
+          }
+
+          @expected_hash = {
+            foo: 'bar',
+            baz: {
+              'hello' => 2,
+            }
+          }
+
+          expect {
+            expect(@actual_hash).not_to deeply_include(@expected_hash)
+          }.to fail_matching(%r|expected #{hash_inspect @actual_hash} not to include #{hash_inspect @expected_hash}|)
+        end
+
+        it 'fails for a Hash with an incorrect partial subhash' do
+          @actual_hash = {
+            foo: 'bar',
+            baz: {
+              'hello'   => {
+                '1'       => {
+                  '2'       => 'yes',
+                  '3'       => 'no',
+                  '4'       => [
+                    1,
+                    2,
+                  ]
+                }
+              },
+            }
+          }
+
+          @expected_hash = {
+            foo: 'bar',
+            baz: {
+              'hello'   => {
+                '1'       => {
+                  '2'       => 'yes',
+                  '3'       => 'no',
+                  '4'       => [
+                    5,
+                    2,
+                  ]
+                }
+              },
+            }
+          }
+
+          expect {
+            expect(@actual_hash).not_to deeply_include(@expected_hash)
+          }.to fail_matching(%r|expected {:foo => "bar", :baz => {"hello" => {"1" => {"2" => "yes", "3" => "no", "4" => \[1, 2\]}}}} not to include {:foo => "bar", :baz => {"hello" => {"1" => {"2" => "yes", "3" => "no", "4" => \[5, 2\]}}}}|)
+        end
+      end
+
       it 'works even when an entry in the hash overrides #send' do
         hash = { :key => 'value' }
         def hash.send; :sent; end
