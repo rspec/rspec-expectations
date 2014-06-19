@@ -573,12 +573,16 @@ module RSpec
     #   expect("spread").to     include("read")
     #   expect("spread").not_to include("red")
     def include(*expected)
-      BuiltIn::Include.new(*expected)
+      BuiltIn::Include.new(false, *expected)
     end
     alias_matcher :a_collection_including, :include
     alias_matcher :a_string_including,     :include
     alias_matcher :a_hash_including,       :include
     alias_matcher :including,              :include
+
+    def deeply_include(*expected)
+      BuiltIn::Include.new(true, *expected)
+    end
 
     # Passes if actual all expected objects pass. This works for
     # any enumerable object.
