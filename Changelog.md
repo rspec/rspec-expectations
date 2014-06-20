@@ -1,7 +1,7 @@
-### 2.99.1 Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0...2-99-maintenance)
+### 2.99.1 / 2014-06-19
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0...v2.99.1)
 
-Bug fixes:
+Bug Fixes:
 
 * Fix typo in custom matcher `expected` deprecation warning -- it's
   `expected_as_array`, not `expected_array`. (Frederick Cheung, #562)
