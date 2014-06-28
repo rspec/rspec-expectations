@@ -210,9 +210,9 @@ describe "operator matchers", :uses_should do
     let(:custom_klass) { Class.new }
     let(:custom_subklass) { Class.new(custom_klass) }
 
-    after {
+    after do
       RSpec::Matchers::BuiltIn::OperatorMatcher.unregister(custom_klass, "=~")
-    }
+    end
 
     it "allows operator matchers to be registered for types" do
       RSpec::Matchers::BuiltIn::OperatorMatcher.register(custom_klass, "=~", RSpec::Matchers::BuiltIn::Match)
