@@ -893,6 +893,29 @@ module RSpec
     alias_matcher :a_block_yielding_successive_args,  :yield_successive_args
     alias_matcher :yielding_successive_args,          :yield_successive_args
 
+    # Designed for use with methods that repeatedly yield (such as
+    # iterators). Passes if the method called in the expect block yields
+    # multiple times with arguments matching those given despite their
+    # order.
+    #
+    # Argument matching is done using `===` (the case match operator)
+    # and `==`. If the expected and actual arguments match with either
+    # operator, the matcher will pass.
+    #
+    # @example
+    #
+    #   expect { |b| [1, 2, 3].each(&b) }.to yield_successive_args_in_any_order(3, 2, 1)
+    #   expect { |b| { :a => 1, :b => 2 }.each(&b) }.to yield_successive_args_in_any_order([:b, 2], [:a, 1])
+    #   expect { |b| [1, 2, 3].each(&b) }.not_to yield_successive_args_in_any_order(2, 1)
+    #
+    # @note Your expect block must accept a parameter and pass it on to
+    #   the method-under-test as a block.
+    def yield_successive_args_in_any_order(*args)
+      BuiltIn::YieldSuccessiveArgsInAnyOrder.new(*args)
+    end
+    alias_matcher :a_block_yielding_successive_args_in_any_order,  :yield_successive_args_in_any_order
+    alias_matcher :yielding_successive_args_in_any_order,          :yield_successive_args_in_any_order
+
     # Delegates to {RSpec::Expectations.configuration}.
     # This is here because rspec-core's `expect_with` option
     # looks for a `configuration` method on the mixin
