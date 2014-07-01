@@ -427,6 +427,20 @@ module RSpec
           "\n         got: [#{@actual_formatted.join(", ")}]"
         end
       end
+
+      class YieldSuccessiveArgsInAnyOrder < YieldSuccessiveArgs
+
+        def description
+          "yield successive args in any order(#{expected_arg_description})"
+        end
+
+      private
+
+        def args_match?
+          values_match?(@expected.sort, @actual.sort)
+        end
+
+      end
     end
   end
 end
