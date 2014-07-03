@@ -1,3 +1,11 @@
+### Development
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.2...master)
+
+Bug Fixes:
+
+* Fix issue with detection of generic operator matchers so they work
+  correctly when undefined. (Myron Marston, #597)
+
 ### 3.0.2 / 2014-06-19
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.1...v3.0.2)
 
