@@ -1,3 +1,12 @@
+### 2.99.2 Development
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.1...master)
+
+Bug Fixes:
+
+* Fix regression in `Expectations#method_handle_for` where proxy objects
+  with method delegated would wrongly not return a method handle.
+  (Jon Rowe, #594)
+
 ### 2.99.1 / 2014-06-19
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.0...v2.99.1)
 
