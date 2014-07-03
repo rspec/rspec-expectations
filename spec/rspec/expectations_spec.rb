@@ -30,8 +30,15 @@ module RSpec
       end
 
       class ClassWithMethodOverridden < UntamperedClass
-        def method
+        def method(name)
           :baz
+        end
+      end
+
+      class ProxyClass < Struct.new(:original)
+        undef :=~, :method
+        def method_missing(name, *args, &block)
+          original.__send__(name, *args, &block)
         end
       end
 
@@ -55,6 +62,26 @@ module RSpec
       it 'fetches method definitions for objects with method redefined' do
         object = ClassWithMethodOverridden.new
         expect(Expectations.method_handle_for(object, :foo).call).to eq :bar
+      end
+
+      it 'fetches method definitions for proxy objects' do
+        object = ProxyClass.new([])
+        expect(Expectations.method_handle_for(object, :=~)).to be_a Method
+      end
+
+      it 'fails with `NameError` when an error is raised when fetching a method from an object that has overriden `method`' do
+        object = double
+        allow(object).to receive(:method).and_raise(Exception)
+        expect {
+          Expectations.method_handle_for(object, :some_undefined_method)
+        }.to raise_error(NameError)
+      end
+
+      it 'fails with `NameError` when a method is fetched from an object that has overriden `method` and is not a method' do
+        object = ProxyClass.new(double(:method => :baz))
+        expect {
+          Expectations.method_handle_for(object, :=~)
+        }.to raise_error(NameError)
       end
 
       it 'fetches method definitions for basic objects', :if => (RUBY_VERSION.to_i >= 2 && RUBY_ENGINE != 'rbx') do
