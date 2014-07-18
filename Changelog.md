@@ -1,5 +1,5 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.2...master)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.2...3-0-maintenance)
 
 Bug Fixes:
 
