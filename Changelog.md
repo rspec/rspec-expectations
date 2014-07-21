@@ -1,5 +1,5 @@
-### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.2...3-0-maintenance)
+### 3.0.3 / 2014-07-21
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.2...v3.0.3)
 
 Bug Fixes:
 
@@ -7,7 +7,7 @@ Bug Fixes:
   correctly when undefined. (Myron Marston, #597)
 * Don't inadvertently define `BasicObject` in 1.8.7. (Chris Griego, #603)
 * Fix `include` matcher so that it fails gracefully when matched against
-  an object that does not respond to `include?`. (Myron Marston)
+  an object that does not respond to `include?`. (Myron Marston, #607)
 
 ### 3.0.2 / 2014-06-19
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.1...v3.0.2)
