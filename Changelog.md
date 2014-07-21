@@ -1,5 +1,5 @@
-### 2.99.2 Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.1...master)
+### 2.99.2 / 2014-07-21
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v2.99.1...2-99-maintenance)
 
 Bug Fixes:
 
