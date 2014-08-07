@@ -40,6 +40,31 @@ module RSpec
       end
       alias | or
 
+      # Negates a matcher.
+      #
+      # @example
+      #   expect(stoplight.colors).to ~include(:blue)
+      #   expect(3..15).to ~cover(20)
+      #   expect(7.1).to ~(be_within(0.5).of(8.0))
+      #
+      # On an individual matcher (as shown above) this is equivalent to using
+      # `expect(...).not_to`, and isn't particularly useful.
+      # Where it becomes quite useful is when using it in compound matcher expressions.
+      # It saves you from having to define a custom matcher for the negated form.
+      #
+      # @example
+      #   expect(stoplight.colors).to include(:red).and ~include(:blue)
+      #   expect(3..15).to cover(12).and ~cover(20)
+      #   expect(7.1).to be_within(0.1).of(7.0).and ~(be_within(0.5).of(8.0))
+      #
+      # @note The `!` and `not` forms are only available on 1.9+ and only if you have
+      #   set the `enable_boolean_negation_matcher` config option.
+      #
+      # @see RSpec::Expectations::Configuration#enable_boolean_negation_matcher=
+      def ~
+        BuiltIn::Negation.new self
+      end
+
       # Delegates to `#matches?`. Allows matchers to be used in composable
       # fashion and also supports using matchers in case statements.
       def ===(value)

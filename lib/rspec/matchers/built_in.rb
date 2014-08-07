@@ -34,6 +34,7 @@ module RSpec
       autoload :Include,                 'rspec/matchers/built_in/include'
       autoload :All,                     'rspec/matchers/built_in/all'
       autoload :Match,                   'rspec/matchers/built_in/match'
+      autoload :Negation,                'rspec/matchers/built_in/negation'
       autoload :NegativeOperatorMatcher, 'rspec/matchers/built_in/operators'
       autoload :OperatorMatcher,         'rspec/matchers/built_in/operators'
       autoload :Output,                  'rspec/matchers/built_in/output'
