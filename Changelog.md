@@ -3,6 +3,8 @@
 
 Bug Fixes:
 
+* Fix `start_with` and `end_with` so that they work properly with
+  structs. (Myron Marston, #620)
 * Fix failure message generation so that structs are printed properly
   in failures. Previously failure messages would represent them as
   an array. (Myron Marston, #620)
