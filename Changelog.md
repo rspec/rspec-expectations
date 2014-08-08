@@ -1,3 +1,12 @@
+### 3.0.4 Development
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.3...3-0-maintenance)
+
+Bug Fixes:
+
+* Fix failure message generation so that structs are printed properly
+  in failures. Previously failure messages would represent them as
+  an array. (Myron Marston, #620)
+
 ### 3.0.3 / 2014-07-21
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.2...v3.0.3)
 
