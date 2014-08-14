@@ -1,5 +1,5 @@
-### 3.0.4 Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.3...3-0-maintenance)
+### 3.0.4 / 2014-08-14
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.0.3...v3.0.4)
 
 Bug Fixes:
 
