@@ -444,3 +444,31 @@ RSpec.describe "Composing matchers with `raise_error`" do
     end
   end
 end
+
+RSpec.describe "expect { ... }.to fail" do
+  it "passes if an expectation fails" do
+    expect {
+      expect(true).to be_falsy
+    }.to fail
+  end
+
+  it "fails if no expectations fail" do
+    expect {
+      expect { }.to fail
+    }.to fail_with "expected RSpec::Expectations::ExpectationNotMetError but nothing was raised"
+  end
+end
+
+RSpec.describe "expect { ... }.to fail_with" do
+  it "passes if an expectation fails" do
+    expect {
+      expect(true).to be_falsy
+    }.to fail_with "expected: falsey value\n     got: true"
+  end
+
+  it "fails if no expectations fail" do
+    expect {
+      expect { }.to fail_with "some message"
+    }.to fail_with "expected RSpec::Expectations::ExpectationNotMetError with \"some message\" but nothing was raised"
+  end
+end
