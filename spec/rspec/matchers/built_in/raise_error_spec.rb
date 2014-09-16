@@ -452,7 +452,7 @@ RSpec.describe "expect { ... }.to fail" do
     }.to fail
   end
 
-  it "fails if no expectations fails" do
+  it "fails if no expectations fail" do
     expect {
       expect { }.to fail
     }.to fail_with "expected RSpec::Expectations::ExpectationNotMetError but nothing was raised"
@@ -466,7 +466,7 @@ RSpec.describe "expect { ... }.to fail_with" do
     }.to fail_with "expected: falsey value\n     got: true"
   end
 
-  it "fails if no expectations fails" do
+  it "fails if no expectations fail" do
     expect {
       expect { }.to fail_with "some message"
     }.to fail_with "expected RSpec::Expectations::ExpectationNotMetError with \"some message\" but nothing was raised"
