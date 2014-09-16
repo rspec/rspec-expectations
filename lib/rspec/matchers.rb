@@ -747,6 +747,25 @@ module RSpec
       desc.sub("raise", "raising")
     end
 
+    # Matches if an expectation fails
+    #
+    # @example
+    #
+    #   expect { some_expectation }.to fail
+    def fail
+      raise_error(RSpec::Expectations::ExpectationNotMetError)
+    end
+
+    # Matches if an expectation fails matching the provided message
+    #
+    # @example
+    #
+    #   expect { some_expectation }.to fail_with("some failure message")
+    #   expect { some_expectation }.to fail_with(/some failure message/)
+    def fail_with(message)
+      raise_error(RSpec::Expectations::ExpectationNotMetError, message)
+    end
+
     # Matches if the target object responds to all of the names
     # provided. Names can be Strings or Symbols.
     #
