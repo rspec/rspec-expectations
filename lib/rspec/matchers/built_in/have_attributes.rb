@@ -6,26 +6,30 @@ module RSpec
       # Not intended to be instantiated directly.
       class HaveAttributes < BaseMatcher
         # @private
-        attr_reader :respond_to_failed
+        attr_reader :respond_to_failed, :actual_object
 
         def initialize(expected)
           @expected = expected
           @respond_to_failed = false
+          @negated = false
         end
 
         # @api private
         # @return [Boolean]
         def matches?(actual)
-          @actual = actual
+          @actual_object = @actual = actual
           return false unless respond_to_attributes?
+          @actual = make_hash_from_expected_attributes
           perform_match(:all?)
         end
 
         # @api private
         # @return [Boolean]
         def does_not_match?(actual)
-          @actual = actual
+          @negated = true
+          @actual_object = @actual = actual
           return false unless respond_to_attributes?
+          @actual = make_hash_from_expected_attributes
           perform_match(:none?)
         end
 
@@ -37,15 +41,21 @@ module RSpec
         end
 
         # @api private
+        # @return [Boolean]
+        def diffable?
+          !@respond_to_failed && !@negated
+        end
+
+        # @api private
         # @return [String]
         def failure_message
-          respond_to_failure_message_or { super }
+          respond_to_failure_message_or { "expected #{actual_object.inspect} to #{description}" }
         end
 
         # @api private
         # @return [String]
         def failure_message_when_negated
-          respond_to_failure_message_or { super }
+          respond_to_failure_message_or { "expected #{actual_object.inspect} not to #{description}" }
         end
 
       private
@@ -57,7 +67,7 @@ module RSpec
         end
 
         def actual_has_attribute?(attribute_key, attribute_value)
-          actual_value = actual.__send__(attribute_key)
+          actual_value = actual[attribute_key]
           values_match?(attribute_value, actual_value)
         end
 
@@ -76,6 +86,13 @@ module RSpec
             respond_to_matcher.failure_message
           else
             improve_hash_formatting(yield)
+          end
+        end
+
+        def make_hash_from_expected_attributes
+          expected.inject({}) do |hash, (attribute_key, _)|
+            hash[attribute_key] = actual.__send__(attribute_key)
+            hash
           end
         end
       end
