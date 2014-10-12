@@ -59,6 +59,34 @@ RSpec.describe "#have_attributes matcher" do
         '-:name => "Wrong Name",',
         '\+:name => "Correct name",'
       ]
+
+      context "when target had computed attribute that may change over time" do
+        class MutablePerson < Person
+          def name
+            name_to_return = super
+            self.name = "Wrong Name"
+            name_to_return
+          end
+        end
+
+        let(:person) { MutablePerson.new(correct_name, correct_age) }
+
+        it "doesn't access these attributes twice" do
+          expect(person).to receive(:name).once.and_call_original
+
+          mutated_person = person.dup
+          mutated_person.name
+
+          expect{ subject }.to fail_matching(
+            %r|expected #{object_inspect mutated_person} to have attributes #{hash_inspect :name => wrong_name}|
+          )
+        end
+
+        include_examples "has diff output with", [
+          '-:name => "Wrong Name",',
+          '\+:name => "Correct name",'
+        ]
+      end
     end
 
     context "when target does not responds to any of the attributes" do
