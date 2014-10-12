@@ -16,8 +16,24 @@ RSpec.describe "#have_attributes matcher" do
 
   let(:person) { Person.new(correct_name, correct_age) }
 
-  it "is not diffable" do
-    expect(have_attributes(:age => correct_age)).to_not be_diffable
+  shared_examples "not diffable" do
+    it "does not render diff" do
+      expect { subject }.to fail_matching(
+        %r|\A((?!Diff:).)*\Z|m
+      )
+    end
+  end
+
+  shared_examples "has diff output with" do |lines|
+    it "renders diff" do
+      expect { subject }.to fail_matching(
+        %r|Diff:.*#{lines.join(".*")}|m
+      )
+    end
+  end
+
+  it "is diffable" do
+    expect(have_attributes(:age => correct_age)).to be_diffable
   end
 
   describe "expect(...).to have_attributes(with_one_attribute)" do
@@ -30,22 +46,69 @@ RSpec.describe "#have_attributes matcher" do
       expect(person).to have_attributes(:name => correct_name)
     end
 
-    it "fails if target does not have any of the expected attributes" do
-      expect {
-        expect(person).to have_attributes(:name => wrong_name)
-      }.to fail_matching(%r|expected #{object_inspect person} to have attributes #{hash_inspect :name => wrong_name}|)
+    context "when target does not have any of the expected attributes" do
+      subject { expect(person).to have_attributes(:name => wrong_name) }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          %r|expected #{object_inspect person} to have attributes #{hash_inspect :name => wrong_name}|
+        )
+      end
+
+      include_examples "has diff output with", [
+        '-:name => "Wrong Name",',
+        '\+:name => "Correct name",'
+      ]
+
+      context "when target had computed attribute that may change over time" do
+        class MutablePerson < Person
+          def name
+            name_to_return = super
+            self.name = "Wrong Name"
+            name_to_return
+          end
+        end
+
+        let(:person) { MutablePerson.new(correct_name, correct_age) }
+
+        it "doesn't access these attributes twice" do
+          mutated_person = person.dup
+          mutated_person.name
+
+          expect{ subject }.to fail_matching(
+            %r|expected #{object_inspect mutated_person} to have attributes #{hash_inspect :name => wrong_name}|
+          )
+        end
+
+        include_examples "has diff output with", [
+          '-:name => "Wrong Name",',
+          '\+:name => "Correct name",'
+        ]
+      end
     end
 
-    it "fails if target does not responds to any of the attributes" do
-      expect {
-        expect(person).to have_attributes(:color => 'red')
-      }.to fail_matching("expected #{object_inspect person} to respond to :color")
+    context "when target does not responds to any of the attributes" do
+      subject { expect(person).to have_attributes(:color => 'red') }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          "expected #{object_inspect person} to respond to :color"
+        )
+      end
+
+      include_examples "not diffable"
     end
 
-    it "fails if target responds to the attribute but requires arguments" do
-      expect {
-        expect(person).to have_attributes(:parent => 'Billy')
-      }.to fail_matching("expected #{object_inspect person} to respond to :parent with 0 arguments")
+    context "when target responds to the attribute but requires arguments" do
+      subject { expect(person).to have_attributes(:parent => 'Billy') }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          "expected #{object_inspect person} to respond to :parent with 0 arguments"
+        )
+      end
+
+      include_examples "not diffable"
     end
 
     describe "expect(...).to have_attributes(key => matcher)" do
@@ -59,10 +122,50 @@ RSpec.describe "#have_attributes matcher" do
         expect(description).to eq("have attributes {:age => (a value > 30)}")
       end
 
-      it "fails with a clear message when the matcher does not match" do
-        expect {
-          expect(person).to have_attributes(:age => (a_value < 10))
-        }.to fail_matching("expected #{object_inspect person} to have attributes {:age => (a value < 10)}")
+      context "when the matcher does not match" do
+        subject { expect(person).to have_attributes(:age => (a_value < 10)) }
+
+        it "fails with a clear message" do
+          expect { subject }.to fail_matching(
+            "expected #{object_inspect person} to have attributes {:age => (a value < 10)}"
+          )
+        end
+
+        include_examples "has diff output with", [
+          '-:age => \(a value < 10\),',
+          '\+:age => 33,'
+        ]
+      end
+    end
+
+    describe "expect(...).to have_attributes(key => matcher, other_key => other_matcher)" do
+      let(:matcher) { have_attributes(:age => (a_value > 30).and(a_value < 40), :name => /Correct/) }
+      let(:wrong_matcher) { have_attributes(:age => (a_value > 5).and(a_value < 10), :name => /Wrong/) }
+
+      it "passes when the matchers match" do
+        expect(person).to matcher
+      end
+
+      it 'provides a description' do
+        description = matcher.description
+        expect(description).to match("have attributes #{hash_inspect :age => MatcherValueForRegexp.new((a_value > 30).and(a_value < 40)), :name => /Correct/}")
+      end
+
+      context "when the matcher does not match" do
+        subject { expect(person).to wrong_matcher }
+
+        it "fails with a clear message" do
+          expect { subject }.to fail_matching(
+            %r|expected #{Regexp.quote object_inspect(person)} to have attributes #{hash_inspect :age => MatcherValueForRegexp.new((a_value > 5).and(a_value < 10)), :name => /Wrong/}|
+          )
+        end
+
+        include_examples "has diff output with", [
+          '-:age => \(a value > 5 and a value < 10\),',
+          '-:name => /Wrong/,',
+          '\+:age => 33,',
+          '\+:name => "Correct name",'
+        ]
       end
     end
   end
@@ -73,22 +176,40 @@ RSpec.describe "#have_attributes matcher" do
       expect(person).to_not have_attributes(:age => wrong_age)
     end
 
-    it "fails if target has all of the expected attributes" do
-      expect {
-        expect(person).to_not have_attributes(:age => correct_age)
-      }.to fail_matching(%r|expected #{object_inspect person} not to have attributes #{hash_inspect :age => correct_age}|)
+    context "when target has all of the expected attributes" do
+      subject { expect(person).to_not have_attributes(:age => correct_age) }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          %r|expected #{object_inspect person} not to have attributes #{hash_inspect :age => correct_age}|
+        )
+      end
+
+      include_examples "not diffable"
     end
 
-    it "fails if target does not responds to any of the attributes" do
-      expect {
-        expect(person).to_not have_attributes(:color => 'red')
-      }.to fail_matching("expected #{object_inspect person} to respond to :color")
+    context "when target does not responds to any of the attributes" do
+      subject { expect(person).to_not have_attributes(:color => 'red') }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          "expected #{object_inspect person} to respond to :color"
+        )
+      end
+
+      include_examples "not diffable"
     end
 
-    it "fails if target responds to the attribute but requires arguments" do
-      expect {
-        expect(person).to_not have_attributes(:parent => 'Billy')
-      }.to fail_matching("expected #{object_inspect person} to respond to :parent with 0 arguments")
+    context "when target responds to the attribute but requires arguments" do
+      subject { expect(person).to_not have_attributes(:parent => 'Billy') }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          "expected #{object_inspect person} to respond to :parent with 0 arguments"
+        )
+      end
+
+      include_examples "not diffable"
     end
   end
 
@@ -102,22 +223,44 @@ RSpec.describe "#have_attributes matcher" do
       expect(person).to have_attributes(:name => correct_name, :age => correct_age)
     end
 
-    it "fails if target does not have any of the expected attributes" do
-      expect {
-        expect(person).to have_attributes(:name => correct_name, :age => wrong_age)
-      }.to fail_matching(%r|expected #{object_inspect person} to have attributes #{hash_inspect :name => correct_name, :age => wrong_age}|)
+    context "when target does not have any of the expected attributes" do
+      subject { expect(person).to have_attributes(:name => correct_name, :age => wrong_age) }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          %r|expected #{object_inspect person} to have attributes #{hash_inspect :name => correct_name, :age => wrong_age}|
+        )
+      end
+
+      include_examples "has diff output with", [
+        '-:age => 11,',
+        '\+:age => 33,',
+        ':name => "Correct name",'
+      ]
     end
 
-    it "fails if target does not responds to any of the attributes" do
-      expect {
-        expect(person).to have_attributes(:name => correct_name, :color => 'red')
-      }.to fail_matching("expected #{object_inspect person} to respond to :color")
+    context "when target does not responds to any of the attributes" do
+      subject { expect(person).to have_attributes(:name => correct_name, :color => 'red') }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          "expected #{object_inspect person} to respond to :color"
+        )
+      end
+
+      include_examples "not diffable"
     end
 
-    it "fails if target responds to the attribute but requires arguments" do
-      expect {
-        expect(person).to have_attributes(:name => correct_name, :parent => 'Billy')
-      }.to fail_matching("expected #{object_inspect person} to respond to :parent with 0 arguments")
+    context "when target responds to the attribute but requires arguments" do
+      subject { expect(person).to have_attributes(:name => correct_name, :parent => 'Billy') }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          "expected #{object_inspect person} to respond to :parent with 0 arguments"
+        )
+      end
+
+      include_examples "not diffable"
     end
   end
 
@@ -127,28 +270,52 @@ RSpec.describe "#have_attributes matcher" do
       expect(person).to_not have_attributes(:name => wrong_name, :age => wrong_age)
     end
 
-    it "fails if target has any of the expected attributes" do
-      expect {
-        expect(person).to_not have_attributes(:name => wrong_name, :age => correct_age)
-      }.to fail_matching(%r|expected #{object_inspect person} not to have attributes #{hash_inspect :name => wrong_name, :age => correct_age}|)
+    context "when target has any of the expected attributes" do
+      subject { expect(person).to_not have_attributes(:name => wrong_name, :age => correct_age) }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          %r|expected #{object_inspect person} not to have attributes #{hash_inspect :name => wrong_name, :age => correct_age}|
+        )
+      end
+
+      include_examples "not diffable"
     end
 
-    it "fails if target has all of the expected attributes" do
-      expect {
-        expect(person).to_not have_attributes(:name => correct_name, :age => correct_age)
-      }.to fail_matching(%r|expected #{object_inspect person} not to have attributes #{hash_inspect :name => correct_name, :age => correct_age}|)
+    context "when target has all of the expected attributes" do
+      subject { expect(person).to_not have_attributes(:name => correct_name, :age => correct_age) }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          %r|expected #{object_inspect person} not to have attributes #{hash_inspect :name => correct_name, :age => correct_age}|
+        )
+      end
+
+      include_examples "not diffable"
     end
 
-    it "fails if target does not responds to any of the attributes" do
-      expect {
-        expect(person).to_not have_attributes(:name => correct_name, :color => 'red')
-      }.to fail_matching("expected #{object_inspect person} to respond to :color")
+    context "when target does not responds to any of the attributes" do
+      subject { expect(person).to_not have_attributes(:name => correct_name, :color => 'red') }
+
+      it "fails" do
+        expect { subject }.to fail_matching(
+          "expected #{object_inspect person} to respond to :color"
+        )
+      end
+
+      include_examples "not diffable"
     end
 
-    it "fails if target responds to the attribute but requires arguments" do
-      expect {
-        expect(person).to_not have_attributes(:name => correct_name, :parent => 'Billy')
-      }.to fail_matching("expected #{object_inspect person} to respond to :parent with 0 arguments")
+    context "when target responds to the attribute but requires arguments" do
+      subject { expect(person).to_not have_attributes(:name => correct_name, :parent => 'Billy') }
+
+      it "fails if target responds to the attribute but requires arguments" do
+        expect { subject }.to fail_matching(
+          "expected #{object_inspect person} to respond to :parent with 0 arguments"
+        )
+      end
+
+      include_examples "not diffable"
     end
   end
 
@@ -165,6 +332,12 @@ RSpec.describe "#have_attributes matcher" do
   else
     def hash_inspect(hash)
       improve_hash_formatting hash.inspect
+    end
+  end
+
+  class MatcherValueForRegexp < Struct.new(:value)
+    def inspect
+      Regexp.quote "(#{value.description})"
     end
   end
 
