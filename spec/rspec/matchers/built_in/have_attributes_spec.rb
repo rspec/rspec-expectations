@@ -139,6 +139,37 @@ RSpec.describe "#have_attributes matcher" do
         ]
       end
     end
+
+    describe "expect(...).to have_attributes(key => matcher, other_key => other_matcher)" do
+      let(:matcher) { have_attributes(:age => (a_value > 30).and(a_value < 40), :name => /Correct/) }
+      let(:wrong_matcher) { have_attributes(:age => (a_value > 5).and(a_value < 10), :name => /Wrong/) }
+
+      it "passes when the matchers match" do
+        expect(person).to matcher
+      end
+
+      it 'provides a description' do
+        description = matcher.description
+        expect(description).to eq("have attributes {:age => (a value > 30 and a value < 40), :name => /Correct/}")
+      end
+
+      context "when the matcher does not match" do
+        subject { expect(person).to wrong_matcher }
+
+        it "fails with a clear message" do
+          expect { subject }.to fail_matching(
+            "expected #{object_inspect person} to have attributes {:age => (a value > 5 and a value < 10), :name => /Wrong/}"
+          )
+        end
+
+        include_examples "has diff output with", [
+          '-:age => \(a value > 5 and a value < 10\),',
+          '-:name => /Wrong/,',
+          '\+:age => 33,',
+          '\+:name => "Correct name",'
+        ]
+      end
+    end
   end
 
   describe "expect(...).to_not have_attributes(with_one_attribute)" do
