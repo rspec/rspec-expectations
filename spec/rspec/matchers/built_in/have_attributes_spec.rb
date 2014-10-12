@@ -24,6 +24,14 @@ RSpec.describe "#have_attributes matcher" do
     end
   end
 
+  shared_examples "has diff output with" do |lines|
+    it "renders diff" do
+      expect { subject }.to fail_matching(
+        %r|Diff:.*#{lines.join(".*")}|m
+      )
+    end
+  end
+
   it "is diffable" do
     expect(have_attributes(:age => correct_age)).to be_diffable
   end
@@ -47,11 +55,10 @@ RSpec.describe "#have_attributes matcher" do
         )
       end
 
-      it "renders diff" do
-        expect { subject }.to fail_matching(
-          %r|Diff:.*-:name => "Wrong Name",.*\+:name => "Correct name",|m
-        )
-      end
+      include_examples "has diff output with", [
+        '-:name => "Wrong Name",',
+        '\+:name => "Correct name",'
+      ]
     end
 
     context "when target does not responds to any of the attributes" do
@@ -98,11 +105,10 @@ RSpec.describe "#have_attributes matcher" do
           )
         end
 
-        it "renders diff" do
-          expect { subject }.to fail_matching(
-            %r|Diff:.*-:age => \(a value < 10\),.*\+:age => 33,|m
-          )
-        end
+        include_examples "has diff output with", [
+          '-:age => \(a value < 10\),',
+          '\+:age => 33,'
+        ]
       end
     end
   end
@@ -169,11 +175,11 @@ RSpec.describe "#have_attributes matcher" do
         )
       end
 
-      it "renders diff" do
-        expect { subject }.to fail_matching(
-          %r|Diff:.*-:age => 11,.*\+:age => 33,.* :name => "Correct name",|m
-        )
-      end
+      include_examples "has diff output with", [
+        '-:age => 11,',
+        '\+:age => 33,',
+        ':name => "Correct name",'
+      ]
     end
 
     context "when target does not responds to any of the attributes" do
