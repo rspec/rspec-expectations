@@ -16,10 +16,11 @@ install:
   - cinst ansicon
 
 test_script:
-  - bundle exec rspec
+  - bundle exec rspec --backtrace --format progress --profile
+  - bundle exec cucumber --strict
 
 environment:
   matrix:
     - ruby_version: '193'
+    - ruby_version: '20'
     - ruby_version: '21'
-
