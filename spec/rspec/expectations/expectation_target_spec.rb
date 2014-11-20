@@ -79,6 +79,12 @@ module RSpec
             expect(3).not_to == 4
           }.to raise_error(ArgumentError)
         end
+
+        it 'does not support #==' do
+          expect {
+            expect(3) == 3
+          }.to raise_error(ArgumentError)
+        end
       end
 
       context "when passed a block" do
@@ -144,4 +150,3 @@ module RSpec
     end
   end
 end
-
