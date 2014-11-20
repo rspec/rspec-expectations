@@ -68,6 +68,10 @@ module RSpec
       end
       alias to_not not_to
 
+      def ==(*args)
+        raise ArgumentError, 'The expect syntax does not support ==, use `.to eq()`'
+      end
+
     private
 
       def prevent_operator_matchers(verb)
