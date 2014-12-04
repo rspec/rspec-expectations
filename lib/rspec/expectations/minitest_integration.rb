@@ -12,6 +12,14 @@ end
 module RSpec
   module Expectations
     remove_const :ExpectationNotMetError
+
+    # Exception raised when an expectation fails.
+    #
+    # @note we subclass `Exception` in `rspec-expectations` normally but
+    # when integrating with minitest it makes more sense to use their
+    # assertion constant.
+    #
+    # @api public
     ExpectationNotMetError = ::Minitest::Assertion
   end
 end
