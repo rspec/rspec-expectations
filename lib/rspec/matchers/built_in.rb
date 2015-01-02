@@ -12,6 +12,7 @@ module RSpec
     module BuiltIn
       autoload :BeAKindOf,               'rspec/matchers/built_in/be_kind_of'
       autoload :BeAnInstanceOf,          'rspec/matchers/built_in/be_instance_of'
+      autoload :BeASubclassOf,           'rspec/matchers/built_in/be_subclass_of'
       autoload :BeBetween,               'rspec/matchers/built_in/be_between'
       autoload :Be,                      'rspec/matchers/built_in/be'
       autoload :BeComparedTo,            'rspec/matchers/built_in/be'
