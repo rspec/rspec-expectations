@@ -117,25 +117,27 @@ module RSpec
           end
 
           it "uses the matcher's `description` in the error message" do
-            custom_matcher = Module.new do
-              def self.supports_block_expectations?; false; end
-              def self.description; "matcher-description"; end
+            RSpec::Matchers.define :custom_matcher_with_description do
+              def supports_block_expectations?; false; end
+
+              match { true }
+              description { "matcher-description" }
             end
 
             expect {
-              expect { }.to custom_matcher
+              expect { }.to custom_matcher_with_description
             }.to fail_with(/\(matcher-description\)/)
           end
 
           context 'when the matcher does not define `description` (since it is an optional part of the protocol)' do
             it 'uses `inspect` in the error message instead' do
-              custom_matcher = Module.new do
-                def self.supports_block_expectations?; false; end
-                def self.inspect; "matcher-inspect"; end
+              RSpec::Matchers.define :custom_matcher_without_description do
+                def supports_block_expectations?; false; end
+                def inspect; "matcher-inspect"; end
               end
 
               expect {
-                expect { }.to custom_matcher
+                expect { }.to custom_matcher_without_description
               }.to fail_with(/\(matcher-inspect\)/)
             end
           end
