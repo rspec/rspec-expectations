@@ -132,23 +132,18 @@ module RSpec
       # does not "leak" between checks.
       def with_matchers_cloned(object)
         if Matchers.is_a_matcher?(object)
-          require 'pry'; binding.pry
           object.clone
         elsif Hash === object
-          require 'pry'; binding.pry
           Hash[with_matchers_cloned(object.to_a)]
         elsif Struct === object
-          require 'pry'; binding.pry
           object
         elsif enumerable?(object)
-          require 'pry'; binding.pry
           begin
             object.map { |subobject| with_matchers_cloned(subobject) }
           rescue IOError # STDOUT is enumerable but `map` raises an error
             object
           end
         else
-          require 'pry'; binding.pry
           object
         end
       end

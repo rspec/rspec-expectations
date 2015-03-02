@@ -61,22 +61,11 @@ module RSpec
           return false unless actual.respond_to?(:include?)
 
           if Array === actual
-            expected_matches = Hash[Array.new(expected.size) { |i| [i, []] }]
-            actual_matches   = Hash[Array.new(actual.size)   { |i| [i, []] }]
-
-            expected.each_with_index do |e, ei|
-              actual.each_with_index do |a, ai|
-                require 'pry'; binding.pry
-                next unless values_match?(e, a)
-
-                expected_matches[ei] << ai
-                actual_matches[ai] << ei
-              end
-            end
-
-            count = RSpec::Matchers::PairingsMaximizer.new(
-              expected_matches, actual_matches
-            ).find_best_solution.unmatched_expected_indexes.count
+            count = PairingsMaximizer.best_solution(
+              expected,
+              actual,
+              method(:values_match?)
+            ).unmatched_expected_indices.count
 
             if predicate == :none?
               count == expected.size
