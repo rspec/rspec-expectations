@@ -95,35 +95,6 @@ module RSpec
           end
         end
 
-        # Once we started supporting composing matchers, the algorithm for this matcher got
-        # much more complicated. Consider this expression:
-        #
-        #   expect(["fool", "food"]).to contain_exactly(/foo/, /fool/)
-        #
-        # This should pass (because we can pair /fool/ with "fool" and /foo/ with "food"), but
-        # the original algorithm used by this matcher would pair the first elements it could
-        # (/foo/ with "fool"), which would leave /fool/ and "food" unmatched.  When we have
-        # an expected element which is a matcher that matches a superset of actual items
-        # compared to another expected element matcher, we need to consider every possible pairing.
-        #
-        # This class is designed to maximize the number of actual/expected pairings -- or,
-        # conversely, to minimize the number of unpaired items. It's essentially a brute
-        # force solution, but with a few heuristics applied to reduce the size of the
-        # problem space:
-        #
-        #   * Any items which match none of the items in the other list are immediately
-        #     placed into the `unmatched_expected_indexes` or `unmatched_actual_indexes` array.
-        #     The extra items and missing items in the matcher failure message are derived
-        #     from these arrays.
-        #   * Any items which reciprocally match only each other are paired up and not
-        #     considered further.
-        #
-        # What's left is only the items which match multiple items from the other list
-        # (or vice versa). From here, it performs a brute-force depth-first search,
-        # looking for a solution which pairs all elements in both lists, or, barring that,
-        # that produces the fewest unmatched items.
-        #
-        # @private
         class PairingsMaximizer
           Solution = Struct.new(:unmatched_expected_indexes,     :unmatched_actual_indexes,
                                 :indeterminate_expected_indexes, :indeterminate_actual_indexes) do

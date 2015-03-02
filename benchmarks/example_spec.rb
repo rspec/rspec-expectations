@@ -1,9 +1,9 @@
-describe "something" do
+RSpec.describe "something" do
   it "does something that passes" do
-    1.should eq(1)
+    expect([1,3,2]).to include(2,3)
   end
 
   it "does something that fails" do
-    1.should eq(2)
+    expect([1,3]).not_to include(1,18)
   end
 end

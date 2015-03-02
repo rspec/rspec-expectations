@@ -77,6 +77,12 @@ RSpec.describe "#include matcher" do
         dbl = double.as_null_object
         expect([dbl]).to include(dbl)
       end
+
+      it 'fails when the target array does not include expected duplicate values' do
+        expect {
+          expect([3]).to include(3, 3)
+        }.to fail_matching("expected [3] to include 3 and 3")
+      end
     end
 
     context "for a hash target" do

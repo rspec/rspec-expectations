@@ -1,3 +1,5 @@
+RSpec::Support.require_rspec_matchers "pairings_maximizer"
+
 module RSpec
   module Matchers
     module BuiltIn
@@ -58,15 +60,40 @@ module RSpec
         def perform_match(predicate, hash_subset_predicate)
           return false unless actual.respond_to?(:include?)
 
-          expected.__send__(predicate) do |expected_item|
-            if comparing_hash_to_a_subset?(expected_item)
-              expected_item.__send__(hash_subset_predicate) do |(key, value)|
-                actual_hash_includes?(key, value)
+          if Array === actual
+            expected_matches = Hash[Array.new(expected.size) { |i| [i, []] }]
+            actual_matches   = Hash[Array.new(actual.size)   { |i| [i, []] }]
+
+            expected.each_with_index do |e, ei|
+              actual.each_with_index do |a, ai|
+                require 'pry'; binding.pry
+                next unless values_match?(e, a)
+
+                expected_matches[ei] << ai
+                actual_matches[ai] << ei
               end
-            elsif comparing_hash_keys?(expected_item)
-              actual_hash_has_key?(expected_item)
+            end
+
+            count = RSpec::Matchers::PairingsMaximizer.new(
+              expected_matches, actual_matches
+            ).find_best_solution.unmatched_expected_indexes.count
+
+            if predicate == :none?
+              count == expected.size
             else
-              actual_collection_includes?(expected_item)
+              count == 0
+            end
+          else
+            expected.__send__(predicate) do |expected_item|
+              if comparing_hash_to_a_subset?(expected_item)
+                expected_item.__send__(hash_subset_predicate) do |(key, value)|
+                  actual_hash_includes?(key, value)
+                end
+              elsif comparing_hash_keys?(expected_item)
+                actual_hash_has_key?(expected_item)
+              else
+                actual_collection_includes?(expected_item)
+              end
             end
           end
         end
