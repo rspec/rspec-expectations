@@ -41,7 +41,7 @@ module RSpec
           elsif defined?(DateTime) && DateTime === object
             format_date_time(object)
           elsif defined?(BigDecimal) && BigDecimal === object
-            "#{object.to_s 'F'} (#{object.inspect})"
+            format_big_decimal(object)
           else
             object.inspect
           end

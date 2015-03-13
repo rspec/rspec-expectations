@@ -113,6 +113,14 @@ module RSpec
           alias present_ivars instance_variables
         end
 
+        module BigDecimalFormatting
+          def format_big_decimal(object)
+            "#{object.to_s 'F'} (#{object.inspect})"
+          end
+        end
+
+        include BigDecimalFormatting
+
         module TimeFormatting
           TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
