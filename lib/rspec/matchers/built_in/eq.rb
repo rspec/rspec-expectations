@@ -50,6 +50,8 @@ module RSpec
               end.join(', ')
               }}
             OUTPUT
+          elsif defined?(Array) && Array === object
+            "[#{object.map { |element| format_object(element) }.join(', ')}]"
           else
             object.inspect
           end
