@@ -42,6 +42,14 @@ module RSpec
             format_date_time(object)
           elsif defined?(BigDecimal) && BigDecimal === object
             format_big_decimal(object)
+          elsif defined?(Hash) && Hash === object
+            <<-OUTPUT.strip
+              {#{
+              object.map do |k, v|
+                "#{format_object(k)}=>#{format_object(v)}"
+              end.join(', ')
+              }}
+            OUTPUT
           else
             object.inspect
           end

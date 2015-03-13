@@ -202,6 +202,17 @@ module RSpec
             expect(5).to eq(4)
           }.to raise_error(RSpec::Expectations::ExpectationNotMetError)
         end
+
+        context 'inside of Hash objects' do
+          it 'fails with a conventional representation of the decimal inside the hash' do
+            in_sub_process_if_possible do
+              require 'bigdecimal'
+              expect {
+                expect({}).to eq({decimal => 'value'})
+              }.to fail_including "expected: {3.3 (#<BigDecimal"
+            end
+          end
+        end
       end
     end
   end
