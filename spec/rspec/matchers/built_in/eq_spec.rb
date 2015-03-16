@@ -216,6 +216,19 @@ module RSpec
           end
         end
       end
+
+      context 'with Array objects with special case objects inside them' do
+        let(:decimal) { BigDecimal("3.3") }
+
+        it 'formats the special case objects inside it when failing' do
+          in_sub_process_if_possible do
+            require 'bigdecimal'
+            expect {
+              expect(true).to eq([[decimal]])
+            }.to fail_including "expected: [[3.3 (#<BigDecimal"
+          end
+        end
+      end
     end
   end
 end
