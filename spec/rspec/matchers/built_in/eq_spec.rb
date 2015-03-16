@@ -203,6 +203,19 @@ module RSpec
           }.to raise_error(RSpec::Expectations::ExpectationNotMetError)
         end
       end
+
+      context 'with Hash objects with special case objects inside them' do
+        let(:decimal) { BigDecimal("3.3") }
+
+        it 'formats the special case objects inside it when failing' do
+          in_sub_process_if_possible do
+            require 'bigdecimal'
+            expect {
+              expect(true).to eq(:key => decimal)
+            }.to fail_including "expected: :key => 3.3 (#<BigDecimal"
+          end
+        end
+      end
     end
   end
 end
