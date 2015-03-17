@@ -12,6 +12,19 @@ module RSpec
         }.to fail_with(STDOUT.inspect)
       end
 
+      it "does not blow up when surfacing descriptions from an unreadable Range object" do
+        infinite_range = -Float::INFINITY..Float::INFINITY
+        expect {
+          expect(1).to matcher_using_surface_descriptions_in(infinite_range)
+        }.to fail_with(infinite_range.inspect)
+      end
+
+      it "does not enumerate normal ranges" do
+        expect {
+          expect(1).to matcher_using_surface_descriptions_in(1..3)
+        }.to fail_with((1..3).inspect)
+      end
+
       it "doesn't mangle struct descriptions" do
         model = Struct.new(:a).new(1)
         expect {
