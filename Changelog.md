@@ -1,4 +1,5 @@
-### Development
+### 3.2.1 / 2015-04-06
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.2.0...v3.2.1)
 
 Bug Fixes:
 
