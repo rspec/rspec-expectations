@@ -135,11 +135,11 @@ module RSpec
   #       end
   #
   #       def failure_message
-  #         "expected #{@target.inspect} to be in Zone #{@expected}"
+  #         "expected #{RSpec::Support::ObjectInspector.inspect(@target)} to be in Zone #{@expected}"
   #       end
   #
   #       def failure_message_when_negated
-  #         "expected #{@target.inspect} not to be in Zone #{@expected}"
+  #         "expected #{RSpec::Support::ObjectInspector.inspect(@target)} not to be in Zone #{@expected}"
   #       end
   #     end
   #

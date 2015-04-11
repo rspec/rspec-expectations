@@ -1,3 +1,4 @@
+require 'rspec/support/object_inspector'
 require 'rspec/support/spec'
 require 'rspec/support/spec/in_sub_process'
 
