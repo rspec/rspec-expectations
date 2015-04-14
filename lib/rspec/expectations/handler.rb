@@ -52,7 +52,7 @@ module RSpec
       end
 
       def self.verb
-        "should"
+        Expectations::Syntax.expect_enabled? ? "is expected to" : "should"
       end
 
       def self.should_method
@@ -82,7 +82,7 @@ module RSpec
       end
 
       def self.verb
-        "should not"
+        Expectations::Syntax.expect_enabled? ? "is expected to not" : "should not"
       end
 
       def self.should_method
