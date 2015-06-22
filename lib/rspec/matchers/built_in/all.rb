@@ -50,7 +50,13 @@ module RSpec
         def index_failed_objects
           actual.each_with_index do |actual_item, index|
             cloned_matcher = matcher.clone
-            matches = cloned_matcher.matches?(actual_item)
+
+            begin
+              matches = cloned_matcher.matches?(actual_item)
+            rescue StandardError
+              matches = nil
+            end
+
             failed_objects[index] = cloned_matcher.failure_message unless matches
           end
         end
