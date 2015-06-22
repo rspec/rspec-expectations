@@ -33,6 +33,7 @@ module RSpec
       autoload :HaveAttributes,          'rspec/matchers/built_in/have_attributes'
       autoload :Include,                 'rspec/matchers/built_in/include'
       autoload :All,                     'rspec/matchers/built_in/all'
+      autoload :Any,                     'rspec/matchers/built_in/any'
       autoload :Match,                   'rspec/matchers/built_in/match'
       autoload :NegativeOperatorMatcher, 'rspec/matchers/built_in/operators'
       autoload :OperatorMatcher,         'rspec/matchers/built_in/operators'
