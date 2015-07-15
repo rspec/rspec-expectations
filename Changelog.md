@@ -1,3 +1,15 @@
+### 3.3.1 Development
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.3.0...3-3-maintenance)
+
+Bug Fixes:
+
+* Fix `be >`, `be <`, etc so that it fails rather than allowing an
+  argument error to be raised when compared against an object of the
+  wrong type. This allows it to be used in composed matcher expressions
+  against heterogeneous objects. (Dennis Günnewig, #809)
+* Fix `respond_to` to work properly on target objects
+  that redefine the `method` method. (unmanbearpig, #821)
+
 ### 3.3.0 / 2015-06-12
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.2.1...v3.3.0)
 
