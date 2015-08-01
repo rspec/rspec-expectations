@@ -205,6 +205,46 @@ RSpec.describe "#have_attributes matcher" do
     end
   end
 
+  describe "expect(...).to change{...}.to have_attributes()" do
+
+    it "fails on 'have_attributes' and gives informative error message" do
+      expect {
+        expect { person.age = wrong_age }.to change { person }.to have_attributes({:age => correct_age})
+      }.to fail_including("expected result to have changed to have attributes {:age => 33}, but had attributes {:age => 11}")
+    end
+
+    it "fails the 'change' check and gives informative error message" do
+      expect {
+        expect { person.age = correct_age }.to change { person }.to have_attributes({:age => correct_age})
+      }.to fail_including("expected result to have changed to have attributes {:age => #{correct_age}}, but did not change")
+    end
+
+    it "fails on negation with 'have_attributes' and gives informative error message" do
+      expect {
+        expect { person.age = wrong_age }.not_to change { person }.from have_attributes({:age => correct_age})
+      }.to fail_including("expected result not to have changed, but changed and has attributes {:age => #{wrong_age}}")
+    end
+
+    it "fails on negation with 'not_change' with informative error messages" do
+      expect {
+        expect { person.age = wrong_age }.not_to change { person }.from have_attributes({:age => wrong_age})
+      }.to fail_including("expected result to not change, but changed and has attributes {:age => 11}")
+    end
+
+    it "fails on both change and have_attributes and gives informative error message" do
+      expect {
+        expect { person.age = correct_age }.to change { person }.to have_attributes({:age => wrong_age})
+      }.to fail_including("expected result to have changed to have attributes {:age => 11}, but did not change")
+    end
+
+    it "fails on negation for both change and have_attributes and gives informative error message" do
+      expect {
+        expect { person.age = wrong_age }.not_to change { person }.from have_attributes({:age => correct_age})
+      }.to fail_including("expected result not to have changed, but changed and has attributes {:age => #{wrong_age}}")
+    end
+
+  end
+
   include RSpec::Matchers::Composable
   # a helper for failure message assertion
   def object_inspect(object)

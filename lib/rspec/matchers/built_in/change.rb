@@ -195,11 +195,33 @@ module RSpec
         end
 
         def before_value_failure
-          "expected #{@change_details.message} to have initially been #{description_of @expected_before}, but was #{description_of @change_details.actual_before}"
+          if @expected_before.class == RSpec::Matchers::BuiltIn::HaveAttributes
+            "expected #{@change_details.message} to not change, but changed and has attributes #{ formatted_values(get_actual_values(@expected_before.expected)) }"
+          else
+            "expected #{@change_details.message} to have initially been #{description_of @expected_before}, but was #{description_of @change_details.actual_before}"
+          end
         end
 
         def after_value_failure
-          "expected #{@change_details.message} to have changed to #{description_of @expected_after}, but is now #{description_of @change_details.actual_after}"
+          if @expected_after.class == RSpec::Matchers::BuiltIn::HaveAttributes
+            "expected #{@change_details.message} to have changed to #{description_of @expected_after}, but had attributes #{ formatted_values(get_actual_values(@expected_after.expected)) }"
+          else
+            "expected #{@change_details.message} to have changed to #{description_of @expected_after}, but is now #{description_of @change_details.actual_after}"
+          end
+        end
+
+        def formatted_values(expected)
+          values = RSpec::Support::ObjectFormatter.format(expected)
+          improve_hash_formatting(values)
+        end
+
+        def get_actual_values(expectation)
+          actual_values = {}
+          expectation.each do |attribute_key, _attribute_value|
+            actual_value = @change_details.actual_after.__send__(attribute_key)
+            actual_values[attribute_key] = actual_value
+          end
+          actual_values
         end
 
         def did_not_change_failure
@@ -207,7 +229,11 @@ module RSpec
         end
 
         def did_change_failure
-          "expected #{@change_details.message} not to have changed, but did change from #{description_of @change_details.actual_before} to #{description_of @change_details.actual_after}"
+          if @expected_before.class == RSpec::Matchers::BuiltIn::HaveAttributes
+            "expected #{@change_details.message} not to have changed, but changed and has attributes #{ formatted_values(get_actual_values(@expected_before.expected))}"
+          else
+            "expected #{@change_details.message} not to have changed, but did change from #{description_of @change_details.actual_before} to #{description_of @change_details.actual_after}"
+          end
         end
 
         def not_given_a_block_failure
