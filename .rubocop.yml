@@ -4,6 +4,19 @@ inherit_from: .rubocop_rspec_base.yml
 LineLength:
   Max: 186
 
+Lint/NestedMethodDefinition:
+ Enabled: false
+
+Metrics/AbcSize:
+  Max: 40
+
+ParallelAssignment:
+  Enabled: false
+
+PerceivedComplexity:
+  Enabled: false
+
 # We have some situations where we need to use `raise ExceptionClass.new(argument)`.
 Style/RaiseArgs:
   Enabled: false
+
