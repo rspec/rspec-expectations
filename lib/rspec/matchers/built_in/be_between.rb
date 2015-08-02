@@ -6,7 +6,8 @@ module RSpec
       # Not intended to be instantiated directly.
       class BeBetween < BaseMatcher
         def initialize(min, max)
-          @min, @max = min, max
+          @min = min
+          @max = max
           inclusive
         end
 

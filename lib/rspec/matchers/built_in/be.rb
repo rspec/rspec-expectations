@@ -137,7 +137,8 @@ module RSpec
         include BeHelpers
 
         def initialize(operand, operator)
-          @expected, @operator = operand, operator
+          @expected = operand
+          @operator = operator
           @args = []
         end
 

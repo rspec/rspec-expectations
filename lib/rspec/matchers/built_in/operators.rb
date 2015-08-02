@@ -87,7 +87,8 @@ module RSpec
 
         def eval_match(actual, operator, expected)
           ::RSpec::Matchers.last_matcher = self
-          @operator, @expected = operator, expected
+          @operator = operator
+          @expected = expected
           __delegate_operator(actual, operator, expected)
         end
       end

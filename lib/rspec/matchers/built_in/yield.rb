@@ -22,7 +22,8 @@ module RSpec
         def initialize(block)
           @block = block
           @used = false
-          self.num_yields, self.yielded_args = 0, []
+          self.num_yields = 0
+          self.yielded_args = []
         end
 
         def has_block?
