@@ -318,7 +318,7 @@ module RSpec
             "was not a block"
           elsif all_args_match?
             "yielded with expected arguments" \
-              "\nexpected not: #{surface_descriptions_in(@expected).inspect}" +
+              "\nexpected not: #{surface_descriptions_in(@expected).inspect}" \
               "\n         got: #{actual_formatted}"
           else
             "did"
@@ -333,7 +333,7 @@ module RSpec
 
           unless (match = all_args_match?)
             @positive_args_failure = "yielded with unexpected arguments" \
-              "\nexpected: #{surface_descriptions_in(@expected).inspect}" +
+              "\nexpected: #{surface_descriptions_in(@expected).inspect}" \
               "\n     got: #{actual_formatted}"
           end
 
