@@ -20,6 +20,9 @@ PerceivedComplexity:
   Max: 14
 
 # We have some situations where we need to use `raise ExceptionClass.new(argument)`.
+Style/ClassCheck:
+  Enabled: false
+
 Style/MultilineOperationIndentation:
   Enabled: false
 

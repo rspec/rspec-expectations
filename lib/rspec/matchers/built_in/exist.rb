@@ -40,7 +40,8 @@ module RSpec
         # @api private
         # Simple class for memoizing actual/expected for this matcher
         # and examining the match
-        class ExistenceTest < Struct.new(:actual, :expected)
+        ExistenceTest = Struct.new(:actual, :expected)
+        class ExistenceTest
           # @api private
           # @return [Boolean]
           def valid_test?

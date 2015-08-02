@@ -169,7 +169,8 @@ module RSpec
       end
 
       # @private
-      class CaptureStreamToTempfile < Struct.new(:name, :stream)
+      CaptureStreamToTempfile = Struct.new(:name, :stream)
+      class CaptureStreamToTempfile
         def capture(block)
           # We delay loading tempfile until it is actually needed because
           # we want to minimize stdlibs loaded so that users who use a
