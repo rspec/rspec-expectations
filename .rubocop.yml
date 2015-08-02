@@ -7,16 +7,27 @@ LineLength:
 Lint/NestedMethodDefinition:
  Enabled: false
 
+Lint/NonLocalExitFromIterator:
+  Enabled: false
+
 Metrics/AbcSize:
   Max: 40
 
-ParallelAssignment:
+Metrics/ModuleLength:
   Enabled: false
 
 PerceivedComplexity:
-  Enabled: false
+  Max: 14
 
 # We have some situations where we need to use `raise ExceptionClass.new(argument)`.
+Style/MultilineOperationIndentation:
+  Enabled: false
+
 Style/RaiseArgs:
   Enabled: false
 
+Style/StringLiteralsInInterpolation:
+  Enabled: False
+
+Style/SymbolProc:
+    Enabled: false
