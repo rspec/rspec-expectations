@@ -26,6 +26,9 @@ Style/MultilineOperationIndentation:
 Style/RaiseArgs:
   Enabled: false
 
+Style/SpaceInsideStringInterpolation:
+  Enabled: false
+
 Style/StringLiteralsInInterpolation:
   Enabled: False
 
