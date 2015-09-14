@@ -22,8 +22,9 @@ RSpec.describe "expect(regex).to match(string).with_captures" do
       it "matches a regex with named captures" do
         expect("a123a").to match(Regexp.new("(?<num>123)")).with_captures(:num => "123")
       end
+
       it "matches a regex with a nested matcher" do
-        expect("a123a").to match(Regexp.new("(?<num>123)(asdf)?")).with_captures(hash_including(:num => "123"))
+        expect("a123a").to match(Regexp.new("(?<num>123)(asdf)?")).with_captures(a_hash_including(:num => "123"))
       end
 
       it "does not match a regex with an incorrect named group match" do
@@ -33,7 +34,7 @@ RSpec.describe "expect(regex).to match(string).with_captures" do
       it "has a sensible failure description with a hash including matcher" do
         expect {
           expect("a123a").not_to match(Regexp.new("(?<num>123)(asdf)?")).with_captures(a_hash_including(:num => "123"))
-        }.to fail_with(/num => "123"/)
+        }.to fail_with(/"num" => "123"/)
       end
 
       it "matches named captures when not passing a hash" do
@@ -65,8 +66,9 @@ RSpec.describe "expect(regex).to match(string).with_captures" do
       it "matches a regex with named captures" do
         expect(Regexp.new("(?<num>123)")).to match("a123a").with_captures(:num => "123")
       end
+
       it "matches a regex with a nested matcher" do
-        expect(Regexp.new("(?<num>123)(asdf)?")).to match("a123a").with_captures(hash_including(:num => "123"))
+        expect(Regexp.new("(?<num>123)(asdf)?")).to match("a123a").with_captures(a_hash_including(:num => "123"))
       end
 
       it "does not match a regex with an incorrect named group match" do
@@ -76,7 +78,7 @@ RSpec.describe "expect(regex).to match(string).with_captures" do
       it "has a sensible failure description with a hash including matcher" do
         expect {
           expect(Regexp.new("(?<num>123)(asdf)?")).not_to match("a123a").with_captures(a_hash_including(:num => "123"))
-        }.to fail_with(/num => "123"/)
+        }.to fail_with(/"num" => "123"/)
       end
 
       it "matches named captures when not passing a hash" do
