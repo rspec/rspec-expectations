@@ -20,6 +20,8 @@ module RSpec
       autoload :BePredicate,             'rspec/matchers/built_in/be'
       autoload :BeTruthy,                'rspec/matchers/built_in/be'
       autoload :BeWithin,                'rspec/matchers/built_in/be_within'
+      autoload :MatchWithCaptures,       'rspec/matchers/built_in/match_with_captures'
+      autoload :MatchWithNamedCaptures,  'rspec/matchers/built_in/match_with_captures'
       autoload :Change,                  'rspec/matchers/built_in/change'
       autoload :Compound,                'rspec/matchers/built_in/compound'
       autoload :ContainExactly,          'rspec/matchers/built_in/contain_exactly'

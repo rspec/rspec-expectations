@@ -34,7 +34,7 @@ RSpec.describe "expect(regex).to match(string).with_captures" do
       it "has a sensible failure description with a hash including matcher" do
         expect {
           expect("a123a").not_to match(Regexp.new("(?<num>123)(asdf)?")).with_captures(a_hash_including(:num => "123"))
-        }.to fail_with(/num => "123"/)
+        }.to fail_with(/"num" => "123"/)
       end
 
       it "matches named captures when not passing a hash" do
@@ -78,7 +78,7 @@ RSpec.describe "expect(regex).to match(string).with_captures" do
       it "has a sensible failure description with a hash including matcher" do
         expect {
           expect(Regexp.new("(?<num>123)(asdf)?")).not_to match("a123a").with_captures(a_hash_including(:num => "123"))
-        }.to fail_with(/num => "123"/)
+        }.to fail_with(/"num" => "123"/)
       end
 
       it "matches named captures when not passing a hash" do
