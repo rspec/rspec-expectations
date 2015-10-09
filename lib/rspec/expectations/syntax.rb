@@ -4,7 +4,7 @@ module RSpec
     # Provides methods for enabling and disabling the available
     # syntaxes provided by rspec-expectations.
     module Syntax
-      module_function
+    module_function
 
       # @api private
       # Determines where we add `should` and `should_not`.

@@ -118,7 +118,7 @@ module RSpec
         if RUBY_VERSION.to_f < 1.9
           # :nocov:
           def present_ivars
-            instance_variables.map { |v| v.to_sym }
+            instance_variables.map(&:to_sym)
           end
           # :nocov:
         else

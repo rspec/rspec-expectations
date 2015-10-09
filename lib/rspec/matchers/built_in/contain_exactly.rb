@@ -154,7 +154,7 @@ module RSpec
             def +(derived_candidate_solution)
               self.class.new(
                 unmatched_expected_indexes + derived_candidate_solution.unmatched_expected_indexes,
-                unmatched_actual_indexes   + derived_candidate_solution.unmatched_actual_indexes,
+                unmatched_actual_indexes + derived_candidate_solution.unmatched_actual_indexes,
                 # Ignore the indeterminate indexes: by the time we get here,
                 # we've dealt with all indeterminates.
                 [], []

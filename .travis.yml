@@ -8,9 +8,8 @@ cache:
     - ../bundle
 before_install:
   - "script/clone_all_rspec_repos"
-  # Downgrade bundler to work around https://github.com/bundler/bundler/issues/3004
   # Note this doesn't work on JRUBY 2.0.0 mode so we don't do it
-  - if [ -z "$JRUBY_OPTS" ]; then gem install bundler -v=1.5.3 && alias bundle="bundle _1.5.3_"; fi
+  - if [ "jruby" != "$TRAVIS_RUBY_VERSION" ]; then gem install bundler; fi
 bundler_args: "--binstubs --standalone --without documentation --path ../bundle"
 script: "script/run_build"
 rvm:
@@ -26,16 +25,16 @@ rvm:
 matrix:
   include:
     - rvm: jruby
-      env: JRUBY_OPTS='--server -Xcompile.invokedynamic=false -Xcompat.version=2.0'
+    env: JRUBY_OPTS='--server -Xcompile.invokedynamic=false -Xcompat.version=2.0'
     - rvm: jruby-head
-      env: JRUBY_OPTS='--server -Xcompile.invokedynamic=false'
+    env: JRUBY_OPTS='--server -Xcompile.invokedynamic=false'
     - rvm: jruby-18mode
-      env: JRUBY_OPTS='--server -Xcompile.invokedynamic=false'
+    env: JRUBY_OPTS='--server -Xcompile.invokedynamic=false'
     - rvm: jruby
-      env: JRUBY_OPTS='--server -Xcompile.invokedynamic=false'
+    env: JRUBY_OPTS='--server -Xcompile.invokedynamic=false'
   allow_failures:
     - rvm: jruby-head
-      env: JRUBY_OPTS='--server -Xcompile.invokedynamic=false'
+    env: JRUBY_OPTS='--server -Xcompile.invokedynamic=false'
     - rvm: ruby-head
     - rvm: rbx
   fast_finish: true

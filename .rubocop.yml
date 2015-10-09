@@ -4,6 +4,36 @@ inherit_from: .rubocop_rspec_base.yml
 LineLength:
   Max: 186
 
+Lint/NestedMethodDefinition:
+ Enabled: false
+
+Lint/NonLocalExitFromIterator:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 40
+
+Metrics/ModuleLength:
+  Enabled: false
+
+PerceivedComplexity:
+  Max: 14
+
 # We have some situations where we need to use `raise ExceptionClass.new(argument)`.
+Style/ClassCheck:
+  Enabled: false
+
+Style/MultilineOperationIndentation:
+  Enabled: false
+
 Style/RaiseArgs:
   Enabled: false
+
+Style/SpaceInsideStringInterpolation:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  Enabled: False
+
+Style/SymbolProc:
+    Enabled: false
