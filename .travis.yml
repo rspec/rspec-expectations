@@ -10,6 +10,12 @@ before_install:
   - "script/clone_all_rspec_repos"
   # Note this doesn't work on JRUBY 2.0.0 mode so we don't do it
   - if [ "jruby" != "$TRAVIS_RUBY_VERSION"  ]; then gem install bundler; fi
+addons:
+  apt:
+    packages:
+      - libxml2
+      - libxml2-dev
+      - libxslt-dev
 bundler_args: "--binstubs --standalone --without documentation --path ../bundle"
 script: "script/run_build"
 rvm:
