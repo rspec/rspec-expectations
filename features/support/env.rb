@@ -1,3 +1,12 @@
+# For Aruba on 1.9.2
+unless File.respond_to?(:write)
+  class File
+    def self.write(path, content)
+      open(path, 'w') { |f| f << content }
+    end
+  end
+end
+
 require 'aruba/cucumber'
 
 Before do
