@@ -167,7 +167,7 @@ module RSpec
         end
 
         def warn_about_negative_false_positive(expression)
-          RSpec.warning("Using #{expression} risks false positives, since literally " \
+          RSpec.warning("Using #{expression} risks false positives, since " \
                         "any other error would cause the expectation to pass, " \
                         "including those raised by Ruby (e.g. NoMethodError, NameError " \
                         "and ArgumentError), meaning the code you are intending to test " \
