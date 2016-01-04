@@ -11,12 +11,6 @@ export JRUBY_OPTS=${JRUBY_OPTS:-"--server -Xcompile.invokedynamic=false"}
 SPECS_HAVE_RUN_FILE=specs.out
 MAINTENANCE_BRANCH=`cat maintenance-branch`
 
-# Don't allow rubygems to pollute what's loaded. Also, things boot faster
-# without the extra load time of rubygems. Only works on MRI Ruby 1.9+
-if is_mri_192_plus; then
-  export RUBYOPT="--disable=gem"
-fi
-
 function clone_repo {
   if [ ! -d $1 ]; then # don't clone if the dir is already there
     travis_retry eval "git clone git://github.com/rspec/$1 --depth 1 --branch $MAINTENANCE_BRANCH"
