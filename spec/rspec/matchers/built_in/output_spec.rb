@@ -144,6 +144,13 @@ module RSpec
           $stderr.print(msg)
         end
       }
+
+      include_examples "output_to_stream", :stderr, :to_stderr, Module.new {
+        def print_to_stream(msg)
+          STDERR.print(msg)
+        end
+      }
+
     end
 
     RSpec.describe "output.to_stdout matcher" do
