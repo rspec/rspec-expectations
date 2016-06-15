@@ -98,7 +98,7 @@ Feature: `respond_to` matcher
     Given a file named "respond_to_matcher_argument_range_checking_spec.rb" with:
       """ruby
       class MyClass
-        def build(name, options = {})
+        def build(name, options={})
 
         end
 
@@ -133,7 +133,7 @@ Feature: `respond_to` matcher
   Given a file named "respond_to_matcher_unlimited_argument_checking_spec.rb" with:
       """ruby
       class MyClass
-        def greet(message = 'Hello', *people)
+        def greet(message='Hello', *people)
 
         end
 
@@ -172,7 +172,7 @@ Feature: `respond_to` matcher
     Given a file named "respond_to_matcher_keyword_checking_spec.rb" with:
       """ruby
       class MyClass
-        def find(name = 'id', limit: 1_000, offset: 0)
+        def find(name='id', limit: 1_000, offset: 0)
           []
         end
 
