@@ -32,6 +32,27 @@ Feature: diffing
                   string
       """
 
+  Scenario: diff for a multiline string with trailing newline
+    Given a file named "example_spec.rb" with:
+      """ruby
+      RSpec.describe "a multiline string" do
+        it "is like another string" do
+          expected = "Chewy\nbagel."
+          actual = "Chewy\nbagel.\n"
+          expect(actual).to eq(expected)
+        end
+      end
+      """
+    When I run `rspec example_spec.rb`
+    Then the output should contain:
+      """
+             Diff:
+             @@ -1,3 +1,4 @@
+              Chewy
+              bagel.
+             +
+      """
+
   Scenario: diff for a multiline string and a regexp
     Given a file named "example_spec.rb" with:
       """ruby
@@ -56,6 +77,26 @@ Feature: diffing
              +this is the
              +  actual
              +    string
+      """
+
+  Scenario: diff for a single line string with trailing newline
+    Given a file named "example_spec.rb" with:
+      """ruby
+      RSpec.describe "a string" do
+        it "is not like another string" do
+          expected = "Meow"
+          actual = "Meow\n"
+          expect(expected).to eq(actual)
+        end
+      end
+      """
+    When I run `rspec example_spec.rb`
+    Then the output should contain:
+      """
+             Diff:
+             @@ -1,3 +1,2 @@
+              Meow
+             -
       """
 
   Scenario: no diff for a single line strings
