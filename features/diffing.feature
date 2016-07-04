@@ -25,7 +25,7 @@ Feature: diffing
     Then the output should contain:
       """
              Diff:
-             @@ -1,4 +1,4 @@
+             @@ -1,5 +1,5 @@
               this is the
              -  expected
              +  actual
@@ -72,7 +72,33 @@ Feature: diffing
     Then the output should contain:
       """
              Diff:
-             @@ -1,2 +1,4 @@
+             @@ -1,2 +1,5 @@
+             -/expected/m
+             +this is the
+             +  actual
+             +    string
+      """
+
+  Scenario: diff for a multiline string and a regexp
+    Given a file named "example_spec.rb" with:
+      """ruby
+      RSpec.describe "a multiline string" do
+        it "is like another string" do
+          expected = /expected/m
+          actual = <<-ACTUAL
+      this is the
+        actual
+          string
+      ACTUAL
+          expect(actual).to match expected
+        end
+      end
+      """
+    When I run `rspec example_spec.rb`
+    Then the output should contain:
+      """
+             Diff:
+             @@ -1,2 +1,5 @@
              -/expected/m
              +this is the
              +  actual
