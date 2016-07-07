@@ -38,7 +38,7 @@ Feature: diffing
       RSpec.describe "a multiline string" do
         it "is like another string" do
           expected = "Chewy\nbagel."
-          actual = "Chewy\nbagel.\n"
+          actual = "Chewy\n\nbagel.\n"
           expect(actual).to eq(expected)
         end
       end
@@ -47,10 +47,11 @@ Feature: diffing
     Then the output should contain:
       """
              Diff:
-             @@ -1,3 +1,4 @@
+             @@ -1,3 +1,5 @@
               Chewy
-              bagel.
              +
+              bagel.
+             +\ No newline at end of input
       """
 
   Scenario: diff for a multiline string and a regexp
@@ -110,9 +111,9 @@ Feature: diffing
       """ruby
       RSpec.describe "a string" do
         it "is not like another string" do
-          expected = "Meow"
-          actual = "Meow\n"
-          expect(expected).to eq(actual)
+          actual = "Meow"
+          expected = "Meow\n"
+          expect(actual).to eq(expected)
         end
       end
       """
@@ -122,7 +123,7 @@ Feature: diffing
              Diff:
              @@ -1,3 +1,2 @@
               Meow
-             -
+             -\ No newline at end of input
       """
 
   Scenario: no diff for a single line strings
