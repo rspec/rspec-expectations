@@ -4,7 +4,7 @@ module RSpec
       # @private
       def differ
         RSpec::Support::Differ.new(
-          :object_preparer => lambda { |object| RSpec::Matchers::Composable.surface_descriptions_in(object) },
+          :object_preparer => self,
           :color => RSpec::Matchers.configuration.color?
         )
       end
@@ -25,6 +25,10 @@ module RSpec
         message = ::RSpec::Matchers::ExpectedsForMultipleDiffs.from(expected).message_with_diff(message, differ, actual)
 
         RSpec::Support.notify_failure(RSpec::Expectations::ExpectationNotMetError.new message)
+      end
+
+      def call(object)
+        RSpec::Matchers::Composable.surface_descriptions_in(object)
       end
     end
   end
