@@ -4,7 +4,7 @@ module RSpec
       # @private
       def differ
         RSpec::Support::Differ.new(
-          :object_preparer => self,
+          :object_preparer => DifferObjectPreparer,
           :color => RSpec::Matchers.configuration.color?
         )
       end
@@ -27,7 +27,10 @@ module RSpec
         RSpec::Support.notify_failure(RSpec::Expectations::ExpectationNotMetError.new message)
       end
 
-      def call(object)
+    end
+
+    module DifferObjectPreparer
+      def self.call(object)
         RSpec::Matchers::Composable.surface_descriptions_in(object)
       end
     end
