@@ -35,6 +35,11 @@ module RSpec
         }.to fail_with(range.inspect)
       end
 
+      it "sorts array when comparing Set objects" do
+        set = [1]
+        expect { set << 2 }.to change { set }.from([1].to_set).to([2, 1].to_set)
+      end
+
       it "doesn't mangle struct descriptions" do
         model = Struct.new(:a).new(1)
         expect {
