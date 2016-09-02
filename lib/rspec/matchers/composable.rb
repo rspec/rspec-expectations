@@ -133,10 +133,20 @@ module RSpec
         elsif Struct === object || unreadable_io?(object)
           object
         elsif should_enumerate?(object)
-          object.map { |subobject| with_matchers_cloned(subobject) }
+          enumerate(object)
         else
           object
         end
+      end
+
+      # @api private
+      # As we treat all enumerables as an ordered list and convert it
+      # to an array before checking equality we need to take into account
+      # Set case as an array representing it should be always sorted
+      # in order not to break its equality
+      def enumerate(object)
+        enumerated = object.map { |subobject| with_matchers_cloned(subobject) }
+        Set === object ? enumerated.sort : enumerated
       end
 
       if String.ancestors.include?(Enumerable) # 1.8.7
