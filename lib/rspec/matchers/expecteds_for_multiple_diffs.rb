@@ -62,11 +62,11 @@ module RSpec
       end
 
       def diffs(differ, actual)
-        @expected_list.map do |(expected, diff_label)|
+        @expected_list.inject("") do |output, (expected, diff_label)|
           diff = differ.diff(actual, expected)
-          next if diff.strip.empty?
-          "#{diff_label}#{diff}"
-        end.compact.join("\n")
+          next output if /\A[[:space:]]*\z/ === diff
+          output << diff_label << diff << "\n".freeze
+        end.tap(&:rstrip!)
       end
     end
   end

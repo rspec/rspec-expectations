@@ -47,7 +47,6 @@ RSpec.describe RSpec::Expectations, "#fail_with with matchers" do
       |@@ -1,2 +1,2 @@
       |-["poo", "car"]
       |+[(a string matching /foo/), (a string matching /bar/)]
-      |
     EOS
 
     expect {
