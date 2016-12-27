@@ -66,6 +66,12 @@ module RSpec
           expect(nil).to be_within(0.1).of(0)
         }.to fail_with("expected nil to be within 0.1 of 0, but it could not be treated as a numeric value")
       end
+
+      it "raises an error if a block is passed" do
+        expect {
+          within("test") { }
+        }.to raise_error(ArgumentError, /does not take a block/)
+      end
     end
 
     RSpec.describe "expect(actual).to be_within(delta).percent_of(expected)" do
