@@ -1230,6 +1230,20 @@ module RSpec::Matchers::DSL
         }.to raise_error(NoMethodError, /#{expected_msg}/)
       end
 
+      it 'avoids stack overflow when `RSpec::Matchers` is included in `main`' do
+        in_sub_process do # to avoid leaking our mutation to `main`
+          main = TOPLEVEL_BINDING.eval("self")
+          main.send :include, RSpec::Matchers
+
+          matcher = new_matcher(:foo) { }
+
+          # On 1.9.3, calling `respond_to?` on a DSL-defined matcher
+          # would trigger a SystemStackError when `RSpec::Matchers` has been
+          # included in `main` until we worked around it.
+          expect(matcher.respond_to?(:some_method)).to eq false
+        end
+      end
+
       def rbx?
         defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
       end

@@ -203,6 +203,23 @@ module RSpec
   # for readable failure messages. You can alias your custom matchers in similar fashion
   # using {RSpec::Matchers.alias_matcher}.
   module Matchers
+
+    if RSpec::Support::Ruby.mri? && RUBY_VERSION[0, 3] == '1.9'
+      # @api private
+      # When `RSpec::Matchers` has been included in a superclass after
+      # previously being included in subclasses it can trigger infinite
+      # recursion from `super` due to an MRI 1.9 bug
+      # (https://redmine.ruby-lang.org/issues/3351).
+      #
+      # If we detect this situation we work around this by including a
+      # duplicate of RSpec::Matchers instead.
+      def self.append_features(mod)
+        subclasses = ObjectSpace.each_object(Class).select { |c| c < mod && c < self }
+        return super unless subclasses.any?
+        mod.include self.dup
+      end
+    end
+
     # @method expect
     # Supports `expect(actual).to matcher` syntax by wrapping `actual` in an
     # `ExpectationTarget`.
