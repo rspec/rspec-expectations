@@ -8,8 +8,8 @@ module RSpec
       # yield matchers is used. Provides information about
       # the yield behavior of the object-under-test.
       class YieldProbe
-        def self.probe(block)
-          probe = new(block)
+        def self.probe(block, &callback)
+          probe = new(block, &callback)
           return probe unless probe.has_block?
           probe.assert_valid_expect_block!
           block.call(probe)
@@ -19,8 +19,9 @@ module RSpec
 
         attr_accessor :num_yields, :yielded_args
 
-        def initialize(block)
+        def initialize(block, &callback)
           @block = block
+          @callback = callback
           @used = false
           self.num_yields = 0
           self.yielded_args = []
@@ -37,6 +38,7 @@ module RSpec
           Proc.new do |*args|
             probe.num_yields += 1
             probe.yielded_args << args
+            @callback.call(*args)
             nil # to indicate the block does not return a meaningful value
           end
         end
@@ -269,10 +271,12 @@ module RSpec
 
         # @private
         def matches?(block)
-          @probe = YieldProbe.probe(block)
+          @probe = YieldProbe.probe(block) do |*args|
+            @actual = args
+            check_args_match
+          end
           return false unless @probe.has_block?
-          @actual = @probe.single_yield_args
-          @probe.yielded_once?(:yield_with_args) && args_match?
+          @probe.yielded_once?(:yield_with_args) && args_matched?
         end
 
         # @private
@@ -324,6 +328,14 @@ module RSpec
           else
             'did'
           end
+        end
+
+        def args_matched?
+          @args_matched
+        end
+
+        def check_args_match
+          @args_matched = args_match?
         end
 
         def args_match?
