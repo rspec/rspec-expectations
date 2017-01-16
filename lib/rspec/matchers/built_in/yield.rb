@@ -35,10 +35,11 @@ module RSpec
           @used = true
 
           probe = self
+          callback = @callback
           Proc.new do |*args|
             probe.num_yields += 1
             probe.yielded_args << args
-            @callback.call(*args)
+            callback.call(*args)
             nil # to indicate the block does not return a meaningful value
           end
         end
