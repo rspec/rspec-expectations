@@ -277,7 +277,7 @@ module RSpec
             check_args_match
           end
           return false unless @probe.has_block?
-          @probe.yielded_once?(:yield_with_args) && args_matched?
+          @probe.yielded_once?(:yield_with_args) && args_matched_when_yielded?
         end
 
         # @private
@@ -331,15 +331,15 @@ module RSpec
           end
         end
 
-        def args_matched?
-          @args_matched
+        def args_matched_when_yielded?
+          @args_matched_when_yielded
         end
 
         def check_args_match
-          @args_matched = args_match?
+          @args_matched_when_yielded = args_currently_match?
         end
 
-        def args_match?
+        def args_currently_match?
           if @expected.empty? # expect {...}.to yield_with_args
             @positive_args_failure = 'yielded with no arguments' if @actual.empty?
             return !@actual.empty?
