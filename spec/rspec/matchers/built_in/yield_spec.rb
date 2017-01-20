@@ -309,6 +309,14 @@ RSpec.describe "yield_with_args matcher" do
       expect { |b| _yield_with_args(1, &b) }.to yield_with_args
     end
 
+    it 'passes if the matchers match at yield time only' do
+      expect { |b|
+        val = []
+        _yield_with_args(val, &b)
+        val << 1
+      }.to yield_with_args(be_empty)
+    end
+
     it 'fails if the block does not yield' do
       expect {
         expect { |b| _dont_yield(&b) }.to yield_with_args
@@ -319,6 +327,16 @@ RSpec.describe "yield_with_args matcher" do
       expect {
         expect { |b| _yield_with_no_args(&b) }.to yield_with_args
       }.to fail_with(/expected given block to yield with arguments, but yielded with no arguments/)
+    end
+
+    it 'fails if the matchers match at return time only' do
+      expect {
+        expect { |b|
+          val = [1]
+          _yield_with_args(val, &b)
+          val.clear
+        }.to yield_with_args(be_empty)
+      }.to fail_with(/but yielded with unexpected arguments/)
     end
 
     it 'raises an error if it yields multiple times' do
@@ -335,12 +353,30 @@ RSpec.describe "yield_with_args matcher" do
       }.to fail_with(/expected given block not to yield with arguments, but did/)
     end
 
+    it 'fails if the matchers match at yield time only' do
+      expect {
+        expect { |b|
+          val = []
+          _yield_with_args(val, &b)
+          val << 1
+        }.not_to yield_with_args(be_empty)
+      }.to fail_with(/expected given block not to yield with arguments, but did/)
+    end
+
     it 'passes if the block does not yield' do
       expect { |b| _dont_yield(&b) }.not_to yield_with_args
     end
 
     it 'passes if the block yields with no arguments' do
       expect { |b| _yield_with_no_args(&b) }.not_to yield_with_args
+    end
+
+    it 'passes if the matchers match at return time only' do
+      expect { |b|
+        val = [1]
+        _yield_with_args(val, &b)
+        val.clear
+      }.not_to yield_with_args(be_empty)
     end
 
     it 'fails if the expect block does not accept an argument', :if => (RUBY_VERSION.to_f > 1.8) do
