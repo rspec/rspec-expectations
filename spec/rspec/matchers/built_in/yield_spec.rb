@@ -560,6 +560,15 @@ RSpec.describe "yield_successive_args matcher" do
       expect { |b| [ [:a, 1], [:b, 2] ].each(&b) }.to yield_successive_args([:a, 1], [:b, 2])
     end
 
+    it 'passes if matched at yield time only' do
+      expect { |b|
+        [ [:a, 1], [:b, 2] ].each do |val|
+          _yield_with_args(val, &b)
+          val.clear
+        end
+      }.to yield_successive_args([:a, 1], [:b, 2])
+    end
+
     it 'fails when the block does not yield that many times' do
       expect {
         expect { |b| [[:a, 1]].each(&b) }.to yield_successive_args([:a, 1], [:b, 2])
@@ -569,6 +578,18 @@ RSpec.describe "yield_successive_args matcher" do
     it 'fails when the block yields the right number of times but with different arguments' do
       expect {
         expect { |b| [ [:a, 1], [:b, 3] ].each(&b) }.to yield_successive_args([:a, 1], [:b, 2])
+      }.to fail_with(/but yielded with unexpected arguments/)
+    end
+
+    it 'fails if the matched at return time only' do
+      expect {
+        expect { |b|
+          [ [:a, 1], [:b, 2] ].each do |eventual|
+            initial = []
+            _yield_with_args(initial, &b)
+            initial.concat(eventual)
+          end
+        }.to yield_successive_args([:a, 1], [:b, 2])
       }.to fail_with(/but yielded with unexpected arguments/)
     end
   end
@@ -653,6 +674,16 @@ RSpec.describe "yield_successive_args matcher" do
       }.not_to yield_successive_args(a_string_matching(/foo/), a_string_matching(/bar/))
     end
 
+    it 'passes when the successively yielded args match the matchers at yield time only' do
+      expect { |b|
+        %w[ barn food ].each do |eventual|
+          initial = String.new
+          _yield_with_args(initial, &b)
+          initial << eventual
+        end
+      }.not_to yield_successive_args(a_string_matching(/foo/), a_string_matching(/bar/))
+    end
+
     it 'fails when the successively yielded args do not match the matchers' do
       expect {
         expect { |b|
@@ -663,6 +694,15 @@ RSpec.describe "yield_successive_args matcher" do
         |expected not: [(a string matching /foo/), (a string matching /bar/)]
         |         got: ["food", "barn"]
       EOS
+    end
+
+    it 'fails when the successively yielded args match the matchers at return time only' do
+      expect { |b|
+        %w[ barn food ].each do |val|
+          _yield_with_args(val, &b)
+          val.clear
+        end
+      }.not_to yield_successive_args(a_string_matching(/foo/), a_string_matching(/bar/))
     end
   end
 

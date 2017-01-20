@@ -369,10 +369,17 @@ module RSpec
 
         # @private
         def matches?(block)
-          @probe = YieldProbe.probe(block)
+          @actual = []
+          @args_matched_when_yielded = true
+          @total_calls = 0
+
+          @probe = YieldProbe.probe(block) do |arg|
+            @actual << arg
+            check_latest_arg_matches
+          end
+
           return false unless @probe.has_block?
-          @actual = @probe.successive_yield_args
-          args_match?
+          called_expected_number_of_times? && args_matched_when_yielded?
         end
 
         def does_not_match?(block)
@@ -403,8 +410,24 @@ module RSpec
 
       private
 
-        def args_match?
-          values_match?(@expected, @actual)
+        def next_expected
+          value = @expected[@total_calls]
+          @total_calls += 1
+          value
+        end
+
+        def called_expected_number_of_times?
+          @total_calls == @expected.count
+        end
+
+        def args_matched_when_yielded?
+          @args_matched_when_yielded
+        end
+
+        def check_latest_arg_matches
+          expected = next_expected
+          actual = @actual.last
+          @args_matched_when_yielded &&= values_match?(expected, actual)
         end
 
         def expected_arg_description
