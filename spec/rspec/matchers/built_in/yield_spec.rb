@@ -700,7 +700,7 @@ RSpec.describe "yield_successive_args matcher" do
       expect { |b|
         %w[ barn food ].each do |val|
           _yield_with_args(val, &b)
-          val.clear
+          val.delete!(val)
         end
       }.not_to yield_successive_args(a_string_matching(/foo/), a_string_matching(/bar/))
     end
