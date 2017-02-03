@@ -21,7 +21,7 @@ module RSpec
 
         def initialize(block, &callback)
           @block = block
-          @callback = callback || proc {}
+          @callback = callback || Proc.new {}
           @used = false
           self.num_yields = 0
           self.yielded_args = []
