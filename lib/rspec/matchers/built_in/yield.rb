@@ -417,7 +417,7 @@ module RSpec
         end
 
         def called_expected_number_of_times?
-          @total_calls == @expected.count
+          @total_calls == @expected.size
         end
 
         def args_matched_when_yielded?
