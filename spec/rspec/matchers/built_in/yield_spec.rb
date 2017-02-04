@@ -668,13 +668,13 @@ RSpec.describe "yield_successive_args matcher" do
   end
 
   describe "expect {...}.not_to yield_successive_args(matcher, matcher)" do
-    it 'passes when the successively yielded args match the matchers' do
+    it 'passes when the successively yielded args do not match the matchers' do
       expect { |b|
         %w[ barn food ].each(&b)
       }.not_to yield_successive_args(a_string_matching(/foo/), a_string_matching(/bar/))
     end
 
-    it 'passes when the successively yielded args match the matchers at yield time only' do
+    it 'passes when the successively yielded args do not match the matchers (at yield time only)' do
       expect { |b|
         %w[ barn food ].each do |eventual|
           initial = String.new
@@ -684,7 +684,7 @@ RSpec.describe "yield_successive_args matcher" do
       }.not_to yield_successive_args(a_string_matching(/foo/), a_string_matching(/bar/))
     end
 
-    it 'fails when the successively yielded args do not match the matchers' do
+    it 'fails when the successively yielded args match the matchers' do
       expect {
         expect { |b|
           %w[ food barn ].each(&b)
@@ -696,7 +696,7 @@ RSpec.describe "yield_successive_args matcher" do
       EOS
     end
 
-    it 'fails when the successively yielded args match the matchers at return time only' do
+    it 'fails when the successively yielded args match the matchers (at yield time only)' do
       expect { |b|
         %w[ barn food ].each do |val|
           _yield_with_args(val, &b)
