@@ -697,12 +697,18 @@ RSpec.describe "yield_successive_args matcher" do
     end
 
     it 'fails when the successively yielded args match the matchers (at yield time only)' do
-      expect { |b|
-        %w[ barn food ].each do |val|
-          _yield_with_args(val, &b)
-          val.sub!(/.+/, '')
-        end
-      }.not_to yield_successive_args(a_string_matching(/foo/), a_string_matching(/bar/))
+      expect {
+        expect { |b|
+          %w[ food barn ].each do |val|
+            _yield_with_args(val, &b)
+            val.sub!(/.+/, '')
+          end
+        }.not_to yield_successive_args(a_string_matching(/foo/), a_string_matching(/bar/))
+      }.to fail_with(dedent <<-EOS)
+        |expected given block not to yield successively with arguments, but yielded with expected arguments
+        |expected not: [(a string matching /foo/), (a string matching /bar/)]
+        |         got: ["", ""]
+      EOS
     end
   end
 
