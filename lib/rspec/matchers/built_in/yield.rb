@@ -11,10 +11,7 @@ module RSpec
         def self.probe(block, &callback)
           probe = new(block, &callback)
           return probe unless probe.has_block?
-          probe.assert_valid_expect_block!
-          block.call(probe)
-          probe.assert_used!
-          probe
+          probe.probe
         end
 
         attr_accessor :num_yields, :yielded_args
@@ -29,6 +26,13 @@ module RSpec
 
         def has_block?
           Proc === @block
+        end
+
+        def probe
+          assert_valid_expect_block!
+          @block.call(self)
+          assert_used!
+          self
         end
 
         def to_proc
@@ -272,12 +276,14 @@ module RSpec
 
         # @private
         def matches?(block)
-          @probe = YieldProbe.probe(block) do |*args|
-            @actual = args
-            check_args_match
+          args_matched_when_yielded = true
+          @probe = YieldProbe.new(block) do
+            @actual = @probe.single_yield_args
+            args_matched_when_yielded &&= args_currently_match?
           end
           return false unless @probe.has_block?
-          @probe.yielded_once?(:yield_with_args) && args_matched_when_yielded?
+          @probe.probe
+          @probe.yielded_once?(:yield_with_args) && args_matched_when_yielded
         end
 
         # @private
@@ -329,14 +335,6 @@ module RSpec
           else
             'did'
           end
-        end
-
-        def args_matched_when_yielded?
-          @args_matched_when_yielded
-        end
-
-        def check_args_match
-          @args_matched_when_yielded = args_currently_match?
         end
 
         def args_currently_match?
