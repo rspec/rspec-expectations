@@ -276,14 +276,15 @@ module RSpec
 
         # @private
         def matches?(block)
-          args_matched_when_yielded = true
+          @args_matched_when_yielded = true
           @probe = YieldProbe.new(block) do
             @actual = @probe.single_yield_args
-            args_matched_when_yielded &&= args_currently_match?
+            @actual_formatted = actual_formatted
+            @args_matched_when_yielded &&= args_currently_match?
           end
           return false unless @probe.has_block?
           @probe.probe
-          @probe.yielded_once?(:yield_with_args) && args_matched_when_yielded
+          @probe.yielded_once?(:yield_with_args) && @args_matched_when_yielded
         end
 
         # @private
@@ -328,10 +329,10 @@ module RSpec
         def negative_failure_reason
           if !@probe.has_block?
             'was not a block'
-          elsif all_args_match?
+          elsif @args_matched_when_yielded && !@expected.empty?
             'yielded with expected arguments' \
               "\nexpected not: #{surface_descriptions_in(@expected).inspect}" \
-              "\n         got: #{actual_formatted}"
+              "\n         got: #{@actual_formatted}"
           else
             'did'
           end
@@ -346,7 +347,7 @@ module RSpec
           unless (match = all_args_match?)
             @positive_args_failure = 'yielded with unexpected arguments' \
               "\nexpected: #{surface_descriptions_in(@expected).inspect}" \
-              "\n     got: #{actual_formatted}"
+              "\n     got: #{@actual_formatted}"
           end
 
           match
