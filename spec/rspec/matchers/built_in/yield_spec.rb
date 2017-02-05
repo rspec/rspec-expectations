@@ -336,7 +336,11 @@ RSpec.describe "yield_with_args matcher" do
           _yield_with_args(val, &b)
           val.clear
         }.to yield_with_args(be_empty)
-      }.to fail_with(/but yielded with unexpected arguments/)
+      }.to fail_with(dedent <<-EOS)
+        |expected given block to yield with arguments, but yielded with unexpected arguments
+        |expected: [(be empty)]
+        |     got: [[1]]
+      EOS
     end
 
     it 'raises an error if it yields multiple times' do
@@ -360,7 +364,11 @@ RSpec.describe "yield_with_args matcher" do
           _yield_with_args(val, &b)
           val << 1
         }.not_to yield_with_args(be_empty)
-      }.to fail_with(/expected given block not to yield with arguments, but did/)
+      }.to fail_with(dedent <<-EOS)
+        |expected given block not to yield with arguments, but yielded with expected arguments
+        |expected not: [(be empty)]
+        |         got: [[]]
+      EOS
     end
 
     it 'passes if the block does not yield' do
