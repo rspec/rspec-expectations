@@ -408,12 +408,6 @@ module RSpec
 
       private
 
-        def next_expected
-          value = @expected[@total_calls]
-          @total_calls += 1
-          value
-        end
-
         def expected_arg_description
           @expected.map { |e| description_of e }.join(', ')
         end
