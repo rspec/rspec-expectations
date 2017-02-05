@@ -581,7 +581,7 @@ RSpec.describe "yield_successive_args matcher" do
       }.to fail_with(/but yielded with unexpected arguments/)
     end
 
-    it 'fails if the matched at return time only' do
+    it 'fails if matched at return time only' do
       expect {
         expect { |b|
           [ [:a, 1], [:b, 2] ].each do |eventual|
