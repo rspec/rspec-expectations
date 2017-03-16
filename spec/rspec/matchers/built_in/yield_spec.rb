@@ -598,7 +598,11 @@ RSpec.describe "yield_successive_args matcher" do
             initial.concat(eventual)
           end
         }.to yield_successive_args([:a, 1], [:b, 2])
-      }.to fail_with(/but yielded with unexpected arguments/)
+      }.to fail_with(dedent <<-EOS)
+        |expected given block to yield successively with arguments, but yielded with unexpected arguments
+        |expected: [[:a, 1], [:b, 2]]
+        |     got: [[], []]
+      EOS
     end
   end
 
@@ -715,7 +719,7 @@ RSpec.describe "yield_successive_args matcher" do
       }.to fail_with(dedent <<-EOS)
         |expected given block not to yield successively with arguments, but yielded with expected arguments
         |expected not: [(a string matching /foo/), (a string matching /bar/)]
-        |         got: ["", ""]
+        |         got: ["food", "barn"]
       EOS
     end
   end

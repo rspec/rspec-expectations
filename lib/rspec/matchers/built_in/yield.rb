@@ -368,10 +368,12 @@ module RSpec
 
         # @private
         def matches?(block)
+          @actual_formatted = []
           args_matched_when_yielded = true
           yield_count = 0
 
           @probe = YieldProbe.probe(block) do |args|
+            @actual_formatted << RSpec::Support::ObjectFormatter.format(args)
             args_matched_when_yielded &&= values_match?(@expected[yield_count], args)
             yield_count += 1
           end
@@ -418,7 +420,7 @@ module RSpec
 
           'yielded with unexpected arguments' \
           "\nexpected: #{surface_descriptions_in(@expected).inspect}" \
-          "\n     got: #{actual_formatted}"
+          "\n     got: [#{@actual_formatted.join(", ")}]"
         end
 
         def negative_failure_reason
@@ -426,7 +428,7 @@ module RSpec
 
           'yielded with expected arguments' \
           "\nexpected not: #{surface_descriptions_in(@expected).inspect}" \
-          "\n         got: #{actual_formatted}"
+          "\n         got: [#{@actual_formatted.join(", ")}]"
         end
       end
     end
