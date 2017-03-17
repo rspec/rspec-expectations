@@ -548,7 +548,7 @@ RSpec.describe "yield_successive_args matcher" do
 
   it_behaves_like "an RSpec matcher",
       :valid_value => lambda { |b| [1, 2].each(&b) },
-      :invalid_value => lambda { |b| _dont_yield(&b) } do
+      :invalid_value => lambda { |b| [3, 4].each(&b) } do
     let(:matcher) { yield_successive_args(1, 2) }
   end
 
