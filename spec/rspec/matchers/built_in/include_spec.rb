@@ -200,7 +200,7 @@ RSpec.describe "#include matcher" do
           )
         }.to fail_including(dedent(<<-END))
           |Diff:
-          |@@ -1,2 +1,2 @@
+          |@@ -1,3 +1,3 @@
           |-[{:number=>1}, {:number=>0}, {:number=>3}]
           |+[{:number=>1}, {:number=>2}, {:number=>3}]
         END
