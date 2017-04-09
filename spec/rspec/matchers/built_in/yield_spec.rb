@@ -563,7 +563,7 @@ RSpec.describe "yield_successive_args matcher" do
     expect(val).to be_nil
   end
 
-  it "works correctly when the method yield multiple args each time (passing case)" do
+  it "works correctly when the method yields multiple args each time (passing case)" do
     expect { |block|
       ['football', 'barstool'].each_with_index(&block)
     }.to yield_successive_args(
@@ -572,7 +572,7 @@ RSpec.describe "yield_successive_args matcher" do
     )
   end
 
-  it "works correctly when the method yield multiple args each time (failing case)" do
+  it "works correctly when the method yields multiple args each time (failing case)" do
     expect {
       expect { |block|
         ['football', 'barstool'].each_with_index(&block)
