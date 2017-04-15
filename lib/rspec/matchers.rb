@@ -402,6 +402,18 @@ module RSpec
     alias_matcher :a_value_within, :be_within
     alias_matcher :within,         :be_within
 
+    # tbd
+    #
+    def output_to_stdout(expected)
+      BuiltIn::Couple.new(expected)
+    end
+
+    # tbd
+    #
+    def output_to_stderr(expected)
+      BuiltIn::Couple.new(expected)
+    end
+
     # Applied to a proc, specifies that its execution will cause some value to
     # change.
     #
