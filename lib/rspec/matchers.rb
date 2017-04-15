@@ -345,6 +345,23 @@ module RSpec
     end
     alias_matcher :a_value, :be, :klass => AliasedMatcherWithOperatorSupport
 
+    # @example
+    #   expect(actual).to     be_equal_to(1)
+    #   actual.should         be_equal_to(1)
+    #   expect(actual).to     be_less_than(1)
+    #   expect(actual).to     be_greater_than_or_equal_to(1)
+    #   actual.should         be_greater_than_or_equal_to(1)
+    #   expect(actual).to     be_match(/substring/)
+    {
+      :be_equal_to => :==, :be_less_than => :<, :be_less_than_or_equal_to => :<=,
+      :be_greater_than_or_equal_to => :>=, :be_greater_than => :>, :be_match => :=~,
+      :be_equivalent_to => :===
+    }.each_pair do |alias_operator, operator|
+      define_method alias_operator do |operand|
+        Matchers::BuiltIn::BeComparedTo.new(operand, operator)
+      end
+    end
+
     # passes if target.kind_of?(klass)
     def be_a(klass)
       be_a_kind_of(klass)
