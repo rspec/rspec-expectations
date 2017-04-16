@@ -31,7 +31,7 @@ module RSpec
       end
 
       def self.handle_failure(matcher, message, failure_message_method)
-        message = message.call if message.respond_to?(:call)
+        message = message.call(matcher.__send__(failure_message_method)) if message.respond_to?(:call)
         message ||= matcher.__send__(failure_message_method)
 
         if matcher.respond_to?(:diffable?) && matcher.diffable?
