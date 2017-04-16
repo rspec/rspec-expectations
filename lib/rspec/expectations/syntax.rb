@@ -72,6 +72,7 @@ module RSpec
           def expect(value=::RSpec::Expectations::ExpectationTarget::UndefinedValue, &block)
             ::RSpec::Expectations::ExpectationTarget.for(value, block)
           end
+          alias_method :expects, :expect
         end
       end
 
