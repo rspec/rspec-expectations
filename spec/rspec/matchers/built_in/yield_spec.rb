@@ -639,6 +639,12 @@ RSpec.describe "yield_successive_args matcher" do
       expect { |b| InstanceEvaler.new.each_arg(1, 2, 3, &b) }.to yield_successive_args(1, 2, 3)
     end
 
+    it 'fails when the block successively yields the given args in the wrong order' do
+      expect {
+        expect { |b| [1, 2, 3].each(&b) }.to yield_successive_args(3, 2, 1)
+      }.to fail_with(/but yielded with unexpected arguments/)
+    end
+
     it 'fails when the block does not yield the expected args' do
       expect {
         expect { |b| [1, 2, 4].each(&b) }.to yield_successive_args([:a, 1], [:b, 2])
@@ -674,6 +680,10 @@ RSpec.describe "yield_successive_args matcher" do
   describe "expect {...}.not_to yield_successive_args(1, 2, 3)" do
     it 'passes when the block does not yield' do
       expect { |b| _dont_yield(&b) }.not_to yield_successive_args(1, 2, 3)
+    end
+
+    it 'passes when the block yields in the wrong order' do
+      expect { |b| [1, 2].each(&b) }.not_to yield_successive_args(3, 2, 1)
     end
 
     it 'passes when the block yields the wrong number of times' do
@@ -765,3 +775,40 @@ RSpec.describe "yield_successive_args matcher" do
   end
 end
 
+RSpec.describe "yield_successive_args_in_any_order matcher" do
+  include YieldHelpers
+  extend  YieldHelpers
+
+  it_behaves_like "an RSpec matcher",
+      :valid_value => lambda { |b| [1, 2].each(&b) },
+      :invalid_value => lambda { |b| _dont_yield(&b) } do
+    let(:matcher) { yield_successive_args_in_any_order(1, 2) }
+  end
+
+  it 'has a description' do
+    expect(yield_successive_args_in_any_order(1, 3).description).to eq("yield successive args in any order(1, 3)")
+    expect(yield_successive_args_in_any_order([:a, 1], [:b, 2]).description).to eq("yield successive args in any order([:a, 1], [:b, 2])")
+  end
+
+  describe "expect {...}.to yield_successive_args_in_any_order([:a, 1], [:b, 2])" do
+    it 'passes when the block successively yields the given args' do
+      expect { |b| [ [:a, 1], [:b, 2] ].each(&b) }.to yield_successive_args_in_any_order([:b, 2], [:a, 1])
+    end
+
+    it 'fails when the block does not yield that many times' do
+      expect {
+        expect { |b| [[:a, 1]].each(&b) }.to yield_successive_args_in_any_order([:a, 1], [:b, 2])
+      }.to fail_with(/but yielded with unexpected arguments/)
+    end
+  end
+
+  describe "expect {...}.to yield_successive_args_in_any_order(1, 2, 3)" do
+    it 'passes when the block successively yields the given args' do
+      expect { |b| [1, 2, 3].each(&b) }.to yield_successive_args_in_any_order(3, 2, 1)
+    end
+
+    it 'passes when the block successively yields the given args using instance_eval' do
+      expect { |b| InstanceEvaler.new.each_arg(1, 2, 3, &b) }.to yield_successive_args_in_any_order(3, 2, 1)
+    end
+  end
+end
