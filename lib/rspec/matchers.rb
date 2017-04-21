@@ -341,7 +341,7 @@ module RSpec
     # (e.g. be_empty), letting you choose the prefix that best suits the
     # predicate.
     def be(*args)
-      args.empty? ? Matchers::BuiltIn::Be.new : equal(*args)
+      args.empty? ? be_truthy : equal(*args)
     end
     alias_matcher :a_value, :be, :klass => AliasedMatcherWithOperatorSupport
 
