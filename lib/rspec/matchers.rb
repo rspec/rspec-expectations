@@ -375,6 +375,19 @@ module RSpec
     alias_method :be_kind_of, :be_a_kind_of
     alias_matcher :a_kind_of,  :be_a_kind_of
 
+    # Passes if actual.ancestors.include?(expected)
+    #
+    # @example
+    #
+    #   expect(Integer).to    be_a_kind_of(Fixnum)
+    #   expect(String).to     be_a_kind_of(Object)
+    #   expect(String).not_to be_a_kind_of(Integer)
+    def be_a_subclass_of(expected)
+      BuiltIn::BeASubclassOf.new(expected)
+    end
+    alias_method :be_subclass_of, :be_a_subclass_of
+    alias_matcher :a_subclass_of,  :be_a_subclass_of
+
     # Passes if actual.between?(min, max). Works with any Comparable object,
     # including String, Symbol, Time, or Numeric (Fixnum, Bignum, Integer,
     # Float, Complex, and Rational).
