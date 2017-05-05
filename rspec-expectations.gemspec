@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
     s.add_runtime_dependency "rspec-support", "~> #{RSpec::Expectations::Version::STRING.split('.')[0..1].concat(['0']).join('.')}"
   end
 
-  s.add_runtime_dependency "diff-lcs", ">= 1.2.0", "< 2.0"
+  s.add_runtime_dependency "diff-lcs", ">= 1.2.0", (RUBY_VERSION < "1.9.0" ? "< 1.3" : "< 2.0")
 
   s.add_development_dependency 'rake',     '~> 10.0.0'
   s.add_development_dependency 'cucumber', '~> 1.3'
