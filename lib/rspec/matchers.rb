@@ -397,6 +397,7 @@ module RSpec
     #   expect(result).to     be_within(0.5).of(3.0)
     #   expect(result).not_to be_within(0.5).of(3.0)
     def be_within(delta)
+      raise ArgumentError, "The RSpec BeWithin matcher does not take a block" if block_given?
       BuiltIn::BeWithin.new(delta)
     end
     alias_matcher :a_value_within, :be_within
