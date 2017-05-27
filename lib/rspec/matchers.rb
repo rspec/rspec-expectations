@@ -654,6 +654,24 @@ module RSpec
       BuiltIn::All.new(expected)
     end
 
+    # Passes if the provided matcher passes when checked against any
+    # element of the collection.
+    #
+    # @example
+    #   expect([1, 4, 5]).to any be_odd
+    #
+    # @note The negative form `not_to any` is not supported. Instead
+    #   use `not_to include` or pass a negative form of a matcher
+    #   as the argument (e.g. `all exclude(:foo)` - mind it's `all` here).
+    #
+    # @note You can also use this with compound matchers as well.
+    #
+    # @example
+    #   expect([1, 4, 'a']).to any( be_odd.and be_an(Integer) )
+    def any(expected)
+      BuiltIn::Any.new(expected)
+    end
+
     # Given a `Regexp` or `String`, passes if `actual.match(pattern)`
     # Given an arbitrary nested data structure (e.g. arrays and hashes),
     # matches if `expected === actual` || `actual == expected` for each

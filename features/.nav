@@ -4,6 +4,7 @@
   - predicates.feature
   - types.feature
   - all.feature
+  - any.feature
   - be.feature
   - be_within.feature
   - exist.feature

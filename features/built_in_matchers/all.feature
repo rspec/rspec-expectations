@@ -31,13 +31,18 @@ Feature: `all` matcher
         it { is_expected.to all( be_a(String) ) }
         it { is_expected.to all( be > 2 ) }
       end
+
+      RSpec.describe [1, 'a', 5] do
+        it { is_expected.to all( be < 10 ) }
+      end
       """
     When I run `rspec array_all_matcher_spec.rb`
     Then the output should contain all of these:
-      | 6 examples, 3 failures                        |
+      | 7 examples, 4 failures                        |
       | expected [1, 3, 5] to all be even             |
       | expected [1, 3, 5] to all be a kind of String |
       | expected [1, 3, 5] to all be > 2              |
+      | expected [1, "a", 5] to all be < 10           |
 
   Scenario: compound matcher usage
     Given a file named "compound_all_matcher_spec.rb" with:
