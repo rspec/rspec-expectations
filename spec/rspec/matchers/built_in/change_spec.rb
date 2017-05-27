@@ -882,6 +882,56 @@ RSpec.describe "Composing a matcher with `change`" do
       }.to fail_with(/expected #{value_pattern} to have initially been a value within 0.1 of 1.5, but was 0.51/)
     end
   end
+
+  describe "expect(...).to change{...}.to have_attributes()" do
+    Movie = Struct.new(:name, :year)
+
+    let(:wrong_name) { "Wrong Name" }
+    let(:wrong_year) { 2011 }
+
+    let(:correct_name) { "Correct name" }
+    let(:correct_year) { 2013 }
+
+    let(:movie) { Movie.new(correct_name, correct_year) }
+
+    it "fails on 'have_attributes' and gives informative error message" do
+      expect {
+        expect { movie.year = wrong_year }.to change { movie }.to have_attributes({:year => correct_year})
+      }.to fail_including("expected result to have changed to have attributes {:year => #{correct_year}}, but had attributes {:year => #{wrong_year}}")
+    end
+
+    it "fails the 'change' check and gives informative error message" do
+      expect {
+        expect { movie.year = correct_year }.to change { movie }.to have_attributes({:year => correct_year})
+      }.to fail_including("expected result to have changed to have attributes {:year => #{correct_year}}, but did not change")
+    end
+
+    it "fails on negation with 'have_attributes' and gives informative error message" do
+      expect {
+        expect { movie.year = wrong_year }.not_to change { movie }.from have_attributes({:year => correct_year})
+      }.to fail_including("expected result not to have changed, but changed and has attributes {:year => #{wrong_year}}")
+    end
+
+    it "fails on negation with 'not_change' with informative error messages" do
+      expect {
+        expect { movie.year = wrong_year }.not_to change { movie }.from have_attributes({:year => wrong_year})
+      }.to fail_including("expected result to not change, but changed and has attributes {:year => #{wrong_year}}")
+    end
+
+    it "fails on both change and have_attributes and gives informative error message" do
+      expect {
+        expect { movie.year = correct_year }.to change { movie }.to have_attributes({:year => wrong_year})
+      }.to fail_including("expected result to have changed to have attributes {:year => #{wrong_year}}, but did not change")
+    end
+
+    it "fails on negation for both change and have_attributes and gives informative error message" do
+      expect {
+        expect { movie.year = wrong_year }.not_to change { movie }.from have_attributes({:year => correct_year})
+      }.to fail_including("expected result not to have changed, but changed and has attributes {:year => #{wrong_year}}")
+    end
+
+  end
+
 end
 
 RSpec.describe RSpec::Matchers::BuiltIn::Change do

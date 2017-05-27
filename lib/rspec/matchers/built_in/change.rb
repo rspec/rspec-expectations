@@ -189,6 +189,7 @@ module RSpec
           return not_given_a_block_failure unless Proc === @event_proc
           return before_value_failure      unless matches_before?
           return did_not_change_failure    unless @change_details.changed?
+          return after_value_failure_with_attributes if change_with_has_attributes
           after_value_failure
         end
 
@@ -213,10 +214,18 @@ module RSpec
           "but was #{description_of @change_details.actual_before}"
         end
 
+        def before_value_failure_with_attributes
+          "expected #{@change_details.message} to not change, but changed and has attributes #{ formatted_values(get_actual_values(@expected_before.expected)) }"
+        end
+
         def after_value_failure
           "expected #{@change_details.value_representation} " \
           "to have changed to #{description_of @expected_after}, " \
           "but is now #{description_of @change_details.actual_after}"
+        end
+
+        def after_value_failure_with_attributes
+          "expected #{@change_details.message} to have changed to #{description_of @expected_after}, but had attributes #{ formatted_values(get_actual_values(@expected_after.expected)) }"
         end
 
         def did_not_change_failure
@@ -230,9 +239,34 @@ module RSpec
           "to #{description_of @change_details.actual_after}"
         end
 
+        def did_change_with_attributes_failure
+          "expected #{@change_details.message} not to have changed, but changed and has attributes #{ formatted_values(get_actual_values(@expected_before.expected))}"
+        end
+
         def not_given_a_block_failure
           "expected #{@change_details.value_representation} to have changed " \
           "#{change_description}, but was not given a block"
+        end
+
+        # TODO: refactor code to reuse this from have_attributes.rb:107
+        def formatted_values(expected)
+          values = RSpec::Support::ObjectFormatter.format(expected)
+          improve_hash_formatting(values)
+        end
+        # TODO: refactor code to reuse this from have_attributes.rb:70
+        def get_actual_values(expectation)
+          actual_values = {}
+          expectation.each do |attribute_key, _attribute_value|
+            actual_value = @change_details.actual_after.__send__(attribute_key)
+            actual_values[attribute_key] = actual_value
+          end
+          actual_values
+        end
+
+        # HACK: special case to change the error message
+        def change_with_has_attributes
+          @expected_before.class == HaveAttributes ||
+            @expected_after.class == HaveAttributes
         end
       end
 
@@ -269,7 +303,9 @@ module RSpec
         # @private
         def failure_message_when_negated
           return not_given_a_block_failure unless Proc === @event_proc
+          return before_value_failure_with_attributes if !matches_before? && change_with_has_attributes
           return before_value_failure unless matches_before?
+          return did_change_with_attributes_failure if change_with_has_attributes
           did_change_failure
         end
 
