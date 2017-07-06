@@ -129,13 +129,39 @@ module RSpec
       end
 
       # @private
+      class IOCapturer
+        def initialize(original)
+          @io = StringIO.new
+          @proxy = if defined?(::RSpec::Mocks)
+            ::RSpec::Mocks.space.proxy_for(original)
+          end
+        end
+
+        def respond_to?(method, *args)
+          if @proxy && @proxy.method_double_if_exists_for_message(method)
+            @proxy.object.respond_to?(method, *args)
+          else
+            @io.respond_to?(method, *args)
+          end
+        end
+
+        def method_missing(method, *args)
+          if @proxy && @proxy.method_double_if_exists_for_message(method)
+            @proxy.object.__send__(method, *args)
+          else
+            @io.__send__(method, *args)
+          end
+        end
+      end
+
+      # @private
       module CaptureStdout
         def self.name
           'stdout'
         end
 
         def self.capture(block)
-          captured_stream = StringIO.new
+          captured_stream = IOCapturer.new($stdout)
 
           original_stream = $stdout
           $stdout = captured_stream
@@ -155,7 +181,7 @@ module RSpec
         end
 
         def self.capture(block)
-          captured_stream = StringIO.new
+          captured_stream = IOCapturer.new($stderr)
 
           original_stream = $stderr
           $stderr = captured_stream
