@@ -144,6 +144,13 @@ module RSpec
           $stderr.print(msg)
         end
       }
+
+      it "forwards stubbed methods to the real $stderr" do
+        [true, false].each do |bool|
+          allow($stderr).to receive(:tty?).and_return(bool)
+          expect { $stderr.puts $stderr.tty? }.to output("#{bool}\n").to_stderr
+        end
+      end
     end
 
     RSpec.describe "output.to_stdout matcher" do
@@ -152,6 +159,13 @@ module RSpec
           print(msg)
         end
       }
+
+      it "forwards stubbed methods to the real $stdout" do
+        [true, false].each do |bool|
+          allow($stdout).to receive(:tty?).and_return(bool)
+          expect { $stdout.puts $stdout.tty? }.to output("#{bool}\n").to_stdout
+        end
+      end
     end
 
     RSpec.describe "output.to_stderr_from_any_process matcher" do
