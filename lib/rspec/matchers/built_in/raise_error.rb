@@ -12,7 +12,7 @@ module RSpec
         def initialize(expected_error_or_message=nil, expected_message=nil, &block)
           @block = block
           @actual_error = nil
-          @warn_about_bare_error = expected_error_or_message.nil?
+          @warn_about_bare_error = expected_error_or_message.nil? || expected_error_or_message == StandardError && expected_message.nil?
 
           case expected_error_or_message
           when nil
