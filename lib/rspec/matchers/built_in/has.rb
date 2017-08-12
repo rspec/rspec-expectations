@@ -91,10 +91,13 @@ module RSpec
         end
 
         def validity_message
+          msg = "expected #{@actual} to respond to `#{predicate}`"
           if private_predicate?
-            "expected #{@actual} to respond to `#{predicate}` but `#{predicate}` is a private method"
+            msg << " but `#{predicate}` is a private method"
+          elsif @method_name.to_s.end_with?('?')
+            msg << " or perhaps you meant `#{@method_name.to_s[0..-2]}`(without question suffix)"
           elsif !predicate_exists?
-            "expected #{@actual} to respond to `#{predicate}`"
+            msg
           end
         end
       end

@@ -158,6 +158,13 @@ RSpec.describe "expect(...).to be_predicate" do
       expect(actual).to be_false
     }.not_to raise_error
   end
+
+  it "indicates droping a question when using `be_something?`" do
+    actual = double("actual")
+    expect {
+      expect(actual).to be_something?
+    }.to fail_with(/or perhaps you meant `be_something`\(without question suffix\)/)
+  end
 end
 
 RSpec.describe "expect(...).not_to be_predicate" do

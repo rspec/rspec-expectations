@@ -84,6 +84,12 @@ RSpec.describe "expect(...).to have_sym(*args)" do
     }.to fail_including('to respond to `has_key?`')
   end
 
+  it "fails if target does not respond to #has_sym??" do
+    expect {
+      expect(Object.new).to have_key?(:a)
+    }.to fail_including('or perhaps you meant `have_key`(without question suffix)')
+  end
+
   it "reraises an exception thrown in #has_sym?(*args)" do
     o = Object.new
     def o.has_sym?(*args)
