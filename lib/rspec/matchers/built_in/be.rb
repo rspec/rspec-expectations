@@ -278,6 +278,8 @@ module RSpec
             msg << " or perhaps you meant `be true` or `be_truthy`"
           elsif predicate == :false?
             msg << " or perhaps you meant `be false` or `be_falsey`"
+          elsif predicate.to_s.end_with?('??')
+            msg << " or perhaps you meant `be_#{@expected[0..-2]}`(without question suffix)"
           end
 
           msg
