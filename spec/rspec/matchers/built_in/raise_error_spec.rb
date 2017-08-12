@@ -13,6 +13,16 @@ RSpec.describe "expect { ... }.to raise_error" do
     expect { raise }.to raise_error
   end
 
+  it "issues a warning when used with StandardError without a message" do
+    expect_warning_with_call_site __FILE__, __LINE__+1, /without providing a specific error/
+    expect { raise StandardError.new }.to raise_error(StandardError)
+  end
+
+  it "does not issue a warning when used with StandardError with a message" do
+    expect_no_warnings
+    expect { raise StandardError.new("message") }.to raise_error(StandardError, "message")
+  end
+
   it 'issues a warning that includes the current error when used without an error class or message' do
     expect_warning_with_call_site __FILE__, __LINE__+1, /Actual error raised was #<StandardError: boom>/
     expect { raise StandardError.new, 'boom'}.to raise_error
@@ -99,9 +109,10 @@ RSpec.describe "expect { ... }.to raise_error" do
   end
 
   it "passes if an error class is expected and an instance of that class is thrown" do
-    s = StandardError.new :bees
+    CustomErrorClass = Class.new(StandardError)
+    s = CustomErrorClass.new :bees
 
-    expect { raise s }.to raise_error(StandardError)
+    expect { raise s }.to raise_error(CustomErrorClass)
   end
 
   it "fails if nothing is raised" do
