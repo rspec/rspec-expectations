@@ -139,6 +139,13 @@ RSpec.describe "#include matcher" do
         PseudoHash.new(hsh)
       end
 
+      around do |example|
+        in_sub_process_if_possible do
+          require 'delegate'
+          example.run
+        end
+      end
+
       it_behaves_like "a Hash target"
     end
   end

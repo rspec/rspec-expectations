@@ -145,6 +145,7 @@ Feature: `include` matcher
   Scenario: pseudo-hash usage
     Given a file named "pseudo_hash_include_matcher_spec.rb" with:
       """ruby
+      require 'delegate'
       class PseudoHash < SimpleDelegator
       end
 
