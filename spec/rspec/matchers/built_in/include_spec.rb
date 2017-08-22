@@ -131,6 +131,51 @@ RSpec.describe "#include matcher" do
         end
       end
     end
+
+    context "for a target that can pass for a hash" do
+      class PseudoHash < SimpleDelegator
+      end
+
+      def build_target(hsh)
+        PseudoHash.new(hsh)
+      end
+
+      it 'passes if target has the expected as a key' do
+        expect(build_target(:key => 'value')).to include(:key)
+      end
+
+      it "fails if target does not include expected" do
+        expect {
+          expect(build_target(:key => 'value')).to include(:other)
+        }.to fail_matching(%Q|expected {:key => "value"} to include :other|)
+      end
+
+      it "fails if target doesn't have a key and we expect nil" do
+        expect {
+          expect(build_target({})).to include(:something => nil)
+        }.to fail_matching(%Q|expected {} to include {:something => nil}|)
+      end
+
+      it 'works even when an entry in the hash overrides #send' do
+        hash = build_target(:key => 'value')
+        def hash.send; :sent; end
+        expect(hash).to include(hash)
+      end
+
+      it 'provides a valid diff' do
+        allow(RSpec::Matchers.configuration).to receive(:color?).and_return(false)
+
+        expect {
+          expect(build_target(:foo => 1, :bar => 2)).to include(:foo => 1, :bar => 3)
+        }.to fail_including(dedent(<<-END))
+          |Diff:
+          |@@ -1,3 +1,3 @@
+          |-:bar => 3,
+          |+:bar => 2,
+          | :foo => 1,
+        END
+      end
+    end
   end
 
   describe "expect(...).to include(with, multiple, args)" do

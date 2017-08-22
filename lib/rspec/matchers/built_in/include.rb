@@ -15,12 +15,14 @@ module RSpec
         # @api private
         # @return [Boolean]
         def matches?(actual)
+          actual = actual.to_hash if actual.respond_to?(:to_hash)
           perform_match(actual) { |v| v }
         end
 
         # @api private
         # @return [Boolean]
         def does_not_match?(actual)
+          actual = actual.to_hash if actual.respond_to?(:to_hash)
           perform_match(actual) { |v| !v }
         end
 
@@ -87,6 +89,7 @@ module RSpec
           return [] unless @actual.respond_to?(:include?)
 
           expecteds.inject([]) do |memo, expected_item|
+            expected_item = expected_item.to_hash if expected_item.respond_to?(:to_hash)
             if comparing_hash_to_a_subset?(expected_item)
               expected_item.each do |(key, value)|
                 memo << { key => value } unless yield actual_hash_includes?(key, value)
