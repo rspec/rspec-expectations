@@ -132,9 +132,6 @@ RSpec.describe "#include matcher" do
     end
 
     context "for a target that can pass for a hash" do
-      class PseudoHash < SimpleDelegator
-      end
-
       def build_target(hsh)
         PseudoHash.new(hsh)
       end
@@ -142,6 +139,10 @@ RSpec.describe "#include matcher" do
       around do |example|
         in_sub_process_if_possible do
           require 'delegate'
+
+          class PseudoHash < SimpleDelegator
+          end
+
           example.run
         end
       end
