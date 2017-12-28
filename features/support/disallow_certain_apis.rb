@@ -3,7 +3,7 @@
 
 if defined?(Cucumber)
   require 'shellwords'
-  Before('~@allow-disallowed-api') do
+  Before('not @allow-disallowed-api') do
     set_env('SPEC_OPTS', "-r#{Shellwords.escape(__FILE__)}")
   end
 else
