@@ -1,4 +1,4 @@
-# This file was generated on 2017-11-21T14:21:55+11:00 from the rspec-dev repo.
+# This file was generated on 2017-12-30T17:04:25-08:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 language: ruby
@@ -21,9 +21,10 @@ rvm:
   - 1.9.3
   - 2.0.0
   - 2.1
-  - 2.2.7
-  - 2.3.5
-  - 2.4.2
+  - 2.2.9
+  - 2.3.6
+  - 2.4.3
+  - 2.5.0
   - ruby-head
   - ree
   - rbx-3
