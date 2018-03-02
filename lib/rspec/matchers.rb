@@ -240,6 +240,7 @@ module RSpec
   #
   module Matchers
     extend ::RSpec::Matchers::DSL
+    include ::RSpec::Matchers::DSL
 
     # @!macro [attach] alias_matcher
     #   @!parse

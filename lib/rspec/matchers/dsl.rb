@@ -94,8 +94,6 @@ module RSpec
         # :nocov:
       end
 
-      RSpec.configure { |c| c.extend self } if RSpec.respond_to?(:configure)
-
       # Contains the methods that are available from within the
       # `RSpec::Matchers.define` DSL for creating custom matchers.
       module Macros
