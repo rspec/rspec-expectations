@@ -1,3 +1,11 @@
+### Development
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.1...3-8-maintenance)
+
+Bug Fixes:
+
+* Change `include` matcher to rely on a `respond_to?(:include?)` check rather than a direct
+  Hash comparison before calling `to_hash` to convert to a hash. (Jordan Owens, #1073)
+
 ### 3.8.1 / 2018-08-06
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.0...v3.8.1)
 
