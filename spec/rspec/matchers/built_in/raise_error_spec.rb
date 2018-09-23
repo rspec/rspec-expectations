@@ -247,7 +247,7 @@ RSpec.describe "expect { ... }.to raise_error.with_message(message)" do
   it "raises an argument error if raise_error itself expects a message" do
     expect {
       expect { }.to raise_error("bees").with_message("sup")
-    }.to raise_error.with_message(/`expect \{ \}\.to raise_error\(message\)\.with_message\(message\)` is not valid/)
+    }.to raise_error.with_message(/The matcher only allows the expected message to be specified once/)
   end
 
   it "passes if RuntimeError is raised with the right message" do
@@ -559,6 +559,82 @@ RSpec.describe "Composing matchers with `raise_error`" do
     it 'provides a description' do
       description = raise_error(FooError).with_message(a_string_including("foo")).description
       expect(description).to eq('raise FooError with a string including "foo"')
+    end
+  end
+end
+
+RSpec.describe "Expecting error attributes with `raise_error`" do
+  class BarError < StandardError
+    attr_reader :status
+    def initialize(message, status)
+      super(message)
+      @status = status
+    end
+  end
+
+  describe "expect { ... }.to raise_error(...).with_attributes(...)" do
+    it 'passes when the raised error has the expected attributes with the correct values' do
+      expect { raise BarError.new('File not found', 99) }.to(
+        raise_error(BarError).with_attributes(message: 'File not found', status: 99)
+      )
+    end
+
+    it 'passes when the raised error has the expected attributes with fuzzy matching values' do
+      expect { raise BarError.new('CLIENT ERROR: Page Not Found', 404) }.to(
+        raise_error(BarError).with_attributes(message: /client error/i, status: 400...499)
+      )
+    end
+
+    it 'fails when the raised error has an expected attribute with the wrong value' do
+      expect {
+        expect { raise BarError.new('File not found', 1) }.to(
+          raise_error(BarError).with_attributes(message: 'File not found', status: 99)
+        )
+      }.to fail_including('have attributes {:message => "File not found", :status => 99} but had attributes {:message => "File not found", :status => 1}')
+    end
+
+    it 'fails when the raised error does not have an expected attribute' do
+      expect {
+        expect { raise RuntimeError, 'File not found' }.to(
+          raise_error(RuntimeError).with_attributes(message: 'File not found', status: 99)
+        )
+      }.to fail_including('expected #<RuntimeError: File not found> to respond to :status with 0 arguments')
+    end
+
+    it 'passes and issues a warning when used without an expecting an error class or message' do
+      expect_warning_with_call_site __FILE__, __LINE__+1, /without providing a specific error/
+      expect { raise BarError.new('File not found', 99) }.to(
+        raise_error.with_attributes(status: 99)
+      )
+    end
+
+    it 'passes and does NOT issue a warning when only specifying a message attribute' do
+      expect { raise BarError.new('PAGE NOT FOUND', 404) }.to(
+        raise_error.with_attributes(message: /not found/i)
+      )
+    end
+
+    it 'can be chained with the `with_message` method' do
+      expect { raise BarError.new('PAGE NOT FOUND', 404) }.to(
+        raise_error.with_message('PAGE NOT FOUND').with_attributes(status: 404)
+      )
+      expect { raise BarError.new('PAGE NOT FOUND', 404) }.to(
+        raise_error.with_attributes(status: 404).with_message('PAGE NOT FOUND')
+      )
+    end
+
+    it 'does not allow a message attribute when message was specified elsewhere' do
+      expect {
+        expect { raise BarError.new('PAGE NOT FOUND', 404) }.to(
+          raise_error.with_message('PAGE NOT FOUND').with_attributes(message: 'PAGE NOT FOUND')
+        )
+      }.to raise_error.with_message(/The matcher only allows the expected message to be specified once/)
+
+      expect {
+        expect { raise BarError.new('PAGE NOT FOUND', 404) }.to(
+          raise_error('PAGE NOT FOUND').with_attributes(message: 'PAGE NOT FOUND')
+        )
+      }.to raise_error.with_message(/The matcher only allows the expected message to be specified once/)
     end
   end
 end

@@ -26,7 +26,11 @@ Feature: `raise_error` matcher
     expect { raise "oops" }.to raise_error(/op/)
     expect { raise "oops" }.to raise_error(RuntimeError, "oops")
     expect { raise "oops" }.to raise_error(RuntimeError, /op/)
+    expect { raise SystemExit.new(1, 'oops') } to raise_error(SystemExit).with_attributes(status: 1, message: 'oops')
+    expect { raise SystemExit.new(1, 'oops') } to raise_error(SystemExit).with_attributes(status: 1, message: /op/)
     ```
+
+  with_attributes uses the have_attributes matcher internally.  See the have_attributes matcher documentation for more details.
 
   Scenario: expect any error
     Given a file named "example_spec" with:
@@ -137,6 +141,34 @@ Feature: `raise_error` matcher
       RSpec.describe "#to_s" do
         it "does not raise" do
           expect { Object.new.to_s }.not_to raise_error
+        end
+      end
+      """
+    When I run `rspec example_spec`
+    Then the example should pass
+
+  Scenario: matching error attributes with `with_attributes`
+    Given a file named "spec/test_spec.rb" with:
+      """ruby
+      RSpec.describe 'raise_error matcher' do
+        specify do
+          expect { raise SystemExit.new(1, 'File not found') }.to(
+            raise_error(SystemExit).with_attributes(message: 'File not found', status: 1)
+          )
+        end
+      end
+      """
+    When I run `rspec spec/test_spec.rb`
+    Then the example should pass
+
+  Scenario: fuzzy matching error attributes with `with_attributes`
+    Given a file named "example_spec" with:
+      """ruby
+      RSpec.describe 'raise_error matcher' do
+        specify do
+          expect { raise RuntimeError, 'ERROR: File not found' }.to(
+            raise_error(RuntimeError).with_attributes(message: /not found/i)
+          )
         end
       end
       """
