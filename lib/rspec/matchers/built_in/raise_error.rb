@@ -25,6 +25,8 @@ module RSpec
             @expected_error = expected_error_or_message
             @expected_message = expected_message
           end
+
+          @attribute_matcher = nil
         end
 
         # @api public
@@ -33,6 +35,16 @@ module RSpec
           raise_message_already_set if @expected_message
           @warn_about_bare_error = false
           @expected_message = expected_message
+          self
+        end
+
+        # @api public
+        # Specifies the expected attributes on the error raised
+        def with_attributes(expected_attributes)
+          @attribute_matcher = RSpec::Matchers::BuiltIn::HaveAttributes.new(expected_attributes)
+          expecting_message_attribute = expected_attributes.keys.any? { |k| k.to_sym == :message }
+          @warn_about_bare_error = false if expecting_message_attribute
+          raise_message_already_set if @expected_message && expecting_message_attribute
           self
         end
 
@@ -61,6 +73,8 @@ module RSpec
           warn_about_bare_error if warning_about_bare_error && !negative_expectation
           eval_block if !negative_expectation && ready_to_eval_block?
 
+          @attributes_match = @attribute_matcher.matches?(@actual_error) if @attribute_matcher
+
           expectation_matched?
         end
         # rubocop:enable MethodLength
@@ -83,7 +97,8 @@ module RSpec
         # @api private
         # @return [String]
         def failure_message
-          @eval_block ? @actual_error.message : "expected #{expected_error}#{given_error}"
+          (@eval_block ? @actual_error.message : "expected #{expected_error}#{given_error}") +
+            (attributes_match? ? '' : ' '+ @attribute_matcher.failure_message)
         end
 
         # @api private
@@ -95,13 +110,17 @@ module RSpec
         # @api private
         # @return [String]
         def description
-          "raise #{expected_error}"
+          "raise #{expected_error}" + attribute_matcher_description
         end
 
       private
 
+        def attribute_matcher_description
+          @attribute_matcher ? @attribute_matcher.description.gsub(/^have attribute/, ' with attribute') : ''
+        end
+
         def expectation_matched?
-          error_and_message_match? && block_matches?
+          error_and_message_match? && block_matches? && attributes_match?
         end
 
         def error_and_message_match?
@@ -110,6 +129,10 @@ module RSpec
 
         def block_matches?
           @eval_block ? @eval_block_passed : true
+        end
+
+        def attributes_match?
+          @attribute_matcher ? @attributes_match : true
         end
 
         def ready_to_eval_block?
@@ -214,8 +237,7 @@ module RSpec
         end
 
         def raise_message_already_set
-          raise "`expect { }.to raise_error(message).with_message(message)` is not valid. " \
-                'The matcher only allows the expected message to be specified once'
+          raise 'The matcher only allows the expected message to be specified once'
         end
 
         def warning
