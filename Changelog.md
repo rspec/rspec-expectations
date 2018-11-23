@@ -1,3 +1,11 @@
+### Development
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.2...3-8-maintenance)
+
+Bug Fixes:
+
+* Prevent composed `all` matchers from leaking into their siblings leading to duplicate
+  failures. (Jamie English, #1086)
+
 ### 3.8.2 / 2018-10-09
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.1...v3.8.2)
 
