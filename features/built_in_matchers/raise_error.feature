@@ -26,7 +26,7 @@ Feature: `raise_error` matcher
     expect { raise "oops" }.to raise_error(/op/)
     expect { raise "oops" }.to raise_error(RuntimeError, "oops")
     expect { raise "oops" }.to raise_error(RuntimeError, /op/)
-    expect { raise "oops" }.to raise_error(an_instance_of(RuntimeError).and have_attributes(message: "oops"))
+    expect { raise "oops" }.to raise_error(an_instance_of(RuntimeError).and having_attributes(message: "oops"))
     ```
 
   Scenario: expect any error
@@ -138,7 +138,7 @@ Feature: `raise_error` matcher
       RSpec.describe "composing matchers" do
         it "raises StandardError" do
           expect { raise StandardError, "my message" }.to
-            raise_error(an_instance_of(StandardError).and have_attributes(message: "my message"))
+            raise_error(an_instance_of(StandardError).and having_attributes(message: "my message"))
         end
       end
       """
