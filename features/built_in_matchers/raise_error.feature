@@ -131,13 +131,13 @@ Feature: `raise_error` matcher
       """
       When I run `rspec example_spec`
       Then the example should pass
-      
+
   Scenario: set expectations on error object with chained matchers
     Given a file named "example_spec" with:
       """
       RSpec.describe "composing matchers" do
         it "raises StandardError" do
-          expect { raise StandardError, "my message" }.to 
+          expect { raise StandardError, "my message" }.to
             raise_error(an_instance_of(StandardError).and have_attributes(message: "my message"))
         end
       end
