@@ -137,8 +137,8 @@ Feature: `raise_error` matcher
       """
       RSpec.describe "composing matchers" do
         it "raises StandardError" do
-          expect { raise StandardError, "my message" }.to
-            raise_error(an_instance_of(StandardError).and having_attributes(message: "my message"))
+          expect { raise StandardError, "my message" }.
+            to raise_error(an_instance_of(StandardError).and having_attributes(message: "my message"))
         end
       end
       """
