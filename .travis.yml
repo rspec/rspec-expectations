@@ -1,4 +1,4 @@
-# This file was generated on 2018-09-19T14:39:24+01:00 from the rspec-dev repo.
+# This file was generated on 2019-01-03T20:34:23+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 language: ruby
@@ -8,8 +8,7 @@ cache:
   directories:
     - ../bundle
 before_install:
-  - gem update --system # https://github.com/travis-ci/travis-ci/issues/8978#issuecomment-354036443
-  - gem install bundler
+  - "script/update_rubygems_and_install_bundler"
   - unset _JAVA_OPTIONS
   - "script/clone_all_rspec_repos"
 bundler_args: "--binstubs --standalone --without documentation --path ../bundle"
