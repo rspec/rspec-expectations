@@ -38,6 +38,8 @@ module RSpec
 
         register Enumerable, '=~', BuiltIn::ContainExactly
 
+        attr_reader :actual, :expected
+
         def initialize(actual)
           @actual = actual
         end
@@ -68,7 +70,7 @@ module RSpec
 
         # @private
         def fail_with_message(message)
-          RSpec::Expectations.fail_with(message, @expected, @actual)
+          RSpec::Expectations.fail_with(message, self)
         end
 
         # @api private

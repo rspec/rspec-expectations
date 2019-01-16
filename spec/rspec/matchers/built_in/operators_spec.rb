@@ -27,7 +27,12 @@ RSpec.describe "operator matchers", :uses_should do
 
     it "fails when target.==(actual) returns false" do
       subject = "apple"
-      expect(RSpec::Expectations).to receive(:fail_with).with(%[expected: "orange"\n     got: "apple" (using ==)], "orange", "apple")
+      expect(RSpec::Expectations).to receive(:fail_with).with(
+        %[expected: "orange"\n     got: "apple" (using ==)],
+        an_object_having_attributes(:expected => "orange", :actual => "apple").and(
+          be_a(RSpec::Matchers::BuiltIn::OperatorMatcher)
+        )
+      )
       subject.should == "orange"
     end
 
@@ -87,7 +92,12 @@ RSpec.describe "operator matchers", :uses_should do
 
     it "fails when target.==(actual) returns false" do
       subject = "apple"
-      expect(RSpec::Expectations).to receive(:fail_with).with(%[expected not: == "apple"\n         got:    "apple"], "apple", "apple")
+      expect(RSpec::Expectations).to receive(:fail_with).with(
+        %[expected not: == "apple"\n         got:    "apple"],
+        an_object_having_attributes(:expected => "apple", :actual => "apple").and(
+          be_a(RSpec::Matchers::BuiltIn::OperatorMatcher)
+        )
+      )
       subject.should_not == "apple"
     end
   end
@@ -102,7 +112,12 @@ RSpec.describe "operator matchers", :uses_should do
     it "fails when target.===(actual) returns false" do
       subject = "apple".dup
       expect(subject).to receive(:===).with("orange").and_return(false)
-      expect(RSpec::Expectations).to receive(:fail_with).with(%[expected: "orange"\n     got: "apple" (using ===)], "orange", "apple")
+      expect(RSpec::Expectations).to receive(:fail_with).with(
+        %[expected: "orange"\n     got: "apple" (using ===)],
+        an_object_having_attributes(:expected => "orange", :actual => "apple").and(
+          be_a(RSpec::Matchers::BuiltIn::OperatorMatcher)
+        )
+      )
       subject.should === "orange"
     end
   end
@@ -117,7 +132,12 @@ RSpec.describe "operator matchers", :uses_should do
     it "fails when target.===(actual) returns false" do
       subject = "apple".dup
       expect(subject).to receive(:===).with("apple").and_return(true)
-      expect(RSpec::Expectations).to receive(:fail_with).with(%[expected not: === "apple"\n         got:     "apple"], "apple", "apple")
+      expect(RSpec::Expectations).to receive(:fail_with).with(
+        %[expected not: === "apple"\n         got:     "apple"],
+        an_object_having_attributes(:expected => "apple", :actual => "apple").and(
+          be_a(RSpec::Matchers::BuiltIn::OperatorMatcher)
+        )
+      )
       subject.should_not === "apple"
     end
   end
@@ -132,7 +152,12 @@ RSpec.describe "operator matchers", :uses_should do
     it "fails when target.=~(actual) returns false" do
       subject = "fu".dup
       expect(subject).to receive(:=~).with(/oo/).and_return(false)
-      expect(RSpec::Expectations).to receive(:fail_with).with(%[expected: /oo/\n     got: "fu" (using =~)], /oo/, "fu")
+      expect(RSpec::Expectations).to receive(:fail_with).with(
+        %[expected: /oo/\n     got: "fu" (using =~)],
+        an_object_having_attributes(:expected => /oo/, :actual => "fu").and(
+          be_a(RSpec::Matchers::BuiltIn::OperatorMatcher)
+        )
+      )
       subject.should =~ /oo/
     end
   end
@@ -147,7 +172,12 @@ RSpec.describe "operator matchers", :uses_should do
     it "fails when target.=~(actual) returns false" do
       subject = "foo".dup
       expect(subject).to receive(:=~).with(/oo/).and_return(true)
-      expect(RSpec::Expectations).to receive(:fail_with).with(%[expected not: =~ /oo/\n         got:    "foo"], /oo/, "foo")
+      expect(RSpec::Expectations).to receive(:fail_with).with(
+        %[expected not: =~ /oo/\n         got:    "foo"],
+        an_object_having_attributes(:expected => /oo/, :actual => "foo").and(
+          be_a(RSpec::Matchers::BuiltIn::OperatorMatcher)
+        )
+      )
       subject.should_not =~ /oo/
     end
   end
@@ -158,7 +188,12 @@ RSpec.describe "operator matchers", :uses_should do
     end
 
     it "fails if > fails" do
-      expect(RSpec::Expectations).to receive(:fail_with).with(%[expected: > 5\n     got:   4], 5, 4)
+      expect(RSpec::Expectations).to receive(:fail_with).with(
+        %[expected: > 5\n     got:   4],
+        an_object_having_attributes(:expected => 5, :actual => 4).and(
+          be_a(RSpec::Matchers::BuiltIn::OperatorMatcher)
+        )
+      )
       4.should > 5
     end
   end
@@ -173,7 +208,12 @@ RSpec.describe "operator matchers", :uses_should do
     end
 
     it "fails if > fails" do
-      expect(RSpec::Expectations).to receive(:fail_with).with(%[expected: >= 5\n     got:    4], 5, 4)
+      expect(RSpec::Expectations).to receive(:fail_with).with(
+        %[expected: >= 5\n     got:    4],
+        an_object_having_attributes(:expected => 5, :actual => 4).and(
+          be_a(RSpec::Matchers::BuiltIn::OperatorMatcher)
+        )
+      )
       4.should >= 5
     end
   end
@@ -184,7 +224,12 @@ RSpec.describe "operator matchers", :uses_should do
     end
 
     it "fails if > fails" do
-      expect(RSpec::Expectations).to receive(:fail_with).with(%[expected: < 3\n     got:   4], 3, 4)
+      expect(RSpec::Expectations).to receive(:fail_with).with(
+        %[expected: < 3\n     got:   4],
+        an_object_having_attributes(:expected => 3, :actual => 4).and(
+          be_a(RSpec::Matchers::BuiltIn::OperatorMatcher)
+        )
+      )
       4.should < 3
     end
   end
@@ -199,7 +244,12 @@ RSpec.describe "operator matchers", :uses_should do
     end
 
     it "fails if > fails" do
-      expect(RSpec::Expectations).to receive(:fail_with).with(%[expected: <= 3\n     got:    4], 3, 4)
+      expect(RSpec::Expectations).to receive(:fail_with).with(
+        %[expected: <= 3\n     got:    4],
+        an_object_having_attributes(:expected => 3, :actual => 4).and(
+          be_a(RSpec::Matchers::BuiltIn::OperatorMatcher)
+        )
+      )
       4.should <= 3
     end
   end
