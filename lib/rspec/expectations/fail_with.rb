@@ -30,10 +30,12 @@ module RSpec
         end
 
         message = if !matcher.nil?
-          ::RSpec::Matchers::ExpectedsForMultipleDiffs.from(matcher.expected).message_with_diff(message, differ, matcher.actual)
-        else
-          ::RSpec::Matchers::ExpectedsForMultipleDiffs.from(nil).message_with_diff(message, differ, nil)
-        end
+                    differ_in_use = matcher.respond_to?(:differ) ? matcher.differ : differ
+
+                    ::RSpec::Matchers::ExpectedsForMultipleDiffs.from(matcher.expected).message_with_diff(message, differ_in_use, matcher.actual)
+                  else
+                    ::RSpec::Matchers::ExpectedsForMultipleDiffs.from(nil).message_with_diff(message, differ, nil)
+                  end
 
         RSpec::Support.notify_failure(RSpec::Expectations::ExpectationNotMetError.new message)
       end

@@ -57,6 +57,24 @@ RSpec.describe RSpec::Expectations, "#fail_with with matchers" do
       RSpec::Expectations.fail_with "message", matcher_class.new(expected, actual)
     }.to fail_with("message\nDiff:#{expected_diff}")
   end
+
+  context "when matcher provides custom differ" do
+    let(:custom_differ) { double("custom differ") }
+    let(:custom_diff) { "custom diff" }
+    let(:matcher_class) { Struct.new(:expected, :actual, :differ) }
+
+    before(:example) do
+      allow(custom_differ).to receive(:diff).and_return(custom_diff)
+    end
+
+    it "uses custom differ instead of default" do
+      expect(RSpec::Expectations).not_to receive(:differ)
+
+      expect {
+        RSpec::Expectations.fail_with "message", matcher_class.new("abc", "def", custom_differ)
+      }.to fail_with("message\nDiff:#{custom_diff}")
+    end
+  end
 end
 
 RSpec.describe RSpec::Expectations, "#fail_with with --color" do

@@ -79,6 +79,13 @@ module RSpec
       #   and that the values returned by these can be usefully diffed, which can
       #   be included in the output.
 
+      # @!method differ
+      #   @return [Object] An `RSpec::Support::Differ` compatible object.
+      #   Provides a custom differ object to calculate printable difference
+      #   between `actual` and `expected` attributes. The result will be
+      #   included in the output. `diffable?` should be defined as well to make
+      #   it work.
+
       # @!method actual
       #   @return [String, Object] If an object (rather than a string) is provided,
       #     RSpec will use the `pp` library to convert it to multi-line output in
