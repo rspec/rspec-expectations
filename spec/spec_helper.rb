@@ -41,7 +41,7 @@ module CommonHelperMethods
   end
 end
 
-RSpec::configure do |config|
+RSpec.configure do |config|
   config.color = true
   config.order = :random
 

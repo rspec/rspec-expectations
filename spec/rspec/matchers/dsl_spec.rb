@@ -30,7 +30,7 @@ RSpec.describe "a matcher defined using the matcher DSL" do
   end
 
   it "clears user instance variables between invocations" do
-    RSpec::Matchers::define(:be_just_like) do |expected|
+    RSpec::Matchers.define(:be_just_like) do |expected|
       match do |actual_value|
         @foo ||= expected
         @foo == actual_value
