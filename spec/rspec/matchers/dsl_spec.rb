@@ -20,12 +20,12 @@ RSpec.describe "a matcher defined using the matcher DSL" do
   end
 
   it "has access to methods available in the scope of the example" do
-    RSpec::Matchers::define(:matcher_a) {}
+    RSpec::Matchers.define(:matcher_a) {}
     expect(matcher_a.question?).to eq(:answer)
   end
 
   it "raises when method is missing from local scope as well as matcher" do
-    RSpec::Matchers::define(:matcher_b) {}
+    RSpec::Matchers.define(:matcher_b) {}
     expect { matcher_b.i_dont_exist }.to raise_error(NameError)
   end
 
@@ -71,12 +71,12 @@ RSpec.describe "a matcher defined using the matcher DSL" do
 
   describe "#respond_to?" do
     it "returns true for methods in example scope" do
-      RSpec::Matchers::define(:matcher_c) {}
+      RSpec::Matchers.define(:matcher_c) {}
       expect(matcher_c).to respond_to(:question?)
     end
 
     it "returns false for methods not defined in matcher or example scope" do
-      RSpec::Matchers::define(:matcher_d) {}
+      RSpec::Matchers.define(:matcher_d) {}
       expect(matcher_d).not_to respond_to(:i_dont_exist)
     end
   end
@@ -446,7 +446,7 @@ module RSpec::Matchers::DSL
     end
 
     it "is not diffable by default" do
-      matcher = new_matcher(:name) { }
+      matcher = new_matcher(:name) {}
       expect(matcher).not_to be_diffable
     end
 
@@ -481,7 +481,7 @@ module RSpec::Matchers::DSL
       # which had the side effect of causing all custom matchers
       # to share that state
       m1 = new_matcher(:m1) { diffable }
-      m2 = new_matcher(:m2) { }
+      m2 = new_matcher(:m2) {}
       m3 = new_matcher(:m3) { diffable }
 
       expect(m1).to be_diffable
@@ -490,27 +490,27 @@ module RSpec::Matchers::DSL
     end
 
     it "provides expected" do
-      matcher = new_matcher(:name, "expected string") { }
+      matcher = new_matcher(:name, "expected string") {}
       expect(matcher.expected).to eq 'expected string'
     end
 
     it "provides expected when there is more than one argument" do
-      matcher = new_matcher(:name, "expected string", "another arg") { }
+      matcher = new_matcher(:name, "expected string", "another arg") {}
       expect(matcher.expected).to eq ['expected string', "another arg"]
     end
 
     it "provides expected_as_array which returns an array regardless of expected" do
-      matcher = new_matcher(:name, "expected string") { }
+      matcher = new_matcher(:name, "expected string") {}
       expect(matcher.expected_as_array).to eq ['expected string']
-      matcher = new_matcher(:name, "expected\nstring") { }
+      matcher = new_matcher(:name, "expected\nstring") {}
       expect(matcher.expected_as_array).to eq ["expected\nstring"]
-      matcher = new_matcher(:name, "expected string", "another arg") { }
+      matcher = new_matcher(:name, "expected string", "another arg") {}
       expect(matcher.expected_as_array).to eq ['expected string', "another arg"]
     end
 
     it "provides actual when `match` is used" do
       matcher = new_matcher(:name, 'expected string') do
-        match {|actual|}
+        match { |actual| }
       end
 
       matcher.matches?('actual string')
@@ -538,7 +538,7 @@ module RSpec::Matchers::DSL
 
     it 'provides actual when `match_unless_raises` is used' do
       matcher = new_matcher(:name, 'expected string') do
-        match_unless_raises(SyntaxError) {|actual|}
+        match_unless_raises(SyntaxError) { |actual| }
       end
 
       matcher.matches?('actual string')
@@ -562,7 +562,7 @@ module RSpec::Matchers::DSL
 
     it 'provides actual when `match_when_negated` is used' do
       matcher = new_matcher(:name, 'expected string') do
-        match_when_negated {|actual|}
+        match_when_negated { |actual| }
       end
 
       matcher.does_not_match?('actual string')
@@ -1018,7 +1018,7 @@ module RSpec::Matchers::DSL
     end
 
     it "treats method missing normally for undeclared methods" do
-      matcher = new_matcher(:ignore) { }
+      matcher = new_matcher(:ignore) {}
       expect { matcher.non_existent_method }.to raise_error(NoMethodError)
     end
 
@@ -1237,13 +1237,13 @@ module RSpec::Matchers::DSL
       end
 
       it 'can get a method object for methods in the running example', :if => (RUBY_VERSION.to_f > 1.8) do
-        matcher = new_matcher(:get_method_object) { }
+        matcher = new_matcher(:get_method_object) {}
         method  = matcher.method(:a_method_in_the_example)
         expect(method.call).to eq("method defined in the example")
       end
 
       it 'indicates that it responds to a method from the running example' do
-        matcher = new_matcher(:respond_to) { }
+        matcher = new_matcher(:respond_to) {}
         expect(matcher).to respond_to(:a_method_in_the_example)
         expect(matcher).not_to respond_to(:a_method_not_in_the_example)
       end

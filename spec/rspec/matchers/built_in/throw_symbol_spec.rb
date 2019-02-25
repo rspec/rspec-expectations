@@ -1,7 +1,7 @@
 module RSpec::Matchers::BuiltIn
   RSpec.describe ThrowSymbol do
     it_behaves_like("an RSpec matcher", :valid_value => lambda { throw :foo },
-                                        :invalid_value => lambda { }) do
+                                        :invalid_value => lambda {}) do
       let(:matcher) { throw_symbol(:foo) }
     end
 
@@ -15,14 +15,14 @@ module RSpec::Matchers::BuiltIn
         expect(@matcher.matches?(lambda{ throw :sym, "argument" })).to be_truthy
       end
       it "does not match if no Symbol is thrown" do
-        expect(@matcher.matches?(lambda{ })).to be_falsey
+        expect(@matcher.matches?(lambda {})).to be_falsey
       end
       it "provides a failure message" do
-        @matcher.matches?(lambda{})
+        @matcher.matches?(lambda {})
         expect(@matcher.failure_message).to eq "expected a Symbol to be thrown, got nothing"
       end
       it "provides a negative failure message" do
-        @matcher.matches?(lambda{ throw :sym})
+        @matcher.matches?(lambda{ throw :sym })
         expect(@matcher.failure_message_when_negated).to eq "expected no Symbol to be thrown, got :sym"
       end
     end
@@ -37,13 +37,13 @@ module RSpec::Matchers::BuiltIn
         expect(@matcher.matches?(lambda{ throw :sym, "argument" })).to be_truthy
       end
       it "does not match if no Symbol is thrown" do
-        expect(@matcher.matches?(lambda{ })).to be_falsey
+        expect(@matcher.matches?(lambda {})).to be_falsey
       end
       it "does not match if correct Symbol is thrown" do
         expect(@matcher.matches?(lambda{ throw :other_sym })).to be_falsey
       end
       it "provides a failure message when no Symbol is thrown" do
-        @matcher.matches?(lambda{})
+        @matcher.matches?(lambda {})
         expect(@matcher.failure_message).to eq "expected :sym to be thrown, got nothing"
       end
       it "provides a failure message when wrong Symbol is thrown" do
@@ -68,7 +68,7 @@ module RSpec::Matchers::BuiltIn
         expect(@matcher.matches?(lambda{ throw :sym, "a" })).to be_truthy
       end
       it "does not match if nothing is thrown" do
-        expect(@matcher.matches?(lambda{ })).to be_falsey
+        expect(@matcher.matches?(lambda {})).to be_falsey
       end
       it "does not match if other Symbol is thrown" do
         expect(@matcher.matches?(lambda{ throw :other_sym, "a" })).to be_falsey
@@ -80,7 +80,7 @@ module RSpec::Matchers::BuiltIn
         expect(@matcher.matches?(lambda{ throw :sym, "b" })).to be_falsey
       end
       it "provides a failure message when no Symbol is thrown" do
-        @matcher.matches?(lambda{})
+        @matcher.matches?(lambda {})
         expect(@matcher.failure_message).to eq 'expected :sym with "a" to be thrown, got nothing'
       end
       it "provides a failure message when wrong Symbol is thrown" do

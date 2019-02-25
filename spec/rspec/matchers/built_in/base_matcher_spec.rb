@@ -107,7 +107,7 @@ module RSpec::Matchers::BuiltIn
         include_examples "detecting default failure message" do
           def build_matcher(&block)
             definition = Proc.new do
-              match { }
+              match {}
               module_exec(&block) if block
             end
 

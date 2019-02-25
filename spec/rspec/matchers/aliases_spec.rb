@@ -342,17 +342,17 @@ module RSpec
 
     specify do
       expect(
-        an_object_satisfying { }
+        an_object_satisfying {}
       ).to be_aliased_to(
-        satisfy { }
+        satisfy {}
       ).with_description("an object satisfying block")
     end
 
     specify do
       expect(
-        satisfying { }
+        satisfying {}
       ).to be_aliased_to(
-        satisfy { }
+        satisfy {}
       ).with_description("satisfying block")
     end
 

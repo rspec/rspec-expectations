@@ -15,7 +15,7 @@ Benchmark.benchmark do |bm|
     bm.report do
       n.times do |j|
         RSpec::Matchers.define :"define_matcher_#{i}_#{j}" do
-          match { }
+          match {}
         end
       end
     end
