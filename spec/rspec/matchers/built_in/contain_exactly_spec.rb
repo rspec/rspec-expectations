@@ -507,7 +507,6 @@ module RSpec
               maximizer = PairingsMaximizer.new({ 0 => [0, 2], 1 => [0, 2], 2 => [] },
                                                 { 0 => [0, 1], 1 => [], 2 => [0, 1] })
 
-
               expect(maximizer.solution.indeterminate_expected_indexes).to include(0, 1)
               expect(maximizer.solution.indeterminate_actual_indexes).to include(0, 2)
             end

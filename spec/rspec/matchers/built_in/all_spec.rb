@@ -49,7 +49,6 @@ module RSpec::Matchers::BuiltIn
             end
           end
 
-
           context 'when the matcher has multi-line failure message' do
             it 'returns the index of the failed object' do
               expect {

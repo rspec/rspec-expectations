@@ -41,7 +41,6 @@ RSpec.describe "a matcher defined using the matcher DSL" do
     expect(4).to be_just_like(4)
   end
 
-
   describe '#block_arg' do
     before(:context) do
       RSpec::Matchers.define :be_lazily_equal_to do

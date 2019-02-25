@@ -34,7 +34,6 @@ RSpec::Matchers.define :have_string_length do |expected|
   end
 end
 
-
 RSpec.configure do |config|
   config.include RSpec::Matchers::FailMatchers
 end

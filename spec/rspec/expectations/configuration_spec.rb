@@ -269,7 +269,6 @@ module RSpec
             end
           end
 
-
           def configured_syntax
             RSpec.configure do |rspec|
               rspec.expect_with :rspec do |c|
