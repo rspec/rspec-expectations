@@ -27,6 +27,10 @@ Style/PercentLiteralDelimiters:
     default: []
     '%r':   '||'
 
+Security/Eval:
+  Exclude:
+    - Gemfile
+
 Metrics/AbcSize:
   Max: 26
 
