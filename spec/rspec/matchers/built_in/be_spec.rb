@@ -631,7 +631,7 @@ RSpec.describe "expect(...).to be =~" do
   it "fails when =~ operator returns false" do
     expect {
       expect("a string").to be =~ /blah/
-    }.to fail_with(%Q|expected: =~ /blah/\n     got:    "a string"|)
+    }.to fail_with(%(expected: =~ /blah/\n     got:    "a string"))
   end
 end
 
@@ -643,7 +643,7 @@ RSpec.describe "should be =~", :uses_should do
   it "fails when =~ operator returns false" do
     expect {
       "a string".should be =~ /blah/
-    }.to fail_with(%Q|expected: =~ /blah/\n     got:    "a string"|)
+    }.to fail_with(%(expected: =~ /blah/\n     got:    "a string"))
   end
 end
 
@@ -655,7 +655,7 @@ RSpec.describe "expect(...).to be ===" do
   it "fails when === operator returns false" do
     expect {
       expect(Hash).to be === "not a hash"
-    }.to fail_with(%[expected: === "not a hash"\n     got:     Hash])
+    }.to fail_with(%(expected: === "not a hash"\n     got:     Hash))
   end
 end
 

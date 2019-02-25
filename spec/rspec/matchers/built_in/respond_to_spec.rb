@@ -10,7 +10,7 @@ RSpec.describe "expect(...).to respond_to(:sym)" do
   it "fails if target does not respond to :sym" do
     expect {
       expect("this string").to respond_to(:some_method)
-    }.to fail_with(%q|expected "this string" to respond to :some_method|)
+    }.to fail_with('expected "this string" to respond to :some_method')
   end
 end
 

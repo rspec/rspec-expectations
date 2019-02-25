@@ -24,7 +24,7 @@ with_changelog_in_features = lambda do |&block|
 end
 
 desc "Push docs/cukes to relishapp using the relish-client-gem"
-task :relish, :version do |t, args|
+task :relish, :version do |_task, args|
   raise "rake relish[VERSION]" unless args[:version]
 
   with_changelog_in_features.call do
@@ -47,7 +47,7 @@ end
 namespace :clobber do
   desc "delete generated .rbc files"
   task :rbc do
-    sh %q{find . -name "*.rbc" | xargs rm}
+    sh 'find . -name "*.rbc" | xargs rm'
   end
 end
 

@@ -17,7 +17,7 @@ module RSpec
         "description: #{@expected_desc.inspect}, but got #{@actual_desc.inspect}"
       end
 
-      description do |aliased_matcher|
+      description do |_aliased_matcher|
         "have an alias for #{old_matcher.description.inspect} with description: #{@expected_desc.inspect}"
       end
     end

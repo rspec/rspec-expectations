@@ -18,6 +18,11 @@ Style/FrozenStringLiteralComment:
   Exclude:
     - REPORT_TEMPLATE.md
 
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: []
+    '%r':   '||'
+
 Metrics/AbcSize:
   Max: 26
 

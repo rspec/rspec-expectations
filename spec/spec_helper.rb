@@ -6,7 +6,7 @@ RSpec::Support::Spec.setup_simplecov do
 end
 
 Dir['./spec/support/**/*'].each do |f|
-  require f.sub(%r{\./spec/}, '')
+  require f.sub(%r|\./spec/|, '')
 end
 
 module CommonHelperMethods

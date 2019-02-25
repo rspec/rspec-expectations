@@ -56,7 +56,7 @@ RSpec.describe "#include matcher" do
     end
 
     it "fails if target does not include expected" do
-      failure_string = %Q|expected {#{convert_key(:key)} => "value"} to include :other|
+      failure_string = %(expected {#{convert_key(:key)} => "value"} to include :other)
       expect {
         expect(build_target(:key => 'value')).to include(:other)
       }.to fail_matching(failure_string)
@@ -65,7 +65,7 @@ RSpec.describe "#include matcher" do
     it "fails if target doesn't have a key and we expect nil" do
       expect {
         expect(build_target({})).to include(:something => nil)
-      }.to fail_matching(%Q|expected {} to include {:something => nil}|)
+      }.to fail_matching("expected {} to include {:something => nil}")
     end
 
     it 'works even when an entry in the hash overrides #send' do
@@ -243,19 +243,19 @@ RSpec.describe "#include matcher" do
       it "fails if target does not include one of the items" do
         expect {
           expect("a string").to include("str", "a", "foo")
-        }.to fail_matching(%Q{expected "a string" to include "foo"})
+        }.to fail_matching('expected "a string" to include "foo"')
       end
 
       it "fails if target does not include two of the items" do
         expect {
           expect("a string").to include("nope", "a", "nada", "str")
-        }.to fail_matching(%Q{expected "a string" to include "nope" and "nada"})
+        }.to fail_matching('expected "a string" to include "nope" and "nada"')
       end
 
       it "fails if target does not include many of the items" do
         expect {
           expect("a string").to include("nope", "a", "nada", "nein", "ing", "str")
-        }.to fail_matching(%Q{expected "a string" to include "nope", "nada", and "nein"})
+        }.to fail_matching('expected "a string" to include "nope", "nada", and "nein"')
       end
     end
 
@@ -395,7 +395,7 @@ RSpec.describe "#include matcher" do
       it "fails if target includes expected key" do
         expect {
           expect({:key => 'value'}).not_to include(:key)
-        }.to fail_matching(%Q|expected {:key => "value"} not to include :key|)
+        }.to fail_matching('expected {:key => "value"} not to include :key')
       end
     end
 
@@ -416,19 +416,19 @@ RSpec.describe "#include matcher" do
       it "fails if the target includes one (but not all) of the expected" do
         expect {
           expect("abc").not_to include("d", "a")
-        }.to fail_with(%q{expected "abc" not to include "a"})
+        }.to fail_with('expected "abc" not to include "a"')
       end
 
       it "fails if the target includes two (but not all) of the expected" do
         expect {
           expect("abc").not_to include("d", "a", "b")
-        }.to fail_with(%q{expected "abc" not to include "a" and "b"})
+        }.to fail_with('expected "abc" not to include "a" and "b"')
       end
 
       it "fails if the target includes many (but not all) of the expected" do
         expect {
           expect("abcd").not_to include("b", "d", "a", "f")
-        }.to fail_with(%q{expected "abcd" not to include "b", "d", and "a"})
+        }.to fail_with('expected "abcd" not to include "b", "d", and "a"')
       end
     end
 
@@ -470,25 +470,25 @@ RSpec.describe "#include matcher" do
       it "fails if the target includes all of the expected" do
         expect {
           expect([1, 2, 3]).not_to include(3, 1)
-        }.to fail_with(%q{expected [1, 2, 3] not to include 3 and 1})
+        }.to fail_with('expected [1, 2, 3] not to include 3 and 1')
       end
 
       it "fails if the target includes one (but not all) of the expected" do
         expect {
           expect([1, 2, 3]).not_to include(4, 1)
-        }.to fail_with(%q{expected [1, 2, 3] not to include 1})
+        }.to fail_with('expected [1, 2, 3] not to include 1')
       end
 
       it "fails if the target includes two (but not all) of the expected" do
         expect {
           expect([1, 2, 3]).not_to include(4, 1, 2)
-        }.to fail_with(%q{expected [1, 2, 3] not to include 1 and 2})
+        }.to fail_with('expected [1, 2, 3] not to include 1 and 2')
       end
 
       it "fails if the target includes many (but not all) of the expected" do
         expect {
           expect([1, 2, 3]).not_to include(5, 4, 2, 1, 3)
-        }.to fail_with(%q{expected [1, 2, 3] not to include 2, 1, and 3})
+        }.to fail_with('expected [1, 2, 3] not to include 2, 1, and 3')
       end
     end
   end
@@ -506,13 +506,13 @@ RSpec.describe "#include matcher" do
       it "fails if target has a different value for key" do
         expect {
           expect({:key => 'different'}).to include(:key => 'value')
-        }.to fail_matching(%Q|expected {:key => "different"} to include {:key => "value"}|)
+        }.to fail_matching('expected {:key => "different"} to include {:key => "value"}')
       end
 
       it "fails if target has a different key" do
         expect {
           expect({:other => 'value'}).to include(:key => 'value')
-        }.to fail_matching(%Q|expected {:other => "value"} to include {:key => "value"}|)
+        }.to fail_matching('expected {:other => "value"} to include {:key => "value"}')
       end
     end
 
@@ -520,7 +520,7 @@ RSpec.describe "#include matcher" do
       it "fails if the target does not contain the given hash" do
         expect {
           expect(['a', 'b']).to include(:key => 'value')
-        }.to fail_matching(%q|expected ["a", "b"] to include {:key => "value"}|)
+        }.to fail_matching('expected ["a", "b"] to include {:key => "value"}')
       end
 
       it "passes if the target contains the given hash" do
@@ -534,7 +534,7 @@ RSpec.describe "#include matcher" do
       it "fails if target includes the key/value pair" do
         expect {
           expect({:key => 'value'}).not_to include(:key => 'value')
-        }.to fail_matching(%Q|expected {:key => "value"} not to include {:key => "value"}|)
+        }.to fail_matching('expected {:key => "value"} not to include {:key => "value"}')
       end
 
       it "fails if target includes the key/value pair among others" do
@@ -560,7 +560,7 @@ RSpec.describe "#include matcher" do
       it "fails if the target contains the given hash" do
         expect {
           expect(['a', { :key => 'value' } ]).not_to include(:key => 'value')
-        }.to fail_matching(%Q|expected ["a", {:key => "value"}] not to include {:key => "value"}|)
+        }.to fail_matching('expected ["a", {:key => "value"}] not to include {:key => "value"}')
       end
     end
   end
@@ -730,7 +730,7 @@ RSpec.describe "#include matcher" do
       it "fails if target does not include an item satisfying any one of the items" do
         expect {
           expect(['foo', 'bar', 'baz']).to include(a_string_containing("ar"), a_string_containing("abc"))
-        }.to fail_matching(%Q|expected #{['foo', 'bar', 'baz'].inspect} to include (a string containing 'abc')|)
+        }.to fail_matching("expected #{['foo', 'bar', 'baz'].inspect} to include (a string containing 'abc')")
       end
     end
 
@@ -776,13 +776,13 @@ RSpec.describe "#include matcher" do
       it 'fails if all of the matchers are satisfied by one of the target values' do
         expect {
           expect(['foo', 'bar', 'baz']).not_to include(a_string_containing("ar"), a_string_containing('az'))
-        }.to fail_matching(%Q|expected #{['foo', 'bar', 'baz'].inspect} not to include (a string containing 'ar') and (a string containing 'az')|)
+        }.to fail_matching("expected #{['foo', 'bar', 'baz'].inspect} not to include (a string containing 'ar') and (a string containing 'az')")
       end
 
       it 'fails if the some (but not all) of the matchers are satisifed' do
         expect {
           expect(['foo', 'bar', 'baz']).not_to include(a_string_containing("ar"), a_string_containing('bz'))
-        }.to fail_matching(%Q|expected #{['foo', 'bar', 'baz'].inspect} not to include (a string containing 'ar')|)
+        }.to fail_matching("expected #{['foo', 'bar', 'baz'].inspect} not to include (a string containing 'ar')")
       end
     end
   end

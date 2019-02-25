@@ -451,8 +451,8 @@ RSpec.describe "Composing `contain_exactly` with other matchers" do
           a_string_matching(/bar/),
           a_string_matching(/foo/)
         )
-      }.to fail_with %Q{expected ["food", "barn"] not to contain exactly }+
-                     %Q{(a string matching /bar/) and (a string matching /foo/)}
+      }.to fail_with 'expected ["food", "barn"] not to contain exactly '+
+                     "(a string matching /bar/) and (a string matching /foo/)"
     end
 
     it 'passes when there is an extra element' do
