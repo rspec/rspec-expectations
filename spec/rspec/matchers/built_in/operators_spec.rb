@@ -247,4 +247,3 @@ RSpec.describe "operator matchers", :uses_should do
     end
   end
 end
-

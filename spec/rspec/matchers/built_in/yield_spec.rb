@@ -765,4 +765,3 @@ RSpec.describe "yield_successive_args matcher" do
     end
   end
 end
-

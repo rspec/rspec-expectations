@@ -250,4 +250,3 @@ Using a previously gotten custom matcher instance -- negative match
    0.350000   0.010000   0.360000 (  0.256000)
 
 =end
-
