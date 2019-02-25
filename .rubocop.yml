@@ -1,6 +1,10 @@
 inherit_from:
   - .rubocop_rspec_base.yml
 
+AllCops:
+  TargetRubyVersion: 2.1
+  DisplayCopNames: true
+
 # Over time we'd like to get this down, but this is what we're at now.
 LineLength:
   Max: 186
