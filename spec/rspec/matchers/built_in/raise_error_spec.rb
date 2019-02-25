@@ -25,7 +25,7 @@ RSpec.describe "expect { ... }.to raise_error" do
     end
 
     expect {
-      expect{ '' }.to(raise_error)
+      expect { '' }.to(raise_error)
     }.to fail_with("expected Exception but nothing was raised")
   end
 

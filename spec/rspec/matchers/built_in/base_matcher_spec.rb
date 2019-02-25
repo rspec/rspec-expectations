@@ -14,7 +14,7 @@ module RSpec::Matchers::BuiltIn
       end
 
       it "returns false if the only submitted error is raised" do
-        expect(matcher.match_unless_raises(RuntimeError){ raise "foo" }).to be_falsey
+        expect(matcher.match_unless_raises(RuntimeError) { raise "foo" }).to be_falsey
       end
 
       it "returns false if any of several errors submitted is raised" do
@@ -25,12 +25,12 @@ module RSpec::Matchers::BuiltIn
 
       it "re-raises any error other than one of those specified" do
         expect do
-          matcher.match_unless_raises(ArgumentError){ raise "foo" }
+          matcher.match_unless_raises(ArgumentError) { raise "foo" }
         end.to raise_error "foo"
       end
 
       it "stores the rescued exception for use in messages" do
-        matcher.match_unless_raises(RuntimeError){ raise "foo" }
+        matcher.match_unless_raises(RuntimeError) { raise "foo" }
         expect(matcher.rescued_exception).to be_a(RuntimeError)
         expect(matcher.rescued_exception.message).to eq("foo")
       end
