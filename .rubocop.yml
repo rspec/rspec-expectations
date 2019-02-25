@@ -9,6 +9,10 @@ AllCops:
 LineLength:
   Max: 186
 
+# Offense count: 1
+Style/BlockComments:
+  Enabled: false
+
 # We have some situations where we need to use `raise ExceptionClass.new(argument)`.
 Style/RaiseArgs:
   Enabled: false
