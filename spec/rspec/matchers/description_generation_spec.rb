@@ -86,7 +86,7 @@ RSpec.describe 'a matcher is expected to be able to have its description generat
   end
 
   example "expect(...).to have_key" do
-    expect({:a => "a"}).to have_key(:a)
+    expect({ :a => "a" }).to have_key(:a)
     expect(RSpec::Matchers.generated_description).to eq "is expected to have key :a"
   end
 

@@ -215,7 +215,7 @@ RSpec.describe "expect { ... }.to change ..." do
   context "with a hash" do
     before(:example) do
       @instance = SomethingExpected.new
-      @instance.some_value = {:a => 'a'}
+      @instance.some_value = { :a => 'a' }
     end
 
     it "passes when actual is modified by the block" do
@@ -456,7 +456,7 @@ RSpec.describe "expect { ... }.not_to change { block }" do
 
     it 'fails when part of it is changed' do
       data = [{ :a => [1, 2] }]
-      failure_msg = /expected #{value_pattern} not to have changed, but did change from #{regexp_inspect data} to #{regexp_inspect [{:a=>[1, 2, 3]}]}/
+      failure_msg = /expected #{value_pattern} not to have changed, but did change from #{regexp_inspect data} to #{regexp_inspect [{ :a=>[1, 2, 3] }]}/
 
       expect {
         expect { data[0][:a] << 3 }.not_to change { data }

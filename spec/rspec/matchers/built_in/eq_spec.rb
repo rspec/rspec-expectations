@@ -91,7 +91,7 @@ module RSpec
             ['foo', 'eq "foo"'],
             [/regex/, 'eq /regex/'],
             [['foo'], 'eq ["foo"]'],
-            [{:foo => :bar}, 'eq {:foo=>:bar}'],
+            [{ :foo => :bar }, 'eq {:foo=>:bar}'],
             [Class, 'eq Class'],
             [RSpec, 'eq RSpec'],
             [Time.utc(2014, 1, 1), "eq 2014-01-01 00:00:00.#{expected_seconds} +0000"],
