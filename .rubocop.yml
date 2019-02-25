@@ -43,6 +43,8 @@ Metrics/BlockLength:
 # Configuration parameters: CountComments.
 Metrics/ModuleLength:
   Max: 236
+  Exclude:
+    - spec/**/*
 
 # Offense count: 4
 Metrics/PerceivedComplexity:
