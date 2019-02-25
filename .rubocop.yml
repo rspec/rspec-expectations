@@ -13,6 +13,11 @@ LineLength:
 Style/RaiseArgs:
   Enabled: false
 
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: never
+  Exclude:
+    - REPORT_TEMPLATE.md
+
 Metrics/AbcSize:
   Max: 26
 
