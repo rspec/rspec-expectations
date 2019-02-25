@@ -773,7 +773,7 @@ RSpec.describe "arbitrary predicate with DelegateClass" do
         end
       end
 
-      delegate = ArrayDelegate.new([1,2,3,4,5,6])
+      delegate = ArrayDelegate.new([1, 2, 3, 4, 5, 6])
       expect(delegate).to be_large
     end
   end
@@ -782,12 +782,12 @@ end
 RSpec.describe "be_a, be_an" do
   it "passes when class matches" do
     expect("foobar").to be_a(String)
-    expect([1,2,3]).to be_an(Array)
+    expect([1, 2, 3]).to be_an(Array)
   end
 
   it "fails when class does not match" do
     expect("foobar").not_to be_a(Hash)
-    expect([1,2,3]).not_to be_an(Integer)
+    expect([1, 2, 3]).not_to be_an(Integer)
   end
 end
 

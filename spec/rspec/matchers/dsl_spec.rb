@@ -469,7 +469,7 @@ module RSpec::Matchers::DSL
         allow(RSpec::Matchers.configuration).to receive(:color?).and_return(false)
         expect(actual).to matcher
       rescue RSpec::Expectations::ExpectationNotMetError => e
-        diff = e.message.sub(/\A.*Diff:/m, "Diff:").gsub(/^\s*/,'')
+        diff = e.message.sub(/\A.*Diff:/m, "Diff:").gsub(/^\s*/, '')
       end
 
       expect(diff).to eq "Diff:\n@@ -1,3 +1,3 @@\n-line1\n+LINE1\nline2\n"
@@ -1004,7 +1004,7 @@ module RSpec::Matchers::DSL
         end
       end
 
-      expect(matcher.matches?([2,3,1])).to be_truthy
+      expect(matcher.matches?([2, 3, 1])).to be_truthy
     end
 
     it "supports fluent interface" do
@@ -1074,7 +1074,7 @@ module RSpec::Matchers::DSL
     describe "#match_unless_raises" do
       context "with an assertion" do
         mod = Module.new do
-          def assert_equal(a,b)
+          def assert_equal(a, b)
             raise UnexpectedError.new("#{b} does not equal #{a}") unless a == b
           end
         end

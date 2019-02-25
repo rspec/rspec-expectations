@@ -168,12 +168,12 @@ RSpec.describe "#include matcher" do
 
     context "for an array target" do
       it "passes if target includes expected" do
-        expect([1,2,3]).to include(3)
+        expect([1, 2, 3]).to include(3)
       end
 
       it "fails if target does not include expected" do
         expect {
-          expect([1,2,3]).to include(4)
+          expect([1, 2, 3]).to include(4)
         }.to fail_matching("expected [1, 2, 3] to include 4")
       end
 
@@ -261,24 +261,24 @@ RSpec.describe "#include matcher" do
 
     context "for an array target" do
       it "passes if target includes all items" do
-        expect([1,2,3]).to include(1,2,3)
+        expect([1, 2, 3]).to include(1, 2, 3)
       end
 
       it "fails if target does not include one of the items" do
         expect {
-          expect([1,2,3]).to include(1,2,4)
+          expect([1, 2, 3]).to include(1, 2, 4)
         }.to fail_matching("expected [1, 2, 3] to include 4")
       end
 
       it "fails if target does not include two of the items" do
         expect {
-          expect([1,2,3]).to include(5,1,2,4)
+          expect([1, 2, 3]).to include(5, 1, 2, 4)
         }.to fail_matching("expected [1, 2, 3] to include 5 and 4")
       end
 
       it "fails if target does not include many of the items" do
         expect {
-          expect([1,2,3]).to include(5,1,6,2,4)
+          expect([1, 2, 3]).to include(5, 1, 6, 2, 4)
         }.to fail_matching("expected [1, 2, 3] to include 5, 6, and 4")
       end
 
@@ -365,12 +365,12 @@ RSpec.describe "#include matcher" do
 
     context "for an array target" do
       it "passes if target does not include expected" do
-        expect([1,2,3]).not_to include(4)
+        expect([1, 2, 3]).not_to include(4)
       end
 
       it "fails if target includes expected" do
         expect {
-          expect([1,2,3]).not_to include(3)
+          expect([1, 2, 3]).not_to include(3)
         }.to fail_with("expected [1, 2, 3] not to include 3")
       end
 

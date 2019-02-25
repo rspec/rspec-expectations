@@ -107,7 +107,7 @@ RSpec.describe 'a matcher is expected to be able to have its description generat
   end
 
   example "expect(...).to include(x)" do
-    expect([1,2,3]).to include(3)
+    expect([1, 2, 3]).to include(3)
     expect(RSpec::Matchers.generated_description).to eq "is expected to include 3"
   end
 
@@ -126,7 +126,7 @@ RSpec.describe 'a matcher is expected to be able to have its description generat
   end
 
   example "expect(array).to contain_exactly(1, 2, 3)" do
-    expect([1,2,3]).to contain_exactly(1, 2, 3)
+    expect([1, 2, 3]).to contain_exactly(1, 2, 3)
     expect(RSpec::Matchers.generated_description).to eq "is expected to contain exactly 1, 2, and 3"
   end
 

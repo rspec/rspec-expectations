@@ -75,22 +75,22 @@ end
 RSpec.describe "should_not =~ [:with, :multiple, :args]", :uses_should do
   it "fails when the arrays match" do
     expect {
-      [1,2,3].should_not =~ [1,2,3]
+      [1, 2, 3].should_not =~ [1, 2, 3]
     }.to fail_with "expected [1, 2, 3] not to contain exactly 1, 2, and 3"
   end
 
   it "fails when the arrays match in a different order" do
     expect {
-      [1,3,2].should_not =~ [1,2,3]
+      [1, 3, 2].should_not =~ [1, 2, 3]
     }.to fail_with "expected [1, 3, 2] not to contain exactly 1, 2, and 3"
   end
 
   it "passes when there are extra elements in the array" do
-    [1,3].should_not =~ [1,2,3]
+    [1, 3].should_not =~ [1, 2, 3]
   end
 
   it "passes when there are elements missing from the array" do
-    [1,2,3,4].should_not =~ [1,2,3]
+    [1, 2, 3, 4].should_not =~ [1, 2, 3]
   end
 end
 
@@ -157,11 +157,11 @@ RSpec.describe "expect(array).to contain_exactly(*other_array)" do
   end
 
   it "passes if target contains all items" do
-    expect([1,2,3]).to contain_exactly(1,2,3)
+    expect([1, 2, 3]).to contain_exactly(1, 2, 3)
   end
 
   it "passes if target contains all items out of order" do
-    expect([1,3,2]).to contain_exactly(1,2,3)
+    expect([1, 3, 2]).to contain_exactly(1, 2, 3)
   end
 
   it 'fails if the expected array is empty and the actual array is non-empty' do
@@ -205,7 +205,7 @@ MESSAGE
 
   it "fails if target includes extra items" do
     expect {
-      expect([1,2,3,4]).to contain_exactly(1,2,3)
+      expect([1, 2, 3, 4]).to contain_exactly(1, 2, 3)
     }.to fail_with(<<-MESSAGE)
 expected collection contained:  [1, 2, 3]
 actual collection contained:    [1, 2, 3, 4]
@@ -215,7 +215,7 @@ MESSAGE
 
   it "fails if target is missing items" do
     expect {
-      expect([1,2]).to contain_exactly(1,2,3)
+      expect([1, 2]).to contain_exactly(1, 2, 3)
     }.to fail_with(<<-MESSAGE)
 expected collection contained:  [1, 2, 3]
 actual collection contained:    [1, 2]
@@ -225,7 +225,7 @@ MESSAGE
 
   it "fails if target is missing items and has extra items" do
     expect {
-      expect([1,2,4]).to contain_exactly(1,2,3)
+      expect([1, 2, 4]).to contain_exactly(1, 2, 3)
     }.to fail_with(<<-MESSAGE)
 expected collection contained:  [1, 2, 3]
 actual collection contained:    [1, 2, 4]
@@ -236,7 +236,7 @@ MESSAGE
 
   it "sorts items in the error message if they all respond to <=>" do
     expect {
-      expect([6,2,1,5]).to contain_exactly(4,1,2,3)
+      expect([6, 2, 1, 5]).to contain_exactly(4, 1, 2, 3)
     }.to fail_with(<<-MESSAGE)
 expected collection contained:  [1, 2, 3, 4]
 actual collection contained:    [1, 2, 5, 6]
@@ -258,7 +258,7 @@ MESSAGE
 
   it "accurately reports extra elements when there are duplicates" do
     expect {
-      expect([1,1,1,5]).to contain_exactly(1,5)
+      expect([1, 1, 1, 5]).to contain_exactly(1, 5)
     }.to fail_with(<<-MESSAGE)
 expected collection contained:  [1, 5]
 actual collection contained:    [1, 1, 1, 5]
@@ -268,7 +268,7 @@ MESSAGE
 
   it "accurately reports missing elements when there are duplicates" do
     expect {
-      expect([1,5]).to contain_exactly(1,1,5)
+      expect([1, 5]).to contain_exactly(1, 1, 5)
     }.to fail_with(<<-MESSAGE)
 expected collection contained:  [1, 1, 5]
 actual collection contained:    [1, 5]
@@ -280,22 +280,22 @@ end
 RSpec.describe "expect(...).not_to contain_exactly(:with, :multiple, :args)" do
   it "fails when the arrays match" do
     expect {
-      expect([1,2,3]).not_to contain_exactly(1,2,3)
+      expect([1, 2, 3]).not_to contain_exactly(1, 2, 3)
     }.to fail_with "expected [1, 2, 3] not to contain exactly 1, 2, and 3"
   end
 
   it "fails when the arrays match in a different order" do
     expect {
-      expect([1,3,2]).not_to contain_exactly(1,2,3)
+      expect([1, 3, 2]).not_to contain_exactly(1, 2, 3)
     }.to fail_with "expected [1, 3, 2] not to contain exactly 1, 2, and 3"
   end
 
   it "passes when there are extra elements in the array" do
-    expect([1,3]).not_to contain_exactly(1,2,3)
+    expect([1, 3]).not_to contain_exactly(1, 2, 3)
   end
 
   it "passes when there are elements missing from the array" do
-    expect([1,2,3,4]).not_to contain_exactly(1,2,3)
+    expect([1, 2, 3, 4]).not_to contain_exactly(1, 2, 3)
   end
 end
 
