@@ -55,3 +55,9 @@ Lint/IneffectiveAccessModifier:
 Lint/InheritException:
   Exclude:
     - 'lib/rspec/expectations.rb'
+
+Bundler/DuplicatedGem:
+  Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: false
