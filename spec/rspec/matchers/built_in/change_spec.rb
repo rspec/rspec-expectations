@@ -104,7 +104,7 @@ RSpec.describe "expect { ... }.to change ..." do
   it 'does not detect changes in an object that updates its hash upon comparison' do
     obj = Class.new do
       def ==(another)
-        @hash = rand # (^ °=°)^ #
+        @hash = rand # (^ '=')^ #
         self.object_id == another.object_id
       end
       def hash
