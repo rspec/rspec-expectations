@@ -67,6 +67,10 @@ Lint/AmbiguousRegexpLiteral:
   Exclude:
     - 'features/step_definitions/*'
 
+Lint/HandleExceptions:
+  Exclude:
+    - benchmarks/**/*
+
 # Offense count: 6
 Lint/IneffectiveAccessModifier:
   Exclude:
