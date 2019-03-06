@@ -712,7 +712,7 @@ module RSpec::Matchers::DSL
             aggregate_failures do
               expect(1).to rescue_failure
             end
-          rescue RSpec::Expectations::ExpectationNotMetError
+          rescue RSpec::Expectations::ExpectationNotMetError # rubocop:disable Lint/HandleExceptions
           end
 
           expect(error_rescued).to be true
