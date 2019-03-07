@@ -1108,8 +1108,8 @@ module RSpec::Matchers::DSL
 
       context "with an unexpected error" do
         it "raises the error" do
-          matcher = new_matcher(:foo, :bar) do |expected|
-            match_unless_raises SyntaxError do |actual|
+          matcher = new_matcher(:foo, :bar) do |_expected|
+            match_unless_raises SyntaxError do |_actual|
               raise "unexpected exception"
             end
           end
@@ -1229,7 +1229,7 @@ module RSpec::Matchers::DSL
 
       it "can access methods in the running example" do |example|
         RSpec::Matchers.define(:__access_running_example) do
-          match do |actual|
+          match do |_actual|
             a_method_in_the_example == "method defined in the example"
           end
         end
@@ -1250,7 +1250,7 @@ module RSpec::Matchers::DSL
 
       it "raises NoMethodError for methods not in the running_example" do |example|
         RSpec::Matchers.define(:__raise_no_method_error) do
-          match do |actual|
+          match do |_actual|
             self.a_method_not_in_the_example == "method defined in the example"
           end
         end

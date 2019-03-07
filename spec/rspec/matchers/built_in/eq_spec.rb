@@ -20,7 +20,7 @@ module RSpec
       it "compares by sending == to actual (not expected)" do
         called = false
         actual = Class.new do
-          define_method :== do |other|
+          define_method :== do |_other|
             called = true
           end
         end.new

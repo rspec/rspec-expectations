@@ -120,7 +120,7 @@ end
 RSpec.describe "expect { ... }.to raise_error {|err| ... }" do
   it "passes if there is an error" do
     ran = false
-    expect { non_existent_method }.to raise_error { |e|
+    expect { non_existent_method }.to raise_error { |_e|
       ran = true
     }
     expect(ran).to be_truthy
@@ -420,7 +420,7 @@ RSpec.describe "expect { ... }.to raise_error(NamedError, error_message) { |err|
     expect {
       expect {
         raise "example message"
-      }.to raise_error(RuntimeError, "example message") { |err|
+      }.to raise_error(RuntimeError, "example message") { |_err|
         ran = true
         expect(5).to eq 4
         passed = true
@@ -449,7 +449,7 @@ RSpec.describe "expect { ... }.to raise_error(NamedError, error_message) { |err|
     expect {
       expect {
         raise "example message"
-      }.to raise_error(SyntaxError, "example message") { |err|
+      }.to raise_error(SyntaxError, "example message") { |_err|
         ran = true
       }
     }.to fail_with(/expected SyntaxError with \"example message\", got #<RuntimeError: example message>/)
@@ -463,7 +463,7 @@ RSpec.describe "expect { ... }.to raise_error(NamedError, error_message) { |err|
     expect {
       expect {
         raise "example message"
-      }.to raise_error(RuntimeError, "different message") { |err|
+      }.to raise_error(RuntimeError, "different message") { |_err|
         ran = true
       }
     }.to fail_with(/expected RuntimeError with \"different message\", got #<RuntimeError: example message>/)
