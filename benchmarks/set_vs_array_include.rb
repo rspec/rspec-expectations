@@ -1,7 +1,7 @@
 require 'benchmark'
 require 'set'
 
-n = 10000000
+n = 10_000_000
 
 array = [
   :@name, :@declarations, :@diffable, :@messages,
