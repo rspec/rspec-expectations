@@ -49,7 +49,7 @@ RSpec.configure do |config|
   config.include RSpec::Support::InSubProcess
 
   config.expect_with :rspec do |expectations|
-    $default_expectation_syntax = expectations.syntax
+    $default_expectation_syntax = expectations.syntax # rubocop:disable Style/GlobalVars
     expectations.syntax = :expect
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end

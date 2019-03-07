@@ -285,7 +285,7 @@ module RSpec
         # config setting, which makes it hard to get at the original
         # default value. in spec_helper.rb we store the default value
         # in $default_expectation_syntax so we can use it here.
-        expect($default_expectation_syntax).to contain_exactly(:expect, :should)
+        expect($default_expectation_syntax).to contain_exactly(:expect, :should) # rubocop:disable Style/GlobalVars
       end
     end
   end
