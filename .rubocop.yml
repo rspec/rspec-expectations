@@ -88,6 +88,10 @@ AccessModifierIndentation:
 Layout/AlignParameters:
   Enabled: false
 
+Layout/SpaceInsideParens:
+  Exclude:
+    - spec/rspec/matchers/built_in/*
+
 Lint/AmbiguousBlockAssociation:
   Exclude:
     - spec/**/*
