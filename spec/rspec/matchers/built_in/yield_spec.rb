@@ -14,7 +14,6 @@ module YieldHelpers
 end
 
 class InstanceEvaler
-
   def yield_with_no_args(&block)
     instance_exec(&block)
   end
