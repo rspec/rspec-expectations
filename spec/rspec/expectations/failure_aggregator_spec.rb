@@ -88,7 +88,7 @@ module RSpec::Expectations
           notify_error_with(backtrace)
         end
       }.to raise_error do |error|
-        expect(error.failures.map(&:backtrace)).to eq([ backtrace, backtrace ])
+        expect(error.failures.map(&:backtrace)).to eq([backtrace, backtrace])
       end
     end
 

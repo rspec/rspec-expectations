@@ -92,6 +92,10 @@ AccessModifierIndentation:
 Layout/AlignParameters:
   Enabled: false
 
+Layout/SpaceInsideArrayLiteralBrackets:
+  Exclude:
+    - spec/rspec/matchers/built_in/contain_exactly_spec.rb
+
 Layout/SpaceInsideParens:
   Exclude:
     - spec/rspec/matchers/built_in/*

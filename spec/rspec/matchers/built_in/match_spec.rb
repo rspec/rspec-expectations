@@ -77,17 +77,17 @@ RSpec.describe "expect(...).to match(expected)" do
 
   context "when passed a data structure with matchers" do
     it 'passes when the matchers match' do
-      expect(["food", 1.1]).to match([ a_string_matching(/foo/), a_value_within(0.2).of(1) ])
+      expect(["food", 1.1]).to match([a_string_matching(/foo/), a_value_within(0.2).of(1)])
     end
 
     it 'fails when the matchers do not match' do
       expect {
-        expect(["fod", 1.1]).to match([ a_string_matching(/foo/), a_value_within(0.2).of(1) ])
+        expect(["fod", 1.1]).to match([a_string_matching(/foo/), a_value_within(0.2).of(1)])
       }.to fail_with('expected ["fod", 1.1] to match [(a string matching /foo/), (a value within 0.2 of 1)]')
     end
 
     it 'provides a description' do
-      description = match([ a_string_matching(/foo/), a_value_within(0.2).of(1) ]).description
+      description = match([a_string_matching(/foo/), a_value_within(0.2).of(1)]).description
       expect(description).to eq("match [(a string matching /foo/), (a value within 0.2 of 1)]")
     end
   end
@@ -122,12 +122,12 @@ RSpec.describe "expect(...).not_to match(expected)" do
 
   context "when passed a data structure with matchers" do
     it 'passes when the matchers match' do
-      expect(["food", 1.1]).not_to match([ a_string_matching(/fod/), a_value_within(0.2).of(1) ])
+      expect(["food", 1.1]).not_to match([a_string_matching(/fod/), a_value_within(0.2).of(1)])
     end
 
     it 'fails when the matchers do not match' do
       expect {
-        expect(["fod", 1.1]).not_to match([ a_string_matching(/fod/), a_value_within(0.2).of(1) ])
+        expect(["fod", 1.1]).not_to match([a_string_matching(/fod/), a_value_within(0.2).of(1)])
       }.to fail_with('expected ["fod", 1.1] not to match [(a string matching /fod/), (a value within 0.2 of 1)]')
     end
   end
