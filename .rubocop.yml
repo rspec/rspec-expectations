@@ -21,6 +21,10 @@ Style/ClassAndModuleChildren:
   Exclude:
     - spec/**/*
 
+Style/EvalWithLocation:
+  Exclude:
+    - spec/rspec/matchers/built_in/respond_to_spec.rb
+
 Style/MultilineBlockChain:
   Exclude:
     - spec/**/*
