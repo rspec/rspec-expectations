@@ -451,7 +451,7 @@ RSpec.describe "Composing `contain_exactly` with other matchers" do
           a_string_matching(/bar/),
           a_string_matching(/foo/)
         )
-      }.to fail_with 'expected ["food", "barn"] not to contain exactly '+
+      }.to fail_with 'expected ["food", "barn"] not to contain exactly '\
                      "(a string matching /bar/) and (a string matching /foo/)"
     end
 
@@ -542,14 +542,14 @@ module RSpec
 
               failure_message do |result|
                 if result.candidate_result?
-                  "expected a complete solution, but still had indeterminate indexes: " +
-                  "expected: #{result.indeterminate_expected_indexes.inspect}; " +
+                  "expected a complete solution, but still had indeterminate indexes: " \
+                  "expected: #{result.indeterminate_expected_indexes.inspect}; " \
                   "actual: #{result.indeterminate_actual_indexes.inspect}"
                 elsif result.unmatched_expected_indexes != unmatched_expected
-                  "expected unmatched_expected_indexes: #{unmatched_expected.inspect} " +
+                  "expected unmatched_expected_indexes: #{unmatched_expected.inspect} " \
                   "but got: #{result.unmatched_expected_indexes.inspect}"
                 elsif result.unmatched_actual_indexes != unmatched_actual
-                  "expected unmatched_actual_indexes: #{unmatched_actual.inspect} " +
+                  "expected unmatched_actual_indexes: #{unmatched_actual.inspect} " \
                   "but got: #{result.unmatched_actual_indexes.inspect}"
                 end
               end

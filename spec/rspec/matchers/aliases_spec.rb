@@ -13,7 +13,7 @@ module RSpec
       end
 
       failure_message do |aliased_matcher|
-        "expected #{aliased_matcher} to be aliased to #{old_matcher} with " +
+        "expected #{aliased_matcher} to be aliased to #{old_matcher} with " \
         "description: #{@expected_desc.inspect}, but got #{@actual_desc.inspect}"
       end
 
