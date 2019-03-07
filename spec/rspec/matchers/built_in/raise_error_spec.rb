@@ -159,6 +159,7 @@ RSpec.describe "expect { ... }.to(raise_error { |err| ... }) do |err| ... end" d
   end
 end
 
+# rubocop:disable Style/RedundantException
 RSpec.describe "expect { ... }.not_to raise_error" do
 
   context "with a specific error class" do
@@ -385,6 +386,7 @@ RSpec.describe "expect { ... }.to raise_error(NamedError, error_message) with Re
     }.to fail_with(/expected RuntimeError with message matching \/less than ample mess\/, got #<RuntimeError: not the example message>/)
   end
 end
+# rubocop:enable Style/RedundantException
 
 RSpec.describe "expect { ... }.not_to raise_error(NamedError, error_message) with Regexp" do
   it "issues a warning" do
