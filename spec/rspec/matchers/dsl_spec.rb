@@ -273,7 +273,8 @@ module RSpec::Matchers::DSL
 
       it 'allows multiple modules to be included at once' do
         m = new_matcher(:multiple_modules) do
-          include Enumerable, Comparable
+          include Enumerable
+          include Comparable
         end
         expect(m).to be_a(Enumerable)
         expect(m).to be_a(Comparable)
