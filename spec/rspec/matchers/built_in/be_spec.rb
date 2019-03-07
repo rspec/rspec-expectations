@@ -649,7 +649,7 @@ end
 
 RSpec.describe "expect(...).to be ===" do
   it "passes when === operator returns true" do
-    expect(Hash).to be === Hash.new
+    expect(Hash).to be === {}
   end
 
   it "fails when === operator returns false" do

@@ -712,7 +712,7 @@ RSpec.describe "yield_successive_args matcher" do
     it 'passes when the successively yielded args do not match the matchers (at yield time only)' do
       expect { |b|
         %w[ food barn ].each do |eventual|
-          initial = String.new
+          initial = ''
           _yield_with_args(initial, &b)
           initial << eventual
         end
