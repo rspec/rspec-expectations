@@ -55,8 +55,8 @@ module RSpec
           end
         end
 
-        let(:time1) { Time.utc(1969, 12, 31, 19, 01, 40, 101) }
-        let(:time2) { Time.utc(1969, 12, 31, 19, 01, 40, 102) }
+        let(:time1) { Time.utc(1969, 12, 31, 19, 10, 40, 101) }
+        let(:time2) { Time.utc(1969, 12, 31, 19, 10, 40, 102) }
 
         it "provides additional precision on #failure_message" do
           expect {
