@@ -84,6 +84,10 @@ AccessModifierIndentation:
 Layout/AlignParameters:
   Enabled: false
 
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - spec/**/*
+
 Lint/AmbiguousRegexpLiteral:
   Exclude:
     - 'features/step_definitions/*'
