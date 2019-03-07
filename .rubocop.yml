@@ -13,6 +13,9 @@ LineLength:
 Style/BlockComments:
   Enabled: false
 
+Style/Semicolon:
+  Enabled: false
+
 # We have some situations where we need to use `raise ExceptionClass.new(argument)`.
 Style/RaiseArgs:
   Enabled: false
