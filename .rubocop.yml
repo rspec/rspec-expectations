@@ -13,6 +13,11 @@ LineLength:
 Style/BlockComments:
   Enabled: false
 
+Style/RescueModifier:
+  Exclude:
+    - spec/**/*
+    - benchmarks/**/*
+
 Style/Semicolon:
   Enabled: false
 
