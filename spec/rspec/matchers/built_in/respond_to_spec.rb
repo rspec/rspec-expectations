@@ -236,7 +236,7 @@ RSpec.describe "expect(...).to respond_to(:sym).with(1..2).arguments" do
   end
 
   it "passes if target is new and initialize reponds to arguments" do
-    klass = Class.new { def initialize(arg, arg2 = nil, arg3 = nil); end }
+    klass = Class.new { def initialize(arg, arg2=nil, arg3=nil); end }
     expect(klass).to respond_to(:new).with(1..2).arguments
   end
 
