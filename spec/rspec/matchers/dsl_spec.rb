@@ -856,7 +856,7 @@ module RSpec::Matchers::DSL
         let(:matcher) do
           new_matcher(:be_even) do
             match do |to_match|
-              (to_match % 2 == 0) && (to_match % @divisible_by == 0)
+              to_match.even? && (to_match % @divisible_by == 0)
             end
 
             chain :and_divisible_by do |divisible_by|
