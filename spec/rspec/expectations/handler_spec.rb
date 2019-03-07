@@ -1,5 +1,4 @@
 module ExampleExpectations
-
   class ArbitraryMatcher
     def initialize(*args, &block)
       if args.last.is_a? Hash
@@ -39,7 +38,6 @@ module ExampleExpectations
   def positive_only_matcher(*args, &block)
     PositiveOnlyMatcher.new(*args, &block)
   end
-
 end
 
 module RSpec
