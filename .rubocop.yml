@@ -16,6 +16,11 @@ Style/BlockComments:
 Style/Semicolon:
   Enabled: false
 
+Style/SingleLineMethods:
+  Exclude:
+    - spec/**/*
+    - benchmarks/**/*
+
 # We have some situations where we need to use `raise ExceptionClass.new(argument)`.
 Style/RaiseArgs:
   Enabled: false
