@@ -64,7 +64,7 @@ Metrics/BlockLength:
 # Offense count: 1
 # Configuration parameters: CountComments.
 Metrics/ModuleLength:
-  Max: 236
+  Max: 239
   Exclude:
     - spec/**/*
 
@@ -88,13 +88,11 @@ Lint/HandleExceptions:
   Exclude:
     - benchmarks/**/*
 
-# Offense count: 6
+# Offense count: 3
 Lint/IneffectiveAccessModifier:
   Exclude:
     - 'lib/rspec/matchers.rb'
     - 'lib/rspec/matchers/built_in/compound.rb'
-    - 'lib/rspec/matchers/expecteds_for_multiple_diffs.rb'
-    - 'lib/rspec/matchers/generated_descriptions.rb'
 
 Lint/InheritException:
   Exclude:
