@@ -1251,7 +1251,7 @@ module RSpec::Matchers::DSL
       it "raises NoMethodError for methods not in the running_example" do |example|
         RSpec::Matchers.define(:__raise_no_method_error) do
           match do |_actual|
-            self.a_method_not_in_the_example == "method defined in the example"
+            self.a_method_not_in_the_example == "method defined in the example" # rubocop:disable Style/RedundantSelf RuboCop bug, should disappear on version update
           end
         end
 

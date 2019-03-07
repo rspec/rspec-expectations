@@ -57,7 +57,7 @@ RSpec.describe 'a matcher is expected to be able to have its description generat
     class Parent; end
     class Child < Parent
       def child_of?(*parents)
-        parents.all? { |parent| self.is_a?(parent) }
+        parents.all? { |parent| is_a?(parent) }
       end
     end
     expect(Child.new).to be_a_child_of(Parent, Object)

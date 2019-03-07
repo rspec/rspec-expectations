@@ -709,7 +709,7 @@ RSpec.describe "#include matcher" do
 
           domain = Struct.new(:domain) do
             def matches?(url)
-              URI(url).host == self.domain
+              URI(url).host == domain
             end
           end
 

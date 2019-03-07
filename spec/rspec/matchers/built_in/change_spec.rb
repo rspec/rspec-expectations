@@ -105,7 +105,7 @@ RSpec.describe "expect { ... }.to change ..." do
     obj = Class.new do
       def ==(another)
         @hash = rand # (^ '=')^ #
-        self.object_id == another.object_id
+        object_id == another.object_id
       end
       def hash
         @hash ||= super
