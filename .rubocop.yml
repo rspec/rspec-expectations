@@ -4,6 +4,9 @@ inherit_from:
 AllCops:
   TargetRubyVersion: 2.1
   DisplayCopNames: true
+  Exclude:
+    - bin/*
+    - tmp/**/*
 
 # Over time we'd like to get this down, but this is what we're at now.
 LineLength:
