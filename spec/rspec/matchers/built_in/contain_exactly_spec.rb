@@ -245,16 +245,16 @@ the extra elements were:        [5, 6]
 MESSAGE
   end
 
-    it "does not sort items in the error message if they don't all respond to <=>" do
-      expect {
-        expect([UnsortableObject.new(2), UnsortableObject.new(1)]).to contain_exactly(UnsortableObject.new(4), UnsortableObject.new(3))
-      }.to fail_with(<<-MESSAGE)
+  it "does not sort items in the error message if they don't all respond to <=>" do
+    expect {
+      expect([UnsortableObject.new(2), UnsortableObject.new(1)]).to contain_exactly(UnsortableObject.new(4), UnsortableObject.new(3))
+    }.to fail_with(<<-MESSAGE)
 expected collection contained:  [4, 3]
 actual collection contained:    [2, 1]
 the missing elements were:      [4, 3]
 the extra elements were:        [2, 1]
 MESSAGE
-    end
+  end
 
   it "accurately reports extra elements when there are duplicates" do
     expect {
