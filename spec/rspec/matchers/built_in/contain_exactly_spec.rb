@@ -166,7 +166,7 @@ RSpec.describe "expect(array).to contain_exactly(*other_array)" do
 
   it 'fails if the expected array is empty and the actual array is non-empty' do
     expect {
-      expect([1]).to contain_exactly()
+      expect([1]).to contain_exactly # no arguments passed to the matcher
     }.to fail_with(<<-MESSAGE)
 expected collection contained:  []
 actual collection contained:    [1]
