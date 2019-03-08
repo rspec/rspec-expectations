@@ -4,7 +4,7 @@ module ExampleExpectations
       if args.last.is_a? Hash
         @expected = args.last[:expected]
       end
-      @expected = block.call if block
+      @expected = yield if block
       @block = block
     end
 
