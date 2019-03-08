@@ -1035,7 +1035,7 @@ RSpec.describe RSpec::Matchers::BuiltIn::Change do
   it "works when the receiver has implemented #send" do
     @instance = SomethingExpected.new
     @instance.some_value = "string"
-    def @instance.send(*args); raise "DOH! Library developers shouldn't use #send!" end
+    def @instance.send(*_args); raise "DOH! Library developers shouldn't use #send!" end
 
     expect {
       expect { @instance.some_value = "cat" }.to change(@instance, :some_value)

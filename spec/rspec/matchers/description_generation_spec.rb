@@ -100,7 +100,7 @@ RSpec.describe 'a matcher is expected to be able to have its description generat
 
   example "expect(...).to have_some_method(args*)" do
     object = Object.new
-    def object.has_taste_for?(*args); true; end
+    def object.has_taste_for?(*_args); true; end
 
     expect(object).to have_taste_for("wine", "cheese")
     expect(RSpec::Matchers.generated_description).to eq 'is expected to have taste for "wine", "cheese"'
@@ -184,7 +184,7 @@ end
 RSpec.describe "a Matcher with no description" do
   it "provides a helpful message when used in a string-less example block" do
     matcher = Class.new do
-      def matches?(ignore); true; end
+      def matches?(_ignore); true; end
       def failure_message; ""; end
     end.new
 

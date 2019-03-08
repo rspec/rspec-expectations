@@ -41,7 +41,7 @@ module RSpec::Matchers::BuiltIn
       context "when the parameter to .new is omitted" do
         it "describes what was expected" do
           matcher_class = Class.new(BaseMatcher) do
-            def match(expected, actual)
+            def match(_expected, _actual)
               false
             end
           end

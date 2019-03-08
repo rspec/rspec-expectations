@@ -230,7 +230,7 @@ RSpec.describe "operator matchers", :uses_should do
   describe RSpec::Matchers::BuiltIn::PositiveOperatorMatcher do
     it "works when the target has implemented #send" do
       o = Object.new
-      def o.send(*args); raise "DOH! Library developers shouldn't use #send!" end
+      def o.send(*_args); raise "DOH! Library developers shouldn't use #send!" end
       expect {
         o.should == o
       }.not_to raise_error
@@ -240,7 +240,7 @@ RSpec.describe "operator matchers", :uses_should do
   describe RSpec::Matchers::BuiltIn::NegativeOperatorMatcher do
     it "works when the target has implemented #send" do
       o = Object.new
-      def o.send(*args); raise "DOH! Library developers shouldn't use #send!" end
+      def o.send(*_args); raise "DOH! Library developers shouldn't use #send!" end
       expect {
         o.should_not == :foo
       }.not_to raise_error

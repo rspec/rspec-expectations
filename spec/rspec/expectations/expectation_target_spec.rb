@@ -102,7 +102,7 @@ module RSpec
 
           it 'assumes a custom matcher that does not define `supports_block_expectations?` is not a block matcher (since it is relatively rare)' do
             custom_matcher = Module.new do
-              def self.matches?(value); true; end
+              def self.matches?(_value); true; end
               def self.description; "foo"; end
             end
 

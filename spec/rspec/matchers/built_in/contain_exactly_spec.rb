@@ -7,7 +7,7 @@ class UnsortableObject
     @id.to_s
   end
 
-  def ==(other)
+  def ==(_other)
     false
   end
 end

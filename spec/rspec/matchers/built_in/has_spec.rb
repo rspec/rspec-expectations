@@ -86,7 +86,7 @@ RSpec.describe "expect(...).to have_sym(*args)" do
 
   it "reraises an exception thrown in #has_sym?(*args)" do
     o = Object.new
-    def o.has_sym?(*args)
+    def o.has_sym?(*_args)
       raise "Funky exception"
     end
     expect {
@@ -143,7 +143,7 @@ RSpec.describe "expect(...).not_to have_sym(*args)" do
 
   it "reraises an exception thrown in #has_sym?(*args)" do
     o = Object.new
-    def o.has_sym?(*args)
+    def o.has_sym?(*_args)
       raise "Funky exception"
     end
     expect {

@@ -221,7 +221,7 @@ module RSpec::Matchers::BuiltIn
     context 'when the actual data does not include enumerable but defines #each_with_index' do
       let(:actual) do
         obj = Object.new
-        def obj.each_with_index(&block); [5].each_with_index { |o, i| yield(o, i) }; end
+        def obj.each_with_index(&_block); [5].each_with_index { |o, i| yield(o, i) }; end
         obj
       end
 
