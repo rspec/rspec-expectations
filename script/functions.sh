@@ -124,6 +124,14 @@ function check_binstubs {
     fi
   fi
 
+  if style_and_lint_enforced; then
+    if [ ! -x ./bin/rubocop ]; then
+      binstubs="$binstubs bin/rubocop"
+      gems="$gems rubocop"
+      success=1
+    fi
+  fi
+
   if [ $success -eq 1 ]; then
     echo
     echo "Missing binstubs:$binstubs"
