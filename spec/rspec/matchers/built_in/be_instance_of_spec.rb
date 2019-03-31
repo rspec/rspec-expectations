@@ -44,6 +44,21 @@ module RSpec
             expect(matcher.description).to eq "be an instance of User"
           end
         end
+
+        context "when the actual object does not respond to #instance_of? method" do
+          let(:actual_object) do
+            Class.new { undef_method :instance_of? }.new
+          end
+
+          it "fails with warning message" do
+            message = "The be_an_instance_of matcher requires that "\
+                      "the actual object responds to #instance_of? method " \
+                      "but it does not respond to the method."
+            expect {
+              expect(actual_object).to send(method, Object)
+            }.to fail_with message
+          end
+        end
       end
 
       RSpec.describe "expect(actual).not_to #{method}(expected)" do
@@ -54,8 +69,21 @@ module RSpec
           }.to fail_with(%Q{expected "foo" not to be an instance of String})
         end
 
-      end
+        context "when the actual object does not respond to #instance_of? method" do
+          let(:actual_object) do
+            Class.new { undef_method :instance_of? }.new
+          end
 
+          it "fails with warning message" do
+            message = "The be_an_instance_of matcher requires that "\
+                      "the actual object responds to #instance_of? method " \
+                      "but it does not respond to the method."
+            expect {
+              expect(actual_object).not_to send(method, Object)
+            }.to fail_with message
+          end
+        end
+      end
     end
   end
 end
