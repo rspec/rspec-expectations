@@ -17,18 +17,14 @@ module RSpec
           if actual_object_respond_to?(actual, :instance_of?)
             actual.instance_of?(expected)
           else
-            raise ::ArgumentError, error_message
+            raise ::ArgumentError, "The #{matcher_name} matcher requires that " \
+                                   "the actual object responds to #instance_of? method " \
+                                   "but it does not respond to the method."
           end
         end
 
         def actual_object_respond_to?(actual, method)
           ::Kernel.instance_method(:respond_to?).bind(actual).call(method)
-        end
-
-        def error_message
-          "The #{matcher_name} matcher requires that " \
-          "the actual object responds to #instance_of? method " \
-          "but it does not respond to the method."
         end
       end
     end
