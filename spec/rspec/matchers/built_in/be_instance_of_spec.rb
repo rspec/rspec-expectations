@@ -46,23 +46,22 @@ module RSpec
         end
 
         context "when the actual object does not respond to #instance_of? method" do
-          let(:actual_object) do
-            Class.new { undef_method :instance_of? }.new
-          end
+          let(:klass) { Class.new { undef_method :instance_of? } }
 
-          it "fails with warning message" do
+          let(:actual_object) { klass.new }
+
+          it "raises ArgumentError" do
             message = "The be_an_instance_of matcher requires that "\
                       "the actual object responds to #instance_of? method " \
                       "but it does not respond to the method."
             expect {
-              expect(actual_object).to send(method, Object)
-            }.to fail_with message
+              expect(actual_object).to send(method, klass)
+            }.to raise_error ::ArgumentError, message
           end
         end
       end
 
       RSpec.describe "expect(actual).not_to #{method}(expected)" do
-
         it "fails with failure message for should_not if actual is instance of expected class" do
           expect {
             expect("foo").not_to send(method, String)
@@ -70,17 +69,17 @@ module RSpec
         end
 
         context "when the actual object does not respond to #instance_of? method" do
-          let(:actual_object) do
-            Class.new { undef_method :instance_of? }.new
-          end
+          let(:klass) { Class.new { undef_method :instance_of? } }
 
-          it "fails with warning message" do
+          let(:actual_object) { klass.new }
+
+          it "raises ArgumentError" do
             message = "The be_an_instance_of matcher requires that "\
                       "the actual object responds to #instance_of? method " \
                       "but it does not respond to the method."
             expect {
-              expect(actual_object).not_to send(method, Object)
-            }.to fail_with message
+              expect(actual_object).not_to send(method, klass)
+            }.to raise_error ::ArgumentError, message
           end
         end
       end

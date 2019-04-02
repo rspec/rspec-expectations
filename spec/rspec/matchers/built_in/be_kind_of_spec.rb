@@ -31,13 +31,18 @@ module RSpec
             Class.new { undef_method :kind_of?, :is_a? }.new
           end
 
-          it "fails with warning message" do
+          it "raises ArgumentError" do
             message = "The be_a_kind_of matcher requires that the actual object " \
                       "responds to either #kind_of? or #is_a? methods but " \
                       "it responds to neigher of two methods."
+
+            expect {
+              expect(actual_object).to send(method, actual_object.class)
+            }.to raise_error ::ArgumentError, message
+
             expect {
               expect(actual_object).to send(method, Object)
-            }.to fail_with(message)
+            }.to raise_error ::ArgumentError, message
           end
         end
       end
@@ -54,13 +59,13 @@ module RSpec
             Class.new { undef_method :kind_of?, :is_a? }.new
           end
 
-          it "fails with warning message" do
+          it "raises ArgumentError" do
             message = "The be_a_kind_of matcher requires that the actual object " \
                       "responds to either #kind_of? or #is_a? methods but " \
                       "it responds to neigher of two methods."
             expect {
-              expect(actual_object).not_to send(method, Object)
-            }.to fail_with(message)
+              expect(actual_object).not_to send(method, String)
+            }.to raise_error ArgumentError, message
           end
         end
       end
