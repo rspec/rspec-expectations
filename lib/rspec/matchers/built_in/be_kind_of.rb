@@ -8,19 +8,23 @@ module RSpec
       private
 
         def match(expected, actual)
-          if actual_object_respond_to?(actual, :kind_of?)
-            actual.kind_of?(expected)
-          elsif actual_object_respond_to?(actual, :is_a?)
-            actual.is_a?(expected)
+          result = nil
+          if executable? { result = actual.kind_of?(expected) }
+            result
+          elsif executable? { result = actual.is_a?(expected) }
+            result
           else
             raise ::ArgumentError, "The #{matcher_name} matcher requires that " \
                                    "the actual object responds to either #kind_of? or #is_a? methods "\
-                                   "but it responds to neigher of two methods."
+                                   "but it responds to neither of two methods."
           end
         end
 
-        def actual_object_respond_to?(actual, method)
-          ::Kernel.instance_method(:respond_to?).bind(actual).call(method)
+        def executable?
+          yield
+          true
+        rescue NoMethodError
+          false
         end
       end
     end

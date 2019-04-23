@@ -48,7 +48,7 @@ module RSpec
           end
         end
 
-        context "when the actual object responds to neigher #kind_of? nor #is_a? methods" do
+        context "when the actual object responds to neither #kind_of? nor #is_a? methods" do
           let(:actual_object) do
             Class.new { undef_method :kind_of?, :is_a? }.new
           end
@@ -56,7 +56,7 @@ module RSpec
           it "raises ArgumentError" do
             message = "The be_a_kind_of matcher requires that the actual object " \
                       "responds to either #kind_of? or #is_a? methods but " \
-                      "it responds to neigher of two methods."
+                      "it responds to neither of two methods."
 
             expect {
               expect(actual_object).to send(method, actual_object.class)
@@ -96,7 +96,7 @@ module RSpec
           end
         end
 
-        context "when the actual object responds to neigher #kind_of? nor #is_a? methods" do
+        context "when the actual object responds to neither #kind_of? nor #is_a? methods" do
           let(:actual_object) do
             Class.new { undef_method :kind_of?, :is_a? }.new
           end
@@ -104,7 +104,7 @@ module RSpec
           it "raises ArgumentError" do
             message = "The be_a_kind_of matcher requires that the actual object " \
                       "responds to either #kind_of? or #is_a? methods but " \
-                      "it responds to neigher of two methods."
+                      "it responds to neither of two methods."
             expect {
               expect(actual_object).not_to send(method, String)
             }.to raise_error ArgumentError, message
