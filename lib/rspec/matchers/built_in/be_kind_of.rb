@@ -8,10 +8,11 @@ module RSpec
       private
 
         def match(expected, actual)
-          if executable?(actual, :kind_of?, expected)
-            actual.kind_of?(expected)
-          elsif executable?(actual, :is_a?, expected)
-            actual.is_a?(expected)
+          result = nil
+          if executable? { result = actual.kind_of?(expected) }
+            result
+          elsif executable? { result = actual.is_a?(expected) }
+            result
           else
             raise ::ArgumentError, "The #{matcher_name} matcher requires that " \
                                    "the actual object responds to either #kind_of? or #is_a? methods " \
@@ -19,8 +20,8 @@ module RSpec
           end
         end
 
-        def executable?(object, method, *args)
-          object.public_send(method, *args)
+        def executable?
+          yield
           true
         rescue NoMethodError
           false
