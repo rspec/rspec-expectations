@@ -8,20 +8,19 @@ module RSpec
       private
 
         def match(expected, actual)
-          result = nil
-          if executable? { result = actual.kind_of?(expected) }
-            result
-          elsif executable? { result = actual.is_a?(expected) }
-            result
+          if executable?(actual, :kind_of?, expected)
+            actual.kind_of?(expected)
+          elsif executable?(actual, :is_a?, expected)
+            actual.is_a?(expected)
           else
             raise ::ArgumentError, "The #{matcher_name} matcher requires that " \
-                                   "the actual object responds to either #kind_of? or #is_a? methods "\
-                                   "but it responds to neither of two methods."
+                                   "the actual object responds to either #kind_of? or #is_a? methods " \
+                                   "but a `NoMethodError` was encountered instead."
           end
         end
 
-        def executable?
-          yield
+        def executable?(object, method, *args)
+          object.public_send(method, *args)
           true
         rescue NoMethodError
           false

@@ -55,8 +55,8 @@ module RSpec
 
           it "raises ArgumentError" do
             message = "The be_a_kind_of matcher requires that the actual object " \
-                      "responds to either #kind_of? or #is_a? methods but " \
-                      "it responds to neither of two methods."
+                      "responds to either #kind_of? or #is_a? methods " \
+                      "but a `NoMethodError` was encountered instead."
 
             expect {
               expect(actual_object).to send(method, actual_object.class)
@@ -103,8 +103,8 @@ module RSpec
 
           it "raises ArgumentError" do
             message = "The be_a_kind_of matcher requires that the actual object " \
-                      "responds to either #kind_of? or #is_a? methods but " \
-                      "it responds to neither of two methods."
+                      "responds to either #kind_of? or #is_a? methods " \
+                      "but a `NoMethodError` was encountered instead."
             expect {
               expect(actual_object).not_to send(method, String)
             }.to raise_error ArgumentError, message
