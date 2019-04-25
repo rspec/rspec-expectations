@@ -14,21 +14,11 @@ module RSpec
       private
 
         def match(expected, actual)
-          result = nil
-          if executable? { result = actual.instance_of?(expected) }
-            result
-          else
-            raise ::ArgumentError, "The #{matcher_name} matcher requires that " \
-                                   "the actual object responds to #instance_of? method " \
-                                   "but it does not respond to the method."
-          end
-        end
-
-        def executable?
-          yield
-          true
+          actual.instance_of?(expected)
         rescue NoMethodError
-          false
+          raise ::ArgumentError, "The #{matcher_name} matcher requires that " \
+                                 "the actual object responds to #instance_of? method " \
+                                 "but a `NoMethodError` was encountered instead."
         end
       end
     end
