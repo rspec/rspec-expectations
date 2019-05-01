@@ -8,23 +8,11 @@ module RSpec
       private
 
         def match(expected, actual)
-          result = nil
-          if executable? { result = actual.kind_of?(expected) }
-            result
-          elsif executable? { result = actual.is_a?(expected) }
-            result
-          else
-            raise ::ArgumentError, "The #{matcher_name} matcher requires that " \
-                                   "the actual object responds to either #kind_of? or #is_a? methods " \
-                                   "but a `NoMethodError` was encountered instead."
-          end
-        end
-
-        def executable?
-          yield
-          true
+          actual.kind_of?(expected)
         rescue NoMethodError
-          false
+          raise ::ArgumentError, "The #{matcher_name} matcher requires that " \
+                                 "the actual object responds to #kind_of? method " \
+                                 "but a `NoMethodError` was encountered instead."
         end
       end
     end
