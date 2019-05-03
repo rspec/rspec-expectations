@@ -1,6 +1,11 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.3...3-8-maintenance)
 
+Bug Fixes:
+
+* Prevent false negatives when checking objects for the methods required to run the
+  the `be_an_instance_of` and `be_kind_of` matchers. (Nazar Matus, #1112)
+
 ### 3.8.3 / 2019-04-20
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.2...v3.8.3)
 
