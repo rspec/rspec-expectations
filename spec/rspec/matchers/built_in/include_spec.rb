@@ -704,21 +704,17 @@ RSpec.describe "#include matcher" do
       end
 
       it 'does not treat an object that only implements #matches? as a matcher' do
-        in_sub_process_if_possible do
-          require 'uri'
-
-          domain = Struct.new(:domain) do
-            def matches?(url)
-              URI(url).host == domain
-            end
+        not_a_matcher = Struct.new(:value) do
+          def matches?(_)
+            fail "`matches?` should never be called"
           end
-
-          expect([domain.new("rspec.info")]).to include(domain.new("rspec.info"))
-
-          expect {
-            expect([domain.new("rspec.info")]).to include(domain.new("foo.com"))
-          }.to fail_matching("expected [#{domain.new("rspec.info").inspect}] to include")
         end
+
+        expect([not_a_matcher.new("rspec.info")]).to include(not_a_matcher.new("rspec.info"))
+
+        expect {
+          expect([not_a_matcher.new("rspec.info")]).to include(not_a_matcher.new("foo.com"))
+        }.to fail_matching("expected [#{not_a_matcher.new("rspec.info").inspect}] to include")
       end
     end
 
