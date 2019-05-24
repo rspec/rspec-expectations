@@ -29,7 +29,7 @@ module RSpec
       # @see RSpec::Matchers
       def alias_matcher(new_name, old_name, options={}, &description_override)
         description_override ||= lambda do |old_desc|
-          old_desc.gsub(EnglishPhrasing.split_words(old_name), EnglishPhrasing.split_words(new_name))
+          old_desc.sub(EnglishPhrasing.split_words(old_name), EnglishPhrasing.split_words(new_name))
         end
         klass = options.fetch(:klass) { AliasedMatcher }
 

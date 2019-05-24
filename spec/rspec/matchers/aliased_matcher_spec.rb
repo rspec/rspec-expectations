@@ -79,6 +79,19 @@ module RSpec
         expect(matcher.description).to eq("my blockless override description")
       end
 
+      RSpec::Matchers.define :my_repeating_base_matcher do
+        def description
+          "my repeating base matcher my repeating base matcher"
+        end
+      end
+
+      RSpec::Matchers.alias_matcher :my_repeating_override, :my_repeating_base_matcher
+
+      it 'does not override data in the description with the same name as the matcher' do
+        matcher = my_repeating_override
+        expect(matcher.description).to eq("my repeating override my repeating base matcher")
+      end
+
       it 'works properly with a chained method off a negated matcher' do
         expect { }.to avoid_outputting.to_stdout
 
