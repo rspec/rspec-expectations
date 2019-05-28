@@ -98,7 +98,7 @@ module RSpec
           )
           actual = Object.new
 
-          expect(::RSpec::Expectations).to receive(:fail_with).with("message", 1, 2)
+          expect(::RSpec::Expectations).to receive(:fail_with).with("message", matcher)
 
           RSpec::Expectations::PositiveExpectationHandler.handle_matcher(actual, matcher)
         end
@@ -187,7 +187,7 @@ module RSpec
           )
           actual = Object.new
 
-          expect(::RSpec::Expectations).to receive(:fail_with).with("message", 1, 2)
+          expect(::RSpec::Expectations).to receive(:fail_with).with("message", matcher)
 
           RSpec::Expectations::NegativeExpectationHandler.handle_matcher(actual, matcher)
         end

@@ -35,7 +35,7 @@ module RSpec
         message ||= matcher.__send__(failure_message_method)
 
         if matcher.respond_to?(:diffable?) && matcher.diffable?
-          ::RSpec::Expectations.fail_with message, matcher.expected, matcher.actual
+          ::RSpec::Expectations.fail_with message, matcher
         else
           ::RSpec::Expectations.fail_with message
         end
