@@ -28,9 +28,7 @@ module RSpec
       #   block is provided, a default override is used based on the old and new names.
       # @see RSpec::Matchers
       def alias_matcher(new_name, old_name, options={}, &description_override)
-        description_override ||= lambda do |old_desc|
-          old_desc.sub(EnglishPhrasing.split_words(old_name), EnglishPhrasing.split_words(new_name))
-        end
+        description_override ||= default_desc_override(new_name, old_name)
         klass = options.fetch(:klass) { AliasedMatcher }
 
         define_method(new_name) do |*args, &block|
@@ -76,6 +74,22 @@ module RSpec
       alias_method :matcher, :define
 
     private
+
+      # Defines the override for an aliased matcher description
+      # if not block is passed in.
+      #
+      # @param new_name [Symbol] the name of the new matcher
+      # @param old_name [Symbol] the name of the old (aliased) matcher
+      def default_desc_override(new_name, old_name)
+        old_name_split = EnglishPhrasing.split_words(old_name)
+        lambda do |old_desc, replace_after_start: false|
+          if old_desc.start_with?(old_name_split) || replace_after_start
+            old_desc.sub(old_name_split, EnglishPhrasing.split_words(new_name))
+          else
+            old_desc
+          end
+        end
+      end
 
       if Proc.method_defined?(:parameters)
         def warn_about_block_args(name, declarations)

@@ -237,6 +237,14 @@ module RSpec
     end
 
     specify do
+      expect {
+        expect("some random string").to match(a_string_including("include"))
+      }.to fail_including(
+        'expected "some random string" to match (a string including "include")'
+      )
+    end
+
+    specify do
       expect(
         a_collection_including("a")
       ).to be_aliased_to(
@@ -250,6 +258,14 @@ module RSpec
       ).to be_aliased_to(
         include(:a => 5)
       ).with_description('a hash including {:a => 5}')
+    end
+
+    specify do
+      expect {
+        expect({}).to match(a_hash_including({a: 'include'}))
+      }.to fail_including(
+        'expected {} to match (a hash including {:a => "include"}'
+      )
     end
 
     specify do

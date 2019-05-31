@@ -44,7 +44,7 @@ module RSpec
       #
       # @api private
       def failure_message
-        @description_block.call(super)
+        @description_block.call(super, replace_after_start: true)
       end
 
       # Provides the failure_message_when_negated of the aliased matcher. Aliased matchers
@@ -54,7 +54,7 @@ module RSpec
       #
       # @api private
       def failure_message_when_negated
-        @description_block.call(super)
+        @description_block.call(super, replace_after_start: true)
       end
     end
 
@@ -105,7 +105,7 @@ module RSpec
       def optimal_failure_message(same, inverted)
         if DefaultFailureMessages.has_default_failure_messages?(@base_matcher)
           base_message = @base_matcher.__send__(same)
-          overriden    = @description_block.call(base_message)
+          overriden    = @description_block.call(base_message, replace_after_start: true)
           return overriden if overriden != base_message
         end
 
