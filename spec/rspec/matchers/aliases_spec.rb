@@ -262,7 +262,7 @@ module RSpec
 
     specify do
       expect {
-        expect({}).to match(a_hash_including({a: 'include'}))
+        expect({}).to match(a_hash_including({:a => 'include'}))
       }.to fail_including(
         'expected {} to match (a hash including {:a => "include"}'
       )

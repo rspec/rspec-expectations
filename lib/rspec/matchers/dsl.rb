@@ -82,7 +82,7 @@ module RSpec
       # @param old_name [Symbol] the name of the old (aliased) matcher
       def default_desc_override(new_name, old_name)
         old_name_split = EnglishPhrasing.split_words(old_name)
-        lambda do |old_desc, replace_after_start: false|
+        lambda do |old_desc, replace_after_start|
           if old_desc.start_with?(old_name_split) || replace_after_start
             old_desc.sub(old_name_split, EnglishPhrasing.split_words(new_name))
           else
