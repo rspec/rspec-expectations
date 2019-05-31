@@ -34,7 +34,7 @@ module RSpec
       #
       # @api private
       def description
-        @description_block.call(super, false)
+        @description_block.call(super)
       end
 
       # Provides the failure_message of the aliased matcher. Aliased matchers
@@ -44,7 +44,7 @@ module RSpec
       #
       # @api private
       def failure_message
-        @description_block.call(super, true)
+        @description_block.call(super, replace_after_start: true)
       end
 
       # Provides the failure_message_when_negated of the aliased matcher. Aliased matchers
@@ -54,7 +54,7 @@ module RSpec
       #
       # @api private
       def failure_message_when_negated
-        @description_block.call(super, true)
+        @description_block.call(super, replace_after_start: true)
       end
     end
 
@@ -105,11 +105,52 @@ module RSpec
       def optimal_failure_message(same, inverted)
         if DefaultFailureMessages.has_default_failure_messages?(@base_matcher)
           base_message = @base_matcher.__send__(same)
-          overriden    = @description_block.call(base_message, true)
+          overriden    = @description_block.call(base_message, replace_after_start: true)
           return overriden if overriden != base_message
         end
 
         @base_matcher.__send__(inverted)
+      end
+    end
+
+    # Wrapper around an overriden description for an aliased
+    # matcher.
+    #
+    # @api private
+    class AliasDescription
+      def initialize(new_name, old_name, override_block)
+        @new_name = new_name
+        @old_name = old_name
+        @override_block = override_block
+      end
+
+      # Creates the overriden description.
+      #
+      # @api private
+      def call(old_desc, replace_after_start: false)
+        if @override_block
+          @override_block.call(old_desc)
+        else
+          default_description(old_desc, replace_after_start)
+        end
+      end
+
+    private
+
+      # Generates a default message when no block is provided
+      # when aliasing the matcher. Replaces instances of the old
+      # matcher's name with the new matcher's name where
+      # applicable.
+      #
+      # #api private
+      def default_description(old_desc, replace_after_start)
+        old_name_split = EnglishPhrasing.split_words(@old_name)
+
+        if old_desc.start_with?(old_name_split) || replace_after_start
+          old_desc.sub(old_name_split, EnglishPhrasing.split_words(@new_name))
+        else
+          old_desc
+        end
       end
     end
   end
