@@ -69,27 +69,25 @@ RSpec.shared_examples "an RSpec block-only matcher" do |*options|
   it 'fails gracefully when given a value' do
     expect {
       expect(3).to matcher
-    }.to fail_with(/was not( given)? a block/)
-
+    }.to raise_error(/implicit block expectation syntax is not supported/)
     unless options[:disallows_negation]
       expect {
         expect(3).not_to matcher
-      }.to fail_with(/was not( given)? a block/)
+      }.to raise_error(/implicit block expectation syntax is not supported/)
     end
   end
 
   it 'prints a deprecation warning when given a value' do
-    expect_warn_deprecation(/The implicit block expectation syntax is deprecated, you should pass/)
-    expect { expect(3).to matcher }.to fail
-  end unless options[:skip_deprecation_check] || options[:expects_lambda]
+    expect { expect(3).to matcher }
+      .to raise_error(/implicit block expectation syntax is not supported/)
+  end
 
   it 'prints a deprecation warning when given a value and negated' do
-    expect_warn_deprecation(/The implicit block expectation syntax is deprecated, you should pass/)
-    expect { expect(3).not_to matcher }.to fail
-  end unless options[:disallows_negation] || options[:expects_lambda]
+    expect { expect(3).not_to matcher }
+      .to raise_error(/implicit block expectation syntax is not supported/)
+  end unless options[:disallows_negation]
 
-  it 'allows lambda expectation target' do
-    allow_deprecation
-    expect(valid_block_lambda).to matcher
+  it 'allows a Proc for an expectation target' do
+    expect(&valid_block_lambda).to matcher
   end
 end

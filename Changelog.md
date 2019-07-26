@@ -11,6 +11,8 @@ Breaking Changes:
 * Remove `include_chain_clauses_in_custom_matcher_descriptions` option
   and make it the default. (Phil Pirozhkov, #1279)
 * Remove support for present-tense dynamic predicate. (Phil Pirozhkov, #1286)
+* Prevent implicit blocks (e.g blocks as values) from being used with block matchers.
+  (Phil Pirozhkov, #1285)
 
 Enhancements:
 

@@ -12,7 +12,6 @@ module RSpec
       class YieldProbe
         def self.probe(block, &callback)
           probe = new(block, &callback)
-          return probe unless probe.has_block?
           probe.probe
         end
 
@@ -24,10 +23,6 @@ module RSpec
           @used = false
           self.num_yields = 0
           self.yielded_args = []
-        end
-
-        def has_block?
-          Proc === @block
         end
 
         def probe
@@ -90,13 +85,12 @@ module RSpec
         # @private
         def matches?(block)
           @probe = YieldProbe.probe(block)
-          return false unless @probe.has_block?
           expected_count_matches?(@probe.num_yields)
         end
 
         # @private
         def does_not_match?(block)
-          !matches?(block) && @probe.has_block?
+          !matches?(block)
         end
 
         # @api private
@@ -124,7 +118,6 @@ module RSpec
       private
 
         def failure_reason
-          return ' but was not a block' unless @probe.has_block?
           return "#{count_expectation_description} but did not yield" if @probe.num_yields == 0
           count_failure_reason('yielded')
         end
@@ -137,13 +130,12 @@ module RSpec
         # @private
         def matches?(block)
           @probe = YieldProbe.probe(block)
-          return false unless @probe.has_block?
           @probe.yielded_once?(:yield_with_no_args) && @probe.single_yield_args.empty?
         end
 
         # @private
         def does_not_match?(block)
-          !matches?(block) && @probe.has_block?
+          !matches?(block)
         end
 
         # @private
@@ -169,13 +161,11 @@ module RSpec
       private
 
         def positive_failure_reason
-          return 'was not a block' unless @probe.has_block?
           return 'did not yield' if @probe.num_yields.zero?
           "yielded with arguments: #{description_of @probe.single_yield_args}"
         end
 
         def negative_failure_reason
-          return 'was not a block' unless @probe.has_block?
           'did'
         end
       end
@@ -196,14 +186,13 @@ module RSpec
             @actual_formatted = actual_formatted
             @args_matched_when_yielded &&= args_currently_match?
           end
-          return false unless @probe.has_block?
           @probe.probe
           @probe.yielded_once?(:yield_with_args) && @args_matched_when_yielded
         end
 
         # @private
         def does_not_match?(block)
-          !matches?(block) && @probe.has_block?
+          !matches?(block)
         end
 
         # @private
@@ -236,7 +225,6 @@ module RSpec
       private
 
         def positive_failure_reason
-          return 'was not a block' unless @probe.has_block?
           return 'did not yield' if @probe.num_yields.zero?
           @positive_args_failure
         end
@@ -246,9 +234,7 @@ module RSpec
         end
 
         def negative_failure_reason
-          if !@probe.has_block?
-            'was not a block'
-          elsif @args_matched_when_yielded && !@expected.empty?
+          if @args_matched_when_yielded && !@expected.empty?
             'yielded with expected arguments' \
               "\nexpected not: #{surface_descriptions_in(@expected).inspect}" \
               "\n         got: #{@actual_formatted}"
@@ -300,12 +286,11 @@ module RSpec
             yield_count += 1
           end
 
-          return false unless @probe.has_block?
           args_matched_when_yielded && yield_count == @expected.length
         end
 
         def does_not_match?(block)
-          !matches?(block) && @probe.has_block?
+          !matches?(block)
         end
 
         # @private
@@ -342,16 +327,12 @@ module RSpec
         end
 
         def positive_failure_reason
-          return 'was not a block' unless @probe.has_block?
-
           'yielded with unexpected arguments' \
           "\nexpected: #{surface_descriptions_in(@expected).inspect}" \
           "\n     got: [#{@actual_formatted.join(", ")}]"
         end
 
         def negative_failure_reason
-          return 'was not a block' unless @probe.has_block?
-
           'yielded with expected arguments' \
           "\nexpected not: #{surface_descriptions_in(@expected).inspect}" \
           "\n         got: [#{@actual_formatted.join(", ")}]"

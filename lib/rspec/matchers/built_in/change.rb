@@ -112,12 +112,10 @@ module RSpec
         end
 
         def positive_failure_reason
-          return "was not given a block" unless Proc === @event_proc
           "is still #{@actual_before_description}"
         end
 
         def negative_failure_reason
-          return "was not given a block" unless Proc === @event_proc
           "did change from #{@actual_before_description} " \
           "to #{description_of change_details.actual_after}"
         end
@@ -171,7 +169,6 @@ module RSpec
       private
 
         def failure_reason
-          return "was not given a block" unless Proc === @event_proc
           "was changed by #{description_of @change_details.actual_delta}"
         end
       end

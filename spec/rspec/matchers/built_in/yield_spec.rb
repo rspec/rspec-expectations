@@ -36,8 +36,8 @@ end
 # this example group overrides the default definition of expectations
 # and lambdas that take the expectation target in a way that they accept
 # a probe.
-RSpec.shared_examples "an RSpec probe-yielding block-only matcher" do |*options|
-  include_examples "an RSpec block-only matcher", { :expects_lambda => true }.merge(options.first || {}) do
+RSpec.shared_examples "an RSpec probe-yielding block-only matcher" do |**options|
+  include_examples "an RSpec block-only matcher", **options do
     let(:valid_expectation) { expect { |block| valid_block(&block) } }
     let(:invalid_expectation) { expect { |block| invalid_block(&block) } }
 

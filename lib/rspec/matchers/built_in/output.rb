@@ -108,13 +108,11 @@ module RSpec
         end
 
         def positive_failure_reason
-          return "was not a block" unless Proc === @block
           return "output #{actual_output_description}" if @expected
           "did not"
         end
 
         def negative_failure_reason
-          return "was not a block" unless Proc === @block
           "output #{actual_output_description}"
         end
 
