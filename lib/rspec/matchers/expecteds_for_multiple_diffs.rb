@@ -69,7 +69,12 @@ module RSpec
         @expected_list.map do |(expected, diff_label)|
           diff = differ.diff(actual, expected)
           next if diff.strip.empty?
-          "#{diff_label}#{diff}"
+          if diff == "\e[0m\n\e[0m"
+            "#{DEFAULT_DIFF_LABEL}\n" +
+              "  <diff is empty, do your objects produce identical inspect output?>"
+          else
+            "#{diff_label}#{diff}"
+          end
         end.compact.join("\n")
       end
     end
