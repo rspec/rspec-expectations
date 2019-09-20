@@ -60,14 +60,14 @@ module RSpec
       end
 
       describe "#message_with_diff" do
-        it "returns message and warning if diff is empty" do
+        it "returns a message warning if the diff is empty" do
           allow(FakeDiffer).to receive(:diff) { "\e[0m\n\e[0m" }
           expect(wrapped_value.message_with_diff(
             message, differ, actual
           )).to eq(dedent <<-EOS)
             |a message
             |Diff:
-            |  <diff is empty, do your objects produce identical inspect output?>
+            |  <The diff is empty, are your objects producing identical `#inspect` output?>
           EOS
         end
 

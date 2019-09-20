@@ -70,8 +70,8 @@ module RSpec
           diff = differ.diff(actual, expected)
           next if diff.strip.empty?
           if diff == "\e[0m\n\e[0m"
-            "#{DEFAULT_DIFF_LABEL}\n" +
-              "  <diff is empty, do your objects produce identical inspect output?>"
+            "#{diff_label}\n" +
+              "  <The diff is empty, are your objects producing identical `#inspect` output?>"
           else
             "#{diff_label}#{diff}"
           end
