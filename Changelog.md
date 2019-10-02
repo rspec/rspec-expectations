@@ -1,5 +1,5 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.4...master)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.5...master)
 
 Enhancements:
 
@@ -11,6 +11,9 @@ Enhancements:
   with `match_when_negated` blocks. (Jon Rowe, #1130)
 * Add a warning when an empty diff is produce due to identical inspect output.
   (Benoit Tigeot, #1126)
+
+### 3.8.5 / 2019-10-02
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.4...v3.8.5)
 
 Bug Fixes:
 
