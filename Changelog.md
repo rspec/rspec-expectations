@@ -1,5 +1,5 @@
-### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.4...master)
+### 3.8.5 / 2019-10-02
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.4...v3.8.5)
 
 Bug Fixes:
 
