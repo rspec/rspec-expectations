@@ -1,5 +1,5 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.4...master)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.5...master)
 
 Enhancements:
 
@@ -16,6 +16,12 @@ Bug Fixes:
 
 * The `change` matcher now recognises an object has changed when its instance attributes
   have changed. (Jon Rowe, #1132)
+
+### 3.8.5 / 2019-10-02
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.4...v3.8.5)
+
+Bug Fixes:
+
 * Prevent unsupported implicit block expectation syntax from being used.
   (Phil Pirozhkov, #1125)
 
