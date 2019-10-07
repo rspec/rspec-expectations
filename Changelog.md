@@ -1,4 +1,4 @@
-### Development
+### 3.8.6 / 2019-10-07
 
 Bug Fixes:
 
