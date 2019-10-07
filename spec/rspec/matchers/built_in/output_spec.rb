@@ -2,13 +2,8 @@ RSpec.shared_examples "output_to_stream" do |stream_name, matcher_method, helper
   include helper_module
   extend helper_module
 
-  it_behaves_like "an RSpec block-only matcher" do
+  it_behaves_like("an RSpec matcher", :valid_value => lambda { print_to_stream('foo') }, :invalid_value => lambda {}) do
     let(:matcher) { output(/fo/).send(matcher_method) }
-    def valid_block
-      print_to_stream('foo')
-    end
-    def invalid_block
-    end
   end
 
   define_method :matcher do |*args|

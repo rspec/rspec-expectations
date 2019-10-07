@@ -1044,51 +1044,39 @@ RSpec.describe RSpec::Matchers::BuiltIn::Change do
     }.not_to raise_error
   end
 
-  it_behaves_like "an RSpec block-only matcher" do
-    let(:matcher) { change { @k } }
-    before { @k = 1 }
-    def valid_block
-      @k += 1
-    end
-    def invalid_block
-    end
+  k = 1
+  before { k = 1 }
+  it_behaves_like "an RSpec matcher", :valid_value => lambda { k += 1 },
+                                      :invalid_value => lambda { } do
+    let(:matcher) { change { k } }
   end
 end
 
 RSpec.describe RSpec::Matchers::BuiltIn::ChangeRelatively do
-  it_behaves_like "an RSpec block-only matcher", :disallows_negation => true do
-    let(:matcher) { change { @k }.by(1) }
-    before { @k = 0 }
-    def valid_block
-      @k += 1
-    end
-    def invalid_block
-      @k += 2
-    end
+  k = 0
+  before { k = 0 }
+  it_behaves_like "an RSpec matcher", :valid_value => lambda { k += 1 },
+                                      :invalid_value => lambda { k += 2 },
+                                      :disallows_negation => true do
+    let(:matcher) { change { k }.by(1) }
   end
 end
 
 RSpec.describe RSpec::Matchers::BuiltIn::ChangeFromValue do
-  it_behaves_like "an RSpec block-only matcher" do
-    let(:matcher) { change { @k }.from(0) }
-    before { @k = 0 }
-    def valid_block
-      @k += 1
-    end
-    def invalid_block
-    end
+  k = 0
+  before { k = 0 }
+  it_behaves_like "an RSpec matcher", :valid_value => lambda { k += 1 },
+                                      :invalid_value => lambda { } do
+    let(:matcher) { change { k }.from(0) }
   end
 end
 
 RSpec.describe RSpec::Matchers::BuiltIn::ChangeToValue do
-  it_behaves_like "an RSpec block-only matcher", :disallows_negation => true do
-    let(:matcher) { change { @k }.to(2) }
-    before { @k = 0 }
-    def valid_block
-      @k = 2
-    end
-    def invalid_block
-      @k = 3
-    end
+  k = 0
+  before { k = 0 }
+  it_behaves_like "an RSpec matcher", :valid_value => lambda { k = 2 },
+                                      :invalid_value => lambda { k = 3 },
+                                      :disallows_negation => true do
+    let(:matcher) { change { k }.to(2) }
   end
 end

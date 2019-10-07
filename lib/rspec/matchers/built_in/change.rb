@@ -77,11 +77,6 @@ module RSpec
           true
         end
 
-        # @private
-        def supports_value_expectations?
-          false
-        end
-
       private
 
         def initialize(receiver=nil, message=nil, &block)
@@ -112,10 +107,12 @@ module RSpec
         end
 
         def positive_failure_reason
+          return "was not given a block" unless Proc === @event_proc
           "is still #{@actual_before_description}"
         end
 
         def negative_failure_reason
+          return "was not given a block" unless Proc === @event_proc
           "did change from #{@actual_before_description} " \
           "to #{description_of change_details.actual_after}"
         end
@@ -161,14 +158,10 @@ module RSpec
           true
         end
 
-        # @private
-        def supports_value_expectations?
-          false
-        end
-
       private
 
         def failure_reason
+          return "was not given a block" unless Proc === @event_proc
           "was changed by #{description_of @change_details.actual_delta}"
         end
       end
@@ -197,6 +190,7 @@ module RSpec
 
         # @private
         def failure_message
+          return not_given_a_block_failure unless Proc === @event_proc
           return before_value_failure      unless @matches_before
           return did_not_change_failure    unless @change_details.changed?
           after_value_failure
@@ -205,11 +199,6 @@ module RSpec
         # @private
         def supports_block_expectations?
           true
-        end
-
-        # @private
-        def supports_value_expectations?
-          false
         end
 
       private
@@ -253,6 +242,11 @@ module RSpec
           "did change from #{@actual_before_description} " \
           "to #{description_of @change_details.actual_after}"
         end
+
+        def not_given_a_block_failure
+          "expected #{@change_details.value_representation} to have changed " \
+          "#{change_description}, but was not given a block"
+        end
       end
 
       # @api private
@@ -284,6 +278,7 @@ module RSpec
 
         # @private
         def failure_message_when_negated
+          return not_given_a_block_failure unless Proc === @event_proc
           return before_value_failure unless @matches_before
           did_change_failure
         end
