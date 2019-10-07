@@ -1,10 +1,6 @@
 RSpec.describe "expect { ... }.to raise_error" do
-  it_behaves_like "an RSpec block-only matcher" do
-    def valid_block
-      raise "boom"
-    end
-    def invalid_block
-    end
+  it_behaves_like("an RSpec matcher", :valid_value => lambda { raise "boom" },
+                                      :invalid_value => lambda { }) do
     let(:matcher) { raise_error Exception }
   end
 

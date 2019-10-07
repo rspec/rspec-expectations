@@ -394,10 +394,6 @@ module RSpec
           false
         end
 
-        def supports_value_expectations?
-          true
-        end
-
         # Most matchers do not expect call stack jumps.
         def expects_call_stack_jump?
           false

@@ -1,11 +1,7 @@
 module RSpec::Matchers::BuiltIn
   RSpec.describe ThrowSymbol do
-    it_behaves_like "an RSpec block-only matcher" do
-      def valid_block
-        throw :foo
-      end
-      def invalid_block
-      end
+    it_behaves_like("an RSpec matcher", :valid_value => lambda { throw :foo },
+                                        :invalid_value => lambda { }) do
       let(:matcher) { throw_symbol(:foo) }
     end
 
