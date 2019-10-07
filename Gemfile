@@ -21,6 +21,8 @@ group :documentation do
   gem 'github-markup', '0.7.2'
 end
 
+gem 'rake', '~> 10.0.0'
+
 gem 'simplecov'
 
 if RUBY_VERSION < '2.0.0' || RUBY_ENGINE == 'java'
