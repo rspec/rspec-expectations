@@ -1,5 +1,13 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.6...master)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.0...master)
+
+Bug Fixes:
+
+* The `change` matcher now recognises an object has changed when its instance attributes
+  have changed. (Jon Rowe, #1132)
+
+### 3.9.0 / 2019-10-02
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.6...v3.9.0)
 
 Enhancements:
 
@@ -11,11 +19,6 @@ Enhancements:
   with `match_when_negated` blocks. (Jon Rowe, #1130)
 * Add a warning when an empty diff is produce due to identical inspect output.
   (Benoit Tigeot, #1126)
-
-Bug Fixes:
-
-* The `change` matcher now recognises an object has changed when its instance attributes
-  have changed. (Jon Rowe, #1132)
 
 ### 3.8.6 / 2019-10-07
 
