@@ -1258,6 +1258,13 @@ module RSpec::Matchers::DSL
       expect { m2.foo }.to raise_error("foo in m2")
     end
 
+    it "warns when a duplicate matcher is present" do
+      expect(RSpec).to receive(:warning).with(/A matcher with name: duplicate_matcher has already been defined./).at_least(:once)
+
+      new_matcher(:duplicate_matcher) {}
+      new_matcher(:duplicate_matcher) {}
+    end
+
     context "defined using the dsl" do
       def a_method_in_the_example
         "method defined in the example"

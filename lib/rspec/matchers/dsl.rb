@@ -459,12 +459,18 @@ module RSpec
           @matcher_execution_context = matcher_execution_context
           @chained_method_clauses = []
           @block_arg = block_arg
+          already_implemented_matcher?
 
           class << self
             # See `Macros#define_user_override` above, for an explanation.
             include(@user_method_defs = Module.new)
             self
           end.class_exec(*expected, &declarations)
+        end
+
+        def already_implemented_matcher?
+          return unless ObjectSpace.each_object(RSpec::Matchers::DSL::Matcher).map(&:name).any?(name)
+          RSpec.warning "A matcher with name: #{name} has already been defined."
         end
 
         # Provides the expected value. This will return an array if
