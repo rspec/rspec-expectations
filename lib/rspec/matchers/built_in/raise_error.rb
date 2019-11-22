@@ -169,8 +169,8 @@ module RSpec
         def warn_about_negative_false_positive(expression)
           handle_warning("Using #{expression} risks false positives, since literally " \
                          "any other error would cause the expectation to pass, " \
-                         "including those raised by Ruby (e.g. NoMethodError, NameError " \
-                         "and ArgumentError), meaning the code you are intending to test " \
+                         "including those raised by Ruby (e.g. `NoMethodError`, `NameError` " \
+                         "and `ArgumentError`), meaning the code you are intending to test " \
                          "may not even get reached. Instead consider using " \
                          "`expect { }.not_to raise_error` or `expect { }.to raise_error" \
                          "(DifferentSpecificErrorClass)`. This message can be suppressed by " \
