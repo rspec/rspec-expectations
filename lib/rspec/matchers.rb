@@ -761,20 +761,22 @@ module RSpec
     #   expect { do_something_risky }.to raise_error
     #   expect { do_something_risky }.to raise_error(PoorRiskDecisionError)
     #   expect { do_something_risky }.to raise_error(PoorRiskDecisionError) { |error| expect(error.data).to eq 42 }
+    #   expect { do_something_risky }.to raise_error { |error| expect(error.data).to eq 42 }
     #   expect { do_something_risky }.to raise_error(PoorRiskDecisionError, "that was too risky")
     #   expect { do_something_risky }.to raise_error(PoorRiskDecisionError, /oo ri/)
+    #   expect { do_something_risky }.to raise_error("that was too risky")
     #
     #   expect { do_something_risky }.not_to raise_error
     def raise_error(error=nil, message=nil, &block)
       BuiltIn::RaiseError.new(error, message, &block)
     end
-    alias_method :raise_exception,  :raise_error
+    alias_method :raise_exception,   :raise_error
 
     alias_matcher :a_block_raising,  :raise_error do |desc|
       desc.sub("raise", "a block raising")
     end
 
-    alias_matcher :raising,        :raise_error do |desc|
+    alias_matcher :raising,          :raise_error do |desc|
       desc.sub("raise", "raising")
     end
 
