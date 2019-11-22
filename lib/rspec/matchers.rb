@@ -767,7 +767,7 @@ module RSpec
     #   expect { do_something_risky }.to raise_error("that was too risky")
     #
     #   expect { do_something_risky }.not_to raise_error
-    def raise_error(error=nil, message=nil, &block)
+    def raise_error(error=BuiltIn::RaiseError::UndefinedValue, message=nil, &block)
       BuiltIn::RaiseError.new(error, message, &block)
     end
     alias_method :raise_exception, :raise_error
