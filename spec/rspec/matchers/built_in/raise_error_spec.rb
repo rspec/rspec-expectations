@@ -18,6 +18,16 @@ RSpec.describe "expect { ... }.to raise_error" do
     expect { raise StandardError.new, 'boom' }.to raise_error
   end
 
+  it "issues a warning when `nil` is passed for an error class" do
+    expect_warning_with_call_site __FILE__, __LINE__+1, /with a `nil`/
+    expect { raise }.to raise_error(nil)
+  end
+
+  it "issues a warning when `nil` is passed for an error class when negated" do
+    expect_warning_with_call_site __FILE__, __LINE__+1, /raise_error\(nil\)/
+    expect { '' }.not_to raise_error(nil)
+  end
+
   it "issues a warning that does not include current error when it's not present" do
     expect(::Kernel).to receive(:warn) do |message|
       ex = /Actual error raised was/
