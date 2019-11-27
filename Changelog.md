@@ -10,7 +10,7 @@ Enhancements:
 
 * Add a special warning when `nil` is passed to `raise_error`. (Phil Pirozhkov, #1143)
 
-### 3.9.0 / 2019-10-02
+### 3.9.0 / 2019-10-08
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.6...v3.9.0)
 
 Enhancements:
