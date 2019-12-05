@@ -1,5 +1,5 @@
 <!---
-This file was generated on 2018-04-17T19:41:57+02:00 from the rspec-dev repo.
+This file was generated on 2019-12-05T21:32:23+00:00 from the rspec-dev repo.
 DO NOT modify it by hand as your changes will get lost the next time it is generated.
 -->
 
@@ -13,8 +13,8 @@ If you'd like to help make RSpec better, here are some ways you can contribute:
   - by running RSpec HEAD to help us catch bugs before new releases
   - by [reporting bugs you encounter](https://github.com/rspec/rspec-expectations/issues/new) with [report template](#report-template)
   - by [suggesting new features](https://github.com/rspec/rspec-expectations/issues/new)
-  - by improving RSpec's [Relish](https://relishapp.com/rspec) or [API](http://rspec.info/documentation/) documentation
-  - by improving [RSpec's website](http://rspec.info/) ([source](https://github.com/rspec/rspec.github.io))
+  - by improving RSpec's [Relish](https://relishapp.com/rspec) or [API](https://rspec.info/documentation/) documentation
+  - by improving [RSpec's website](https://rspec.info/) ([source](https://github.com/rspec/rspec.github.io))
   - by taking part in [feature and issue discussions](https://github.com/rspec/rspec-expectations/issues)
   - by adding a failing test for reproducible [reported bugs](https://github.com/rspec/rspec-expectations/issues)
   - by reviewing [pull requests](https://github.com/rspec/rspec-expectations/pulls) and suggesting improvements
