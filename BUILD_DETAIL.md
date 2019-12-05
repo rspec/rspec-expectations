@@ -1,5 +1,5 @@
 <!---
-This file was generated on 2018-04-17T19:41:57+02:00 from the rspec-dev repo.
+This file was generated on 2019-12-05T21:32:23+00:00 from the rspec-dev repo.
 DO NOT modify it by hand as your changes will get lost the next time it is generated.
 -->
 
@@ -68,8 +68,8 @@ $ bin/cucumber
 
 ## YARD documentation
 
-RSpec uses [YARD](http://yardoc.org/) for API documentation on the [rspec.info site](http://rspec.info/).
-Our commitment to [SemVer](htp://semver.org) requires that we explicitly
+RSpec uses [YARD](https://yardoc.org/) for API documentation on the [rspec.info site](https://rspec.info/).
+Our commitment to [SemVer](https://semver.org) requires that we explicitly
 declare our public API, and our build uses YARD to ensure that every
 class, module and method has either been labeled `@private` or has at
 least some level of documentation. For new APIs, this forces us to make
@@ -147,4 +147,3 @@ build for another repo, so our CI build includes a spec that runs the
 spec suite of each of the _other_ project repos. Note that we only run
 the spec suite, not the full build, of the other projects, as the spec
 suite runs very quickly compared to the full build.
-
