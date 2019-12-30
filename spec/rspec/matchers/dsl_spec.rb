@@ -40,6 +40,12 @@ RSpec.describe "a matcher defined using the matcher DSL" do
     expect(3).to be_just_like(3)
     expect(4).to be_just_like(4)
   end
+  it "informs if duplicate matchers have been defined" do
+    RSpec::Matchers.define(:duplicate_matcher) {}
+
+    expect_warning_with_call_site(__FILE__, __LINE__+1, /Matcher definition duplicate_matcher is overriding an existing matcher duplicate_matcher./)
+    RSpec::Matchers.define(:duplicate_matcher) {}
+  end
 
   describe '#block_arg' do
     before(:context) do

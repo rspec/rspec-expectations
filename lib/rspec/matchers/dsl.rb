@@ -69,6 +69,11 @@ module RSpec
       # @see RSpec::Matchers
       def define(name, &declarations)
         warn_about_block_args(name, declarations)
+
+        if method_defined?(name)
+          RSpec.warning "Matcher definition #{name} is overriding an existing matcher #{name}."
+        end
+
         define_method name do |*expected, &block_arg|
           RSpec::Matchers::DSL::Matcher.new(name, declarations, self, *expected, &block_arg)
         end
