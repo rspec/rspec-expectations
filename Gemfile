@@ -13,12 +13,12 @@ branch = File.read(File.expand_path("../maintenance-branch", __FILE__)).chomp
 end
 
 gem 'coderay' # for syntax highlighting
-gem 'yard', '~> 0.9.12', :require => false
+gem 'yard', '~> 0.9.24', :require => false
 
 ### deps for rdoc.info
 group :documentation do
-  gem 'redcarpet',     '2.1.1',   :platform => :mri
-  gem 'github-markup', '0.7.2'
+  gem 'redcarpet',  :platform => :mri
+  gem 'github-markup', :platform => :mri
 end
 
 gem 'simplecov'
