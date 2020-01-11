@@ -7,10 +7,9 @@ RSpec.describe "a matcher defined using the matcher DSL" do
     "ok"
   end
 
-  if RSpec::Support::RubyFeatures.required_kw_args_supported?
-    def kw(a:)
-      a
-    end
+  if RUBY_VERSION.to_f >= 2.7
+    require_relative "dsl27_syntax"
+    include RSpec::Matchers::DSL27Syntax
   end
 
   it "supports calling custom matchers from within other custom matchers" do
@@ -35,7 +34,7 @@ RSpec.describe "a matcher defined using the matcher DSL" do
     expect { matcher_b.i_dont_exist }.to raise_error(NameError)
   end
 
-  if RSpec::Support::RubyFeatures.required_kw_args_supported?
+  if RUBY_VERSION.to_f >= 2.7
     it "doesn't warn when method available in the scope of the example uses keyword args" do
       RSpec::Matchers.define(:matcher_kw) {}
       expect(matcher_kw.kw(a: 1)).to eq(1)
