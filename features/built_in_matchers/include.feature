@@ -23,6 +23,8 @@ Feature: `include` matcher
     expect(:a => 1, :b => 2).to include(:a, :b)
     expect(:a => 1, :b => 2).to include(:a => 1)
     expect(:a => 1, :b => 2).to include(:b => 2, :a => 1)
+    expect(:a => 1, :b => 2).to include(match(/b/) => 2)
+    expect(:a => 1, :b => 2).to include(match(/b/) => be_even)
     expect(:a => 1, :b => 2).not_to include(:c)
     expect(:a => 1, :b => 2).not_to include(:a => 2)
     expect(:a => 1, :b => 2).not_to include(:c => 3)
@@ -141,4 +143,3 @@ Feature: `include` matcher
       | expected {:a => 7, :b => 5} not to include :a                 |
       | expected {:a => 7, :b => 5} to include {:d => 3}              |
       | expected {:a => 7, :b => 5} not to include {:a => 7}          |
-
