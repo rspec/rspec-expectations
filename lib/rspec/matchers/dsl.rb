@@ -522,13 +522,8 @@ module RSpec
         # Rails' test helper methods, but it's also a useful
         # feature in its own right.
         if RUBY_VERSION.to_f >= 2.7
-          def method_missing(method, *args, **kwargs, &block)
-            if @matcher_execution_context.respond_to?(method)
-              @matcher_execution_context.__send__ method, *args, **kwargs, &block
-            else
-              super(method, *args, *kwargs, &block)
-            end
-          end
+          require_relative "dsl27"
+          include DSL27
         else
           def method_missing(method, *args, &block)
             if @matcher_execution_context.respond_to?(method)
