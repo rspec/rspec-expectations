@@ -522,7 +522,7 @@ module RSpec
         # Rails' test helper methods, but it's also a useful
         # feature in its own right.
         if RUBY_VERSION.to_f >= 2.7
-          require_relative "dsl27"
+          require "rspec/matchers/dsl27"
           include DSL27
         else
           def method_missing(method, *args, &block)

@@ -8,7 +8,7 @@ RSpec.describe "a matcher defined using the matcher DSL" do
   end
 
   if RUBY_VERSION.to_f >= 2.7
-    require_relative "dsl27_syntax"
+    require "rspec/matchers/dsl27_syntax"
     include RSpec::Matchers::DSL27Syntax
   end
 
