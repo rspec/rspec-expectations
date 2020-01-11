@@ -7,6 +7,12 @@ RSpec.describe "a matcher defined using the matcher DSL" do
     "ok"
   end
 
+  if RSpec::Support::RubyFeatures.required_kw_args_supported?
+    def kw(a:)
+      a
+    end
+  end
+
   it "supports calling custom matchers from within other custom matchers" do
     RSpec::Matchers.define :be_ok do
       match { |actual| actual == ok }
@@ -27,6 +33,13 @@ RSpec.describe "a matcher defined using the matcher DSL" do
   it "raises when method is missing from local scope as well as matcher" do
     RSpec::Matchers.define(:matcher_b) {}
     expect { matcher_b.i_dont_exist }.to raise_error(NameError)
+  end
+
+  if RSpec::Support::RubyFeatures.required_kw_args_supported?
+    it "doesn't warn when method available in the scope of the example uses keyword args" do
+      RSpec::Matchers.define(:matcher_kw) {}
+      expect(matcher_kw.kw(a: 1)).to eq(1)
+    end
   end
 
   it "clears user instance variables between invocations" do

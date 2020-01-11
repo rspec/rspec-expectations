@@ -521,11 +521,21 @@ module RSpec
         # rspec-rails so that it can define matchers that wrap
         # Rails' test helper methods, but it's also a useful
         # feature in its own right.
-        def method_missing(method, *args, &block)
-          if @matcher_execution_context.respond_to?(method)
-            @matcher_execution_context.__send__ method, *args, &block
-          else
-            super(method, *args, &block)
+        if RUBY_VERSION.to_f >= 2.7
+          def method_missing(method, *args, **kwargs, &block)
+            if @matcher_execution_context.respond_to?(method)
+              @matcher_execution_context.__send__ method, *args, **kwargs, &block
+            else
+              super(method, *args, *kwargs, &block)
+            end
+          end
+        else
+          def method_missing(method, *args, &block)
+            if @matcher_execution_context.respond_to?(method)
+              @matcher_execution_context.__send__ method, *args, &block
+            else
+              super(method, *args, &block)
+            end
           end
         end
       end
