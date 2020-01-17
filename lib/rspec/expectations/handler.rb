@@ -44,10 +44,16 @@ module RSpec
 
     # @private
     class PositiveExpectationHandler
-      def self.handle_matcher(actual, initial_matcher, message=nil, &block)
-        ExpectationHelper.with_matcher(self, initial_matcher, message) do |matcher|
+      def self.handle_matcher(actual, initial_matcher, custom_message=nil, &block)
+        ExpectationHelper.with_matcher(self, initial_matcher, custom_message) do |matcher|
           return ::RSpec::Matchers::BuiltIn::PositiveOperatorMatcher.new(actual) unless initial_matcher
-          matcher.matches?(actual, &block) || ExpectationHelper.handle_failure(matcher, message, :failure_message)
+
+          is_a_match = matcher.matches?(actual, &block)
+          if custom_message && is_a_match.respond_to?(:error_generator)
+            is_a_match.error_generator.opts[:message] = custom_message
+          end
+
+          is_a_match || ExpectationHelper.handle_failure(matcher, custom_message, :failure_message)
         end
       end
 
@@ -66,10 +72,16 @@ module RSpec
 
     # @private
     class NegativeExpectationHandler
-      def self.handle_matcher(actual, initial_matcher, message=nil, &block)
-        ExpectationHelper.with_matcher(self, initial_matcher, message) do |matcher|
+      def self.handle_matcher(actual, initial_matcher, custom_message=nil, &block)
+        ExpectationHelper.with_matcher(self, initial_matcher, custom_message) do |matcher|
           return ::RSpec::Matchers::BuiltIn::NegativeOperatorMatcher.new(actual) unless initial_matcher
-          does_not_match?(matcher, actual, &block) || ExpectationHelper.handle_failure(matcher, message, :failure_message_when_negated)
+
+          is_not_a_match = does_not_match?(matcher, actual, &block)
+          if custom_message && is_not_a_match.respond_to?(:error_generator)
+            is_not_a_match.error_generator.opts[:message] = custom_message
+          end
+
+          is_not_a_match || ExpectationHelper.handle_failure(matcher, custom_message, :failure_message_when_negated)
         end
       end
 
