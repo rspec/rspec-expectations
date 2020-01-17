@@ -130,6 +130,19 @@ module RSpec
 
           RSpec::Expectations::PositiveExpectationHandler.handle_matcher(actual, matcher, failure_message)
         end
+
+        it "add custom failure message to mock matcher if there is one" do
+          error_generator = double(opts: { :message => {} })
+          verifying_message_expectation = double(error_generator: error_generator)
+          matcher = double("matcher", :failure_message => "message", :matches? => verifying_message_expectation)
+
+          actual = Object.new
+
+          handle_matcher_answer = RSpec::Expectations::PositiveExpectationHandler
+                                    .handle_matcher(actual, matcher, "custom")
+
+          expect(handle_matcher_answer.error_generator.opts).to eq({ :message => "custom" })
+        end
       end
     end
 
@@ -208,6 +221,23 @@ module RSpec
           expect(::RSpec::Expectations).to receive(:fail_with).with("custom")
 
           RSpec::Expectations::NegativeExpectationHandler.handle_matcher(actual, matcher, failure_message)
+        end
+
+        it "add custom failure message to mock matcher if there is one" do
+          error_generator = double(opts: { :message => {} })
+          verifying_message_expectation = double(error_generator: error_generator)
+          matcher = double(
+            "matcher",
+            :failure_message_when_negated => "custom",
+            :does_not_match? => verifying_message_expectation
+          )
+
+          actual = Object.new
+
+          handle_matcher_answer = RSpec::Expectations::NegativeExpectationHandler
+            .handle_matcher(actual, matcher, "custom")
+
+          expect(handle_matcher_answer.error_generator.opts).to eq({ :message => "custom" })
         end
       end
     end
