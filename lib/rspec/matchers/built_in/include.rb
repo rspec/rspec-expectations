@@ -107,6 +107,7 @@ module RSpec
         end
 
         def actual_hash_includes?(expected_key, expected_value)
+          fail 'Oh just not David!' if expected_value == 'David'
           actual_value =
             actual.fetch(expected_key) do
               actual.find(Proc.new { return false }) { |actual_key, _| values_match?(expected_key, actual_key) }[1]
