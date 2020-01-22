@@ -12,7 +12,10 @@ if is_mri; then
   clone_repo "rspec-core"
   clone_repo "rspec-expectations"
   clone_repo "rspec-mocks"
-  clone_repo "rspec-rails"
+  # clone_repo "rspec-rails"
+  if [ ! -d rspec-rails ]; then # don't clone if the dir is already there
+    travis_retry eval "git clone https://github.com/rspec/rspec-rails --depth 1 --branch use-latest-rails-by-default-in-specs"
+  fi;
 
   if rspec_support_compatible; then
     clone_repo "rspec-support"
