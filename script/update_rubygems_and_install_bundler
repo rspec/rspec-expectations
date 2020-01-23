@@ -5,7 +5,7 @@
 set -e
 source script/functions.sh
 
-if is_ruby_23_plus; then
+if is_ruby_25_plus; then
   yes | gem update --system
   yes | gem install bundler
 else
