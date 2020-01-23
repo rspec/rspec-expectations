@@ -69,8 +69,8 @@ function is_mri_27 {
   fi
 }
 
-function is_ruby_23_plus {
-  if ruby -e "exit(RUBY_VERSION.to_f >= 2.3)"; then
+function is_ruby_25_plus {
+  if ruby -e "exit(RUBY_VERSION.to_f >= 2.5)"; then
     return 0
   else
     return 1
@@ -78,7 +78,7 @@ function is_ruby_23_plus {
 }
 
 function rspec_rails_compatible {
-  if is_ruby_23_plus; then
+  if is_ruby_25_plus; then
     return 0
   else
     return 1
