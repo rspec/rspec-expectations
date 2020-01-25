@@ -48,12 +48,12 @@ module RSpec
         ExpectationHelper.with_matcher(self, initial_matcher, custom_message) do |matcher|
           return ::RSpec::Matchers::BuiltIn::PositiveOperatorMatcher.new(actual) unless initial_matcher
 
-          is_a_match = matcher.matches?(actual, &block)
-          if custom_message && is_a_match.respond_to?(:error_generator)
-            is_a_match.error_generator.opts[:message] = custom_message
+          match_result = matcher.matches?(actual, &block)
+          if custom_message && match_result.respond_to?(:error_generator)
+            match_result.error_generator.opts[:message] = custom_message
           end
 
-          is_a_match || ExpectationHelper.handle_failure(matcher, custom_message, :failure_message)
+          match_result || ExpectationHelper.handle_failure(matcher, custom_message, :failure_message)
         end
       end
 
@@ -76,12 +76,12 @@ module RSpec
         ExpectationHelper.with_matcher(self, initial_matcher, custom_message) do |matcher|
           return ::RSpec::Matchers::BuiltIn::NegativeOperatorMatcher.new(actual) unless initial_matcher
 
-          is_not_a_match = does_not_match?(matcher, actual, &block)
-          if custom_message && is_not_a_match.respond_to?(:error_generator)
-            is_not_a_match.error_generator.opts[:message] = custom_message
+          negated_match_result = does_not_match?(matcher, actual, &block)
+          if custom_message && negated_match_result.respond_to?(:error_generator)
+            negated_match_result.error_generator.opts[:message] = custom_message
           end
 
-          is_not_a_match || ExpectationHelper.handle_failure(matcher, custom_message, :failure_message_when_negated)
+          negated_match_result || ExpectationHelper.handle_failure(matcher, custom_message, :failure_message_when_negated)
         end
       end
 
