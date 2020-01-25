@@ -132,8 +132,11 @@ module RSpec
         end
 
         it "add custom failure message to mock matcher if there is one" do
-          error_generator = double(:opts => { :message => {} })
-          verifying_message_expectation = double(:error_generator => error_generator)
+          error_generator = instance_double("RSpec::Mocks::ErrorGenerator", :opts => { :message => {} })
+          verifying_message_expectation = instance_double(
+            "RSpec::Mocks::VerifyingMessageExpectation",
+            :error_generator => error_generator
+          )
           matcher = double("matcher", :failure_message => "message", :matches? => verifying_message_expectation)
 
           actual = Object.new
@@ -223,8 +226,11 @@ module RSpec
         end
 
         it "add custom failure message to mock matcher if there is one" do
-          error_generator = double(:opts => { :message => {} })
-          verifying_message_expectation = double(:error_generator => error_generator)
+          error_generator = instance_double("RSpec::Mocks::ErrorGenerator", :opts => { :message => {} })
+          verifying_message_expectation = instance_double(
+            "RSpec::Mocks::VerifyingMessageExpectation",
+            :error_generator => error_generator
+          )
           matcher = double(
             "matcher",
             :failure_message_when_negated => "custom",
