@@ -141,9 +141,9 @@ module RSpec
 
           actual = Object.new
 
-          handle_matcher_answer = RSpec::Expectations::PositiveExpectationHandler.handle_matcher(actual, matcher, "custom")
+          handle_matcher_result = RSpec::Expectations::PositiveExpectationHandler.handle_matcher(actual, matcher, "custom")
 
-          expect(handle_matcher_answer.error_generator.opts).to eq({ :message => "custom" })
+          expect(handle_matcher_result.error_generator.opts).to eq({ :message => "custom" })
         end
       end
     end
@@ -239,9 +239,9 @@ module RSpec
 
           actual = Object.new
 
-          handle_matcher_answer = RSpec::Expectations::NegativeExpectationHandler.handle_matcher(actual, matcher, "custom")
+          handle_matcher_result = RSpec::Expectations::NegativeExpectationHandler.handle_matcher(actual, matcher, "custom")
 
-          expect(handle_matcher_answer.error_generator.opts).to eq({ :message => "custom" })
+          expect(handle_matcher_result.error_generator.opts).to eq({ :message => "custom" })
         end
       end
     end
