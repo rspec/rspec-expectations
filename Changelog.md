@@ -5,6 +5,7 @@ Bug Fixes:
 
 * The `change` matcher now recognises an object has changed when its instance attributes
   have changed. (Jon Rowe, #1132)
+* Mocks expectations can now set a custom failure message. (Benoit Tigeot, #1156)
 
 Enhancements:
 
