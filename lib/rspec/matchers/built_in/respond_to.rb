@@ -109,7 +109,7 @@ module RSpec
           end
         end
 
-        def matches_arity?(actual, name)
+        def setup_method_signature_expectation
           expectation = Support::MethodSignatureExpectation.new
 
           if @expected_arity.is_a?(Range)
@@ -123,10 +123,24 @@ module RSpec
           expectation.expect_unlimited_arguments = @unlimited_arguments
           expectation.expect_arbitrary_keywords  = @arbitrary_keywords
 
+          expectation
+        end
+
+        def matches_arity?(actual, name)
+          expectation = setup_method_signature_expectation
+
           return true if expectation.empty?
 
-          Support::StrictSignatureVerifier.new(method_signature_for(actual, name)).
-            with_expectation(expectation).valid?
+          begin
+            Support::StrictSignatureVerifier.new(method_signature_for(actual, name)).
+              with_expectation(expectation).valid?
+          rescue NameError
+            raise ArgumentError, "The #{matcher_name} matcher requires that " \
+                                 "the actual object define the method(s) in " \
+                                 "order to check arity, but the method " \
+                                 "`#{name}` is not defined. Remove the arity " \
+                                 "check or define the method to continue."
+          end
         end
 
         def method_signature_for(actual, name)

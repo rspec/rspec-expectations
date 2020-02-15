@@ -7,6 +7,12 @@ RSpec.describe "expect(...).to respond_to(:sym)" do
     expect(Object.new).to respond_to(:methods)
   end
 
+  it "passes if target responds to :sym but does not implement method" do
+    # This simulates a behaviour of Rails, see #1162.
+    klass = Class.new { def respond_to?(_); true; end }
+    expect(klass.new).to respond_to(:my_method)
+  end
+
   it "fails if target does not respond to :sym" do
     expect {
       expect("this string").to respond_to(:some_method)
@@ -81,6 +87,14 @@ RSpec.describe "expect(...).to respond_to(:sym).with(1).argument" do
     def obj.method; end
     def obj.other_method(arg); end
     expect(obj).to respond_to(:other_method).with(1).argument
+  end
+
+  it "warns that the subject does not have the implementation required when method does not exist" do
+    # This simulates a behaviour of Rails, see #1162.
+    klass = Class.new { def respond_to?(_); true; end }
+    expect {
+      expect(klass.new).to respond_to(:my_method).with(0).arguments
+    }.to raise_error(ArgumentError)
   end
 end
 
