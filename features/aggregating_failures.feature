@@ -32,19 +32,25 @@ Feature: Aggregating Failures
     Then it should fail with:
       """
       Got 3 failures from failure aggregation block "testing response":
-
+      
         1) expected: 200
                 got: 404
-
+      
            (compared using ==)
-
+      
+           spec/aggregated_failure_spec.rb:9:in `block in <main>'
+      
         2) expected: "application/json"
                 got: "text/plain"
-
+      
            (compared using ==)
-
-        3) expected: "{\"message\":\"Success\"}"
+      
+           spec/aggregated_failure_spec.rb:10:in `block in <main>'
+      
+        3) expected: "{"message":"Success"}"
                 got: "Not Found"
-
+      
            (compared using ==)
+      
+           spec/aggregated_failure_spec.rb:11:in `block in <main>'
       """
