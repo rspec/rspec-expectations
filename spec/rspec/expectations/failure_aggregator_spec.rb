@@ -253,7 +253,7 @@ module RSpec::Expectations
     end
 
     describe "message formatting" do
-      it "enumerates the failures with an index label and blank line in between" do
+      it "enumerates the failures with an index label and the path of each failure with a blank line in between" do
         expect {
           aggregate_failures do
             expect(1).to be_even
@@ -262,10 +262,13 @@ module RSpec::Expectations
           end
         }.to fail_including { dedent <<-EOS }
           |  1) expected `1.even?` to return true, got false
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:259:in `block (5 levels) in <module:Expectations>'
           |
           |  2) expected `2.odd?` to return true, got false
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:260:in `block (5 levels) in <module:Expectations>'
           |
           |  3) expected `3.even?` to return true, got false
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:261:in `block (5 levels) in <module:Expectations>'
         EOS
       end
 
@@ -308,8 +311,10 @@ module RSpec::Expectations
             |Got 1 failure and 1 other error from failure aggregation block:
             |
             |  1) expected `1.even?` to return true, got false
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:307:in `block (6 levels) in <module:Expectations>'
             |
             |  2) RuntimeError: boom
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:308:in `block (6 levels) in <module:Expectations>'
           EOS
         end
       end
@@ -332,10 +337,12 @@ module RSpec::Expectations
             |  1) line 1
             |     a
             |     line 3
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:333:in `block (6 levels) in <module:Expectations>'
             |
             |  2) line 1
             |     b
             |     line 3
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:334:in `block (6 levels) in <module:Expectations>'
           EOS
         end
 
@@ -350,10 +357,12 @@ module RSpec::Expectations
             |  9)  line 1
             |      9
             |      line 3
+            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:353:in `block (7 levels) in <module:Expectations>'
             |
             |  10) line 1
             |      10
             |      line 3
+            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:353:in `block (7 levels) in <module:Expectations>'
           EOS
         end
       end
@@ -378,15 +387,21 @@ module RSpec::Expectations
             |
             |     (compared using ==)
             |
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:380:in `block (6 levels) in <module:Expectations>'
+            |
             |  2) expected: 3
             |          got: 1
             |
             |     (compared using ==)
             |
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:381:in `block (6 levels) in <module:Expectations>'
+            |
             |  3) expected: 4
             |          got: 1
             |
             |     (compared using ==)
+            |
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:382:in `block (6 levels) in <module:Expectations>'
           EOS
         end
       end
