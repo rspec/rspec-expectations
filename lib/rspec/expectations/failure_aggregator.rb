@@ -156,11 +156,13 @@ module RSpec
       end
 
       def exclusion_patterns
-        %w[/lib\d*/ruby/ bin/ exe/rspec /lib/bundler/ /exe/bundle:].map! { |s| Regexp.new(s.gsub('/', File::SEPARATOR)) }
+        patterns = %w[/lib\d*/ruby/ bin/ exe/rspec /lib/bundler/ /exe/bundle:]
+        patterns << "org/jruby/" if RUBY_PLATFORM == 'java'
+        patterns.map! { |s| Regexp.new(s.gsub('/', File::SEPARATOR)) }
       end
 
       def format_backtrace(backtrace)
-        backtrace&.map { |l| backtrace_line(l) }&.compact&.tap { |filtered| filtered.concat backtrace if filtered.empty? }
+        backtrace.map { |l| backtrace_line(l) }.compact.tap { |filtered| filtered.concat backtrace if filtered.empty? }
       end
 
       def backtrace_line(line)
