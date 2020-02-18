@@ -11,6 +11,7 @@ module RSpec
           @names = names
           @expected_arity = nil
           @expected_keywords = []
+          @ignoring_method_signature_failure = false
           @unlimited_arguments = nil
           @arbitrary_keywords = nil
         end
@@ -100,6 +101,12 @@ module RSpec
           "respond to #{pp_names}#{with_arity}"
         end
 
+        # @api private
+        # Used by other matchers to suppress a check
+        def ignoring_method_signature_failure!
+          @ignoring_method_signature_failure = true
+        end
+
       private
 
         def find_failing_method_names(actual, filter_method)
@@ -135,6 +142,7 @@ module RSpec
             Support::StrictSignatureVerifier.new(method_signature_for(actual, name)).
               with_expectation(expectation).valid?
           rescue NameError
+            return true if @ignoring_method_signature_failure
             raise ArgumentError, "The #{matcher_name} matcher requires that " \
                                  "the actual object define the method(s) in " \
                                  "order to check arity, but the method " \
