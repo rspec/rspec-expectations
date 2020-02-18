@@ -1,5 +1,7 @@
 RSpec::Support.require_rspec_support "method_signature_verifier"
 
+# TODO: Refactor this file to be under our class length
+# rubocop:disable ClassLength
 module RSpec
   module Matchers
     module BuiltIn
@@ -11,6 +13,7 @@ module RSpec
           @names = names
           @expected_arity = nil
           @expected_keywords = []
+          @ignoring_method_signature_failure = false
           @unlimited_arguments = nil
           @arbitrary_keywords = nil
         end
@@ -100,6 +103,12 @@ module RSpec
           "respond to #{pp_names}#{with_arity}"
         end
 
+        # @api private
+        # Used by other matchers to suppress a check
+        def ignoring_method_signature_failure!
+          @ignoring_method_signature_failure = true
+        end
+
       private
 
         def find_failing_method_names(actual, filter_method)
@@ -109,7 +118,7 @@ module RSpec
           end
         end
 
-        def matches_arity?(actual, name)
+        def setup_method_signature_expectation
           expectation = Support::MethodSignatureExpectation.new
 
           if @expected_arity.is_a?(Range)
@@ -123,10 +132,25 @@ module RSpec
           expectation.expect_unlimited_arguments = @unlimited_arguments
           expectation.expect_arbitrary_keywords  = @arbitrary_keywords
 
+          expectation
+        end
+
+        def matches_arity?(actual, name)
+          expectation = setup_method_signature_expectation
+
           return true if expectation.empty?
 
-          Support::StrictSignatureVerifier.new(method_signature_for(actual, name)).
-            with_expectation(expectation).valid?
+          begin
+            Support::StrictSignatureVerifier.new(method_signature_for(actual, name)).
+              with_expectation(expectation).valid?
+          rescue NameError
+            return true if @ignoring_method_signature_failure
+            raise ArgumentError, "The #{matcher_name} matcher requires that " \
+                                 "the actual object define the method(s) in " \
+                                 "order to check arity, but the method " \
+                                 "`#{name}` is not defined. Remove the arity " \
+                                 "check or define the method to continue."
+          end
         end
 
         def method_signature_for(actual, name)
@@ -172,3 +196,4 @@ module RSpec
     end
   end
 end
+# rubocop:enable ClassLength
