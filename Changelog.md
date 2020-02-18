@@ -1,5 +1,13 @@
-### 3.9.0 / 2019-10-02
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.5...v3.9.0)
+### Development
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.0...master)
+
+Bug Fixes:
+
+* Issue an improved warning when using `respond_to(...).with(n).arguments` and ignore
+  the warning when using with `have_attributes(...)`. (Jon Rowe, #1164)
+
+### 3.9.0 / 2019-10-08
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.6...v3.9.0)
 
 Enhancements:
 
