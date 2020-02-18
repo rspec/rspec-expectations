@@ -8,6 +8,21 @@ RSpec.describe "#have_attributes matcher" do
     end
   end
 
+  # This simulates a behaviour of Rails, see #1162.
+  class DynamicAttributes
+    def initialize(attributes)
+      @attributes = attributes
+    end
+
+    def method_missing(name, *args, &block)
+      @attributes[name] || super
+    end
+
+    def respond_to?(method_name)
+      @attributes.keys.include?(method_name) || super
+    end
+  end
+
   let(:wrong_name) { "Wrong Name" }
   let(:wrong_age) { 11 }
 
@@ -28,6 +43,10 @@ RSpec.describe "#have_attributes matcher" do
 
     it "passes if target has the provided attributes" do
       expect(person).to have_attributes(:name => correct_name)
+    end
+
+    it "passes if target responds to :sym but does not implement method" do
+      expect(DynamicAttributes.new(:name => "value")).to have_attributes(:name => "value")
     end
 
     it "fails if target does not have any of the expected attributes" do
