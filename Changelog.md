@@ -7,6 +7,8 @@ Bug Fixes:
   have changed. (Jon Rowe, #1132)
 * Mocks expectations can now set a custom failure message.
   (Benoit Tigeot and Nicolas Zermati, #1156)
+* Issue an improved warning when using `respond_to(...).with(n).arguments` and ignore
+  the warning when using with `have_attributes(...)`. (Jon Rowe, #1164)
 
 Enhancements:
 
