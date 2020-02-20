@@ -5,8 +5,6 @@ Bug Fixes:
 
 * The `change` matcher now recognises an object has changed when its instance attributes
   have changed. (Jon Rowe, #1132)
-* Mocks expectations can now set a custom failure message.
-  (Benoit Tigeot and Nicolas Zermati, #1156)
 * Issue an improved warning when using `respond_to(...).with(n).arguments` and ignore
   the warning when using with `have_attributes(...)`. (Jon Rowe, #1164)
 
@@ -14,6 +12,8 @@ Enhancements:
 
 * Add an explicit warning when `nil` is passed to `raise_error`. (Phil Pirozhkov, #1143)
 * Improve `include` matcher's composability. (Phil Pirozhkov, #1155)
+* Mocks expectations can now set a custom failure message.
+  (Benoit Tigeot and Nicolas Zermati, #1156)
 
 ### 3.9.0 / 2019-10-08
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.6...v3.9.0)
