@@ -262,13 +262,13 @@ module RSpec::Expectations
           end
         }.to fail_including { dedent <<-EOS }
           |  1) expected `1.even?` to return true, got false
-          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 6}#{":in `block (5 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 6}#{exception_complement(5)}
           |
           |  2) expected `2.odd?` to return true, got false
-          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 8}#{":in `block (5 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 8}#{exception_complement(5)}
           |
           |  3) expected `3.even?` to return true, got false
-          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 10}#{":in `block (5 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 10}#{exception_complement(5)}
         EOS
       end
 
@@ -311,10 +311,10 @@ module RSpec::Expectations
             |Got 1 failure and 1 other error from failure aggregation block:
             |
             |  1) expected `1.even?` to return true, got false
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:307:in `block (6 levels) in <module:Expectations>'
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 7}#{exception_complement(6)}
             |
             |  2) RuntimeError: boom
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:308:in `block (6 levels) in <module:Expectations>'
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 9}#{exception_complement(6)}
           EOS
         end
       end
@@ -337,12 +337,12 @@ module RSpec::Expectations
             |  1) line 1
             |     a
             |     line 3
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 7}#{":in `block (6 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 7}#{exception_complement(6)}
             |
             |  2) line 1
             |     b
             |     line 3
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 11}#{":in `block (6 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 11}#{exception_complement(6)}
           EOS
         end
 
@@ -357,12 +357,12 @@ module RSpec::Expectations
             |  9)  line 1
             |      9
             |      line 3
-            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 7}#{":in `block (7 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
+            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 7}#{exception_complement(7)}
             |
             |  10) line 1
             |      10
             |      line 3
-            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 12}#{":in `block (7 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
+            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 12}#{exception_complement(7)}
           EOS
         end
       end
@@ -387,21 +387,21 @@ module RSpec::Expectations
             |
             |     (compared using ==)
             |
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 10}#{":in `block (6 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 10}#{exception_complement(6)}
             |
             |  2) expected: 3
             |          got: 1
             |
             |     (compared using ==)
             |
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 16}#{":in `block (6 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 16}#{exception_complement(6)}
             |
             |  3) expected: 4
             |          got: 1
             |
             |     (compared using ==)
             |
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 22}#{":in `block (6 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 22}#{exception_complement(6)}
           EOS
         end
       end
@@ -414,6 +414,18 @@ module RSpec::Expectations
       # to not include the message for some reason.
       def fail_including
         fail { |e| expect(e.message).to include(yield) }
+      end
+
+      # Each Ruby version return a different exception complement.
+      # This method gets the current version and return the
+      # right complement.
+      def exception_complement(block_levels)
+        case RUBY_VERSION
+        when '1.8.7', 'ree' then ''
+        when 'jruby-9.1.7.0' then ":in `block in Expectations'"
+        when 'jruby-1.7', 'rbx-3' then ":in `Expectations'"
+        else ":in `block (#{block_levels} levels) in <module:Expectations>'"
+        end
       end
     end
   end
