@@ -93,7 +93,7 @@ module RSpec
         end
 
         def respond_to_matcher
-          @respond_to_matcher ||= RespondTo.new(*expected.keys).with(0).arguments
+          @respond_to_matcher ||= RespondTo.new(*expected.keys).with(0).arguments.tap { |m| m.ignoring_method_signature_failure! }
         end
 
         def respond_to_failure_message_or
