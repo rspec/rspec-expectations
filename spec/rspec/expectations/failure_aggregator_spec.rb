@@ -262,13 +262,13 @@ module RSpec::Expectations
           end
         }.to fail_including { dedent <<-EOS }
           |  1) expected `1.even?` to return true, got false
-          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:259:in `block (5 levels) in <module:Expectations>'
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 6}#{":in `block (5 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
           |
           |  2) expected `2.odd?` to return true, got false
-          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:260:in `block (5 levels) in <module:Expectations>'
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 8}#{":in `block (5 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
           |
           |  3) expected `3.even?` to return true, got false
-          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:261:in `block (5 levels) in <module:Expectations>'
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 10}#{":in `block (5 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
         EOS
       end
 
@@ -337,12 +337,12 @@ module RSpec::Expectations
             |  1) line 1
             |     a
             |     line 3
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:333:in `block (6 levels) in <module:Expectations>'
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 7}#{":in `block (6 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
             |
             |  2) line 1
             |     b
             |     line 3
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:334:in `block (6 levels) in <module:Expectations>'
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 11}#{":in `block (6 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
           EOS
         end
 
@@ -357,12 +357,12 @@ module RSpec::Expectations
             |  9)  line 1
             |      9
             |      line 3
-            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:353:in `block (7 levels) in <module:Expectations>'
+            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 7}#{":in `block (7 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
             |
             |  10) line 1
             |      10
             |      line 3
-            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:353:in `block (7 levels) in <module:Expectations>'
+            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 12}#{":in `block (7 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
           EOS
         end
       end
@@ -387,21 +387,21 @@ module RSpec::Expectations
             |
             |     (compared using ==)
             |
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:380:in `block (6 levels) in <module:Expectations>'
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 10}#{":in `block (6 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
             |
             |  2) expected: 3
             |          got: 1
             |
             |     (compared using ==)
             |
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:381:in `block (6 levels) in <module:Expectations>'
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 16}#{":in `block (6 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
             |
             |  3) expected: 4
             |          got: 1
             |
             |     (compared using ==)
             |
-            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:382:in `block (6 levels) in <module:Expectations>'
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 22}#{":in `block (6 levels) in <module:Expectations>'" if RUBY_VERSION > '1.8.7'}
           EOS
         end
       end
