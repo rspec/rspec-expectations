@@ -420,12 +420,12 @@ module RSpec::Expectations
       # This method gets the current version and return the
       # right complement.
       def exception_complement(block_levels)
-        return '' unless RUBY_ENGINE
-
-        if RUBY_VERSION == '1.8.7' then ''
-        elsif RUBY_VERSION > '2.0.0' && RUBY_ENGINE == 'jruby' then ":in `block in Expectations'"
-        elsif RUBY_ENGINE == 'jruby' then ":in `Expectations'"
-        else ":in `block (#{block_levels} levels) in <module:Expectations>'"
+        engine = RUBY_ENGINE || ''
+        version = RUBY_VERSION.gsub('ruby-', '') || '0'
+        if engine == 'ruby'
+          version > '1.8.7' ? ":in `block (#{block_levels} levels) in <module:Expectations>'" : ''
+        else
+          version > '2.0.0' ? ":in `block in Expectations'" : ":in `Expectations'"
         end
       end
     end
