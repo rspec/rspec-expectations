@@ -423,7 +423,7 @@ module RSpec::Expectations
         case RUBY_VERSION
         when '1.8.7', 'ree' then ''
         when 'jruby-9.1.7.0' then ":in `block in Expectations'"
-        when 'jruby-1.7', 'rbx-3' then ":in `Expectations'"
+        when 'jruby-1.7.27', 'rbx-3' then ":in `Expectations'"
         else ":in `block (#{block_levels} levels) in <module:Expectations>'"
         end
       end
