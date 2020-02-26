@@ -24,7 +24,7 @@ Feature: Aggregating Failures
           expect(response.body).to eq('{"message":"Success"}')
         end
       rescue RSpec::Expectations::MultipleExpectationsNotMetError => e
-        puts e.message.gsub(":in `block in <main>'", '')
+        puts e.message.gsub(":in `block in <main>'", '').gsub(":in `(root)'", '').gsub(":in `block in (root)'", '')
         exit(1)
       end
       """
