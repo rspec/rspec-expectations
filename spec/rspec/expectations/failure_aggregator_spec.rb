@@ -423,7 +423,7 @@ module RSpec::Expectations
         if RUBY_ENGINE == 'ruby'
           RUBY_VERSION > '1.8.7' ? ":in `block (#{block_levels} levels) in <module:Expectations>'" : ''
         else
-          RUBY_VERSION > '1.8.7' ? ":in `block in Expectations'" : ":in `Expectations'"
+          RUBY_VERSION > '2.0.0' ? ":in `block in Expectations'" : ":in `Expectations'"
         end
       end
     end
