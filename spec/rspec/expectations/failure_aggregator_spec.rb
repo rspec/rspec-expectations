@@ -253,7 +253,7 @@ module RSpec::Expectations
     end
 
     describe "message formatting" do
-      it "enumerates the failures with an index label and the path of each failure with a blank line in between" do
+      it "enumerates the failures with an index label, the path of each failure and a blank line in between" do
         expect {
           aggregate_failures do
             expect(1).to be_even
@@ -419,12 +419,21 @@ module RSpec::Expectations
       # Each Ruby version return a different exception complement.
       # This method gets the current version and return the
       # right complement.
-      def exception_complement(block_levels)
-        version = RUBY_VERSION.gsub('ruby-', '') || '0'
-        if RSpec::Support::Ruby.mri?
-          version > '1.8.7' ? ":in `block (#{block_levels} levels) in <module:Expectations>'" : ''
-        else
-          version > '2.0.0' ? ":in `block in Expectations'" : ":in `Expectations'"
+      if RSpec::Support::Ruby.mri? && RUBY_VERSION > "1.8.7"
+        def exception_complement(block_levels)
+          ":in `block (#{block_levels} levels) in <module:Expectations>'"
+        end
+      elsif RSpec::Support::Ruby.mri?
+        def exception_complement(block_levels)
+          ""
+        end
+      elsif RUBY_VERSION > "2.0.0"
+        def exception_complement(block_levels)
+          ":in `block in Expectations'"
+        end
+      else
+        def exception_complement(block_levels)
+          ":in `Expectations'"
         end
       end
     end
