@@ -24,7 +24,7 @@ Feature: Aggregating Failures
           expect(response.body).to eq('{"message":"Success"}')
         end
       rescue RSpec::Expectations::MultipleExpectationsNotMetError => e
-        puts e.message
+        puts e.message.gsub(/(:in).+/, '')
         exit(1)
       end
       """
@@ -38,13 +38,19 @@ Feature: Aggregating Failures
 
            (compared using ==)
 
+           spec/aggregated_failure_spec.rb:9
+
         2) expected: "application/json"
                 got: "text/plain"
 
            (compared using ==)
 
-        3) expected: "{\"message\":\"Success\"}"
+           spec/aggregated_failure_spec.rb:10
+
+        3) expected: "{"message":"Success"}"
                 got: "Not Found"
 
            (compared using ==)
+
+           spec/aggregated_failure_spec.rb:11
       """

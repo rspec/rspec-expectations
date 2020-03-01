@@ -150,9 +150,27 @@ module RSpec
       def enumerated(exceptions, index_offset)
         exceptions.each_with_index.map do |exception, index|
           index += index_offset
-          formatted_message = yield exception
+          formatted_message = "#{yield exception}\n#{format_backtrace(exception.backtrace).first}"
           "#{index_label index}#{indented formatted_message, index}"
         end
+      end
+
+      def exclusion_patterns
+        patterns = %w[/lib\d*/ruby/ bin/ exe/rspec /lib/bundler/ /exe/bundle:]
+        patterns << "org/jruby/" if RSpec::Support::Ruby.jruby?
+        patterns.map! { |s| Regexp.new(s.gsub('/', File::SEPARATOR)) }
+      end
+
+      def format_backtrace(backtrace)
+        backtrace.map { |l| backtrace_line(l) }.compact.tap { |filtered| filtered.concat backtrace if filtered.empty? }
+      end
+
+      def backtrace_line(line)
+        return if [Regexp.union(RSpec::CallerFilter::IGNORE_REGEX, *exclusion_patterns)].any? { |p| line =~ p }
+
+        # It changes the current path that is relative to
+        # system root to be relative to the project root.
+        line.sub(/(\A|\s)#{File.expand_path('.')}(#{File::SEPARATOR}|\s|\Z)/, '\\1.\\2'.freeze).sub(/\A([^:]+:\d+)$/, '\\1'.freeze)
       end
 
       def enumerated_failures
