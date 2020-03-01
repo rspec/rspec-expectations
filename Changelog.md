@@ -14,6 +14,7 @@ Enhancements:
 * Improve `include` matcher's composability. (Phil Pirozhkov, #1155)
 * Mocks expectations can now set a custom failure message.
   (Benoit Tigeot and Nicolas Zermati, #1156)
+* `aggregate_failures` now shows the backtrace line for each failure. (Fabricio Bedin, #1163)
 
 ### 3.9.0 / 2019-10-08
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.6...v3.9.0)

@@ -253,7 +253,7 @@ module RSpec::Expectations
     end
 
     describe "message formatting" do
-      it "enumerates the failures with an index label and blank line in between" do
+      it "enumerates the failures with an index label, the path of each failure and a blank line in between" do
         expect {
           aggregate_failures do
             expect(1).to be_even
@@ -262,10 +262,13 @@ module RSpec::Expectations
           end
         }.to fail_including { dedent <<-EOS }
           |  1) expected `1.even?` to return true, got false
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 6}#{exception_complement(5)}
           |
           |  2) expected `2.odd?` to return true, got false
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 8}#{exception_complement(5)}
           |
           |  3) expected `3.even?` to return true, got false
+          |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 10}#{exception_complement(5)}
         EOS
       end
 
@@ -308,8 +311,10 @@ module RSpec::Expectations
             |Got 1 failure and 1 other error from failure aggregation block:
             |
             |  1) expected `1.even?` to return true, got false
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 7}#{exception_complement(6)}
             |
             |  2) RuntimeError: boom
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 9}#{exception_complement(6)}
           EOS
         end
       end
@@ -332,10 +337,12 @@ module RSpec::Expectations
             |  1) line 1
             |     a
             |     line 3
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 7}#{exception_complement(6)}
             |
             |  2) line 1
             |     b
             |     line 3
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 11}#{exception_complement(6)}
           EOS
         end
 
@@ -350,10 +357,12 @@ module RSpec::Expectations
             |  9)  line 1
             |      9
             |      line 3
+            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 7}#{exception_complement(7)}
             |
             |  10) line 1
             |      10
             |      line 3
+            |      ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 12}#{exception_complement(7)}
           EOS
         end
       end
@@ -378,15 +387,21 @@ module RSpec::Expectations
             |
             |     (compared using ==)
             |
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 10}#{exception_complement(6)}
+            |
             |  2) expected: 3
             |          got: 1
             |
             |     (compared using ==)
             |
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 16}#{exception_complement(6)}
+            |
             |  3) expected: 4
             |          got: 1
             |
             |     (compared using ==)
+            |
+            |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 22}#{exception_complement(6)}
           EOS
         end
       end
@@ -399,6 +414,27 @@ module RSpec::Expectations
       # to not include the message for some reason.
       def fail_including
         fail { |e| expect(e.message).to include(yield) }
+      end
+
+      # Each Ruby version return a different exception complement.
+      # This method gets the current version and return the
+      # right complement.
+      if RSpec::Support::Ruby.mri? && RUBY_VERSION > "1.8.7"
+        def exception_complement(block_levels)
+          ":in `block (#{block_levels} levels) in <module:Expectations>'"
+        end
+      elsif RSpec::Support::Ruby.mri?
+        def exception_complement(block_levels)
+          ""
+        end
+      elsif RUBY_VERSION > "2.0.0"
+        def exception_complement(block_levels)
+          ":in `block in Expectations'"
+        end
+      else
+        def exception_complement(block_levels)
+          ":in `Expectations'"
+        end
       end
     end
   end
