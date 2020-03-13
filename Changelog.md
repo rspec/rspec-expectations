@@ -1,5 +1,5 @@
-### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.0...master)
+### 3.9.1 / 2020-03-13
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.0...v3.9.1)
 
 Bug Fixes:
 
