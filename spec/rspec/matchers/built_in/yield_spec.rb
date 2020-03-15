@@ -67,6 +67,12 @@ RSpec.describe "yield_control matcher" do
       expect(val).to be_nil
     end
 
+    it 'raises an error if given an invalid count argument' do
+      expect { yield_control.exactly('2') }.to raise_error(ArgumentError)
+      expect { yield_control.at_least(:trice_with_typo) }.to raise_error(ArgumentError)
+      expect { yield_control.at_most(nil) }.to raise_error(ArgumentError)
+    end
+
     context "with exact count" do
       it 'fails if the block yields wrong number of times' do
         expect {

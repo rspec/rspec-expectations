@@ -183,17 +183,23 @@ module RSpec
 
         def set_expected_yields_count(relativity, n)
           @expectation_type = relativity
-          @expected_yields_count = case n
-                                   when Numeric then n
-                                   when :once then 1
-                                   when :twice then 2
-                                   when :thrice then 3
-                                   end
+          @expected_yields_count = count_constraint_to_number(n)
+        end
+
+        def count_constraint_to_number(n)
+          case n
+          when Numeric then n
+          when :once then 1
+          when :twice then 2
+          when :thrice then 3
+          else
+            raise ArgumentError, "Expected a number, :once, :twice or :thrice," \
+              " but got #{n}"
+          end
         end
 
         def failure_reason
           return ' but was not a block' unless @probe.has_block?
-          return '' unless @expected_yields_count
           " #{human_readable_expectation_type}#{human_readable_count(@expected_yields_count)}" \
           " but yielded #{human_readable_count(@probe.num_yields)}"
         end
