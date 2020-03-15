@@ -58,7 +58,7 @@ RSpec.describe "yield_control matcher" do
     it 'fails if the block does not yield' do
       expect {
         expect { |b| _dont_yield(&b) }.to yield_control
-      }.to fail_with(/expected given block to yield control/)
+      }.to fail_with(/expected given block to yield control but/)
     end
 
     it 'does not return a meaningful value from the block' do
@@ -71,6 +71,16 @@ RSpec.describe "yield_control matcher" do
       expect { yield_control.exactly('2') }.to raise_error(ArgumentError)
       expect { yield_control.at_least(:trice_with_typo) }.to raise_error(ArgumentError)
       expect { yield_control.at_most(nil) }.to raise_error(ArgumentError)
+    end
+
+    it 'is yet to support multiple calls to compatible count constraints' do
+      pending
+      expect { |b| 1.upto(4, &b) }.to yield_control.at_least(3).at_most(4).times
+      expect { |b| 1.upto(2, &b) }.not_to yield_control.at_least(3).at_most(4).times
+    end
+
+    it 'raises an error on multiple incompatible calls to count constraints' do
+      expect { yield_control.once.twice }.to raise_error(/multiple/i)
     end
 
     context "with exact count" do
