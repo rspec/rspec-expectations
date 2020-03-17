@@ -4,7 +4,7 @@ Feature: `include` matcher
 
     ```ruby
     expect("a string").to include("a")
-    expect("a string").to include("str")
+    expect("a string").to include(/a|str/).twice
     expect("a string").to include("str", "g")
     expect("a string").not_to include("foo")
 
@@ -13,6 +13,7 @@ Feature: `include` matcher
     expect([1, 2]).to include(a_kind_of(Integer))
     expect([1, 2]).to include(be_odd.and be < 10 )
     expect([1, 2]).to include(be_odd)
+    expect([1, 2]).to include(be < 10).at_least(2).times
     expect([1, 2]).not_to include(17)
     ```
 
@@ -41,7 +42,7 @@ Feature: `include` matcher
         it { is_expected.to include(1, 3, 7) }
         it { is_expected.to include(a_kind_of(Integer)) }
         it { is_expected.to include(be_odd.and be < 10) }
-        it { is_expected.to include(be_odd) }
+        it { is_expected.to include(be_odd).at_least(:twice) }
         it { is_expected.not_to include(be_even) }
         it { is_expected.not_to include(17) }
         it { is_expected.not_to include(43, 100) }
@@ -49,6 +50,7 @@ Feature: `include` matcher
         # deliberate failures
         it { is_expected.to include(4) }
         it { is_expected.to include(be_even) }
+        it { is_expected.to include(be_odd).at_most(2).times }
         it { is_expected.not_to include(1) }
         it { is_expected.not_to include(3) }
         it { is_expected.not_to include(7) }
@@ -61,14 +63,16 @@ Feature: `include` matcher
       """
     When I run `rspec array_include_matcher_spec.rb`
     Then the output should contain all of these:
-      | 19 examples, 8 failures                       |
-      | expected [1, 3, 7] to include 4               |
-      | expected [1, 3, 7] not to include 1           |
-      | expected [1, 3, 7] not to include 3           |
-      | expected [1, 3, 7] not to include 7           |
-      | expected [1, 3, 7] not to include 1, 3, and 7 |
-      | expected [1, 3, 7] to include 9               |
-      | expected [1, 3, 7] not to include 1           |
+      | 20 examples, 9 failures                                                         |
+      | expected [1, 3, 7] to include 4                                                 |
+      | expected [1, 3, 7] to include (be even)                                         |
+      | expected [1, 3, 7] to include (be odd) at most twice but it is included 3 times |
+      | expected [1, 3, 7] not to include 1                                             |
+      | expected [1, 3, 7] not to include 3                                             |
+      | expected [1, 3, 7] not to include 7                                             |
+      | expected [1, 3, 7] not to include 1, 3, and 7                                   |
+      | expected [1, 3, 7] to include 9                                                 |
+      | expected [1, 3, 7] not to include 1                                             |
 
   Scenario: string usage
     Given a file named "string_include_matcher_spec.rb" with:
@@ -76,23 +80,26 @@ Feature: `include` matcher
       RSpec.describe "a string" do
         it { is_expected.to include("str") }
         it { is_expected.to include("a", "str", "ng") }
+        it { is_expected.to include(/a|str/).twice }
         it { is_expected.not_to include("foo") }
         it { is_expected.not_to include("foo", "bar") }
 
         # deliberate failures
         it { is_expected.to include("foo") }
         it { is_expected.not_to include("str") }
+        it { is_expected.to include("str").at_least(:twice) }
         it { is_expected.to include("str", "foo") }
         it { is_expected.not_to include("str", "foo") }
       end
       """
     When I run `rspec string_include_matcher_spec.rb`
     Then the output should contain all of these:
-      | 8 examples, 4 failures                   |
-      | expected "a string" to include "foo"     |
-      | expected "a string" not to include "str" |
-      | expected "a string" to include "foo"     |
-      | expected "a string" not to include "str" |
+      | 10 examples, 5 failures                                                     |
+      | expected "a string" to include "foo"                                        |
+      | expected "a string" not to include "str"                                    |
+      | expected "a string" to include "str" at least twice but it is included once |
+      | expected "a string" to include "foo"                                        |
+      | expected "a string" not to include "str"                                    |
 
   Scenario: hash usage
     Given a file named "hash_include_matcher_spec.rb" with:

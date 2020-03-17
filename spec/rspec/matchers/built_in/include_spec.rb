@@ -103,6 +103,12 @@ RSpec.describe "#include matcher" do
         expect(build_target(:foo => 1, :bar => 2)).to include(:foo => 1, :bar => 3)
       }.to fail_including(failure_string)
     end
+
+    it 'does not support count constraint' do
+      expect {
+        expect(build_target(:key => 'value')).to include(:other).once
+      }.to raise_error(NotImplementedError)
+    end
   end
 
   describe "expect(...).to include(with_one_arg)" do
@@ -115,6 +121,9 @@ RSpec.describe "#include matcher" do
         expect {
           expect(5).to include(1)
         }.to fail_matching("expected 5 to include 1, but it does not respond to `include?`")
+        expect {
+          expect(5).to include(1).once
+        }.to fail_matching("expected 5 to include 1 once, but it does not respond to `include?`")
       end
     end
 
@@ -167,6 +176,46 @@ RSpec.describe "#include matcher" do
           expect(" foo\nbar\nbazz").to include("foo", "bar", "gaz")
         }.to fail_with(a_string_not_matching(/Diff/i))
       end
+
+      context "with exact count" do
+        it 'fails if the block yields wrong number of times' do
+          expect {
+            expect('foo bar foo').to include('foo').once
+          }.to fail_with(/expected "foo bar foo" to include "foo" once but it is included twice/)
+        end
+
+        it 'passes if the block yields the specified number of times' do
+          expect('fooo bar').to include('oo').once
+          expect('fooo bar').to include('o').thrice
+          expect('fooo ooo oo bar foo').to include('oo').exactly(4).times
+        end
+      end
+
+      context "with at_least count" do
+        it 'passes if the search term is included at least the number of times' do
+          expect('foo bar foo').to include('foo').at_least(2).times
+          expect('foo bar foo foo').to include('foo').at_least(:twice)
+        end
+
+        it 'fails if the search term is included too few times' do
+          expect {
+            expect('foo bar foo').to include('foo').at_least(:thrice)
+          }.to fail_with(/expected "foo bar foo" to include "foo" at least 3 times but it is included twice/)
+        end
+      end
+
+      context "with at_most count" do
+        it 'passes if the search term is included at most the number of times' do
+          expect('foo bar foo').to include('foo').at_most(2).times
+          expect('foo bar').to include('foo').at_most(:twice)
+        end
+
+        it 'fails if the search term is included too many times' do
+          expect {
+            expect('foo bar foo foo').to include('foo').at_most(:twice)
+          }.to fail_with(/expected "foo bar foo foo" to include "foo" at most twice but it is included 3 times/)
+        end
+      end
     end
 
     context "for an array target" do
@@ -192,6 +241,48 @@ RSpec.describe "#include matcher" do
       it 'passes when given the same null double' do
         dbl = double.as_null_object
         expect([dbl]).to include(dbl)
+      end
+
+      context "with exact count" do
+        it 'fails if the block yields wrong number of times' do
+          expect {
+            expect([1, 2, 1]).to include(1).once
+          }.to fail_with('expected [1, 2, 1] to include 1 once but it is included twice')
+          expect {
+            expect([10, 20, 30]).to include(a_value_within(2).of(17)).twice
+          }.to fail_with('expected [10, 20, 30] to include (a value within 2 of 17) twice but it is included 0 times')
+        end
+
+        it 'passes if the block yields the specified number of times' do
+          expect([1, 2, 1]).to include(1).twice
+          expect([10, 20, 30]).to include(a_value_within(5).of(17)).once
+        end
+      end
+
+      context "with at_least count" do
+        it 'passes if the search term is included at least the number of times' do
+          expect([1, 2, 1]).to include(1).at_least(2).times
+          expect([1, 2, 1, 1]).to include(1).at_least(:twice)
+        end
+
+        it 'fails if the search term is included too few times' do
+          expect {
+            expect([1, 2, 1]).to include(1).at_least(:thrice)
+          }.to fail_with('expected [1, 2, 1] to include 1 at least 3 times but it is included twice')
+        end
+      end
+
+      context "with at_most count" do
+        it 'passes if the search term is included at most the number of times' do
+          expect([1, 2, 1]).to include(1).at_most(2).times
+          expect([1, 2]).to include(1).at_most(:twice)
+        end
+
+        it 'fails if the search term is included too many times' do
+          expect {
+            expect([1, 2, 1, 1]).to include(1).at_most(:twice)
+          }.to fail_with('expected [1, 2, 1, 1] to include 1 at most twice but it is included 3 times')
+        end
       end
     end
 
@@ -330,6 +421,18 @@ RSpec.describe "#include matcher" do
         }.to fail_with(%r|expected #{hash_inspect :key => "value", :this => "that"} to include :nada, :nope, and :negative|)
       end
     end
+
+    it 'does not implement count constraints' do
+      expect {
+        expect('').to include('foo', 'bar').once
+      }.to raise_error(NotImplementedError)
+      expect {
+        expect('').to include('foo', 'bar').at_least(:twice)
+      }.to raise_error(NotImplementedError)
+      expect {
+        expect('').to include('foo', 'bar').at_most(:twice)
+      }.to raise_error(NotImplementedError)
+    end
   end
 
   describe "expect(...).not_to include(expected)" do
@@ -363,6 +466,42 @@ RSpec.describe "#include matcher" do
         expect {
           expect("abc").not_to include("c")
         }.to fail_with("expected \"abc\" not to include \"c\"")
+      end
+
+      context "with exact count" do
+        it 'passes if the block yields wrong number of times' do
+          expect('foo bar foo').not_to include('foo').once
+        end
+
+        it 'fails if the block yields the specified number of times' do
+          expect {
+            expect('fooo bar').not_to include('oo').once
+          }.to fail_with(/expected "fooo bar" not to include "oo" once but it is included once/)
+        end
+      end
+
+      context "with at_least count" do
+        it 'fails if the search term is included at least the number of times' do
+          expect {
+            expect('foo bar foo foo').not_to include('foo').at_least(:twice)
+          }.to fail_with(/expected "foo bar foo foo" not to include "foo" at least twice but it is included 3 times/)
+        end
+
+        it 'passes if the search term is included too few times' do
+          expect('foo bar foo').not_to include('foo').at_least(:thrice)
+        end
+      end
+
+      context "with at_most count" do
+        it 'fails if the search term is included at most the number of times' do
+          expect {
+            expect('foo bar').not_to include('foo').at_most(:twice)
+          }.to fail_with(/expected "foo bar" not to include "foo" at most twice but it is included once/)
+        end
+
+        it 'passes if the search term is included too many times' do
+          expect('foo bar foo foo').not_to include('foo').at_most(:twice)
+        end
       end
     end
 
