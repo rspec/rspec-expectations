@@ -96,7 +96,7 @@ module RSpec
       # @api private
       # Provides the implementation for `yield_control`.
       # Not intended to be instantiated directly.
-      class YieldControl < BaseMatcher
+      class YieldControl < BaseMatcher # rubocop:disable ClassLength
         def initialize
           @expectation_type = @expected_yields_count = nil
         end
@@ -154,6 +154,8 @@ module RSpec
           @probe = YieldProbe.probe(block)
           return false unless @probe.has_block?
           return @probe.num_yields > 0 unless @expectation_type
+          return @expected_yields_count.cover?(@probe.num_yields) if @expectation_type == :<=>
+
           @probe.num_yields.__send__(@expectation_type, @expected_yields_count)
         end
 
@@ -182,10 +184,48 @@ module RSpec
       private
 
         def set_expected_yields_count(relativity, n)
-          raise "Multiple count constraints are not supported" if @expectation_type
+          raise_unsupported_yield_expectation if unsupported_yield_expectation?(relativity)
 
-          @expectation_type = relativity
-          @expected_yields_count = count_constraint_to_number(n)
+          count = count_constraint_to_number(n)
+
+          if @expectation_type == :<= && relativity == :>=
+            raise_impossible_yield_expectation(count) if count > @expected_yields_count
+            @expectation_type = :<=>
+            @expected_yields_count = count..@expected_yields_count
+          elsif @expectation_type == :>= && relativity == :<=
+            raise_impossible_yield_expectation(count) if count < @expected_yields_count
+            @expectation_type = :<=>
+            @expected_yields_count = @expected_yields_count..count
+          else
+            @expectation_type = relativity
+            @expected_yields_count = count
+          end
+        end
+
+        def raise_impossible_yield_expectation(count)
+          text =
+            case @expectation_type
+            when :<= then "at_least(#{count}).at_most(#{@expected_yields_count})"
+            when :>= then "at_least(#{@expected_yields_count}).at_most(#{count})"
+            end
+          raise ArgumentError, "The constraint #{text} is not possible"
+        end
+
+        def raise_unsupported_yield_expectation
+          text =
+            case @expectation_type
+            when :<= then "at_least"
+            when :>= then "at_most"
+            when :<=> then "at_least/at_most combination"
+            else "count"
+            end
+          raise ArgumentError, "Multiple #{text} constraints are not supported"
+        end
+
+        def unsupported_yield_expectation?(relativity)
+          return true if @expectation_type == :==
+          return true if @expectation_type == :<=>
+          (@expectation_type == :<= && relativity == :<=) || (@expectation_type == :>= && relativity == :>=)
         end
 
         def count_constraint_to_number(n)
@@ -212,12 +252,14 @@ module RSpec
           case @expectation_type
           when :<= then ' at most'
           when :>= then ' at least'
+          when :<=> then ' between'
           else ''
           end
         end
 
         def human_readable_count(count)
           case count
+          when Range then " #{count.first} and #{count.last} times"
           when nil then ''
           when 1 then ' once'
           when 2 then ' twice'

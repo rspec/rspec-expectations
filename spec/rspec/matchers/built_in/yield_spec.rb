@@ -75,6 +75,10 @@ RSpec.describe "yield_control matcher" do
       }.to fail_with(/expected given block to yield control at least twice but yielded once/)
 
       expect {
+        expect { |b| 3.times.each(&b) }.to yield_control.at_least(:once).at_most(2)
+      }.to fail_with(/expected given block to yield control between 1 and 2 times but yielded 3 times/)
+
+      expect {
         expect { |b| 0.times.each(&b) }.to yield_control
       }.to fail_with(/expected given block to yield control but did not yield/)
     end
@@ -89,10 +93,14 @@ RSpec.describe "yield_control matcher" do
       expect { yield_control.exactly('2') }.to raise_error(ArgumentError)
       expect { yield_control.at_least(:trice_with_typo) }.to raise_error(ArgumentError)
       expect { yield_control.at_most(nil) }.to raise_error(ArgumentError)
+      expect { yield_control.at_least(2).at_least(1) }.to raise_error(ArgumentError)
+      expect { yield_control.at_most(2).at_most(1) }.to raise_error(ArgumentError)
+      expect { yield_control.at_most(2).at_least(1).at_most(1) }.to raise_error(ArgumentError)
+      expect { yield_control.at_most(1).at_least(2) }.to raise_error(ArgumentError)
+      expect { yield_control.at_least(2).at_most(1) }.to raise_error(ArgumentError)
     end
 
-    it 'is yet to support multiple calls to compatible count constraints' do
-      pending
+    it 'is supports multiple calls to compatible count constraints' do
       expect { |b| 1.upto(4, &b) }.to yield_control.at_least(3).at_most(4).times
       expect { |b| 1.upto(2, &b) }.not_to yield_control.at_least(3).at_most(4).times
     end
