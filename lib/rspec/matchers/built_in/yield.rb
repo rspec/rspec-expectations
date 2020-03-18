@@ -98,7 +98,7 @@ module RSpec
       # Not intended to be instantiated directly.
       class YieldControl < BaseMatcher
         def initialize
-          at_least(:once)
+          @expectation_type = @expected_yields_count = nil
         end
 
         # @api public
@@ -153,7 +153,7 @@ module RSpec
         def matches?(block)
           @probe = YieldProbe.probe(block)
           return false unless @probe.has_block?
-
+          return @probe.num_yields > 0 unless @expectation_type
           @probe.num_yields.__send__(@expectation_type, @expected_yields_count)
         end
 
@@ -182,35 +182,44 @@ module RSpec
       private
 
         def set_expected_yields_count(relativity, n)
+          raise "Multiple count constraints are not supported" if @expectation_type
+
           @expectation_type = relativity
-          @expected_yields_count = case n
-                                   when Numeric then n
-                                   when :once then 1
-                                   when :twice then 2
-                                   when :thrice then 3
-                                   end
+          @expected_yields_count = count_constraint_to_number(n)
+        end
+
+        def count_constraint_to_number(n)
+          case n
+          when Numeric then n
+          when :once then 1
+          when :twice then 2
+          when :thrice then 3
+          else
+            raise ArgumentError, "Expected a number, :once, :twice or :thrice," \
+              " but got #{n}"
+          end
         end
 
         def failure_reason
           return ' but was not a block' unless @probe.has_block?
-          return '' unless @expected_yields_count
-          " #{human_readable_expectation_type}#{human_readable_count(@expected_yields_count)}" \
-          " but yielded #{human_readable_count(@probe.num_yields)}"
+          "#{human_readable_expectation_type}#{human_readable_count(@expected_yields_count)}" \
+          " but yielded#{human_readable_count(@probe.num_yields)}"
         end
 
         def human_readable_expectation_type
           case @expectation_type
-          when :<= then 'at most '
-          when :>= then 'at least '
+          when :<= then ' at most'
+          when :>= then ' at least'
           else ''
           end
         end
 
         def human_readable_count(count)
           case count
-          when 1 then 'once'
-          when 2 then 'twice'
-          else "#{count} times"
+          when nil then ''
+          when 1 then ' once'
+          when 2 then ' twice'
+          else " #{count} times"
           end
         end
       end
