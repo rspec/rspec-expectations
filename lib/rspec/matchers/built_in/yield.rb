@@ -149,12 +149,22 @@ module RSpec
           self
         end
 
+        if RUBY_VERSION.to_f > 1.8
+          def cover?(count, number)
+            count.cover?(number)
+          end
+        else
+          def cover?(count, number)
+            number >= count.first && number <= count.last
+          end
+        end
+
         # @private
         def matches?(block)
           @probe = YieldProbe.probe(block)
           return false unless @probe.has_block?
           return @probe.num_yields > 0 unless @expectation_type
-          return @expected_yields_count.cover?(@probe.num_yields) if @expectation_type == :<=>
+          return cover?(@expected_yields_count, @probe.num_yields) if @expectation_type == :<=>
 
           @probe.num_yields.__send__(@expectation_type, @expected_yields_count)
         end
