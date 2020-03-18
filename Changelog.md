@@ -7,6 +7,8 @@ Bug Fixes:
   have changed. (Jon Rowe, #1132)
 * Issue an improved warning when using `respond_to(...).with(n).arguments` and ignore
   the warning when using with `have_attributes(...)`. (Jon Rowe, #1164)
+* Issue a proper `ArgumentError` when invalid arguments are given to `yield_control`
+  modifiers such as `at_least` et al. (Marc-André Lafortune, #1167)
 
 Enhancements:
 
