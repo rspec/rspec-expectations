@@ -61,6 +61,24 @@ RSpec.describe "yield_control matcher" do
       }.to fail_with(/expected given block to yield control but/)
     end
 
+    it 'fails if the block does not yield the correct number of times' do
+      expect {
+        expect { |b| 0.times.each(&b) }.to yield_control.at_least(:once)
+      }.to fail_with(/expected given block to yield control at least once but did not yield/)
+
+      expect {
+        expect { |b| 2.times.each(&b) }.to yield_control.at_most(:once)
+      }.to fail_with(/expected given block to yield control at most once but yielded twice/)
+
+      expect {
+        expect { |b| 1.times.each(&b) }.to yield_control.at_least(:twice)
+      }.to fail_with(/expected given block to yield control at least twice but yielded once/)
+
+      expect {
+        expect { |b| 0.times.each(&b) }.to yield_control
+      }.to fail_with(/expected given block to yield control but did not yield/)
+    end
+
     it 'does not return a meaningful value from the block' do
       val = nil
       expect { |b| val = _yield_with_args(&b) }.to yield_control

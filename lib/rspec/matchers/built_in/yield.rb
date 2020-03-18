@@ -202,6 +202,8 @@ module RSpec
 
         def failure_reason
           return ' but was not a block' unless @probe.has_block?
+          return "#{human_readable_expectation_type}#{human_readable_count(@expected_yields_count)} but did not yield" if @probe.num_yields.zero?
+
           "#{human_readable_expectation_type}#{human_readable_count(@expected_yields_count)}" \
           " but yielded#{human_readable_count(@probe.num_yields)}"
         end
