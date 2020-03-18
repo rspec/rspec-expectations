@@ -1,3 +1,11 @@
+### Development
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.1...3-9-maintenance)
+
+Bug Fixes:
+
+* Issue a proper `ArgumentError` when invalid arguments are given to `yield_control`
+  modifiers such as `at_least` et al. (Marc-André Lafortune, #1167)
+
 ### 3.9.1 / 2020-03-13
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.0...v3.9.1)
 
