@@ -1,4 +1,4 @@
-# This file was generated on 2020-01-23T22:37:16+03:00 from the rspec-dev repo.
+# This file was generated on 2020-03-23T20:40:58+03:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -38,12 +38,9 @@ function run_specs_and_record_done {
 
 function run_cukes {
   if [ -d features ]; then
-    # force jRuby to use client mode JVM or a compilation mode thats as close as possible,
-    # idea taken from https://github.com/jruby/jruby/wiki/Improving-startup-time
-    #
     # Note that we delay setting this until we run the cukes because we've seen
     # spec failures in our spec suite due to problems with this mode.
-    export JAVA_OPTS='-client -XX:+TieredCompilation -XX:TieredStopAtLevel=1'
+    export JAVA_OPTS='-XX:+TieredCompilation -XX:TieredStopAtLevel=1'
 
     echo "${PWD}/bin/cucumber"
 
