@@ -1,4 +1,4 @@
-# This file was generated on 2020-03-30T16:31:25+02:00 from the rspec-dev repo.
+# This file was generated on 2020-04-03T18:24:23+03:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 # In order to install old Rubies, we need to use old Ubuntu distibution.
@@ -20,12 +20,12 @@ rvm:
   - 1.9.3
   - 2.0.0
   - 2.1
-  - 2.2.10
-  - 2.3.8
-  - 2.4.9
-  - 2.5.7
-  - 2.6.5
-  - 2.7.0
+  - 2.2
+  - 2.3
+  - 2.4
+  - 2.5
+  - 2.6
+  - 2.7
   - ruby-head
   - ree
   - rbx-3
