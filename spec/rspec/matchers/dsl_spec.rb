@@ -30,6 +30,7 @@ RSpec.describe "a matcher defined using the matcher DSL" do
   end
 
   if RSpec::Support::RubyFeatures.required_kw_args_supported?
+    binding.eval(<<-CODE, __FILE__, __LINE__)
     it 'supports the use of required keyword arguments in definition block' do
       RSpec::Matchers.define(:match_required_kw) do |bar:|
         match { expect(actual).to eq bar }
@@ -45,9 +46,11 @@ RSpec.describe "a matcher defined using the matcher DSL" do
       RSpec::Matchers.define(:matcher_required_kw_on_method) {}
       expect(matcher_required_kw_on_method.kw(a: 1)).to eq(1)
     end
+    CODE
   end
 
   if RSpec::Support::RubyFeatures.kw_args_supported?
+    binding.eval(<<-CODE, __FILE__, __LINE__)
     it 'supports the use of optional keyword arguments in definition block' do
       RSpec::Matchers.define(:match_optional_kw) do |bar: nil|
         match { expect(actual).to eq bar }
@@ -63,6 +66,7 @@ RSpec.describe "a matcher defined using the matcher DSL" do
       RSpec::Matchers.define(:matcher_optional_kw_on_method) {}
       expect(matcher_optional_kw_on_method.optional_kw(a: 1)).to eq(1)
     end
+    CODE
   end
 
   it "clears user instance variables between invocations" do
