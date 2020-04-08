@@ -1,7 +1,10 @@
 RSpec::Support.require_rspec_support "method_signature_verifier"
 
 # TODO: Refactor this file to be under our class length
-# rubocop:disable ClassLength
+# Note, blank lines are to hide this from yard
+# rubocop:disable ClassLength, Layout/EmptyLines
+
+
 module RSpec
   module Matchers
     module BuiltIn
@@ -196,4 +199,4 @@ module RSpec
     end
   end
 end
-# rubocop:enable ClassLength
+# rubocop:enable ClassLength, Layout/EmptyLines
