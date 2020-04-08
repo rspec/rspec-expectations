@@ -1,7 +1,5 @@
 RSpec::Support.require_rspec_support "method_signature_verifier"
 
-# TODO: Refactor this file to be under our class length
-# rubocop:disable ClassLength
 module RSpec
   module Matchers
     module BuiltIn
@@ -118,49 +116,15 @@ module RSpec
           end
         end
 
-        def setup_method_signature_expectation
-          expectation = Support::MethodSignatureExpectation.new
-
-          if @expected_arity.is_a?(Range)
-            expectation.min_count = @expected_arity.min
-            expectation.max_count = @expected_arity.max
-          else
-            expectation.min_count = @expected_arity
-          end
-
-          expectation.keywords = @expected_keywords
-          expectation.expect_unlimited_arguments = @unlimited_arguments
-          expectation.expect_arbitrary_keywords  = @arbitrary_keywords
-
-          expectation
-        end
-
         def matches_arity?(actual, name)
-          expectation = setup_method_signature_expectation
-
-          return true if expectation.empty?
-
-          begin
-            Support::StrictSignatureVerifier.new(method_signature_for(actual, name)).
-              with_expectation(expectation).valid?
-          rescue NameError
-            return true if @ignoring_method_signature_failure
-            raise ArgumentError, "The #{matcher_name} matcher requires that " \
-                                 "the actual object define the method(s) in " \
-                                 "order to check arity, but the method " \
-                                 "`#{name}` is not defined. Remove the arity " \
-                                 "check or define the method to continue."
-          end
-        end
-
-        def method_signature_for(actual, name)
-          method_handle = Support.method_handle_for(actual, name)
-
-          if name == :new && method_handle.owner === ::Class && ::Class === actual
-            Support::MethodSignature.new(actual.instance_method(:initialize))
-          else
-            Support::MethodSignature.new(method_handle)
-          end
+          ArityCheck.new(@expected_arity, @expected_keywords, @arbitrary_keywords, @unlimited_arguments).matches?(actual, name)
+        rescue NameError
+          return true if @ignoring_method_signature_failure
+          raise ArgumentError, "The #{matcher_name} matcher requires that " \
+                               "the actual object define the method(s) in " \
+                               "order to check arity, but the method " \
+                               "`#{name}` is not defined. Remove the arity " \
+                               "check or define the method to continue."
         end
 
         def with_arity
@@ -192,8 +156,45 @@ module RSpec
         def pp_names
           @names.length == 1 ? "##{@names.first}" : description_of(@names)
         end
+
+        # @private
+        class ArityCheck
+          def initialize(expected_arity, expected_keywords, arbitrary_keywords, unlimited_arguments)
+            expectation = Support::MethodSignatureExpectation.new
+
+            if expected_arity.is_a?(Range)
+              expectation.min_count = expected_arity.min
+              expectation.max_count = expected_arity.max
+            else
+              expectation.min_count = expected_arity
+            end
+
+            expectation.keywords = expected_keywords
+            expectation.expect_unlimited_arguments = unlimited_arguments
+            expectation.expect_arbitrary_keywords  = arbitrary_keywords
+            @expectation = expectation
+          end
+
+          def matches?(actual, name)
+            return true if @expectation.empty?
+            verifier_for(actual, name).with_expectation(@expectation).valid?
+          end
+
+          def verifier_for(actual, name)
+            Support::StrictSignatureVerifier.new(method_signature_for(actual, name))
+          end
+
+          def method_signature_for(actual, name)
+            method_handle = Support.method_handle_for(actual, name)
+
+            if name == :new && method_handle.owner === ::Class && ::Class === actual
+              Support::MethodSignature.new(actual.instance_method(:initialize))
+            else
+              Support::MethodSignature.new(method_handle)
+            end
+          end
+        end
       end
     end
   end
 end
-# rubocop:enable ClassLength
