@@ -141,4 +141,3 @@ Feature: `include` matcher
       | expected {:a => 7, :b => 5} not to include :a                 |
       | expected {:a => 7, :b => 5} to include {:d => 3}              |
       | expected {:a => 7, :b => 5} not to include {:a => 7}          |
-
