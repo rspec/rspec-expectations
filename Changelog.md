@@ -1,12 +1,10 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.0...master)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.1...master)
 
 Bug Fixes:
 
 * The `change` matcher now recognises an object has changed when its instance attributes
   have changed. (Jon Rowe, #1132)
-* Issue an improved warning when using `respond_to(...).with(n).arguments` and ignore
-  the warning when using with `have_attributes(...)`. (Jon Rowe, #1164)
 * Issue a proper `ArgumentError` when invalid arguments are given to `yield_control`
   modifiers such as `at_least` et al. (Marc-André Lafortune, #1167)
 
@@ -19,6 +17,14 @@ Enhancements:
 * `aggregate_failures` now shows the backtrace line for each failure. (Fabricio Bedin, #1163)
 * Support multiple combinations of `yield_control` modifiers like `at_least`, `at_most`.
   (Jon Rowe, #1169)
+
+### 3.9.1 / 2020-03-13
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.0...v3.9.1)
+
+Bug Fixes:
+
+* Issue an improved warning when using `respond_to(...).with(n).arguments` and ignore
+  the warning when using with `have_attributes(...)`. (Jon Rowe, #1164)
 
 ### 3.9.0 / 2019-10-08
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.8.6...v3.9.0)
