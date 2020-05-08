@@ -5,6 +5,8 @@ Bug Fixes:
 
 * Issue a proper `ArgumentError` when invalid arguments are given to `yield_control`
   modifiers such as `at_least` et al. (Marc-André Lafortune, #1167)
+* Prevent Ruby 2.7 keyword arguments warning from being issued by custom
+  matcher definitions. (Jon Rowe, #1176)
 
 ### 3.9.1 / 2020-03-13
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.0...v3.9.1)
