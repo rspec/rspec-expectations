@@ -94,17 +94,18 @@ module RSpec
       it "works with custom measure objects" do
         weight_class = Struct.new(:val) do
           include Comparable
-          def <=>(other) ; val <=> other.val               ; end
-          def -(other)   ; self.class.new(val - other.val) ; end
-          def abs        ; self.class.new(val.abs)         ; end
-          def *(numeric) ; self.class.new(val * numeric)   ; end
-          def /(numeric) ; self.class.new(val / numeric)   ; end
+          def <=>(other); val <=> other.val; end
+          def -(other); self.class.new(val - other.val); end
+          def abs; self.class.new(val.abs); end
+          def *(numeric); self.class.new(val * numeric); end
+          def /(numeric); self.class.new(val / numeric); end
+          def inspect; "<val: #{val}>"; end
         end
 
         expect(weight_class.new(99)).to be_within(2).percent_of(weight_class.new(100))
         expect {
           expect(weight_class.new(90)).to be_within(2).percent_of(weight_class.new(100))
-        }.to fail_with("expected #<struct val=90> to be within 2% of #<struct val=100>")
+        }.to fail_with("expected <val: 90> to be within 2% of <val: 100>")
       end
     end
 
