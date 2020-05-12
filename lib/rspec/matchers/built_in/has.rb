@@ -65,7 +65,7 @@ module RSpec
         end
 
         def predicate_matches?
-          @actual.__send__(predicate, *@args, &@block)
+          RSpec::Support::WithKeywordsWhenNeeded.send_to(@actual, predicate, *@args, &@block)
         end
 
         def predicate
