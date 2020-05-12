@@ -5,6 +5,9 @@ Bug Fixes:
 
 * The `change` matcher now recognises an object has changed when its instance attributes
   have changed. (Jon Rowe, #1132)
+* Swap the comparison of the delta vs the expected for the `be_within` matcher allowing
+  more complicated oobjects to be compared providing they provide `abs` and other
+  comparison methods. (Kelly Stannard, #1182)
 
 Enhancements:
 
