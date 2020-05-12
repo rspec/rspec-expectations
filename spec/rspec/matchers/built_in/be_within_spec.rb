@@ -99,7 +99,6 @@ module RSpec
           def abs; self.class.new(val.abs); end
           def *(numeric); self.class.new(val * numeric); end
           def /(numeric); self.class.new(val / numeric); end
-          def inspect; "<val: #{val}>"; end
         end
 
         expect(weight_class.new(99)).to be_within(2).percent_of(weight_class.new(100))
