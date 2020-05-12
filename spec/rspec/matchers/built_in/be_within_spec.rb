@@ -55,6 +55,12 @@ module RSpec
         expect(matcher.description).to eq "be within 0.5 of 5.0"
       end
 
+      it "formats expected within description" do
+        klass = Class.new { def inspect; "5"; end }
+        matcher = be_within(0.5).of(klass.new)
+        expect(matcher.description).to eq "be within 0.5 of 5"
+      end
+
       it "raises an error if no expected value is given" do
         expect {
           expect(5.1).to be_within(0.5)
