@@ -105,7 +105,7 @@ module RSpec
         expect(weight_class.new(99)).to be_within(2).percent_of(weight_class.new(100))
         expect {
           expect(weight_class.new(90)).to be_within(2).percent_of(weight_class.new(100))
-        }.to fail_with("expected <val: 90> to be within 2% of <val: 100>")
+        }.to fail_with(/expected #<struct.*val=90> to be within 2% of #<struct.*val=100>/)
       end
     end
 
