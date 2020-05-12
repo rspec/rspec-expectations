@@ -90,6 +90,22 @@ module RSpec
         matcher.matches?(5.1)
         expect(matcher.description).to eq "be within 0.5% of 5.0"
       end
+
+      it "works with custom measure objects" do
+        weight_class = Struct.new(:val) do
+          include Comparable
+          def <=>(other); val <=> other.val; end
+          def -(other); self.class.new(val - other.val); end
+          def abs; self.class.new(val.abs); end
+          def *(numeric); self.class.new(val * numeric); end
+          def /(numeric); self.class.new(val / numeric); end
+        end
+
+        expect(weight_class.new(99)).to be_within(2).percent_of(weight_class.new(100))
+        expect {
+          expect(weight_class.new(90)).to be_within(2).percent_of(weight_class.new(100))
+        }.to fail_with(/expected #<struct.*val=90> to be within 2% of #<struct.*val=100>/)
+      end
     end
 
     RSpec.describe "expect(actual).not_to be_within(delta).of(expected)" do
