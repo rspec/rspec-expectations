@@ -6,6 +6,7 @@ Bug Fixes:
 * Swap the comparison of the delta vs the expected for the `be_within` matcher allowing
   more complicated oobjects to be compared providing they provide `abs` and other
   comparison methods. (Kelly Stannard, #1182)
+* Properly format expected in the description of the `be_within` matcher. (Jon Rowe, #1185)
 
 ### 3.9.2 / 2020-05-08
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.1...v3.9.2)
