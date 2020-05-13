@@ -50,7 +50,7 @@ module RSpec
         # @api private
         # @return [String]
         def description
-          "be within #{@delta}#{@unit} of #{@expected}"
+          "be within #{@delta}#{@unit} of #{expected_formatted}"
         end
 
       private
