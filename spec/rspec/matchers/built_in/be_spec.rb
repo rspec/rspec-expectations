@@ -70,15 +70,22 @@ RSpec.describe "expect(...).to be_predicate" do
     }.to fail_including("expected nil to respond to `happy?`")
   end
 
+  it 'handles arguments to the predicate' do
+    object = Object.new
+    def object.predicate?(return_val); return_val; end
+    expect(object).to be_predicate(true)
+    expect(object).to_not be_predicate(false)
+
+    expect { expect(object).to be_predicate }.to raise_error(ArgumentError)
+    expect { expect(object).to be_predicate(false) }.to fail
+    expect { expect(object).not_to be_predicate(true) }.to fail
+  end
+
   it 'falls back to a present-tense form of the predicate when needed' do
     mouth = Object.new
     def mouth.frowns?(return_val); return_val; end
 
     expect(mouth).to be_frown(true)
-    expect(mouth).not_to be_frown(false)
-
-    expect { expect(mouth).to be_frown(false) }.to fail
-    expect { expect(mouth).not_to be_frown(true) }.to fail
   end
 
   it 'fails when :predicate? is private' do
