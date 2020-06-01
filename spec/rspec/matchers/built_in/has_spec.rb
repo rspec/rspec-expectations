@@ -8,6 +8,24 @@ RSpec.describe "expect(...).to have_sym(*args)" do
     expect({ :a => "A" }).to have_key(:a)
   end
 
+  if RSpec::Support::RubyFeatures.required_kw_args_supported?
+    binding.eval(<<-CODE, __FILE__, __LINE__)
+    it 'supports the use of required keyword arguments' do
+      thing = Class.new { def has_keyword?(keyword:); keyword == 'a'; end }
+      expect(thing.new).to have_keyword(keyword: 'a')
+    end
+    CODE
+  end
+
+  if RSpec::Support::RubyFeatures.kw_args_supported?
+    binding.eval(<<-CODE, __FILE__, __LINE__)
+    it 'supports the use of optional keyword arguments' do
+      thing = Class.new { def has_keyword?(keyword: 'b'); keyword == 'a'; end }
+      expect(thing.new).to have_keyword(keyword: 'a')
+    end
+    CODE
+  end
+
   it "fails if #has_sym?(*args) returns false" do
     expect {
       expect({ :b => "B" }).to have_key(:a)

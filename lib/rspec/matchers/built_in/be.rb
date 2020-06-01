@@ -181,10 +181,21 @@ module RSpec
       class BePredicate < BaseMatcher
         include BeHelpers
 
-        def initialize(*args, &block)
-          @expected = parse_expected(args.shift)
-          @args = args
-          @block = block
+        if RSpec::Support::RubyFeatures.kw_args_supported?
+          binding.eval(<<-CODE, __FILE__, __LINE__)
+          def initialize(*args, **kwargs, &block)
+            @expected = parse_expected(args.shift)
+            @args = args
+            @kwargs = kwargs
+            @block = block
+          end
+          CODE
+        else
+          def initialize(*args, &block)
+            @expected = parse_expected(args.shift)
+            @args = args
+            @block = block
+          end
         end
 
         def matches?(actual, &block)
@@ -236,9 +247,22 @@ module RSpec
           end
         end
 
-        def predicate_matches?
-          method_name = actual.respond_to?(predicate) ? predicate : present_tense_predicate
-          @predicate_matches = actual.__send__(method_name, *@args, &@block)
+        if RSpec::Support::RubyFeatures.kw_args_supported?
+          binding.eval(<<-CODE, __FILE__, __LINE__)
+          def predicate_matches?
+            method_name = actual.respond_to?(predicate) ? predicate : present_tense_predicate
+            if @kwargs.empty?
+              @predicate_matches = actual.__send__(method_name, *@args, &@block)
+            else
+              @predicate_matches = actual.__send__(method_name, *@args, **@kwargs, &@block)
+            end
+          end
+          CODE
+        else
+          def predicate_matches?
+            method_name = actual.respond_to?(predicate) ? predicate : present_tense_predicate
+            @predicate_matches = actual.__send__(method_name, *@args, &@block)
+          end
         end
 
         def predicate
