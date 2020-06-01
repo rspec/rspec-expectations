@@ -238,7 +238,7 @@ module RSpec
   # best to find a more positive name for the negated form, such as
   # `avoid_changing` rather than `not_change`.
   #
-  module Matchers
+  module Matchers # rubocop:disable Metrics/ModuleLength
     extend ::RSpec::Matchers::DSL
 
     # @!macro [attach] alias_matcher
@@ -953,14 +953,29 @@ module RSpec
     HAS_REGEX = /^(?:have_)(.*)/
     DYNAMIC_MATCHER_REGEX = Regexp.union(BE_PREDICATE_REGEX, HAS_REGEX)
 
-    def method_missing(method, *args, &block)
-      case method.to_s
-      when BE_PREDICATE_REGEX
-        BuiltIn::BePredicate.new(method, *args, &block)
-      when HAS_REGEX
-        BuiltIn::Has.new(method, *args, &block)
-      else
-        super
+    if RSpec::Support::RubyFeatures.kw_args_supported?
+      binding.eval(<<-CODE, __FILE__, __LINE__)
+      def method_missing(method, *args, **kwargs, &block)
+        case method.to_s
+        when BE_PREDICATE_REGEX
+          BuiltIn::BePredicate.new(method, *args, **kwargs, &block)
+        when HAS_REGEX
+          BuiltIn::Has.new(method, *args, **kwargs, &block)
+        else
+          super
+        end
+      end
+      CODE
+    else
+      def method_missing(method, *args, &block)
+        case method.to_s
+        when BE_PREDICATE_REGEX
+          BuiltIn::BePredicate.new(method, *args, &block)
+        when HAS_REGEX
+          BuiltIn::Has.new(method, *args, &block)
+        else
+          super
+        end
       end
     end
 
