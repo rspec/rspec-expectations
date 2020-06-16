@@ -88,32 +88,33 @@ Feature: Predicate matchers
       """
     When I run `rspec should_have_key_spec.rb`
     Then the output should contain "2 examples, 1 failure"
-     And the output should contain "expected #has_key?(:bar) to return true, got false"
+     And the output should contain "expected `{:foo=>7}.has_key?(:bar)` to return true, got false"
 
    Scenario: should_not have_all_string_keys (based on custom #has_all_string_keys? method)
      Given a file named "should_not_have_all_string_keys_spec.rb" with:
        """ruby
-       class Hash
-         def has_all_string_keys?
-           keys.all? { |k| String === k }
+       class Float
+         def has_decimals?
+           round != self
          end
        end
 
-       RSpec.describe Hash do
-         context 'with symbol keys' do
-           subject { { :foo => 7, :bar => 5 } }
-           it { is_expected.not_to have_all_string_keys }
+       RSpec.describe Float do
+         context 'with decimals' do
+           subject { 4.2 }
+
+           it { is_expected.to have_decimals }
          end
 
-         context 'with string keys' do
-           subject { { 'foo' => 7, 'bar' => 5 } }
-           it { is_expected.not_to have_all_string_keys } # deliberate failure
+         context 'with no decimals' do
+           subject { 42.0 }
+           it { is_expected.to have_decimals } # deliberate failure
          end
        end
        """
      When I run `rspec should_not_have_all_string_keys_spec.rb`
      Then the output should contain "2 examples, 1 failure"
-      And the output should contain "expected #has_all_string_keys? to return false, got true"
+      And the output should contain "expected `42.0.has_decimals?` to return true, got false"
 
    Scenario: matcher arguments are passed on to the predicate method
      Given a file named "predicate_matcher_argument_spec.rb" with:

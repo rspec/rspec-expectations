@@ -29,7 +29,7 @@ RSpec.describe "expect(...).to have_sym(*args)" do
   it "fails if #has_sym?(*args) returns false" do
     expect {
       expect({ :b => "B" }).to have_key(:a)
-    }.to fail_with("expected #has_key?(:a) to return true, got false")
+    }.to fail_with('expected `{:b=>"B"}.has_key?(:a)` to return true, got false')
   end
 
   obj_with_block_method = Object.new
@@ -65,7 +65,7 @@ RSpec.describe "expect(...).to have_sym(*args)" do
     def o.has_some_stuff?; false; end
     expect {
       expect(o).to have_some_stuff
-    }.to fail_with("expected #has_some_stuff? to return true, got false")
+    }.to fail_with("expected `#{o.inspect}.has_some_stuff?` to return true, got false")
   end
 
   it 'includes multiple args in the failure message if multiple args were given to the matcher' do
@@ -73,7 +73,7 @@ RSpec.describe "expect(...).to have_sym(*args)" do
     def o.has_some_stuff?(*_); false; end
     expect {
       expect(o).to have_some_stuff(:a, 7, "foo")
-    }.to fail_with('expected #has_some_stuff?(:a, 7, "foo") to return true, got false')
+    }.to fail_with(%Q{expected `#{o.inspect}.has_some_stuff?(:a, 7, "foo")` to return true, got false})
   end
 
   it "fails if #has_sym?(*args) returns nil" do
@@ -83,7 +83,7 @@ RSpec.describe "expect(...).to have_sym(*args)" do
     end
     expect {
       expect(klass.new).to have_foo
-    }.to fail_with(/expected #has_foo.* to return true, got false/)
+    }.to fail_with(/expected `.*\.has_foo\?` to return true, got nil/)
   end
 
   it 'fails if #has_sym?(*args) is private' do
@@ -150,7 +150,7 @@ RSpec.describe "expect(...).not_to have_sym(*args)" do
   it "fails if #has_sym?(*args) returns true" do
     expect {
       expect({ :a => "A" }).not_to have_key(:a)
-    }.to fail_with("expected #has_key?(:a) to return false, got true")
+    }.to fail_with('expected `{:a=>"A"}.has_key?(:a)` to return false, got true')
   end
 
   it "fails if target does not respond to #has_sym?" do
@@ -174,7 +174,7 @@ RSpec.describe "expect(...).not_to have_sym(*args)" do
     def o.has_some_stuff?; true; end
     expect {
       expect(o).not_to have_some_stuff
-    }.to fail_with("expected #has_some_stuff? to return false, got true")
+    }.to fail_with("expected `#{o.inspect}.has_some_stuff?` to return false, got true")
   end
 
   it 'includes multiple args in the failure message if multiple args were given to the matcher' do
@@ -182,7 +182,7 @@ RSpec.describe "expect(...).not_to have_sym(*args)" do
     def o.has_some_stuff?(*_); true; end
     expect {
       expect(o).not_to have_some_stuff(:a, 7, "foo")
-    }.to fail_with('expected #has_some_stuff?(:a, 7, "foo") to return false, got true')
+    }.to fail_with(%Q{expected `#{o.inspect}.has_some_stuff?(:a, 7, "foo")` to return false, got true})
   end
 end
 
