@@ -58,6 +58,35 @@ RSpec.describe "expect(...).to be_predicate" do
     }.to fail_with("expected `#{actual.inspect}.happy?` to return true, got nil")
   end
 
+  context "when strict_predicate_matchers is set to true" do
+    it "fails when actual returns 42 for :predicate?" do
+      actual = double("actual", :happy? => 42)
+      expect {
+        expect(actual).to be_happy
+      }.to fail_with("expected `#{actual.inspect}.happy?` to return true, got 42")
+    end
+  end
+
+  context "when strict_predicate_matchers is set to false" do
+    around do |example|
+      RSpec::Expectations.configuration.strict_predicate_matchers = false
+      example.run
+      RSpec::Expectations.configuration.strict_predicate_matchers = true
+    end
+
+    it "passes when actual returns truthy value for :predicate?" do
+      actual = double("actual", :happy? => 42)
+      expect(actual).to be_happy
+    end
+
+    it "states actual predicate used when it fails" do
+      actual = double("actual", :happy? => false)
+      expect {
+        expect(actual).to be_happy
+      }.to fail_with("expected `#{actual.inspect}.happy?` to be truthy, got false")
+    end
+  end
+
   it "fails when actual does not respond to :predicate?" do
     expect {
       expect(Object.new).to be_happy
@@ -184,14 +213,47 @@ RSpec.describe "expect(...).to be_predicate" do
 end
 
 RSpec.describe "expect(...).not_to be_predicate" do
+  let(:strict_predicate_matchers) { true }
+
+  around do |example|
+    default = RSpec::Expectations.configuration.strict_predicate_matchers?
+    RSpec::Expectations.configuration.strict_predicate_matchers = strict_predicate_matchers
+    example.run
+    RSpec::Expectations.configuration.strict_predicate_matchers = default
+  end
+
   it "passes when actual returns false for :sym?" do
     actual = double("actual", :happy? => false)
     expect(actual).not_to be_happy
   end
 
-  it "passes when actual returns nil for :sym?" do
-    actual = double("actual", :happy? => nil)
-    expect(actual).not_to be_happy
+  context "when strict_predicate_matchers is set to true" do
+    it "fails when actual returns nil for :sym?" do
+      actual = double("actual", :happy? => nil)
+      expect {
+        expect(actual).not_to be_happy
+      }.to fail_with("expected `#{actual.inspect}.happy?` to return false, got nil")
+    end
+  end
+
+  context "when strict_predicate_matchers is set to false" do
+    around do |example|
+      RSpec::Expectations.configuration.strict_predicate_matchers = false
+      example.run
+      RSpec::Expectations.configuration.strict_predicate_matchers = true
+    end
+
+    it "passes when actual returns nil for :sym?" do
+      actual = double("actual", :happy? => nil)
+      expect(actual).not_to be_happy
+    end
+
+    it "shows actual comparision made when it fails" do
+      actual = double("actual", :happy? => 42)
+      expect {
+        expect(actual).not_to be_happy
+      }.to fail_with("expected `#{actual.inspect}.happy?` to be falsey, got 42")
+    end
   end
 
   it "fails when actual returns true for :sym?" do

@@ -39,7 +39,7 @@ Feature: Predicate matchers
 
   In either case, RSpec provides nice, clear error messages, such as:
 
-    `expected zero? to return true, got false`
+    `expected zero? to be truthy, got false`
 
   Calling private methods will also fail:
 
@@ -60,7 +60,7 @@ Feature: Predicate matchers
       """
     When I run `rspec should_be_zero_spec.rb`
     Then the output should contain "2 examples, 1 failure"
-     And the output should contain "expected `7.zero?` to return true, got false"
+     And the output should contain "expected `7.zero?` to be truthy, got false"
 
   Scenario: should_not be_empty (based on Array#empty?)
     Given a file named "should_not_be_empty_spec.rb" with:
@@ -75,7 +75,7 @@ Feature: Predicate matchers
       """
     When I run `rspec should_not_be_empty_spec.rb`
     Then the output should contain "2 examples, 1 failure"
-     And the output should contain "expected `[].empty?` to return false, got true"
+     And the output should contain "expected `[].empty?` to be falsey, got true"
 
    Scenario: should have_key (based on Hash#has_key?)
     Given a file named "should_have_key_spec.rb" with:
@@ -88,7 +88,7 @@ Feature: Predicate matchers
       """
     When I run `rspec should_have_key_spec.rb`
     Then the output should contain "2 examples, 1 failure"
-     And the output should contain "expected `{:foo=>7}.has_key?(:bar)` to return true, got false"
+     And the output should contain "expected `{:foo=>7}.has_key?(:bar)` to be truthy, got false"
 
    Scenario: should_not have_all_string_keys (based on custom #has_all_string_keys? method)
      Given a file named "should_not_have_all_string_keys_spec.rb" with:
@@ -114,7 +114,7 @@ Feature: Predicate matchers
        """
      When I run `rspec should_not_have_all_string_keys_spec.rb`
      Then the output should contain "2 examples, 1 failure"
-      And the output should contain "expected `42.0.has_decimals?` to return true, got false"
+      And the output should contain "expected `42.0.has_decimals?` to be truthy, got false"
 
    Scenario: matcher arguments are passed on to the predicate method
      Given a file named "predicate_matcher_argument_spec.rb" with:
@@ -136,8 +136,44 @@ Feature: Predicate matchers
        """
      When I run `rspec predicate_matcher_argument_spec.rb`
      Then the output should contain "4 examples, 2 failures"
-      And the output should contain "expected `12.multiple_of?(4)` to return false, got true"
-      And the output should contain "expected `12.multiple_of?(5)` to return true, got false"
+      And the output should contain "expected `12.multiple_of?(4)` to be falsey, got true"
+      And the output should contain "expected `12.multiple_of?(5)` to be truthy, got false"
+
+    Scenario: the config `strict_predicate_matchers` impacts matching of results other than `true` and `false`
+      Given a file named "strict_or_not.rb" with:
+        """ruby
+        class StrangeResult
+          def has_strange_result?
+            42
+          end
+        end
+
+        RSpec.describe StrangeResult do
+          subject { StrangeResult.new }
+
+          before do
+            RSpec.configure do |config|
+              config.expect_with :rspec do |expectations|
+                expectations.strict_predicate_matchers = strict
+              end
+            end
+          end
+
+          context 'with non-strict matchers (default)' do
+            let(:strict) { false }
+            it { is_expected.to have_strange_result }
+          end
+
+          context 'with strict matchers' do
+            let(:strict) { true }
+            # deliberate failure
+            it { is_expected.to have_strange_result }
+          end
+        end
+        """
+      When I run `rspec strict_or_not.rb`
+      Then the output should contain "2 examples, 1 failure"
+      And the output should contain "has_strange_result?` to return true, got 42"
 
     Scenario: calling private method with be_predicate causes error
       Given a file named "attempting_to_match_private_method_spec.rb" with:

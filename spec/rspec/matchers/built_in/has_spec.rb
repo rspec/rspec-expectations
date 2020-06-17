@@ -139,12 +139,26 @@ RSpec.describe "expect(...).not_to have_sym(*args)" do
     expect({ :a => "A" }).not_to have_key(:b)
   end
 
-  it "passes if #has_sym?(*args) returns nil" do
-    klass = Class.new do
-      def has_foo?
-      end
+  context "when strict_predicate_matchers is set to true" do
+    it "fails when #has_sym? returns nil" do
+      actual = double("actual", :has_foo? => nil)
+      expect {
+        expect(actual).not_to have_foo
+      }.to fail_with("expected `#{actual.inspect}.has_foo?` to return false, got nil")
     end
-    expect(klass.new).not_to have_foo
+  end
+
+  context "when strict_predicate_matchers is set to false" do
+    around do |example|
+      RSpec::Expectations.configuration.strict_predicate_matchers = false
+      example.run
+      RSpec::Expectations.configuration.strict_predicate_matchers = true
+    end
+
+    it "passes if #has_sym?(*args) returns nil" do
+      actual = double("actual", :has_foo? => nil)
+      expect(actual).not_to have_foo
+    end
   end
 
   it "fails if #has_sym?(*args) returns true" do
