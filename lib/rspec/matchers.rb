@@ -951,7 +951,7 @@ module RSpec
 
   private
 
-    BE_PREDICATE_REGEX = /^(be_(?:an?_)?)(.*)/
+    BE_PREDICATE_REGEX = /^(?:be_(?:an?_)?)(.*)/
     HAS_REGEX = /^(?:have_)(.*)/
     DYNAMIC_MATCHER_REGEX = Regexp.union(BE_PREDICATE_REGEX, HAS_REGEX)
 
