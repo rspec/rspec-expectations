@@ -37,7 +37,6 @@ RSpec.describe "#have_attributes matcher" do
   end
 
   describe "expect(...).to have_attributes(with_one_attribute)" do
-
     it_behaves_like "an RSpec matcher", :valid_value => Person.new("Correct name", 33), :invalid_value => Person.new("Wrong Name", 11) do
       let(:matcher) { have_attributes(:name => "Correct name") }
     end
@@ -101,7 +100,6 @@ RSpec.describe "#have_attributes matcher" do
     end
 
     describe "expect(...).to have_attributes(key => matcher)" do
-
       it "passes when the matchers match" do
         expect(person).to have_attributes(:age => (a_value > 30))
       end
@@ -120,7 +118,6 @@ RSpec.describe "#have_attributes matcher" do
   end
 
   describe "expect(...).to_not have_attributes(with_one_attribute)" do
-
     it "passes if target does not have any of the expected attributes" do
       expect(person).to_not have_attributes(:age => wrong_age)
     end
@@ -151,7 +148,6 @@ RSpec.describe "#have_attributes matcher" do
   end
 
   describe "expect(...).to have_attributes(with_multiple_attributes)" do
-
     it_behaves_like "an RSpec matcher", :valid_value => Person.new("Correct name", 33), :invalid_value => Person.new("Wrong Name", 11) do
       let(:matcher) { have_attributes(:name => "Correct name", :age => 33) }
     end
@@ -195,7 +191,6 @@ RSpec.describe "#have_attributes matcher" do
   end
 
   describe "expect(...).to_not have_attributes(with_multiple_attributes)" do
-
     it "passes if target has none of the expected attributes" do
       expect(person).to_not have_attributes(:name => wrong_name, :age => wrong_age)
     end
@@ -230,5 +225,4 @@ RSpec.describe "#have_attributes matcher" do
   def object_inspect(object)
     surface_descriptions_in object.inspect
   end
-
 end
