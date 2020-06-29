@@ -32,6 +32,8 @@ RSpec.describe RSpec::Expectations, "#fail_with" do
 end
 
 RSpec.describe RSpec::Expectations, "#fail_with with matchers" do
+  include RSpec::Support::Spec::DiffHelpers
+
   before do
     allow(RSpec::Matchers.configuration).to receive_messages(:color? => false)
   end
@@ -42,7 +44,7 @@ RSpec.describe RSpec::Expectations, "#fail_with with matchers" do
 
     expected_diff = dedent(<<-EOS)
       |
-      |@@ -1,2 +1,2 @@
+      |@@ #{one_line_header} @@
       |-["poo", "car"]
       |+[(a string matching /foo/), (a string matching /bar/)]
       |
@@ -55,6 +57,8 @@ RSpec.describe RSpec::Expectations, "#fail_with with matchers" do
 end
 
 RSpec.describe RSpec::Expectations, "#fail_with with --color" do
+  include RSpec::Support::Spec::DiffHelpers
+
   before do
     allow(RSpec::Matchers.configuration).to receive_messages(:color? => true)
   end
@@ -62,7 +66,7 @@ RSpec.describe RSpec::Expectations, "#fail_with with --color" do
   it "tells the differ to use color" do
     expected = "foo bar baz\n"
     actual = "foo bang baz\n"
-    expected_diff = "\e[0m\n\e[0m\e[34m@@ -1,2 +1,2 @@\n\e[0m\e[31m-foo bang baz\n\e[0m\e[32m+foo bar baz\n\e[0m"
+    expected_diff = "\e[0m\n\e[0m\e[34m@@ #{one_line_header} @@\n\e[0m\e[31m-foo bang baz\n\e[0m\e[32m+foo bar baz\n\e[0m"
 
     expect {
       RSpec::Expectations.fail_with "message", actual, expected

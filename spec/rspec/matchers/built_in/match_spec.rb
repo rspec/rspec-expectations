@@ -1,4 +1,6 @@
 RSpec.describe "expect(...).to match(expected)" do
+  include RSpec::Support::Spec::DiffHelpers
+
   it_behaves_like "an RSpec matcher", :valid_value => 'ab', :invalid_value => 'bc' do
     let(:matcher) { match(/a/) }
   end
@@ -68,7 +70,7 @@ RSpec.describe "expect(...).to match(expected)" do
 
     failure_message_that_includes_diff = %r|
 \s*Diff:
-\s*@@ -1,2 \+1,2 @@
+\s*@@ #{Regexp.escape one_line_header} @@
 \s*-/bar/
 \s*\+"foo"|
 

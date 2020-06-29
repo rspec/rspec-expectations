@@ -34,6 +34,8 @@ class FakeHashWithIndifferentAccess < Hash
 end
 
 RSpec.describe "#include matcher" do
+  include RSpec::Support::Spec::DiffHelpers
+
   it "is diffable" do
     expect(include("a")).to be_diffable
   end
@@ -87,13 +89,14 @@ RSpec.describe "#include matcher" do
                            |+"foo" => 1,
                          END
                        else
-                         dedent(<<-END)
+                         diff = dedent(<<-END)
                            |Diff:
-                           |@@ -1,3 +1,3 @@
+                           |@@ #{one_line_header(3)} @@
                            |-:bar => 3,
                            |+:bar => 2,
-                           | :foo => 1,
                          END
+                         diff << "\n :foo => 1,\n" if Diff::LCS::VERSION.to_f < 1.4
+                         diff
                        end
 
       expect {
@@ -297,7 +300,7 @@ RSpec.describe "#include matcher" do
           )
         }.to fail_including(dedent(<<-END))
           |Diff:
-          |@@ -1,2 +1,2 @@
+          |@@ #{one_line_header} @@
           |-[{:number=>1}, {:number=>0}, {:number=>3}]
           |+[{:number=>1}, {:number=>2}, {:number=>3}]
         END

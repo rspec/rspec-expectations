@@ -1,4 +1,5 @@
 RSpec.describe "#have_attributes matcher" do
+  include RSpec::Support::Spec::DiffHelpers
 
   Person = Struct.new(:name, :age)
 
@@ -36,7 +37,6 @@ RSpec.describe "#have_attributes matcher" do
   end
 
   describe "expect(...).to have_attributes(with_one_attribute)" do
-
     it_behaves_like "an RSpec matcher", :valid_value => Person.new("Correct name", 33), :invalid_value => Person.new("Wrong Name", 11) do
       let(:matcher) { have_attributes(:name => "Correct name") }
     end
@@ -71,7 +71,7 @@ RSpec.describe "#have_attributes matcher" do
       allow(RSpec::Matchers.configuration).to receive_messages(:color? => false)
 
       expected_diff = dedent(<<-EOS)
-        |@@ -1,2 +1,2 @@
+        |@@ #{one_line_header} @@
         |-:name => "Wrong Name",
         |+:name => "Correct name",
       EOS
@@ -100,7 +100,6 @@ RSpec.describe "#have_attributes matcher" do
     end
 
     describe "expect(...).to have_attributes(key => matcher)" do
-
       it "passes when the matchers match" do
         expect(person).to have_attributes(:age => (a_value > 30))
       end
@@ -119,7 +118,6 @@ RSpec.describe "#have_attributes matcher" do
   end
 
   describe "expect(...).to_not have_attributes(with_one_attribute)" do
-
     it "passes if target does not have any of the expected attributes" do
       expect(person).to_not have_attributes(:age => wrong_age)
     end
@@ -150,7 +148,6 @@ RSpec.describe "#have_attributes matcher" do
   end
 
   describe "expect(...).to have_attributes(with_multiple_attributes)" do
-
     it_behaves_like "an RSpec matcher", :valid_value => Person.new("Correct name", 33), :invalid_value => Person.new("Wrong Name", 11) do
       let(:matcher) { have_attributes(:name => "Correct name", :age => 33) }
     end
@@ -169,11 +166,11 @@ RSpec.describe "#have_attributes matcher" do
       allow(RSpec::Matchers.configuration).to receive_messages(:color? => false)
 
       expected_diff = dedent(<<-EOS)
-        |@@ -1,3 +1,3 @@
+        |@@ #{one_line_header(3)} @@
         |-:age => 11,
         |+:age => 33,
-        | :name => "Correct name",
       EOS
+      expected_diff << "\n :name => \"Correct name\",\n" if Diff::LCS::VERSION.to_f < 1.4
 
       expect {
         expect(person).to have_attributes(:name => correct_name, :age => wrong_age)
@@ -194,7 +191,6 @@ RSpec.describe "#have_attributes matcher" do
   end
 
   describe "expect(...).to_not have_attributes(with_multiple_attributes)" do
-
     it "passes if target has none of the expected attributes" do
       expect(person).to_not have_attributes(:name => wrong_name, :age => wrong_age)
     end
@@ -229,5 +225,4 @@ RSpec.describe "#have_attributes matcher" do
   def object_inspect(object)
     surface_descriptions_in object.inspect
   end
-
 end
