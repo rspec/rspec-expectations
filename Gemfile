@@ -20,6 +20,12 @@ else
   gem 'rake', '> 12.3.2'
 end
 
+if ENV['DIFF_LCS_VERSION']
+  gem 'diff-lcs', ENV['DIFF_LCS_VERSION']
+else
+  gem 'diff-lcs', '~> 1.4', '>= 1.4.3'
+end
+
 gem 'coderay' # for syntax highlighting
 gem 'yard', '~> 0.9.24', :require => false
 
