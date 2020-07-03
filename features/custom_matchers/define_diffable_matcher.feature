@@ -54,7 +54,7 @@ Feature: define diffable matcher
       """
 
   @skip-when-diff-lcs-1.3
-  Scenario: Redefine actual
+  Scenario: Redefine actual (with diff-lcs 1.4.4)
 
     Sometimes is neccessary to overwrite actual to make diffing work, e.g. if `actual` is a name of a file you want to read from. For this to work you need to overwrite `@actual` in your matcher.
 
@@ -92,7 +92,7 @@ Feature: define diffable matcher
     """
     And the output should contain:
     """
-           @@ -1,4 +1,6 @@
+           @@ -1,4 +1,2 @@
            -No
             Data
            -here
