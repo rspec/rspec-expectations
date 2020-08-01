@@ -356,6 +356,22 @@ RSpec.describe "expect { ... }.not_to change(actual, message)" do
       expect { @instance.some_value = 6 }.not_to change(@instance, :some_value)
     end.to fail_with("expected `SomethingExpected#some_value` not to have changed, but did change from 5 to 6")
   end
+
+  it 'tolerates objects that do not change themselves' do
+    a = []
+    b = 1
+    expect { a << b }
+      .to change { b }
+      .to satisfy { |value| a.include?(value) }
+  end
+
+  specify do
+    a = []
+    b = 1
+    a << b
+    expect(b)
+      .to satisfy { |value| a.include?(value) }
+  end
 end
 
 RSpec.describe "expect { ... }.to change { block }" do

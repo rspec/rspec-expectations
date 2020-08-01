@@ -180,7 +180,11 @@ module RSpec
 
         # @private
         def matches?(event_proc)
-          perform_change(event_proc) && @change_details.changed? && @matches_before && matches_after?
+          if perform_change(event_proc) && @change_details.changed?
+            @matches_before && matches_after?
+          else
+            @nomatches_before && matches_after?
+          end
         end
 
         # @private
@@ -212,6 +216,7 @@ module RSpec
             # returns). We need to cache these values before the `before` value
             # they are based on potentially gets mutated.
             @matches_before = values_match?(@expected_before, actual_before)
+            @nomatches_before = !values_match?(@expected_after, actual_before)
             @actual_before_description = description_of(actual_before)
           end
         end
