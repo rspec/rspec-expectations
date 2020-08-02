@@ -41,4 +41,4 @@ test case. To make this process easier, we have prepared one basic
 
 Maintenance branches are how we manage the different supported point releases
 of RSpec. As such, while they might look like good candidates to merge into
-master, please do not open pull requests to merge them.
+main, please do not open pull requests to merge them.

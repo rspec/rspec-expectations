@@ -1,4 +1,4 @@
-# RSpec Expectations [![Build Status](https://secure.travis-ci.org/rspec/rspec-expectations.svg?branch=master)](http://travis-ci.org/rspec/rspec-expectations) [![Code Climate](https://codeclimate.com/github/rspec/rspec-expectations.svg)](https://codeclimate.com/github/rspec/rspec-expectations)
+# RSpec Expectations [![Build Status](https://secure.travis-ci.org/rspec/rspec-expectations.svg?branch=main)](http://travis-ci.org/rspec/rspec-expectations) [![Code Climate](https://codeclimate.com/github/rspec/rspec-expectations.svg)](https://codeclimate.com/github/rspec/rspec-expectations)
 
 RSpec::Expectations lets you express expected outcomes on an object in an
 example.
@@ -15,12 +15,12 @@ rspec-core and rspec-mocks):
 
     gem install rspec
 
-Want to run against the `master` branch? You'll need to include the dependent
+Want to run against the `main` branch? You'll need to include the dependent
 RSpec repos as well. Add the following to your `Gemfile`:
 
 ```ruby
 %w[rspec-core rspec-expectations rspec-mocks rspec-support].each do |lib|
-  gem lib, :git => "https://github.com/rspec/#{lib}.git", :branch => 'master'
+  gem lib, :git => "https://github.com/rspec/#{lib}.git", :branch => 'main'
 end
 ```
 
@@ -227,7 +227,7 @@ actual.should be > 3
 [1, 2, 3].should_not include 4
 ```
 
-See [detailed information on the `should` syntax and its usage.](https://github.com/rspec/rspec-expectations/blob/master/Should.md)
+See [detailed information on the `should` syntax and its usage.](https://github.com/rspec/rspec-expectations/blob/main/Should.md)
 
 ## Compound Matcher Expressions
 
