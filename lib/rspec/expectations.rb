@@ -1,3 +1,5 @@
+warn "This branch is deprecated. Please use `main`."
+
 require 'rspec/support'
 RSpec::Support.require_rspec_support "caller_filter"
 RSpec::Support.require_rspec_support "warnings"
