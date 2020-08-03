@@ -88,5 +88,5 @@ Feature: Syntax Configuration
       """
     When I run `rspec`
     Then the examples should all pass
-     And the output should not contain "deprecated"
+     And the output should not contain "enabling the syntax is deprecated"
 
