@@ -47,5 +47,5 @@ matrix:
   fast_finish: true
 branches:
   only:
-    - master
+    - main
     - /^\d+-\d+-maintenance$/

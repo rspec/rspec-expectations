@@ -233,7 +233,11 @@ module RSpec
 
           backtrace = format_backtrace(@actual_error.backtrace)
           [
-            ", got #{description_of(@actual_error)} with backtrace:",
+            ", got #{@actual_error.class} with message:",
+            nil,
+            @actual_error.message,
+            nil,
+            "and backtrace:",
             *backtrace
           ].join("\n  # ")
         end

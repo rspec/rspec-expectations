@@ -105,7 +105,7 @@ RSpec.describe "expect { ... }.to raise_error" do
     to_raise = StandardError.new("Error 2")
     expect do
       expect { raise to_raise }.to raise_error(s)
-    end.to fail_with(Regexp.new("expected #{s.inspect}, got #{to_raise.inspect} with backtrace"))
+    end.to fail_with(Regexp.new("expected #{s.inspect}, got StandardError.*#{to_raise.message}"))
   end
 
   it "passes if an error class is expected and an instance of that class is thrown" do
@@ -193,7 +193,7 @@ RSpec.describe "expect { ... }.not_to raise_error" do
     it "fails if anything is raised" do
       expect {
         expect { raise RuntimeError, "example message" }.not_to raise_error
-      }.to fail_with(/expected no Exception, got #<RuntimeError: example message>/)
+      }.to fail_with(/expected no Exception, got RuntimeError with message:\n  #  \n #  example message/)
     end
 
     it 'includes the backtrace of the error that was raised in the error message' do
@@ -235,7 +235,7 @@ RSpec.describe "expect { ... }.to raise_error(message)" do
   it "fails if RuntimeError error is raised with the wrong message" do
     expect do
       expect { raise 'blarg' }.to raise_error('blah')
-    end.to fail_with(/expected Exception with \"blah\", got #<RuntimeError: blarg>/)
+    end.to fail_with(/expected Exception with \"blah\", got RuntimeError with message:\n  #  \n #  blarg/)
   end
 
   it "fails if any other error is raised with the wrong message" do
@@ -526,6 +526,12 @@ RSpec.describe "Composing matchers with `raise_error`" do
       expect {
         expect { raise FooError }.to raise_error(an_attribute(:foo).equal_to(3))
       }.to fail_including("expected Exception with an attribute :foo equal to 3, got #<FooError: FooError>")
+    end
+
+    it 'fails with a clear message when the matcher does not match the raised error and contains multiline message' do
+      #expect {
+        expect { raise "This is a long error\nwith multiple\nlines explaining the cause" }.to raise_error(FooError)
+      #}.to fail_including("expected Exception with an attribute :foo equal to 3, got #<FooError: FooError>")
     end
 
     it 'fails with a clear message when the matcher does not match the exception message' do
