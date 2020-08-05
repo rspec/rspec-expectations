@@ -39,6 +39,8 @@ gem 'simplecov'
 
 if RUBY_VERSION < '2.0.0' || RUBY_ENGINE == 'java'
   gem 'json', '< 2.0.0' # is a dependency of simplecov
+else
+  gem 'json', '> 2.3.0'
 end
 
 # allow gems to be installed on older rubies and/or windows
