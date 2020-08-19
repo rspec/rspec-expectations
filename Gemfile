@@ -78,10 +78,6 @@ platforms :jruby do
   end
 end
 
-platforms :rbx do
-  gem 'rubysl'
-end
-
 if RUBY_VERSION >= '2.4' && RUBY_ENGINE == 'ruby'
   gem 'rubocop', "~> 0.52.1"
 end
