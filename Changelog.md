@@ -13,6 +13,8 @@ Bug Fixes:
   (Jon Rowe, #1187)
 * Prevent formatting a single hash as a list of key value pairs in default failure messages
   for custom matches (fixes formatting in `EnglishPhrasing#list`). (Robert Eshleman, #1193)
+* Prevent errors from causing false positives when using `be <operator>` comparison, e.g.
+  `expect(1).not_to be < 'a'` will now correctly fail rather than pass. (Jon Rowe, #1208)
 
 Enhancements:
 
