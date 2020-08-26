@@ -716,6 +716,30 @@ RSpec.describe "expect(...).not_to with comparison operators" do
       expect("foo").not_to be > "bar"
     }.to fail_with('`expect("foo").not_to be > "bar"` not only FAILED, it is a bit confusing.')
   end
+
+  it "handles ArgumentError as a failure" do
+    %i[< <= >= >].each do |operator|
+      expect {
+        expect('a').to_not be.send(operator, 1)
+      }.to fail_with(%(`expect("a").not_to be #{operator} 1` not only FAILED, it is a bit confusing.))
+    end
+  end
+
+  it "handles NameError as a failure" do
+    %i[< <= >= >].each do |operator|
+      expect {
+        expect(
+          Class.new do
+            def inspect
+              '<Class>'
+            end
+
+            define_method(operator) { |arg| self.non_existant_attribute == operator }
+          end.new
+        ).to_not be.send(operator, 1)
+      }.to fail_with(%(`expect(<Class>).not_to be #{operator} 1` not only FAILED, it is a bit confusing.))
+    end
+  end
 end
 
 RSpec.describe "expect(...).not_to with equality operators" do
@@ -727,6 +751,44 @@ RSpec.describe "expect(...).not_to with equality operators" do
     expect {
       expect(String).not_to be === "Hello"
     }.to fail_with('`expect(String).not_to be === "Hello"`')
+  end
+
+  it "handles ArgumentError as a failure" do
+    failing_equality_klass = Class.new do
+      def inspect
+        "<Class>"
+      end
+
+      def ==(other)
+        raise ArgumentError
+      end
+    end
+
+    expect {
+      expect(failing_equality_klass.new).not_to be == 1
+    }.to fail_with(%(`expect(<Class>).not_to be == 1`))
+
+    expect {
+      expect(failing_equality_klass.new).not_to be === 1
+    }.to fail_with(%(`expect(<Class>).not_to be === 1`))
+  end
+
+  it "handles NameError as a failure" do
+    failing_equality_klass = Class.new do
+      def inspect
+        "<Class>"
+      end
+
+      undef ==
+    end
+
+    expect {
+      expect(failing_equality_klass.new).not_to be == 1
+    }.to fail_with(%(`expect(<Class>).not_to be == 1`))
+
+    expect {
+      expect(failing_equality_klass.new).not_to be === 1
+    }.to fail_with(%(`expect(<Class>).not_to be === 1`))
   end
 end
 
