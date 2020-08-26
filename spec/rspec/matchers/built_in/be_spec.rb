@@ -718,7 +718,7 @@ RSpec.describe "expect(...).not_to with comparison operators" do
   end
 
   it "handles ArgumentError as a failure" do
-    %i[< <= >= >].each do |operator|
+    [:<, :<=, :>=, :>].each do |operator|
       expect {
         expect('a').to_not be.send(operator, 1)
       }.to fail_with(%(`expect("a").not_to be #{operator} 1` not only FAILED, it is a bit confusing.))
@@ -726,7 +726,7 @@ RSpec.describe "expect(...).not_to with comparison operators" do
   end
 
   it "handles NameError as a failure" do
-    %i[< <= >= >].each do |operator|
+    [:<, :<=, :>=, :>].each do |operator|
       expect {
         expect(
           Class.new do
