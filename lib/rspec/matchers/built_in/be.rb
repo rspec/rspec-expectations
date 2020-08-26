@@ -143,8 +143,13 @@ module RSpec
         end
 
         def matches?(actual)
-          @actual = actual
-          @actual.__send__ @operator, @expected
+          perform_match(actual)
+        rescue ArgumentError, NoMethodError
+          false
+        end
+
+        def does_not_match?(actual)
+          !perform_match(actual)
         rescue ArgumentError, NoMethodError
           false
         end
@@ -172,6 +177,13 @@ module RSpec
         # @return [String]
         def description
           "be #{@operator} #{expected_to_sentence}#{args_to_sentence}"
+        end
+
+      private
+
+        def perform_match(actual)
+          @actual = actual
+          @actual.__send__ @operator, @expected
         end
       end
 
