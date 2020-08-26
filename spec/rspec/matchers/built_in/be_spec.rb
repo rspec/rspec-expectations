@@ -628,9 +628,19 @@ RSpec.describe "expect(...).to be ==" do
   end
 
   it "fails when == operator raises ArgumentError" do
+    failing_equality_klass = Class.new do
+      def inspect
+        "<Class>"
+      end
+
+      def ==(other)
+        raise ArgumentError
+      end
+    end
+
     expect {
-      expect('a').to be == 1
-    }.to fail_with(%(expected: == 1\n     got:    "a"))
+      expect(failing_equality_klass.new).to be == 1
+    }.to fail_with(%(expected: == 1\n     got:    <Class>))
   end
 
   it 'works when the target overrides `#send`' do
