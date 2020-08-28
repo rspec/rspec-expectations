@@ -1,13 +1,17 @@
+require 'rspec/matchers/built_in/count_expectation'
+
 module RSpec
   module Matchers
     module BuiltIn
       # @api private
       # Provides the implementation for `include`.
       # Not intended to be instantiated directly.
-      class Include < BaseMatcher
+      class Include < BaseMatcher # rubocop:disable Metrics/ClassLength
+        include CountExpectation
         # @private
         attr_reader :expecteds
 
+        # @api private
         def initialize(*expecteds)
           @expecteds = expecteds
         end
@@ -15,21 +19,29 @@ module RSpec
         # @api private
         # @return [Boolean]
         def matches?(actual)
-          actual = actual.to_hash if convert_to_hash?(actual)
-          perform_match(actual) { |v| v }
+          check_actual?(actual) &&
+            if check_expected_count?
+              expected_count_matches?(count_inclusions)
+            else
+              perform_match { |v| v }
+            end
         end
 
         # @api private
         # @return [Boolean]
         def does_not_match?(actual)
-          actual = actual.to_hash if convert_to_hash?(actual)
-          perform_match(actual) { |v| !v }
+          check_actual?(actual) &&
+            if check_expected_count?
+              !expected_count_matches?(count_inclusions)
+            else
+              perform_match { |v| !v }
+            end
         end
 
         # @api private
         # @return [String]
         def description
-          improve_hash_formatting("include#{readable_list_of(expecteds)}")
+          improve_hash_formatting("include#{readable_list_of(expecteds)}#{count_expectation_description}")
         end
 
         # @api private
@@ -62,12 +74,33 @@ module RSpec
 
       private
 
-        def format_failure_message(preposition)
-          if actual.respond_to?(:include?)
-            improve_hash_formatting("expected #{description_of @actual} #{preposition} include#{readable_list_of @divergent_items}")
-          else
-            improve_hash_formatting(yield) + ", but it does not respond to `include?`"
+        def check_actual?(actual)
+          actual = actual.to_hash if convert_to_hash?(actual)
+          @actual = actual
+          @actual.respond_to?(:include?)
+        end
+
+        def check_expected_count?
+          case
+          when !has_expected_count?
+            return false
+          when expecteds.size != 1
+            raise NotImplementedError, 'Count constraint supported only when testing for a single value being included'
+          when actual.is_a?(Hash)
+            raise NotImplementedError, 'Count constraint on hash keys not implemented'
           end
+          true
+        end
+
+        def format_failure_message(preposition)
+          msg = if actual.respond_to?(:include?)
+                  "expected #{description_of @actual} #{preposition}" \
+                  " include#{readable_list_of @divergent_items}" \
+                  "#{count_failure_reason('it is included') if has_expected_count?}"
+                else
+                  "#{yield}, but it does not respond to `include?`"
+                end
+          improve_hash_formatting(msg)
         end
 
         def readable_list_of(items)
@@ -79,10 +112,9 @@ module RSpec
           end
         end
 
-        def perform_match(actual, &block)
-          @actual = actual
+        def perform_match(&block)
           @divergent_items = excluded_from_actual(&block)
-          actual.respond_to?(:include?) && @divergent_items.empty?
+          @divergent_items.empty?
         end
 
         def excluded_from_actual
@@ -132,6 +164,28 @@ module RSpec
           return false unless actual.respond_to?(:any?)
 
           actual.any? { |value| values_match?(expected_item, value) }
+        end
+
+        if RUBY_VERSION < '1.9'
+          def count_enumerable(expected_item)
+            actual.select { |value| values_match?(expected_item, value) }.size
+          end
+        else
+          def count_enumerable(expected_item)
+            actual.count { |value| values_match?(expected_item, value) }
+          end
+        end
+
+        def count_inclusions
+          @divergent_items = expected
+          case actual
+          when String
+            actual.scan(expected.first).length
+          when Enumerable
+            count_enumerable(expected.first)
+          else
+            raise NotImplementedError, 'Count constraints are implemented for Enumerable and String values only'
+          end
         end
 
         def diff_would_wrongly_highlight_matched_item?

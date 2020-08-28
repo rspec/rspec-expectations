@@ -1,3 +1,5 @@
+require 'rspec/matchers/built_in/count_expectation'
+
 RSpec::Support.require_rspec_support 'method_signature_verifier'
 
 module RSpec
@@ -96,77 +98,13 @@ module RSpec
       # @api private
       # Provides the implementation for `yield_control`.
       # Not intended to be instantiated directly.
-      class YieldControl < BaseMatcher # rubocop:disable ClassLength
-        def initialize
-          @expectation_type = @expected_yields_count = nil
-        end
-
-        # @api public
-        # Specifies that the method is expected to yield once.
-        def once
-          exactly(1)
-          self
-        end
-
-        # @api public
-        # Specifies that the method is expected to yield twice.
-        def twice
-          exactly(2)
-          self
-        end
-
-        # @api public
-        # Specifies that the method is expected to yield thrice.
-        def thrice
-          exactly(3)
-          self
-        end
-
-        # @api public
-        # Specifies that the method is expected to yield the given number of times.
-        def exactly(number)
-          set_expected_yields_count(:==, number)
-          self
-        end
-
-        # @api public
-        # Specifies the maximum number of times the method is expected to yield
-        def at_most(number)
-          set_expected_yields_count(:<=, number)
-          self
-        end
-
-        # @api public
-        # Specifies the minimum number of times the method is expected to yield
-        def at_least(number)
-          set_expected_yields_count(:>=, number)
-          self
-        end
-
-        # @api public
-        # No-op. Provides syntactic sugar.
-        def times
-          self
-        end
-
-        if RUBY_VERSION.to_f > 1.8
-          def cover?(count, number)
-            count.cover?(number)
-          end
-        else
-          def cover?(count, number)
-            number >= count.first && number <= count.last
-          end
-        end
-
+      class YieldControl < BaseMatcher
+        include CountExpectation
         # @private
         def matches?(block)
           @probe = YieldProbe.probe(block)
           return false unless @probe.has_block?
-          return @probe.num_yields > 0 unless @expectation_type
-          return cover?(@expected_yields_count, @probe.num_yields) if @expectation_type == :<=>
-
-          @probe.num_yields.__send__(@expectation_type, @expected_yields_count)
+          expected_count_matches?(@probe.num_yields)
         end
 
         # @private
@@ -193,88 +131,10 @@ module RSpec
 
       private
 
-        def set_expected_yields_count(relativity, n)
-          raise_unsupported_yield_expectation if unsupported_yield_expectation?(relativity)
-
-          count = count_constraint_to_number(n)
-
-          if @expectation_type == :<= && relativity == :>=
-            raise_impossible_yield_expectation(count) if count > @expected_yields_count
-            @expectation_type = :<=>
-            @expected_yields_count = count..@expected_yields_count
-          elsif @expectation_type == :>= && relativity == :<=
-            raise_impossible_yield_expectation(count) if count < @expected_yields_count
-            @expectation_type = :<=>
-            @expected_yields_count = @expected_yields_count..count
-          else
-            @expectation_type = relativity
-            @expected_yields_count = count
-          end
-        end
-
-        def raise_impossible_yield_expectation(count)
-          text =
-            case @expectation_type
-            when :<= then "at_least(#{count}).at_most(#{@expected_yields_count})"
-            when :>= then "at_least(#{@expected_yields_count}).at_most(#{count})"
-            end
-          raise ArgumentError, "The constraint #{text} is not possible"
-        end
-
-        def raise_unsupported_yield_expectation
-          text =
-            case @expectation_type
-            when :<= then "at_least"
-            when :>= then "at_most"
-            when :<=> then "at_least/at_most combination"
-            else "count"
-            end
-          raise ArgumentError, "Multiple #{text} constraints are not supported"
-        end
-
-        def unsupported_yield_expectation?(relativity)
-          return true if @expectation_type == :==
-          return true if @expectation_type == :<=>
-          (@expectation_type == :<= && relativity == :<=) || (@expectation_type == :>= && relativity == :>=)
-        end
-
-        def count_constraint_to_number(n)
-          case n
-          when Numeric then n
-          when :once then 1
-          when :twice then 2
-          when :thrice then 3
-          else
-            raise ArgumentError, "Expected a number, :once, :twice or :thrice," \
-              " but got #{n}"
-          end
-        end
-
         def failure_reason
           return ' but was not a block' unless @probe.has_block?
-          return "#{human_readable_expectation_type}#{human_readable_count(@expected_yields_count)} but did not yield" if @probe.num_yields.zero?
-
-          "#{human_readable_expectation_type}#{human_readable_count(@expected_yields_count)}" \
-          " but yielded#{human_readable_count(@probe.num_yields)}"
-        end
-
-        def human_readable_expectation_type
-          case @expectation_type
-          when :<= then ' at most'
-          when :>= then ' at least'
-          when :<=> then ' between'
-          else ''
-          end
-        end
-
-        def human_readable_count(count)
-          case count
-          when Range then " #{count.first} and #{count.last} times"
-          when nil then ''
-          when 1 then ' once'
-          when 2 then ' twice'
-          else " #{count} times"
-          end
+          return "#{count_expectation_description} but did not yield" if @probe.num_yields == 0
+          count_failure_reason('yielded')
         end
       end
 

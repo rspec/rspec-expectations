@@ -18,6 +18,8 @@ Bug Fixes:
 
 Enhancements:
 
+* Allow `include` matcher to be chained with `once`, `at_least`, etc. for simple cases.
+  (Marc-André Lafortune, #1168)
 * Add an explicit warning when `nil` is passed to `raise_error`. (Phil Pirozhkov, #1143)
 * Improve `include` matcher's composability. (Phil Pirozhkov, #1155)
 * Mocks expectations can now set a custom failure message.
