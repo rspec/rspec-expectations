@@ -103,7 +103,7 @@ RSpec.describe 'a matcher is expected to be able to have its description generat
     def object.has_taste_for?(*_args); true; end
 
     expect(object).to have_taste_for("wine", "cheese")
-    expect(RSpec::Matchers.generated_description).to eq 'is expected to have taste for "wine", "cheese"'
+    expect(RSpec::Matchers.generated_description).to eq 'is expected to have taste for "wine" and "cheese"'
   end
 
   example "expect(...).to include(x)" do
