@@ -27,6 +27,8 @@ Enhancements:
 * `aggregate_failures` now shows the backtrace line for each failure. (Fabricio Bedin, #1163)
 * Support multiple combinations of `yield_control` modifiers like `at_least`, `at_most`.
   (Jon Rowe, #1169)
+* Dynamic `have_<n>` matchers now have output consistent with other dynamic matchers.
+  (Marc-André Lafortune, #1195)
 
 ### 3.9.2 / 2020-05-08
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.1...v3.9.2)
