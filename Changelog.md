@@ -29,6 +29,9 @@ Enhancements:
   (Jon Rowe, #1169)
 * Dynamic `have_<n>` matchers now have output consistent with other dynamic matchers.
   (Marc-André Lafortune, #1195)
+* New config option `strict_predicate_matchers` allows predicate matcher to be strict
+  (i.e. match for `true` or `false`) instead of the default (match truthy vs `false` or `nil`).
+  (Marc-André Lafortune, #1196)
 
 ### 3.9.2 / 2020-05-08
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.1...v3.9.2)

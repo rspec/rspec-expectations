@@ -30,7 +30,7 @@ module RSpec
         def does_not_match?(actual, &block)
           @actual = actual
           @block ||= block
-          predicate_accessible? && !predicate_matches?
+          predicate_accessible? && predicate_matches?(false)
         end
 
         # @api private
@@ -90,8 +90,12 @@ module RSpec
           predicate
         end
 
-        def predicate_matches?
-          !!predicate_result
+        def predicate_matches?(value=true)
+          if RSpec::Expectations.configuration.strict_predicate_matchers?
+            value == predicate_result
+          else
+            value == !!predicate_result
+          end
         end
 
         def root
@@ -108,7 +112,17 @@ module RSpec
 
         def failure_message_expecting(value)
           validity_message ||
-            "expected `#{actual_formatted}.#{predicate}#{args_to_s}` to return #{value}, got #{description_of @predicate_result}"
+            "expected `#{actual_formatted}.#{predicate}#{args_to_s}` to #{expectation_of value}, got #{description_of @predicate_result}"
+        end
+
+        def expectation_of(value)
+          if RSpec::Expectations.configuration.strict_predicate_matchers?
+            "return #{value}"
+          elsif value
+            "be truthy"
+          else
+            "be falsey"
+          end
         end
 
         def validity_message

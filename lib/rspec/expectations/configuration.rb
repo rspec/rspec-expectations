@@ -28,6 +28,7 @@ module RSpec
 
       def initialize
         @on_potential_false_positives = :warn
+        @strict_predicate_matchers = false
       end
 
       # Configures the supported syntax.
@@ -183,6 +184,20 @@ module RSpec
           raise ArgumentError, "Supported values are: #{FALSE_POSITIVE_BEHAVIOURS.keys}"
         end
         @on_potential_false_positives = behavior
+      end
+
+      # Configures RSpec to check predicate matchers to `be(true)` / `be(false)` (strict),
+      # or `be_truthy` / `be_falsey` (not strict).
+      # Historically, the default was `false`, but `true` is recommended.
+      def strict_predicate_matchers=(flag)
+        raise ArgumentError, "Pass `true` or `false`" unless flag == true || flag == false
+        @strict_predicate_matchers = flag
+      end
+
+      attr_reader :strict_predicate_matchers
+
+      def strict_predicate_matchers?
+        @strict_predicate_matchers
       end
 
       # Indicates what RSpec will do about matcher use which will

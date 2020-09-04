@@ -47,7 +47,7 @@ Feature: Minitest integration
       """
      When I run `ruby rspec_expectations_test.rb`
      Then the output should contain "4 runs, 5 assertions, 2 failures, 0 errors"
-      And the output should contain "expected `[1, 2].empty?` to return true, got false"
+      And the output should contain "expected `[1, 2].empty?` to be truthy, got false"
       And the output should contain "be_an_int is deprecated"
       And the output should contain "Got 2 failures from failure aggregation block"
 
@@ -105,7 +105,7 @@ Feature: Minitest integration
       """
      When I run `ruby rspec_expectations_spec.rb`
      Then the output should contain "9 runs, 10 assertions, 5 failures, 0 errors"
-      And the output should contain "expected `[1, 2].empty?` to return true, got false"
+      And the output should contain "expected `[1, 2].empty?` to be truthy, got false"
       And the output should contain "expected ZeroDivisionError but nothing was raised"
       And the output should contain "Got 2 failures from failure aggregation block"
       And the output should contain "Expected [1, 2] to be empty?"

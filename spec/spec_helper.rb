@@ -52,6 +52,7 @@ RSpec.configure do |config|
     $default_expectation_syntax = expectations.syntax # rubocop:disable Style/GlobalVars
     expectations.syntax = :expect
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+    expectations.strict_predicate_matchers = true
   end
 
   config.mock_with :rspec do |mocks|
