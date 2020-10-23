@@ -1,20 +1,10 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.2...main)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.3...main)
 
 Bug Fixes:
 
 * The `change` matcher now recognises an object has changed when its instance attributes
   have changed. (Jon Rowe, #1132)
-* Swap the comparison of the delta vs the expected for the `be_within` matcher allowing
-  more complicated oobjects to be compared providing they provide `abs` and other
-  comparison methods. (Kelly Stannard, #1182)
-* Properly format expected in the description of the `be_within` matcher. (Jon Rowe, #1185)
-* Remove warning when using keyword arguments with `be_` and `have_` matchers on 2.7.x
-  (Jon Rowe, #1187)
-* Prevent formatting a single hash as a list of key value pairs in default failure messages
-  for custom matches (fixes formatting in `EnglishPhrasing#list`). (Robert Eshleman, #1193)
-* Prevent errors from causing false positives when using `be <operator>` comparison, e.g.
-  `expect(1).not_to be < 'a'` will now correctly fail rather than pass. (Jon Rowe, #1208)
 
 Enhancements:
 
@@ -32,6 +22,22 @@ Enhancements:
 * New config option `strict_predicate_matchers` allows predicate matcher to be strict
   (i.e. match for `true` or `false`) instead of the default (match truthy vs `false` or `nil`).
   (Marc-André Lafortune, #1196)
+
+### 3.9.3 / 2020-10-23
+
+Bug Fixes:
+
+* Swap the comparison of the delta vs the expected for the `be_within` matcher allowing
+  more complicated oobjects to be compared providing they provide `abs` and other
+  comparison methods. (Kelly Stannard, #1182)
+* Properly format expected in the description of the `be_within` matcher. (Jon Rowe, #1185)
+* Remove warning when using keyword arguments with `be_` and `have_` matchers on 2.7.x
+  (Jon Rowe, #1187)
+* Prevent formatting a single hash as a list of key value pairs in default failure messages
+  for custom matches (fixes formatting in `EnglishPhrasing#list`). (Robert Eshleman, #1193)
+* Prevent errors from causing false positives when using `be <operator>` comparison, e.g.
+  `expect(1).not_to be < 'a'` will now correctly fail rather than pass. (Jon Rowe, #1208)
+
 
 ### 3.9.2 / 2020-05-08
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.1...v3.9.2)
