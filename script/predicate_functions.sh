@@ -81,6 +81,14 @@ function rspec_rails_compatible {
   fi
 }
 
+function requires_rspec_rails_maintenance_branch {
+  if [ "$MAINTENANCE_BRANCH" == "3-10-maintenance" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 function rspec_support_compatible {
   if [ "$MAINTENANCE_BRANCH" != "2-99-maintenance" ] && [ "$MAINTENANCE_BRANCH" != "2-14-maintenance" ]; then
     return 0
