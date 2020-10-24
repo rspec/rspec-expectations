@@ -1,11 +1,6 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.3...main)
 
-Bug Fixes:
-
-* The `change` matcher now recognises an object has changed when its instance attributes
-  have changed. (Jon Rowe, #1132)
-
 Enhancements:
 
 * Allow `include` matcher to be chained with `once`, `at_least`, etc. for simple cases.
