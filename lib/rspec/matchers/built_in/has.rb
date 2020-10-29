@@ -5,17 +5,10 @@ module RSpec
       # Provides the implementation for `has_<predicate>`.
       # Not intended to be instantiated directly.
       class Has < BaseMatcher
-        if RSpec::Support::RubyFeatures.kw_args_supported?
-          binding.eval(<<-CODE, __FILE__, __LINE__)
-          def initialize(method_name, *args, **kwargs, &block)
-            @method_name, @args, @kwargs, @block = method_name, args, kwargs, block
-          end
-          CODE
-        else
-          def initialize(method_name, *args, &block)
-            @method_name, @args, @block = method_name, args, block
-          end
+        def initialize(method_name, *args, &block)
+          @method_name, @args, @block = method_name, args, block
         end
+        ruby2_keywords :initialize if respond_to?(:ruby2_keywords, true)
 
         # @private
         def matches?(actual, &block)
@@ -72,20 +65,8 @@ module RSpec
           @actual.respond_to? predicate
         end
 
-        if RSpec::Support::RubyFeatures.kw_args_supported?
-          binding.eval(<<-CODE, __FILE__, __LINE__)
-          def predicate_matches?
-            if @kwargs.empty?
-              @actual.__send__(predicate, *@args, &@block)
-            else
-              @actual.__send__(predicate, *@args, **@kwargs, &@block)
-            end
-          end
-          CODE
-        else
-          def predicate_matches?
-            @actual.__send__(predicate, *@args, &@block)
-          end
+        def predicate_matches?
+          @actual.__send__(predicate, *@args, &@block)
         end
 
         def predicate

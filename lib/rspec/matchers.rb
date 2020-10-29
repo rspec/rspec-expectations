@@ -953,31 +953,17 @@ module RSpec
     HAS_REGEX = /^(?:have_)(.*)/
     DYNAMIC_MATCHER_REGEX = Regexp.union(BE_PREDICATE_REGEX, HAS_REGEX)
 
-    if RSpec::Support::RubyFeatures.kw_args_supported?
-      binding.eval(<<-CODE, __FILE__, __LINE__)
-      def method_missing(method, *args, **kwargs, &block)
-        case method.to_s
-        when BE_PREDICATE_REGEX
-          BuiltIn::BePredicate.new(method, *args, **kwargs, &block)
-        when HAS_REGEX
-          BuiltIn::Has.new(method, *args, **kwargs, &block)
-        else
-          super
-        end
-      end
-      CODE
-    else
-      def method_missing(method, *args, &block)
-        case method.to_s
-        when BE_PREDICATE_REGEX
-          BuiltIn::BePredicate.new(method, *args, &block)
-        when HAS_REGEX
-          BuiltIn::Has.new(method, *args, &block)
-        else
-          super
-        end
+    def method_missing(method, *args, &block)
+      case method.to_s
+      when BE_PREDICATE_REGEX
+        BuiltIn::BePredicate.new(method, *args, &block)
+      when HAS_REGEX
+        BuiltIn::Has.new(method, *args, &block)
+      else
+        super
       end
     end
+    ruby2_keywords :method_missing if respond_to?(:ruby2_keywords, true)
 
     if RUBY_VERSION.to_f >= 1.9
       def respond_to_missing?(method, *)
