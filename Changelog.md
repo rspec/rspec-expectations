@@ -1,3 +1,11 @@
+### 3.9.4 / 2020-10-29
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.3...v3.9.4)
+
+Bug Fixes:
+
+* Fix regression with `be_` and `have_` matchers and arguments implementing `to_hash`
+  were they would act like keywords and be cast to a hash. (Jon Rowe, #1222)
+
 ### 3.9.3 / 2020-10-23
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.2...v3.9.3)
 
