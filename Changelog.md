@@ -1,3 +1,10 @@
+### Development
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.0...main)
+
+Enhancements:
+
+* Return `true` from `aggregate_failures` when no exception occurs. (Jon Rowe, #1225)
+
 ### 3.10.0 / 2020-10-30
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.3...v3.10.0)
 
