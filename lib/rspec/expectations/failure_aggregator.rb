@@ -80,7 +80,7 @@ module RSpec
         all_errors = failures + other_errors
 
         case all_errors.size
-        when 0 then return nil
+        when 0 then return true
         when 1 then RSpec::Support.notify_failure all_errors.first
         else RSpec::Support.notify_failure MultipleExpectationsNotMetError.new(self)
         end
