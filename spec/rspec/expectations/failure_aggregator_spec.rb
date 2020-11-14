@@ -10,6 +10,16 @@ module RSpec::Expectations
       }.not_to raise_error
     end
 
+    it 'returns true when no expectations fail' do
+      expect(
+        aggregate_failures do
+          expect(1).to be_odd
+          expect(2).to be_even
+          expect(3).to be_odd
+        end
+      ).to eq true
+    end
+
     it 'aggregates multiple failures into one exception that exposes all the failures' do
       expect {
         aggregate_failures('block label', :some => :metadata) do
