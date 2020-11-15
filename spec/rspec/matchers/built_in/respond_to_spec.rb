@@ -611,408 +611,394 @@ RSpec.describe "expect(...).not_to respond_to(:sym).with_unlimited_arguments" do
   end
 end
 
-if RSpec::Support::RubyFeatures.kw_args_supported?
-  RSpec.describe "expect(...).to respond_to(:sym).with_keywords(:foo, :bar)" do
-    it 'passes if target responds to :sym with specified optional keywords' do
-      obj = Object.new
-      eval %{def obj.foo(a: nil, b: nil); end}
-      expect(obj).to respond_to(:foo).with_keywords(:a, :b)
-    end
+RSpec.describe "expect(...).to respond_to(:sym).with_keywords(:foo, :bar)" do
+  it 'passes if target responds to :sym with specified optional keywords' do
+    obj = Object.new
+    eval %{def obj.foo(a: nil, b: nil); end}
+    expect(obj).to respond_to(:foo).with_keywords(:a, :b)
+  end
 
-    it 'passes if target responds to :sym with any keywords' do
-      obj = Object.new
-      eval %{def obj.foo(**kw_args); end}
-      expect(obj).to respond_to(:foo).with_keywords(:a, :b)
-    end
+  it 'passes if target responds to :sym with any keywords' do
+    obj = Object.new
+    eval %{def obj.foo(**kw_args); end}
+    expect(obj).to respond_to(:foo).with_keywords(:a, :b)
+  end
 
-    it 'passes if target is :new with keywords' do
-      # note we can't use the metaobject definition for initialize
-      klass = eval %{Class.new { def initialize(a: nil, b: nil); end}}
+  it 'passes if target is :new with keywords' do
+    # note we can't use the metaobject definition for initialize
+    klass = eval %{Class.new { def initialize(a: nil, b: nil); end}}
+    expect(klass).to respond_to(:new).with_keywords(:a, :b)
+
+    # note we can't use the metaobject definition for initialize
+    klass_2 = eval %{Class.new { def initialize(**kw_args); end}}
+    expect(klass_2).to respond_to(:new).with_keywords(:a, :b)
+  end
+
+  it "fails if target does not respond to :sym" do
+    obj = Object.new
+    expect {
+      expect(obj).to respond_to(:some_method).with_keywords(:a, :b)
+    }.to fail_with(/expected .* to respond to :some_method with keywords :a and :b/)
+  end
+
+  it "fails if :sym does not expect specified keywords" do
+    obj = Object.new
+    def obj.foo; end
+    expect {
+      expect(obj).to respond_to(:foo).with_keywords(:a, :b)
+    }.to fail_with(/expected .* to respond to :foo with keywords :a and :b/)
+  end
+
+  it "fails if :sym does not expect many specified keywords" do
+    obj = Object.new
+    def obj.foo; end
+    expect {
+      expect(obj).to respond_to(:foo).with_keywords(:a, :b, :c, :d, :e, :f)
+    }.to fail_with(/expected .* to respond to :foo with keywords :a, :b, :c, :d, :e, and :f/)
+  end
+
+  it 'fails if target is :new but initialize does not expect the right keywords' do
+    # note we can't use the metaobject definition for initialize
+    klass = eval %{Class.new { def initialize(a: nil); end}}
+    expect {
       expect(klass).to respond_to(:new).with_keywords(:a, :b)
-
-      # note we can't use the metaobject definition for initialize
-      klass_2 = eval %{Class.new { def initialize(**kw_args); end}}
-      expect(klass_2).to respond_to(:new).with_keywords(:a, :b)
-    end
-
-    it "fails if target does not respond to :sym" do
-      obj = Object.new
-      expect {
-        expect(obj).to respond_to(:some_method).with_keywords(:a, :b)
-      }.to fail_with(/expected .* to respond to :some_method with keywords :a and :b/)
-    end
-
-    it "fails if :sym does not expect specified keywords" do
-      obj = Object.new
-      def obj.foo; end
-      expect {
-        expect(obj).to respond_to(:foo).with_keywords(:a, :b)
-      }.to fail_with(/expected .* to respond to :foo with keywords :a and :b/)
-    end
-
-    it "fails if :sym does not expect many specified keywords" do
-      obj = Object.new
-      def obj.foo; end
-      expect {
-        expect(obj).to respond_to(:foo).with_keywords(:a, :b, :c, :d, :e, :f)
-      }.to fail_with(/expected .* to respond to :foo with keywords :a, :b, :c, :d, :e, and :f/)
-    end
-
-    it 'fails if target is :new but initialize does not expect the right keywords' do
-      # note we can't use the metaobject definition for initialize
-      klass = eval %{Class.new { def initialize(a: nil); end}}
-      expect {
-        expect(klass).to respond_to(:new).with_keywords(:a, :b)
-      }.to fail_with(/expected .* to respond to :new with keywords :a and :b/)
-    end
-
-    if RSpec::Support::RubyFeatures.required_kw_args_supported?
-      it "passes if target responds to :sym with specified required keywords" do
-        obj = Object.new
-        eval %{def obj.foo(a:, b:, c: nil, d: nil); end}
-        expect(obj).to respond_to(:foo).with_keywords(:a, :b)
-      end
-
-      it "passes if target responds to :sym with keyword arg splat" do
-        obj = Object.new
-        eval %{def obj.foo(**rest); end}
-        expect(obj).to respond_to(:foo).with_keywords(:a, :b)
-      end
-
-      it 'passes if target is :new and initialize has specified required keywords' do
-        # note we can't use the metaobject definition for initialize
-        klass = eval %{Class.new { def initialize(a:, b:); end}}
-        expect(klass).to respond_to(:new).with_keywords(:a, :b)
-      end
-
-      it "fails if :sym expects specified optional keywords but expects missing required keywords" do
-        obj = Object.new
-        eval %{def obj.foo(a:, b:, c: nil, d: nil); end}
-        expect {
-          expect(obj).to respond_to(:some_method).with_keywords(:c, :d)
-        }.to fail_with(/expected .* to respond to :some_method with keywords :c and :d/)
-      end
-
-      it "fails if target responds to :sym with keyword arg splat but missing required keywords" do
-        obj = Object.new
-        eval %{def obj.foo(a:, b:, **rest); end}
-        expect {
-          expect(obj).to respond_to(:some_method).with_keywords(:c, :d)
-        }.to fail_with(/expected .* to respond to :some_method with keywords :c and :d/)
-      end
-
-      it 'fails if target is :new and initialize has is missing required keywords' do
-        # note we can't use the metaobject definition for initialize
-        klass = eval %{Class.new { def initialize(a:, b:); end}}
-        expect {
-          expect(klass).to respond_to(:new).with_keywords(:c, :d)
-        }.to fail_with(/expected .* to respond to :new with keywords :c and :d/)
-      end
-    end
+    }.to fail_with(/expected .* to respond to :new with keywords :a and :b/)
   end
 
-  RSpec.describe "expect(...).to respond_to(:sym).with(2).arguments.and_keywords(:foo, :bar)" do
-    it "passes if target responds to :sym with 2 args and specified optional keywords" do
-      obj = Object.new
-      eval %{def obj.foo(a, b, u: nil, v: nil); end}
-      expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-    end
-
-    it "passes if target responds to :sym with any number of arguments and specified optional keywords" do
-      obj = Object.new
-      eval %{def obj.foo(*args, u: nil, v: nil); end}
-      expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-    end
-
-    it "passes if target responds to :sym with one or more arguments and specified optional keywords" do
-      obj = Object.new
-      eval %{def obj.foo(a, *args, u: nil, v: nil); end}
-      expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-    end
-
-    it "passes if target responds to :sym with two or more arguments and specified optional keywords" do
-      obj = Object.new
-      eval %{def obj.foo(a, b, *args, u: nil, v: nil); end}
-      expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-    end
-
-    it "fails if target does not respond to :sym" do
-      obj = Object.new
-      expect {
-        expect(obj).to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
-      }.to fail_with(/expected .* to respond to :some_method with 2 arguments and keywords :u and :v/)
-    end
-
-    it "fails if :sym expects 1 argument" do
-      obj = Object.new
-      eval %{def obj.foo(a, u: nil, v: nil); end}
-      expect {
-        expect(obj).to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
-      }.to fail_with(/expected .* to respond to :some_method with 2 arguments and keywords :u and :v/)
-    end
-
-    it "fails if :sym does not expect specified keywords" do
-      obj = Object.new
-      def obj.foo(a, b); end
-      expect {
-        expect(obj).to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
-      }.to fail_with(/expected .* to respond to :some_method with 2 arguments and keywords :u and :v/)
-    end
-
-    if RSpec::Support::RubyFeatures.required_kw_args_supported?
-      it "passes if target responds to :sym with 2 args and specified required keywords" do
-        obj = Object.new
-        eval %{def obj.foo(a, b, u:, v:); end}
-        expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-      end
-
-      it "passes if target responds to :sym with 2 args and keyword arg splat" do
-        obj = Object.new
-        eval %{def obj.foo(a, b, **rest); end}
-        expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-      end
-
-      it "passes for new when target responds to initialize with a mixture of arguments" do
-        klass = eval %{Class.new { def initialize(a, b, c:, d: nil); end }}
-        expect(klass).to respond_to(:new).with(2).arguments.and_keywords(:c, :d)
-      end
-
-      it "fails if :sym expects 2 arguments and specified optional keywords but expects missing required keywords" do
-        obj = Object.new
-        eval %{def obj.foo(a, b, u: nil, v: nil, x:, y:); end}
-        expect {
-          expect(obj).to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
-        }.to fail_with(/expected .* to respond to :some_method with 2 arguments and keywords :u and :v/)
-      end
-
-      it "fails for new when target responds to initialize with the wrong mixture of arguments" do
-        klass = eval %{Class.new { def initialize(a, b, c:); end }}
-        expect {
-          expect(klass).to respond_to(:new).with(2).arguments.and_keywords(:c, :d)
-        }.to fail_with(/expected .* to respond to :new with 2 arguments and keywords :c and :d/)
-      end
-    end
+  it "passes if target responds to :sym with specified required keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a:, b:, c: nil, d: nil); end}
+    expect(obj).to respond_to(:foo).with_keywords(:a, :b)
   end
 
-  RSpec.describe "expect(...).to respond_to(:sym).with_any_keywords" do
-    it "passes if target responds to any keywords" do
-      obj = Object.new
-      eval %{def obj.foo(**kw_args); end}
-      expect(obj).to respond_to(:foo).with_any_keywords
-    end
+  it "passes if target responds to :sym with keyword arg splat" do
+    obj = Object.new
+    eval %{def obj.foo(**rest); end}
+    expect(obj).to respond_to(:foo).with_keywords(:a, :b)
+  end
 
-    it "passes when initialize responds to any keywords and we check new" do
-      klass = eval %{Class.new { def initialize(**kw_args); end }}
+  it 'passes if target is :new and initialize has specified required keywords' do
+    # note we can't use the metaobject definition for initialize
+    klass = eval %{Class.new { def initialize(a:, b:); end}}
+    expect(klass).to respond_to(:new).with_keywords(:a, :b)
+  end
+
+  it "fails if :sym expects specified optional keywords but expects missing required keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a:, b:, c: nil, d: nil); end}
+    expect {
+      expect(obj).to respond_to(:some_method).with_keywords(:c, :d)
+    }.to fail_with(/expected .* to respond to :some_method with keywords :c and :d/)
+  end
+
+  it "fails if target responds to :sym with keyword arg splat but missing required keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a:, b:, **rest); end}
+    expect {
+      expect(obj).to respond_to(:some_method).with_keywords(:c, :d)
+    }.to fail_with(/expected .* to respond to :some_method with keywords :c and :d/)
+  end
+
+  it 'fails if target is :new and initialize has is missing required keywords' do
+    # note we can't use the metaobject definition for initialize
+    klass = eval %{Class.new { def initialize(a:, b:); end}}
+    expect {
+      expect(klass).to respond_to(:new).with_keywords(:c, :d)
+    }.to fail_with(/expected .* to respond to :new with keywords :c and :d/)
+  end
+end
+
+RSpec.describe "expect(...).to respond_to(:sym).with(2).arguments.and_keywords(:foo, :bar)" do
+  it "passes if target responds to :sym with 2 args and specified optional keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a, b, u: nil, v: nil); end}
+    expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+  end
+
+  it "passes if target responds to :sym with any number of arguments and specified optional keywords" do
+    obj = Object.new
+    eval %{def obj.foo(*args, u: nil, v: nil); end}
+    expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+  end
+
+  it "passes if target responds to :sym with one or more arguments and specified optional keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a, *args, u: nil, v: nil); end}
+    expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+  end
+
+  it "passes if target responds to :sym with two or more arguments and specified optional keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a, b, *args, u: nil, v: nil); end}
+    expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+  end
+
+  it "fails if target does not respond to :sym" do
+    obj = Object.new
+    expect {
+      expect(obj).to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
+    }.to fail_with(/expected .* to respond to :some_method with 2 arguments and keywords :u and :v/)
+  end
+
+  it "fails if :sym expects 1 argument" do
+    obj = Object.new
+    eval %{def obj.foo(a, u: nil, v: nil); end}
+    expect {
+      expect(obj).to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
+    }.to fail_with(/expected .* to respond to :some_method with 2 arguments and keywords :u and :v/)
+  end
+
+  it "fails if :sym does not expect specified keywords" do
+    obj = Object.new
+    def obj.foo(a, b); end
+    expect {
+      expect(obj).to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
+    }.to fail_with(/expected .* to respond to :some_method with 2 arguments and keywords :u and :v/)
+  end
+
+  it "passes if target responds to :sym with 2 args and specified required keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a, b, u:, v:); end}
+    expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+  end
+
+  it "passes if target responds to :sym with 2 args and keyword arg splat" do
+    obj = Object.new
+    eval %{def obj.foo(a, b, **rest); end}
+    expect(obj).to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+  end
+
+  it "passes for new when target responds to initialize with a mixture of arguments" do
+    klass = eval %{Class.new { def initialize(a, b, c:, d: nil); end }}
+    expect(klass).to respond_to(:new).with(2).arguments.and_keywords(:c, :d)
+  end
+
+  it "fails if :sym expects 2 arguments and specified optional keywords but expects missing required keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a, b, u: nil, v: nil, x:, y:); end}
+    expect {
+      expect(obj).to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
+    }.to fail_with(/expected .* to respond to :some_method with 2 arguments and keywords :u and :v/)
+  end
+
+  it "fails for new when target responds to initialize with the wrong mixture of arguments" do
+    klass = eval %{Class.new { def initialize(a, b, c:); end }}
+    expect {
+      expect(klass).to respond_to(:new).with(2).arguments.and_keywords(:c, :d)
+    }.to fail_with(/expected .* to respond to :new with 2 arguments and keywords :c and :d/)
+  end
+end
+
+RSpec.describe "expect(...).to respond_to(:sym).with_any_keywords" do
+  it "passes if target responds to any keywords" do
+    obj = Object.new
+    eval %{def obj.foo(**kw_args); end}
+    expect(obj).to respond_to(:foo).with_any_keywords
+  end
+
+  it "passes when initialize responds to any keywords and we check new" do
+    klass = eval %{Class.new { def initialize(**kw_args); end }}
+    expect(klass).to respond_to(:new).with_any_keywords
+  end
+
+  it "fails if target does not respond to :sym" do
+    obj = Object.new
+    expect {
+      expect(obj).to respond_to(:some_method).with_any_keywords
+    }.to fail_with(/expected .* to respond to :some_method/)
+  end
+
+  it "fails if :sym expects a limited set of keywords" do
+    obj = Object.new
+    eval %{def obj.some_method(a: nil, b: nil); end}
+    expect {
+      expect(obj).to respond_to(:some_method).with_any_keywords
+    }.to fail_with(/expected .* to respond to :some_method with any keywords/)
+  end
+
+  it "fails when initialize expects a limited set of keywords and we check new" do
+    klass = eval %{Class.new { def initialize(a: nil); end }}
+    expect {
       expect(klass).to respond_to(:new).with_any_keywords
-    end
-
-    it "fails if target does not respond to :sym" do
-      obj = Object.new
-      expect {
-        expect(obj).to respond_to(:some_method).with_any_keywords
-      }.to fail_with(/expected .* to respond to :some_method/)
-    end
-
-    it "fails if :sym expects a limited set of keywords" do
-      obj = Object.new
-      eval %{def obj.some_method(a: nil, b: nil); end}
-      expect {
-        expect(obj).to respond_to(:some_method).with_any_keywords
-      }.to fail_with(/expected .* to respond to :some_method with any keywords/)
-    end
-
-    it "fails when initialize expects a limited set of keywords and we check new" do
-      klass = eval %{Class.new { def initialize(a: nil); end }}
-      expect {
-        expect(klass).to respond_to(:new).with_any_keywords
-      }.to fail_with(/expected .* to respond to :new with any keywords/)
-    end
-
-    if RSpec::Support::RubyFeatures.required_kw_args_supported?
-      it "fails if :sym expects missing required keywords" do
-        obj = Object.new
-        eval %{def obj.some_method(a:, b:, **kw_args); end}
-        expect {
-          expect(obj).to respond_to(:some_method).with_any_keywords
-        }.to fail_with(/expected .* to respond to :some_method with any keywords/)
-      end
-
-      it "fails if :initialize expects missing required keywords when we test new" do
-        klass = eval %{Class.new { def initialize(a:, **kw_args); end }}
-        eval %{def initialize(a:, b:, **kw_args); end}
-        expect {
-          expect(klass).to respond_to(:new).with_any_keywords
-        }.to fail_with(/expected .* to respond to :new with any keywords/)
-      end
-    end
+    }.to fail_with(/expected .* to respond to :new with any keywords/)
   end
 
-  RSpec.describe "expect(...).not_to respond_to(:sym).with_keywords(:foo, :bar)" do
-    it "fails if target responds to :sym with specified optional keywords" do
-      obj = Object.new
-      eval %{def obj.foo(a: nil, b: nil); end}
-      expect {
-        expect(obj).not_to respond_to(:foo).with_keywords(:a, :b)
-      }.to fail_with(/expected #<Object:.*> not to respond to :foo with keywords :a and :b/)
-    end
-
-    it "fails if target responds to :sym with any keywords" do
-      obj = Object.new
-      eval %{def obj.foo(**kw_args); end}
-      expect {
-        expect(obj).not_to respond_to(:foo).with_keywords(:a, :b)
-      }.to fail_with(/expected #<Object:.*> not to respond to :foo with keywords :a and :b/)
-    end
-
-    it "fails if target initialize responds to expected keywords when checking new" do
-      klass = eval %{Class.new { def initialize(**kw_args); end }}
-      expect {
-        expect(klass).not_to respond_to(:new).with_keywords(:a, :b)
-      }.to fail_with(/expected .* not to respond to :new with keywords :a and :b/)
-    end
-
-    it "passes if target does not respond to :sym" do
-      obj = Object.new
-      expect(obj).not_to respond_to(:some_method).with_keywords(:a, :b)
-    end
-
-    it "passes if :sym does not expect specified keywords" do
-      obj = Object.new
-      eval %{def obj.foo(a: nil, b: nil); end}
-      expect(obj).not_to respond_to(:some_method).with_keywords(:c, :d)
-    end
-
-    if RSpec::Support::RubyFeatures.required_kw_args_supported?
-      it "fails if target responds to :sym with specified required keywords" do
-        obj = Object.new
-        eval %{def obj.foo(a:, b:); end}
-        expect {
-          expect(obj).not_to respond_to(:foo).with_keywords(:a, :b)
-        }.to fail_with(/expected #<Object:.*> not to respond to :foo with keywords :a and :b/)
-      end
-
-      it "fails if target responds to :sym with keyword arg splat" do
-        obj = Object.new
-        eval %{def obj.foo(**rest); end}
-        expect {
-          expect(obj).not_to respond_to(:foo).with_keywords(:a, :b)
-        }.to fail_with(/expected #<Object:.*> not to respond to :foo with keywords :a and :b/)
-      end
-
-      it "passes if :sym expects missing required keywords" do
-        obj = Object.new
-        eval %{def obj.foo(a:, b:, c: nil, d: nil); end}
-        expect(obj).not_to respond_to(:some_method).with_keywords(:c, :d)
-      end
-
-      it "passes if :initialize expects missing required keywords for :new" do
-        klass = eval %{Class.new { def initialize(a:, b:, c: nil, d: nil); end }}
-        expect(klass).not_to respond_to(:new).with_keywords(:c, :d)
-      end
-    end
+  it "fails if :sym expects missing required keywords" do
+    obj = Object.new
+    eval %{def obj.some_method(a:, b:, **kw_args); end}
+    expect {
+      expect(obj).to respond_to(:some_method).with_any_keywords
+    }.to fail_with(/expected .* to respond to :some_method with any keywords/)
   end
 
-  RSpec.describe "expect(...).not_to respond_to(:sym).with(2).arguments.and_keywords(:foo, :bar)" do
-    it "fails if target responds to :sym with 2 args and specified optional keywords" do
-      obj = Object.new
-      eval %{def obj.foo(a, b, u: nil, v: nil); end}
-      expect {
-        expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-      }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
-    end
+  it "fails if :initialize expects missing required keywords when we test new" do
+    klass = eval %{Class.new { def initialize(a:, **kw_args); end }}
+    eval %{def initialize(a:, b:, **kw_args); end}
+    expect {
+      expect(klass).to respond_to(:new).with_any_keywords
+    }.to fail_with(/expected .* to respond to :new with any keywords/)
+  end
+end
 
-    it "fails if target responds to :sym with any number of arguments and specified optional keywords" do
-      obj = Object.new
-      eval %{def obj.foo(*args, u: nil, v: nil); end}
-      expect {
-        expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-      }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
-    end
-
-    it "fails if target responds to :sym with one or more arguments and specified optional keywords" do
-      obj = Object.new
-      eval %{def obj.foo(a, *args, u: nil, v: nil); end}
-      expect {
-        expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-      }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
-    end
-
-    it "fails if target responds to :sym with two or more arguments and specified optional keywords" do
-      obj = Object.new
-      eval %{def obj.foo(a, b, *args, u: nil, v: nil); end}
-      expect {
-        expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-      }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
-    end
-
-    it "passes if target does not respond to :sym" do
-      obj = Object.new
-      expect(obj).not_to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
-    end
-
-    it "passes if :sym expects 1 argument" do
-      obj = Object.new
-      eval %{def obj.foo(a, u: nil, v: nil); end}
-      expect(obj).not_to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
-    end
-
-    it "passes if :sym does not expect specified keywords" do
-      obj = Object.new
-      def obj.foo(a, b); end
-      expect(obj).not_to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
-    end
-
-    if RSpec::Support::RubyFeatures.required_kw_args_supported?
-      it "fails if target responds to :sym with 2 args and specified required keywords" do
-        obj = Object.new
-        eval %{def obj.foo(a, b, u:, v:); end}
-        expect {
-          expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-        }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
-      end
-
-      it "fails if target responds to :sym with 2 args and keyword arg splat" do
-        obj = Object.new
-        eval %{def obj.foo(a, b, **rest); end}
-        expect {
-          expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
-        }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
-      end
-
-      it "passes if :sym expects 2 arguments and specified optional keywords but expects missing required keywords" do
-        obj = Object.new
-        eval %{def obj.foo(a, b, u: nil, v: nil, x:, y:); end}
-        expect(obj).not_to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
-      end
-    end
+RSpec.describe "expect(...).not_to respond_to(:sym).with_keywords(:foo, :bar)" do
+  it "fails if target responds to :sym with specified optional keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a: nil, b: nil); end}
+    expect {
+      expect(obj).not_to respond_to(:foo).with_keywords(:a, :b)
+    }.to fail_with(/expected #<Object:.*> not to respond to :foo with keywords :a and :b/)
   end
 
-  RSpec.describe "expect(...).not_to respond_to(:sym).with_any_keywords" do
-    it "fails if target responds to any keywords" do
-      obj = Object.new
-      eval %{def obj.foo(**kw_args); end}
-      expect {
-        expect(obj).not_to respond_to(:foo).with_any_keywords
-      }.to fail_with(/expected #<Object:.*> not to respond to :foo with any keywords/)
-    end
+  it "fails if target responds to :sym with any keywords" do
+    obj = Object.new
+    eval %{def obj.foo(**kw_args); end}
+    expect {
+      expect(obj).not_to respond_to(:foo).with_keywords(:a, :b)
+    }.to fail_with(/expected #<Object:.*> not to respond to :foo with keywords :a and :b/)
+  end
 
-    it "passes if target does not respond to :sym" do
-      obj = Object.new
-      expect(obj).not_to respond_to(:some_method).with_any_keywords
-    end
+  it "fails if target initialize responds to expected keywords when checking new" do
+    klass = eval %{Class.new { def initialize(**kw_args); end }}
+    expect {
+      expect(klass).not_to respond_to(:new).with_keywords(:a, :b)
+    }.to fail_with(/expected .* not to respond to :new with keywords :a and :b/)
+  end
 
-    it "passes if :sym expects a limited set of keywords" do
-      obj = Object.new
-      eval %{def obj.some_method(a: nil, b: nil); end}
-      expect(obj).not_to respond_to(:some_method).with_any_keywords
-    end
+  it "passes if target does not respond to :sym" do
+    obj = Object.new
+    expect(obj).not_to respond_to(:some_method).with_keywords(:a, :b)
+  end
 
-    if RSpec::Support::RubyFeatures.required_kw_args_supported?
-      it "passes if :sym expects missing required keywords" do
-        obj = Object.new
-        eval %{def obj.some_method(a:, b:, **kw_args); end}
-        expect(obj).not_to respond_to(:some_method).with_any_keywords
-      end
-    end
+  it "passes if :sym does not expect specified keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a: nil, b: nil); end}
+    expect(obj).not_to respond_to(:some_method).with_keywords(:c, :d)
+  end
+
+  it "fails if target responds to :sym with specified required keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a:, b:); end}
+    expect {
+      expect(obj).not_to respond_to(:foo).with_keywords(:a, :b)
+    }.to fail_with(/expected #<Object:.*> not to respond to :foo with keywords :a and :b/)
+  end
+
+  it "fails if target responds to :sym with keyword arg splat" do
+    obj = Object.new
+    eval %{def obj.foo(**rest); end}
+    expect {
+      expect(obj).not_to respond_to(:foo).with_keywords(:a, :b)
+    }.to fail_with(/expected #<Object:.*> not to respond to :foo with keywords :a and :b/)
+  end
+
+  it "passes if :sym expects missing required keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a:, b:, c: nil, d: nil); end}
+    expect(obj).not_to respond_to(:some_method).with_keywords(:c, :d)
+  end
+
+  it "passes if :initialize expects missing required keywords for :new" do
+    klass = eval %{Class.new { def initialize(a:, b:, c: nil, d: nil); end }}
+    expect(klass).not_to respond_to(:new).with_keywords(:c, :d)
+  end
+end
+
+RSpec.describe "expect(...).not_to respond_to(:sym).with(2).arguments.and_keywords(:foo, :bar)" do
+  it "fails if target responds to :sym with 2 args and specified optional keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a, b, u: nil, v: nil); end}
+    expect {
+      expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+    }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
+  end
+
+  it "fails if target responds to :sym with any number of arguments and specified optional keywords" do
+    obj = Object.new
+    eval %{def obj.foo(*args, u: nil, v: nil); end}
+    expect {
+      expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+    }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
+  end
+
+  it "fails if target responds to :sym with one or more arguments and specified optional keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a, *args, u: nil, v: nil); end}
+    expect {
+      expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+    }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
+  end
+
+  it "fails if target responds to :sym with two or more arguments and specified optional keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a, b, *args, u: nil, v: nil); end}
+    expect {
+      expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+    }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
+  end
+
+  it "passes if target does not respond to :sym" do
+    obj = Object.new
+    expect(obj).not_to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
+  end
+
+  it "passes if :sym expects 1 argument" do
+    obj = Object.new
+    eval %{def obj.foo(a, u: nil, v: nil); end}
+    expect(obj).not_to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
+  end
+
+  it "passes if :sym does not expect specified keywords" do
+    obj = Object.new
+    def obj.foo(a, b); end
+    expect(obj).not_to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
+  end
+
+  it "fails if target responds to :sym with 2 args and specified required keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a, b, u:, v:); end}
+    expect {
+      expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+    }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
+  end
+
+  it "fails if target responds to :sym with 2 args and keyword arg splat" do
+    obj = Object.new
+    eval %{def obj.foo(a, b, **rest); end}
+    expect {
+      expect(obj).not_to respond_to(:foo).with(2).arguments.and_keywords(:u, :v)
+    }.to fail_with(/expected #<Object:.*> not to respond to :foo with 2 arguments and keywords :u and :v/)
+  end
+
+  it "passes if :sym expects 2 arguments and specified optional keywords but expects missing required keywords" do
+    obj = Object.new
+    eval %{def obj.foo(a, b, u: nil, v: nil, x:, y:); end}
+    expect(obj).not_to respond_to(:some_method).with(2).arguments.and_keywords(:u, :v)
+  end
+end
+
+RSpec.describe "expect(...).not_to respond_to(:sym).with_any_keywords" do
+  it "fails if target responds to any keywords" do
+    obj = Object.new
+    eval %{def obj.foo(**kw_args); end}
+    expect {
+      expect(obj).not_to respond_to(:foo).with_any_keywords
+    }.to fail_with(/expected #<Object:.*> not to respond to :foo with any keywords/)
+  end
+
+  it "passes if target does not respond to :sym" do
+    obj = Object.new
+    expect(obj).not_to respond_to(:some_method).with_any_keywords
+  end
+
+  it "passes if :sym expects a limited set of keywords" do
+    obj = Object.new
+    eval %{def obj.some_method(a: nil, b: nil); end}
+    expect(obj).not_to respond_to(:some_method).with_any_keywords
+  end
+
+  it "passes if :sym expects missing required keywords" do
+    obj = Object.new
+    eval %{def obj.some_method(a:, b:, **kw_args); end}
+    expect(obj).not_to respond_to(:some_method).with_any_keywords
   end
 end

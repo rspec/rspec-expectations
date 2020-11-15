@@ -93,7 +93,6 @@ Feature: `respond_to` matcher
       | expected 7 to respond to :between? with 7 arguments     |
       | expected 7 not to respond to :between? with 2 arguments |
 
-  @skip-when-splat-args-unsupported
   Scenario: specify arguments range
     Given a file named "respond_to_matcher_argument_range_checking_spec.rb" with:
       """ruby
@@ -127,7 +126,6 @@ Feature: `respond_to` matcher
       | expected my_object to respond to :build with 2..3 arguments     |
       | expected my_object to respond to :build with 0..3 arguments     |
 
-  @skip-when-splat-args-unsupported
   Scenario: specify unlimited arguments
   Given a file named "respond_to_matcher_unlimited_argument_checking_spec.rb" with:
       """ruby
@@ -164,7 +162,6 @@ Feature: `respond_to` matcher
       | expected my_object to respond to :hail with unlimited arguments                     |
       | expected my_object to respond to :hail with 1 argument and unlimited arguments      |
 
-  @skip-when-keyword-args-unsupported
   Scenario: specify keywords
     Given a file named "respond_to_matcher_keyword_checking_spec.rb" with:
       """ruby
@@ -201,7 +198,6 @@ Feature: `respond_to` matcher
       | expected my_object not to respond to :find with keywords :limit and :offset                    |
       | expected my_object not to respond to :find with 1 argument and keywords :limit and :offset     |
 
-  @skip-when-keyword-args-unsupported
   Scenario: specify any keywords
     Given a file named "respond_to_matcher_any_keywords_checking_spec.rb" with:
       """ruby
@@ -238,7 +234,6 @@ Feature: `respond_to` matcher
       | expected my_object to respond to :create with any keywords |
       | expected my_object to respond to :create with keyword :name and any keywords |
 
-  @skip-when-required-keyword-args-unsupported
   Scenario: specify required keywords
     Given a file named "respond_to_matcher_required_keyword_checking_spec.rb" with:
       """ruby
