@@ -1,8 +1,16 @@
-# This file was generated on 2020-11-16T09:31:10+00:00 from the rspec-dev repo.
+# This file was generated on 2020-11-16T22:10:30+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
-on: [pull_request, push]
+on:
+  push:
+    branches:
+      - 'main'
+      - '*-maintenance'
+      - '*-dev'
+  pull_request:
+    branches:
+      - '*'
 jobs:
   test:
     name: Ruby ${{ matrix.ruby }}
@@ -28,10 +36,6 @@ jobs:
           bundler: ${{ (matrix.ruby == 'jruby-9.1.17.0' && 1) || 2 }}
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - uses: actions/cache@v2
-        with:
-          path: ../bundle
-          key: ${{ runner.os }}-${{ matrix.ruby }}
       - run: script/update_rubygems_and_install_bundler
       - run: script/clone_all_rspec_repos
       - run: bundle install --binstubs --standalone
