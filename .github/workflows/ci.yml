@@ -1,0 +1,38 @@
+# This file was generated on 2020-11-16T09:31:10+00:00 from the rspec-dev repo.
+# DO NOT modify it by hand as your changes will get lost the next time it is generated.
+
+name: RSpec CI
+on: [pull_request, push]
+jobs:
+  test:
+    name: Ruby ${{ matrix.ruby }}
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        ruby:
+          - 3.0.0-preview1
+          - 2.7
+          - 2.6
+          - 2.5
+          - 2.4
+          - 2.3
+          - 2.2
+          - 2.1.9
+          - ruby-head
+      fail-fast: false
+    continue-on-error: ${{ matrix.ruby == 'jruby-9.2.13.0' || endsWith(matrix.ruby, 'head') }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler: ${{ (matrix.ruby == 'jruby-9.1.17.0' && 1) || 2 }}
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - uses: actions/cache@v2
+        with:
+          path: ../bundle
+          key: ${{ runner.os }}-${{ matrix.ruby }}
+      - run: script/update_rubygems_and_install_bundler
+      - run: script/clone_all_rspec_repos
+      - run: bundle install --binstubs --standalone
+      - run: script/run_build

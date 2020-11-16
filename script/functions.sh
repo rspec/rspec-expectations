@@ -1,8 +1,8 @@
-# This file was generated on 2020-09-28T16:30:00+02:00 from the rspec-dev repo.
+# This file was generated on 2020-11-16T09:31:10+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source $SCRIPT_DIR/travis_functions.sh
+source $SCRIPT_DIR/ci_functions.sh
 source $SCRIPT_DIR/predicate_functions.sh
 
 # If JRUBY_OPTS isn't set, use these.
