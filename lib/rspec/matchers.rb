@@ -1,5 +1,6 @@
 require 'rspec/support'
 RSpec::Support.require_rspec_support 'matcher_definition'
+RSpec::Support.require_rspec_support 'ruby_features'
 RSpec::Support.define_optimized_require_for_rspec(:matchers) { |f| require_relative(f) }
 
 %w[
