@@ -11,6 +11,8 @@ on:
   pull_request:
     branches:
       - '*'
+env:
+  RSPEC_CI: true
 jobs:
   test:
     name: Ruby ${{ matrix.ruby }} ${{ matrix.name_extra || '' }}
