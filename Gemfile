@@ -54,8 +54,12 @@ else
   gem 'ffi', '> 1.9.24' # prevent Github security vulnerability warning
 end
 
-if RUBY_VERSION < '2.2.0' && !!(RbConfig::CONFIG['host_os'] =~ /cygwin|mswin|mingw|bccwin|wince|emx/)
-  gem "childprocess", "< 1.0.0"
+# on windows
+if !!(RbConfig::CONFIG['host_os'] =~ /cygwin|mswin|mingw|bccwin|wince|emx/)
+  if RUBY_VERSION.to_f <  2.3
+    # Ruby 2.2,2.1 etc require this
+    gem "childprocess", "< 1.0.0"
+  end
 end
 
 if RUBY_VERSION < '1.9.2'
