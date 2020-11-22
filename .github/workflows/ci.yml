@@ -1,4 +1,4 @@
-# This file was generated on 2020-11-18T09:45:41+00:00 from the rspec-dev repo.
+# This file was generated on 2020-11-22T07:41:13+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -13,8 +13,8 @@ on:
       - '*'
 jobs:
   test:
-    name: Ruby ${{ matrix.ruby }}
-    runs-on: ubuntu-20.04
+    name: Ruby ${{ matrix.ruby }} ${{ matrix.name_extra || '' }}
+    runs-on: ${{ matrix.os || 'ubuntu-20.04' }}
     strategy:
       matrix:
         ruby:
@@ -27,15 +27,35 @@ jobs:
           - 2.2
           - 2.1.9
           - ruby-head
+        env:
+          -
+            DIFF_LCS_VERSION: "> 1.4.3"
+        include:
+          - ruby: jruby-9.2.13.0
+            env:
+              JRUBY_OPTS: "--dev"
+          - ruby: jruby-9.1.17.0
+            bundler: 1
+            os: ubuntu-18.04
+            env:
+              JRUBY_OPTS: "--dev"
+          - ruby: 2.7
+            name_extra: "with diff-lcs 1.3"
+            env:
+              DIFF_LCS_VERSION: "~> 1.3.0"
+          - ruby: 2.7
+            name_extra: "with diff-lcs 1.4.3"
+            env:
+              DIFF_LCS_VERSION: "1.4.3"
       fail-fast: false
-    continue-on-error: ${{ matrix.ruby == 'jruby-9.2.13.0' || endsWith(matrix.ruby, 'head') }}
+    continue-on-error: ${{ matrix.allow_failure || endsWith(matrix.ruby, 'head') }}
+    env: ${{ matrix.env }}
     steps:
       - uses: actions/checkout@v2
       - uses: ruby/setup-ruby@v1
         with:
-          bundler: ${{ (matrix.ruby == 'jruby-9.1.17.0' && 1) || 2 }}
+          bundler: ${{ matrix.bundler || 2 }}
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
       - run: script/update_rubygems_and_install_bundler
       - run: script/clone_all_rspec_repos
       - run: bundle install --binstubs --standalone
