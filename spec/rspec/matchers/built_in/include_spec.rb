@@ -890,7 +890,7 @@ RSpec.describe "#include matcher" do
     end
 
     describe "expect(hash).to include(key_matcher)" do
-      it "passes when the matcher matches a key", :if => (RUBY_VERSION.to_f > 1.8) do
+      it "passes when the matcher matches a key" do
         expect(:drink => "water", :food => "bread").to include(match(/foo/))
       end
 
@@ -899,7 +899,7 @@ RSpec.describe "#include matcher" do
         expect(description).to eq("include (match /foo/)")
       end
 
-      it 'fails with a clear message when the matcher does not match', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'fails with a clear message when the matcher does not match' do
         expect {
           expect(:drink => "water", :food => "bread").to include(match(/bar/))
         }.to fail_matching('expected {:drink => "water", :food => "bread"} to include (match /bar/)')
@@ -907,19 +907,19 @@ RSpec.describe "#include matcher" do
     end
 
     describe "expect(hash).to include(key_matcher => value)" do
-      it "passes when the matcher matches a pair", :if => (RUBY_VERSION.to_f > 1.8) do
+      it "passes when the matcher matches a pair" do
         expect(:drink => "water", :food => "bread").to include(match(/foo/) => "bread")
       end
 
-      it "passes when the matcher matches all pairs", :if => (RUBY_VERSION.to_f > 1.8) do
+      it "passes when the matcher matches all pairs" do
         expect(:drink => "water", :food => "bread").to include(match(/foo/) => "bread", match(/ink/) => "water")
       end
 
-      it "passes with a natural matcher", :if => (RUBY_VERSION.to_f > 1.8) do
+      it "passes with a natural matcher" do
         expect(:drink => "water", :food => "bread").to include(/foo/ => "bread")
       end
 
-      it "passes with a natural matcher", :if => (RUBY_VERSION.to_f > 1.8) do
+      it "passes with a natural matcher" do
         expect(:drink => "water", :food => "bread").to include(/foo/ => /read/)
       end
 
@@ -928,19 +928,19 @@ RSpec.describe "#include matcher" do
         expect(description).to eq('include {(match /foo/) => "bread"}')
       end
 
-      it 'fails with a clear message when the value does not match', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'fails with a clear message when the value does not match' do
         expect {
           expect(:drink => "water", :food => "bread").to include(match(/foo/) => "meat")
         }.to fail_matching('expected {:drink => "water", :food => "bread"} to include {(match /foo/) => "meat"}')
       end
 
-      it 'fails with a clear message when the matcher does not match', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'fails with a clear message when the matcher does not match' do
         expect {
           expect(:drink => "water", :food => "bread").to include(match(/bar/) => "bread")
         }.to fail_matching('expected {:drink => "water", :food => "bread"} to include {(match /bar/) => "bread"}')
       end
 
-      it 'fails with a clear message when several matchers do not match', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'fails with a clear message when several matchers do not match' do
         expect {
           expect(:drink => "water", :food => "bread").to include(match(/bar/) => "bread", match(/baz/) => "water")
         }.to fail_matching('expected {:drink => "water", :food => "bread"} to include {(match /bar/) => "bread", (match /baz/) => "water"}')

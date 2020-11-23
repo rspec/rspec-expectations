@@ -49,7 +49,7 @@ module RSpec
       include_examples "making a copy", :dup
       include_examples "making a copy", :clone
 
-      it 'can get a method object for delegated methods', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'can get a method object for delegated methods' do
         matcher = my_base_matcher
         decorated = AliasedMatcher.new(matcher, Proc.new {})
 

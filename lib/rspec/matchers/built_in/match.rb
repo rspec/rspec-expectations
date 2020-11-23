@@ -74,20 +74,11 @@ module RSpec
           @match_data = match_data
         end
 
-        if RUBY_VERSION == "1.8.7"
-          # @api private
-          # Returns match data names for named captures
-          # @return Array
-          def names
-            []
-          end
-        else
-          # @api private
-          # Returns match data names for named captures
-          # @return Array
-          def names
-            match_data.names
-          end
+        # @api private
+        # Returns match data names for named captures
+        # @return Array
+        def names
+          match_data.names
         end
 
         # @api private

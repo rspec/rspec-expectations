@@ -47,7 +47,7 @@ RSpec.describe "operator matchers", :uses_should do
     end
   end
 
-  describe "unsupported operators", :if => RUBY_VERSION.to_f == 1.9 do
+  describe "unsupported operators" do
     it "raises an appropriate error for should != expected" do
       expect {
         "apple".should != "pear"

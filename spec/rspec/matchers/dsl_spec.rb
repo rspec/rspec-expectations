@@ -93,7 +93,7 @@ RSpec.describe "a matcher defined using the matcher DSL" do
     end
   end
 
-  it "warns when passing block to the block of define", :if => (RUBY_VERSION.to_f > 1.8) do
+  it "warns when passing block to the block of define" do
     expect(RSpec).to receive(:warning).with(/be_warning.*a_block.*block_arg/)
 
     RSpec::Matchers.define :be_warning do |&a_block|
@@ -1310,7 +1310,7 @@ module RSpec::Matchers::DSL
         expect(example).to __access_running_example
       end
 
-      it 'can get a method object for methods in the running example', :if => (RUBY_VERSION.to_f > 1.8) do
+      it 'can get a method object for methods in the running example' do
         matcher = new_matcher(:get_method_object) {}
         method  = matcher.method(:a_method_in_the_example)
         expect(method.call).to eq("method defined in the example")

@@ -118,10 +118,6 @@ module RSpec
         context "with Complex(1, 2)" do
           it "is eq to Complex(1, 2).inspect" do
             in_sub_process_if_possible do
-              # complex is available w/o requiring on ruby 1.9+.
-              # Loading it on 1.9+ issues a warning, so we only load it on 1.8.7.
-              require 'complex' if RUBY_VERSION == '1.8.7'
-
               complex = Complex(1, 2)
               expect(eq(complex).description).to eq "eq #{complex.inspect}"
             end
