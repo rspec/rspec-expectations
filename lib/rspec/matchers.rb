@@ -238,7 +238,7 @@ module RSpec
   # best to find a more positive name for the negated form, such as
   # `avoid_changing` rather than `not_change`.
   #
-  module Matchers # rubocop:disable Metrics/ModuleLength
+  module Matchers
     extend ::RSpec::Matchers::DSL
 
     # @!macro [attach] alias_matcher
