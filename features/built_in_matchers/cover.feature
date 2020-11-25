@@ -1,4 +1,3 @@
-@ruby-1.9
 Feature: `cover` matcher
 
   Use the `cover` matcher to specify that a range covers one or more

@@ -36,10 +36,7 @@ module RSpec
                 @caught_symbol = @expected_symbol
               end
             end
-
-            # Ruby 1.8 uses NameError with `symbol'
-            # Ruby 1.9 uses ArgumentError with :symbol
-          rescue NameError, ArgumentError => e
+          rescue ArgumentError => e
             unless (match_data = e.message.match(/uncaught throw (`|\:)([a-zA-Z0-9_]*)(')?/))
               other_exception = e
               raise

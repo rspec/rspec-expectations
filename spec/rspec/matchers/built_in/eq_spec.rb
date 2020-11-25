@@ -78,9 +78,6 @@ module RSpec
       end
 
       describe '#description' do
-        # Ruby 1.8.7 produces a less precise output
-        expected_seconds = Time.method_defined?(:nsec) ? '000000000' : '000000'
-
         [
             [nil, 'eq nil'],
             [true, 'eq true'],
@@ -94,7 +91,7 @@ module RSpec
             [{ :foo => :bar }, 'eq {:foo=>:bar}'],
             [Class, 'eq Class'],
             [RSpec, 'eq RSpec'],
-            [Time.utc(2014, 1, 1), "eq 2014-01-01 00:00:00.#{expected_seconds} +0000"],
+            [Time.utc(2014, 1, 1), "eq 2014-01-01 00:00:00.000000000 +0000"],
         ].each do |expected, expected_description|
           context "with #{expected.inspect}" do
             around { |ex| with_env_vars('TZ' => 'UTC', &ex) } if expected.is_a?(Time)

@@ -52,7 +52,7 @@ module RSpec
         def match_captures(expected, actual)
           match = actual.match(expected)
           if match
-            match = ReliableMatchData.new(match)
+            match = MatchData.new(match)
             if match.names.empty?
               values_match?(@expected_captures, match.captures)
             else
@@ -67,9 +67,8 @@ module RSpec
         end
       end
 
-      # @api private
-      # Used to wrap match data and make it reliable for 1.8.7
-      class ReliableMatchData
+      # @private
+      class MatchData
         def initialize(match_data)
           @match_data = match_data
         end
