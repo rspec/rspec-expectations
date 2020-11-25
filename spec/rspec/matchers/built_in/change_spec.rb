@@ -303,26 +303,8 @@ RSpec.describe "expect { ... }.to change(actual, message)" do
   end
 
   context 'when the receiver is an object that does not respond to #class such as BasicObject' do
-    let(:basic_object) do
-      basic_object_class.new
-    end
-
-    let(:basic_object_class) do
-      defined?(BasicObject) ? BasicObject : fake_basic_object_class
-    end
-
-    let(:fake_basic_object_class) do
-      Class.new do
-        def self.to_s
-          'BasicObject'
-        end
-
-        undef class, inspect, respond_to?
-      end
-    end
-
     it 'can properly extract the class name' do
-      expect(change(basic_object, :__id__).description).to eq 'change `BasicObject#__id__`'
+      expect(change(BasicObject.new, :__id__).description).to eq 'change `BasicObject#__id__`'
     end
   end
 
