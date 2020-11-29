@@ -1,4 +1,4 @@
-# This file was generated on 2020-11-16T22:10:30+00:00 from the rspec-dev repo.
+# This file was generated on 2020-11-29T14:01:16+03:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 # In order to install old Rubies, we need to use old Ubuntu distibution.
@@ -15,21 +15,13 @@ before_install:
 bundler_args: "--binstubs --standalone --without documentation --path ../bundle"
 script: "script/run_build"
 rvm:
-  - 1.8.7
-  - 1.9.2
-  - 1.9.3
-  - 2.0.0
-  - ree
   - rbx-3
   - jruby-9.1.7.0 # pin JRuby to this until travis/rvm can install later versions
   - jruby-head
-  - jruby-1.7
 env:
   - JRUBY_OPTS='--dev'
 matrix:
   include:
-    - rvm: jruby-1.7
-      env: JRUBY_OPTS='--dev --1.8'
     - rvm: 2.7.1
       env: DIFF_LCS_VERSION="~> 1.3.0"
     - rvm: 2.7.1

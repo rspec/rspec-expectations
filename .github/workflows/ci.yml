@@ -1,4 +1,4 @@
-# This file was generated on 2020-11-16T22:10:30+00:00 from the rspec-dev repo.
+# This file was generated on 2020-11-29T14:01:16+03:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -11,8 +11,6 @@ on:
   pull_request:
     branches:
       - '*'
-env:
-  RSPEC_CI: true
 jobs:
   test:
     name: Ruby ${{ matrix.ruby }}
@@ -26,8 +24,6 @@ jobs:
           - 2.5
           - 2.4
           - 2.3
-          - 2.2
-          - 2.1.9
           - ruby-head
       fail-fast: false
     continue-on-error: ${{ matrix.ruby == 'jruby-9.2.13.0' || endsWith(matrix.ruby, 'head') }}
@@ -42,3 +38,25 @@ jobs:
       - run: script/clone_all_rspec_repos
       - run: bundle install --binstubs --standalone
       - run: script/run_build
+
+  windows:
+    name: Ruby ${{ matrix.ruby }} (Windows)
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        ruby:
+          - 2.7
+          - 2.6
+          - 2.5
+          - 2.4
+          - 2.3
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler: 2
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - run: cinst ansicon
+      - run: bundle exec rspec --backtrace
