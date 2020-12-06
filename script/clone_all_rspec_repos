@@ -1,5 +1,5 @@
 #!/bin/bash
-# This file was generated on 2020-11-22T07:41:13+00:00 from the rspec-dev repo.
+# This file was generated on 2020-12-07T01:07:10+03:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 set -e
@@ -13,10 +13,7 @@ if is_mri; then
   clone_repo "rspec-expectations"
   clone_repo "rspec-mocks"
   clone_repo "rspec-rails" "main"
-
-  if rspec_support_compatible; then
-    clone_repo "rspec-support"
-  fi
+  clone_repo "rspec-support"
 
   popd
 else
