@@ -56,6 +56,9 @@ module RSpec::Expectations
     end
 
     it 'ensures the sub-failure backtraces are in a form that overlaps with the aggregated failure backtrace' do
+      if RSpec::Support::Ruby.jruby?
+        pending "This is broken on 9.2.x.x" unless RSpec::Support::Ruby.jruby_version < '9.2.0.0'
+      end
       # On JRuby, `caller` and `raise` backtraces can differ significantly --
       # I've seen one include java frames but not the other -- and as a result,
       # the backtrace truncation rspec-core does (based on the common part) fails

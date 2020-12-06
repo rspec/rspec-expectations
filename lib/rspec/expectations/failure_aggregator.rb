@@ -52,10 +52,10 @@ module RSpec
 
     private
 
-      if RSpec::Support::Ruby.jruby?
-        # On JRuby, `caller` and `raise` produce different backtraces with regards to `.java`
-        # stack frames. It's important that we use `raise` for JRuby to produce a backtrace
-        # that has a continuous common section with the raised `MultipleExpectationsNotMetError`,
+      if RSpec::Support::Ruby.jruby? && RSpec::Support::Ruby.jruby_version < '9.2.0.0'
+        # On JRuby 9.1.x.x and before, `caller` and `raise` produce different backtraces with
+        # regards to `.java` stack frames. It's important that we use `raise` for JRuby to produce
+        # a backtrace that has a continuous common section with the raised `MultipleExpectationsNotMetError`,
         # so that rspec-core's truncation logic can work properly on it to list the backtrace
         # relative to the `aggregate_failures` block.
         def assign_backtrace(failure)

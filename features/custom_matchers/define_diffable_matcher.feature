@@ -53,7 +53,7 @@ Feature: define diffable matcher
               lines
       """
 
-  @skip-when-diff-lcs-1.3
+  @skip-when-diff-lcs-1.3 @skip-when-diff-lcs-1.4.3
   Scenario: Redefine actual (with diff-lcs 1.4.4)
 
     Sometimes is neccessary to overwrite actual to make diffing work, e.g. if `actual` is a name of a file you want to read from. For this to work you need to overwrite `@actual` in your matcher.
