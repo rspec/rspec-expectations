@@ -1,4 +1,4 @@
-# This file was generated on 2020-11-22T07:41:13+00:00 from the rspec-dev repo.
+# This file was generated on 2020-12-08T21:16:17+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -88,7 +88,10 @@ function run_spec_suite_for {
       echo "Running specs for $1"
       pushd ../$1
       unset BUNDLE_GEMFILE
-      bundle_install_flags=`cat .travis.yml | grep bundler_args | tr -d '"' | grep -o " .*"`
+      bundle_install_flags=""
+      if [ -e .travis.yml ]; then
+        bundle_install_flags=`cat .travis.yml | grep bundler_args | tr -d '"' | grep -o " .*"`
+      fi
       travis_retry eval "(unset RUBYOPT; exec bundle install $bundle_install_flags)"
       run_specs_and_record_done
       popd
