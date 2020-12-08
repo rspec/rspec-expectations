@@ -2,7 +2,7 @@ require 'rspec/support/spec'
 require 'rspec/support/spec/in_sub_process'
 
 RSpec::Support::Spec.setup_simplecov do
-  minimum_coverage 92
+  minimum_coverage 91
 end
 
 Dir['./spec/support/**/*'].each do |f|
