@@ -50,17 +50,8 @@ module RSpec
           @actual.respond_to? predicate
         end
 
-        # support 1.8.7, evaluate once at load time for performance
-        if String === methods.first
-          # :nocov:
-          def private_predicate?
-            @actual.private_methods.include? predicate.to_s
-          end
-          # :nocov:
-        else
-          def private_predicate?
-            @actual.private_methods.include? predicate
-          end
+        def private_predicate?
+          @actual.private_methods.include? predicate
         end
 
         def predicate_result
@@ -80,11 +71,7 @@ module RSpec
         end
 
         def root
-          # On 1.9, there appears to be a bug where String#match can return `false`
-          # rather than the match data object. Changing to Regex#match appears to
-          # work around this bug. For an example of this bug, see:
-          # https://travis-ci.org/rspec/rspec-expectations/jobs/27549635
-          self.class::REGEX.match(@method_name.to_s).captures.first
+          self.class::REGEX.match(@method_name).captures.first
         end
 
         def method_description

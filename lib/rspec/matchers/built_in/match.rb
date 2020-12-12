@@ -52,7 +52,6 @@ module RSpec
         def match_captures(expected, actual)
           match = actual.match(expected)
           if match
-            match = ReliableMatchData.new(match)
             if match.names.empty?
               values_match?(@expected_captures, match.captures)
             else
@@ -65,41 +64,6 @@ module RSpec
             false
           end
         end
-      end
-
-      # @api private
-      # Used to wrap match data and make it reliable for 1.8.7
-      class ReliableMatchData
-        def initialize(match_data)
-          @match_data = match_data
-        end
-
-        if RUBY_VERSION == "1.8.7"
-          # @api private
-          # Returns match data names for named captures
-          # @return Array
-          def names
-            []
-          end
-        else
-          # @api private
-          # Returns match data names for named captures
-          # @return Array
-          def names
-            match_data.names
-          end
-        end
-
-        # @api private
-        # returns an array of captures from the match data
-        # @return Array
-        def captures
-          match_data.captures
-        end
-
-      protected
-
-        attr_reader :match_data
       end
     end
   end

@@ -1,7 +1,6 @@
 module RSpec
   module Matchers
     module BuiltIn
-      # rubocop:disable ClassLength
       # @api private
       # Provides the implementation for `contain_exactly` and `match_array`.
       # Not intended to be instantiated directly.
@@ -99,17 +98,8 @@ module RSpec
           array
         end
 
-        if RUBY_VERSION == "1.8.7"
-          def to_a_disallowed?(object)
-            case object
-            when NilClass, String then true
-            else Kernel == RSpec::Support.method_handle_for(object, :to_a).owner
-            end
-          end
-        else
-          def to_a_disallowed?(object)
-            NilClass === object
-          end
+        def to_a_disallowed?(object)
+          NilClass === object
         end
 
         def missing_items
@@ -296,7 +286,6 @@ module RSpec
           end
         end
       end
-      # rubocop:enable ClassLength
     end
   end
 end

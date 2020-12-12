@@ -11,8 +11,6 @@ RSpec.describe RSpec::Matchers do
 
   it 'can be mixed into `main`' do
     in_sub_process do
-      allow_warning if RSpec::Support::Ruby.mri? && RUBY_VERSION[0, 3] == '1.9'
-
       main.instance_eval do
         include RSpec::Matchers
         include RSpec::Matchers::FailMatchers
@@ -28,13 +26,8 @@ RSpec.describe RSpec::Matchers do
   end
 
   context "when included into a superclass after a subclass has already included it" do
-    if RSpec::Support::Ruby.mri? && RUBY_VERSION[0, 3] == '1.9'
-      desc_start = "print"
-      matcher_method = :output
-    else
-      desc_start = "does not print"
-      matcher_method = :avoid_outputting
-    end
+    desc_start = "does not print"
+    matcher_method = :avoid_outputting
 
     it "#{desc_start} a warning so the user is made aware of the MRI 1.9 bug that can cause infinite recursion" do
       superclass = stub_const("Superclass", Class.new)
@@ -68,7 +61,7 @@ RSpec.describe RSpec::Matchers do
       expect(respond_to?(:puts)).to eq false
     end
 
-    it "allows `method` to get dynamic matcher methods", :if => RUBY_VERSION.to_f >= 1.9 do
+    it "allows `method` to get dynamic matcher methods" do
       expect(method(:be_happy).call).to be_a(be_happy.class)
     end
   end
@@ -77,7 +70,7 @@ end
 module RSpec
   module Matchers
     RSpec.describe ".is_a_matcher?" do
-      it 'does not match BasicObject', :if => RUBY_VERSION.to_f > 1.8 do
+      it 'does not match BasicObject' do
         expect(RSpec::Matchers.is_a_matcher?(BasicObject.new)).to eq(false)
       end
 

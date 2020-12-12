@@ -238,7 +238,7 @@ module RSpec
   # best to find a more positive name for the negated form, such as
   # `avoid_changing` rather than `not_change`.
   #
-  module Matchers # rubocop:disable Metrics/ModuleLength
+  module Matchers
     extend ::RSpec::Matchers::DSL
 
     # @!macro [attach] alias_matcher
@@ -524,7 +524,6 @@ module RSpec
     #   expect(1..10).not_to cover(11)
     #   expect(1..10).not_to cover(5)        # fails
     #
-    # ### Warning:: Ruby >= 1.9 only
     def cover(*values)
       BuiltIn::Cover.new(*values)
     end
@@ -967,18 +966,8 @@ module RSpec
     end
     ruby2_keywords :method_missing if respond_to?(:ruby2_keywords, true)
 
-    if RUBY_VERSION.to_f >= 1.9
-      def respond_to_missing?(method, *)
-        method =~ DYNAMIC_MATCHER_REGEX || super
-      end
-    else # for 1.8.7
-      # :nocov:
-      def respond_to?(method, *)
-        method = method.to_s
-        method =~ DYNAMIC_MATCHER_REGEX || super
-      end
-      public :respond_to?
-      # :nocov:
+    def respond_to_missing?(method, *)
+      method =~ DYNAMIC_MATCHER_REGEX || super
     end
 
     # @api private
@@ -1004,38 +993,6 @@ module RSpec
     # @api private
     def self.is_a_describable_matcher?(obj)
       is_a_matcher?(obj) && obj.respond_to?(:description)
-    end
-
-    class << self
-      private
-
-      if RSpec::Support::Ruby.mri? && RUBY_VERSION[0, 3] == '1.9'
-        # Note that `included` doesn't work for this because it is triggered
-        # _after_ `RSpec::Matchers` is an ancestor of the inclusion host, rather
-        # than _before_, like `append_features`. It's important we check this before
-        # in order to find the cases where it was already previously included.
-        # @api private
-        def append_features(mod)
-          return super if mod < self # `mod < self` indicates a re-inclusion.
-
-          subclasses = ObjectSpace.each_object(Class).select { |c| c < mod && c < self }
-          return super unless subclasses.any?
-
-          subclasses.reject! { |s| subclasses.any? { |s2| s < s2 } } # Filter to the root ancestor.
-          subclasses = subclasses.map { |s| "`#{s}`" }.join(", ")
-
-          RSpec.warning "`#{self}` has been included in a superclass (`#{mod}`) " \
-                        "after previously being included in subclasses (#{subclasses}), " \
-                        "which can trigger infinite recursion from `super` due to an MRI 1.9 bug " \
-                        "(https://redmine.ruby-lang.org/issues/3351). To work around this, " \
-                        "either upgrade to MRI 2.0+, include a dup of the module (e.g. " \
-                        "`include #{self}.dup`), or find a way to include `#{self}` in `#{mod}` " \
-                        "before it is included in subclasses (#{subclasses}). See " \
-                        "https://github.com/rspec/rspec-expectations/issues/814 for more info"
-
-          super
-        end
-      end
     end
   end
 end

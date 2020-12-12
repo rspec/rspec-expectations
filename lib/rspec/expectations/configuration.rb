@@ -104,8 +104,7 @@ module RSpec
 
       # Adds `should` and `should_not` to the given classes
       # or modules. This can be used to ensure `should` works
-      # properly on things like proxy objects (particular
-      # `Delegator`-subclassed objects on 1.8).
+      # properly on things like proxy objects.
       #
       # @param [Array<Module>] modules the list of classes or modules
       #   to add `should` and `should_not` to.

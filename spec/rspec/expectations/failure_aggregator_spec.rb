@@ -429,24 +429,14 @@ module RSpec::Expectations
         fail { |e| expect(e.message).to include(yield) }
       end
 
-      # Each Ruby version return a different exception complement.
-      # This method gets the current version and return the
-      # right complement.
-      if RSpec::Support::Ruby.mri? && RUBY_VERSION > "1.8.7"
+      # Ruby imprementations return different exception complements
+      if RSpec::Support::Ruby.mri?
         def exception_complement(block_levels)
           ":in `block (#{block_levels} levels) in <module:Expectations>'"
         end
-      elsif RSpec::Support::Ruby.mri?
-        def exception_complement(block_levels)
-          ""
-        end
-      elsif RUBY_VERSION > "2.0.0"
-        def exception_complement(block_levels)
-          ":in `block in Expectations'"
-        end
       else
         def exception_complement(block_levels)
-          ":in `Expectations'"
+          ":in `block in Expectations'"
         end
       end
     end
