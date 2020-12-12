@@ -1,6 +1,10 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.0...main)
 
+Breaking Changes:
+
+* Ruby < 2.3 is no longer supported. (Phil Pirozhkov, #1231)
+
 Enhancements:
 
 * Return `true` from `aggregate_failures` when no exception occurs. (Jon Rowe, #1225)
