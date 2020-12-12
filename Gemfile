@@ -29,7 +29,7 @@ end
 
 gem 'simplecov'
 
-gem 'ffi', '> 1.9.24' # prevent Github security vulnerability warning
+gem 'ffi', '~> 1.12.0'
 
 # Version 5.12 of minitest requires Ruby 2.4
 if RUBY_VERSION < '2.4.0'
