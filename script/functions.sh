@@ -1,8 +1,8 @@
-# This file was generated on 2020-09-28T16:30:00+02:00 from the rspec-dev repo.
+# This file was generated on 2020-12-15T09:57:15+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source $SCRIPT_DIR/travis_functions.sh
+source $SCRIPT_DIR/ci_functions.sh
 source $SCRIPT_DIR/predicate_functions.sh
 
 # If JRUBY_OPTS isn't set, use these.
@@ -20,12 +20,12 @@ fi
 function clone_repo {
   if [ ! -d $1 ]; then # don't clone if the dir is already there
     if [ -z "$2" ]; then
-      BRANCH_TO_CLONE="${MAINTENANCE_BRANCH?}";
+      BRANCH_TO_CLONE="$MAINTENANCE_BRANCH"
     else
-      BRANCH_TO_CLONE="$2";
-    fi;
+      BRANCH_TO_CLONE="$2"
+    fi
 
-    travis_retry eval "git clone https://github.com/rspec/$1 --depth 1 --branch ${BRANCH_TO_CLONE?}"
+    travis_retry eval "git clone https://github.com/rspec/$1 --depth 1 --branch $BRANCH_TO_CLONE"
   fi;
 }
 
@@ -88,7 +88,7 @@ function run_spec_suite_for {
       echo "Running specs for $1"
       pushd ../$1
       unset BUNDLE_GEMFILE
-      bundle_install_flags=`cat .travis.yml | grep bundler_args | tr -d '"' | grep -o " .*"`
+      bundle_install_flags=`cat .github/workflows/ci.yml | grep "bundle install" | sed 's/.* bundle install//'`
       travis_retry eval "(unset RUBYOPT; exec bundle install $bundle_install_flags)"
       run_specs_and_record_done
       popd
