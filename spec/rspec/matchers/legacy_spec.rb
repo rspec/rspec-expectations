@@ -27,7 +27,7 @@ module RSpec
           end
 
           it 'warns about the deprecated protocol' do
-            expect_warn_deprecation_with_call_site(__FILE__, __LINE__ + 1, /legacy\s+RSpec\s+matcher/)
+            expect_warn_deprecation(/legacy\s+RSpec\s+matcher.+#{__FILE__}:#{__LINE__ + 1}/m)
             expect(true).to matcher
           end
 
@@ -48,7 +48,7 @@ module RSpec
           end
 
           it 'warns about the deprecated protocol' do
-            expect_warn_deprecation_with_call_site(__FILE__, __LINE__ + 1, /legacy\s+RSpec\s+matcher/)
+            expect_warn_deprecation(/legacy\s+RSpec\s+matcher.+#{__FILE__}:#{__LINE__ + 1}/m)
             expect(false).not_to matcher
           end
 
