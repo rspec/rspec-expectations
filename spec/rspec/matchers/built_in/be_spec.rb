@@ -746,14 +746,16 @@ RSpec.describe "expect(...).to be =~" do
   end
 end
 
-RSpec.describe "should be =~", :uses_should do
+RSpec.describe "should be =~" do
+  subject { "a string" }
+
   it "passes when =~ operator returns true" do
-    "a string".should be =~ /str/
+    should be =~ /str/
   end
 
   it "fails when =~ operator returns false" do
     expect {
-      "a string".should be =~ /blah/
+      should be =~ /blah/
     }.to fail_with(%(expected: =~ /blah/\n     got:    "a string"))
   end
 end

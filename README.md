@@ -219,15 +219,14 @@ expect(
 ## `should` syntax
 
 In addition to the `expect` syntax, rspec-expectations continues to support the
-`should` syntax:
+non-monkey patching `should` syntax:
 
 ```ruby
-actual.should eq expected
-actual.should be > 3
-[1, 2, 3].should_not include 4
+subject(:number) { 4 }
+it { should eq(4) }
+it { should be > 3 }
+it { should_not be_odd }
 ```
-
-See [detailed information on the `should` syntax and its usage.](https://github.com/rspec/rspec-expectations/blob/main/Should.md)
 
 ## Compound Matcher Expressions
 

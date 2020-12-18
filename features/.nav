@@ -36,7 +36,6 @@
 - customized_message.feature
 - diffing.feature
 - implicit_docstrings.feature
-- syntax_configuration.feature
 - test_frameworks:
   - test_unit.feature
 - Changelog.md

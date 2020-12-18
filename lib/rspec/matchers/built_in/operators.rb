@@ -6,7 +6,7 @@ module RSpec
       # @api private
       # Provides the implementation for operator matchers.
       # Not intended to be instantiated directly.
-      # Only available for use with `should`.
+      # Only available for use with `should` one-liner syntax.
       class OperatorMatcher
         class << self
           # @private
@@ -93,7 +93,7 @@ module RSpec
       end
 
       # @private
-      # Handles operator matcher for `should`.
+      # Handles operator matcher for positive expectations
       class PositiveOperatorMatcher < OperatorMatcher
         def __delegate_operator(actual, operator, expected)
           if actual.__send__(operator, expected)
@@ -112,7 +112,7 @@ module RSpec
       end
 
       # @private
-      # Handles operator matcher for `should_not`.
+      # Handles operator matcher for negative expectations
       class NegativeOperatorMatcher < OperatorMatcher
         def __delegate_operator(actual, operator, expected)
           return false unless actual.__send__(operator, expected)

@@ -260,7 +260,6 @@ module RSpec
     # @!method self.define_negated_matcher(negated_name, base_name, &description_override)
     #   Extended from {RSpec::Matchers::DSL#define_negated_matcher}.
 
-    # @method expect
     # Supports `expect(actual).to matcher` syntax by wrapping `actual` in an
     # `ExpectationTarget`.
     # @example
@@ -269,6 +268,9 @@ module RSpec
     # @return [Expectations::ExpectationTarget]
     # @see Expectations::ExpectationTarget#to
     # @see Expectations::ExpectationTarget#not_to
+    def expect(value=::RSpec::Expectations::ExpectationTarget::UndefinedValue, &block)
+      ::RSpec::Expectations::ExpectationTarget.for(value, block)
+    end
 
     # Allows multiple expectations in the provided block to fail, and then
     # aggregates them into a single exception, rather than aborting on the
