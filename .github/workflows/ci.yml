@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - 3.0.0-preview2
+          - 3.0.0-rc1
           - 2.7
           - 2.6
           - 2.5
