@@ -216,17 +216,6 @@ expect(
 ).to match([a_hash_including(:a => 'hash'), a_hash_including(:a => 'another')])
 ```
 
-## `should` syntax
-
-In addition to the `expect` syntax, rspec-expectations continues to support the
-non-monkey patching `should` syntax:
-
-```ruby
-subject(:number) { 4 }
-it { should eq(4) }
-it { should be > 3 }
-it { should_not be_odd }
-```
 
 ## Compound Matcher Expressions
 

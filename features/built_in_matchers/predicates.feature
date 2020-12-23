@@ -47,8 +47,8 @@ Feature: Predicate matchers
 
   Any arguments passed to the matcher will be passed on to the predicate method.
 
-  Scenario: should be_zero (based on Integer#zero?)
-    Given a file named "should_be_zero_spec.rb" with:
+  Scenario: is_expected.to be_zero (based on Integer#zero?)
+    Given a file named "be_zero_spec.rb" with:
       """ruby
       RSpec.describe 0 do
         it { is_expected.to be_zero }
@@ -58,12 +58,12 @@ Feature: Predicate matchers
         it { is_expected.to be_zero } # deliberate failure
       end
       """
-    When I run `rspec should_be_zero_spec.rb`
+    When I run `rspec be_zero_spec.rb`
     Then the output should contain "2 examples, 1 failure"
      And the output should contain "expected `7.zero?` to be truthy, got false"
 
-  Scenario: should_not be_empty (based on Array#empty?)
-    Given a file named "should_not_be_empty_spec.rb" with:
+  Scenario: is_expected.not_to be_empty (based on Array#empty?)
+    Given a file named "not_to_be_empty_spec.rb" with:
       """ruby
       RSpec.describe [1, 2, 3] do
         it { is_expected.not_to be_empty }
@@ -73,12 +73,12 @@ Feature: Predicate matchers
         it { is_expected.not_to be_empty } # deliberate failure
       end
       """
-    When I run `rspec should_not_be_empty_spec.rb`
+    When I run `rspec not_to_be_empty_spec.rb`
     Then the output should contain "2 examples, 1 failure"
      And the output should contain "expected `[].empty?` to be falsey, got true"
 
-   Scenario: should have_key (based on Hash#has_key?)
-    Given a file named "should_have_key_spec.rb" with:
+   Scenario: is_expected.to have_key (based on Hash#has_key?)
+    Given a file named "have_key_spec.rb" with:
       """ruby
       RSpec.describe Hash do
         subject { { :foo => 7 } }
@@ -86,12 +86,12 @@ Feature: Predicate matchers
         it { is_expected.to have_key(:bar) } # deliberate failure
       end
       """
-    When I run `rspec should_have_key_spec.rb`
+    When I run `rspec have_key_spec.rb`
     Then the output should contain "2 examples, 1 failure"
      And the output should contain "expected `{:foo=>7}.has_key?(:bar)` to be truthy, got false"
 
-   Scenario: should_not have_all_string_keys (based on custom #has_all_string_keys? method)
-     Given a file named "should_not_have_all_string_keys_spec.rb" with:
+   Scenario: is_expected.to have_decimals (based on custom #have_decimals? method)
+     Given a file named "have_decimals_spec.rb" with:
        """ruby
        class Float
          def has_decimals?
@@ -112,7 +112,7 @@ Feature: Predicate matchers
          end
        end
        """
-     When I run `rspec should_not_have_all_string_keys_spec.rb`
+     When I run `rspec have_decimals_spec.rb`
      Then the output should contain "2 examples, 1 failure"
       And the output should contain "expected `42.0.has_decimals?` to be truthy, got false"
 

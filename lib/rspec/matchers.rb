@@ -501,9 +501,6 @@ module RSpec
     # This works for collections. Pass in multiple args and it will only
     # pass if all args are found in collection.
     #
-    # @note This is also available using the `=~` operator with `should`,
-    #       but `=~` is not supported with `expect`.
-    #
     # @example
     #   expect([1, 2, 3]).to contain_exactly(1, 2, 3)
     #   expect([1, 2, 3]).to contain_exactly(1, 3, 2)
