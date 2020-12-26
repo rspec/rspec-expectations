@@ -1,4 +1,4 @@
-# This file was generated on 2020-12-22T08:25:54+00:00 from the rspec-dev repo.
+# This file was generated on 2020-12-26T10:45:27+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 function is_mri {
@@ -9,6 +9,28 @@ function is_mri {
   else
     return 1
   fi;
+}
+
+function is_ruby_head {
+  # This checks for the presence of our CI's ruby-head env variable
+  if [ -z ${RUBY_HEAD+x} ]; then
+    return 1
+  else
+    return 0
+  fi;
+}
+
+function supports_cross_build_checks {
+  if is_mri; then
+    # We don't run cross build checks on ruby-head
+    if is_ruby_head; then
+      return 1
+    else
+      return 0
+    fi
+  else
+    return 1
+  fi
 }
 
 function is_jruby {
