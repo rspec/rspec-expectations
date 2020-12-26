@@ -1,4 +1,4 @@
-# This file was generated on 2020-12-22T08:25:54+00:00 from the rspec-dev repo.
+# This file was generated on 2020-12-26T10:45:27+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -30,11 +30,13 @@ jobs:
           - 2.3
           - 2.2
           - 2.1.9
-          - ruby-head
         env:
           -
             DIFF_LCS_VERSION: "> 1.4.3"
         include:
+          - ruby: ruby-head
+            env:
+              RUBY_HEAD: true
           - ruby: jruby-9.2.13.0
             env:
               JRUBY_OPTS: "--dev"
