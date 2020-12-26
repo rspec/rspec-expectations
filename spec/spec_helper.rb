@@ -49,7 +49,7 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-  config.disable_monkey_patching!
+  config.disable_monkey_patching! if config.respond_to?(:disable_monkey_patching!) # RSpec 4 dropped this method
 
   # We don't want rspec-core to look in our `lib` for failure snippets.
   # When it does that, it inevitably finds this line:
