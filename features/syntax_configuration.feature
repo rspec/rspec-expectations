@@ -68,7 +68,7 @@ Feature: Syntax Configuration
           expectations.syntax = :should
         end
         config.mock_with :rspec do |mocks|
-          mocks.syntax = :should
+          mocks.syntax = :should if mocks.respond_to?(:syntax=) # RSpec 4 removed `syntax=`
         end
       end
       """
