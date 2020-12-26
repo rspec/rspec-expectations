@@ -1,5 +1,5 @@
 <!---
-This file was generated on 2019-12-05T21:32:23+00:00 from the rspec-dev repo.
+This file was generated on 2020-12-26T20:29:42+00:00 from the rspec-dev repo.
 DO NOT modify it by hand as your changes will get lost the next time it is generated.
 -->
 
@@ -108,7 +108,7 @@ Here's a short, non-exhaustive checklist of things we typically ask contributors
 - [ ] New behavior is covered by tests and all tests are passing.
 - [ ] No Ruby warnings are issued by your changes.
 - [ ] Documentation reflects changes and renders as intended.
-- [ ] RuboCop passes (e.g. `bundle exec rubocop`).
+- [ ] RuboCop passes (e.g. `bundle exec rubocop lib`).
 - [ ] Commits are squashed into a reasonable number of logical changesets that tell an easy-to-follow story.
 - [ ] No changelog entry is necessary (we'll add it as part of the merge process!)
 
