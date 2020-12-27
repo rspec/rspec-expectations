@@ -1,4 +1,4 @@
-# This file was generated on 2020-12-27T10:37:01+00:00 from the rspec-dev repo.
+# This file was generated on 2020-12-27T14:29:49+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 function is_mri {
@@ -97,14 +97,6 @@ function is_ruby_25_plus {
 
 function rspec_rails_compatible {
   if is_ruby_25_plus; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-function requires_rspec_rails_maintenance_branch {
-  if [ "$MAINTENANCE_BRANCH" == "3-10-maintenance" ]; then
     return 0
   else
     return 1
