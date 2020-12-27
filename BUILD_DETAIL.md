@@ -1,5 +1,5 @@
 <!---
-This file was generated on 2019-12-05T21:32:23+00:00 from the rspec-dev repo.
+This file was generated on 2020-12-26T20:29:42+00:00 from the rspec-dev repo.
 DO NOT modify it by hand as your changes will get lost the next time it is generated.
 -->
 
@@ -104,11 +104,11 @@ conventions on the project so that the code has stylistic consistency
 throughout. Run with:
 
 ```
-$ bundle exec rubocop
+$ bundle exec rubocop lib
 
 # or, if you installed your bundle with `--standalone --binstubs`:
 
-$ bin/rubocop
+$ bin/rubocop lib
 ```
 
 Our RuboCop configuration is a work-in-progress, so if you get a failure
