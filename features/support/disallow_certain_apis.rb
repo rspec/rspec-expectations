@@ -18,7 +18,7 @@ else
   end
 
   RSpec.configure do |rspec|
-    rspec.expose_dsl_globally = false
+    rspec.expose_dsl_globally = false if rspec.respond_to?(:expose_dsl_globally)
 
     rspec.mock_with :rspec do |mocks|
       mocks.syntax = :expect if mocks.respond_to?(:syntax=) # RSpec 4 removed `syntax=`
