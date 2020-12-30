@@ -30,7 +30,7 @@ jobs:
           - 2.3
         env:
           -
-            DIFF_LCS_VERSION: "> 1.4.3"
+            BOGUS: ""
         include:
           - ruby: ruby-head
             env:
