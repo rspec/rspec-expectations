@@ -49,6 +49,7 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.shared_context_metadata_behavior = :apply_to_host_groups if config.respond_to?(:shared_context_metadata_behavior=) # RSpec 4 dropped this setting
   config.disable_monkey_patching! if config.respond_to?(:disable_monkey_patching!) # RSpec 4 dropped this method
 
   # We don't want rspec-core to look in our `lib` for failure snippets.
@@ -59,7 +60,7 @@ RSpec.configure do |config|
   config.project_source_dirs -= ["lib"]
 end
 
-RSpec.shared_context "with #should enabled", :uses_should do
+RSpec.shared_context "with #should enabled" do
   orig_syntax = nil
 
   before(:all) do
@@ -83,10 +84,9 @@ RSpec.shared_context "with the default expectation syntax" do
   after(:context) do
     RSpec::Matchers.configuration.syntax = orig_syntax
   end
-
 end
 
-RSpec.shared_context "with #should exclusively enabled", :uses_only_should do
+RSpec.shared_context "with #should exclusively enabled" do
   orig_syntax = nil
 
   before(:context) do
@@ -107,10 +107,16 @@ RSpec.shared_context "isolate include_chain_clauses_in_custom_matcher_descriptio
   end
 end
 
-RSpec.shared_context "with warn_about_potential_false_positives set to false", :warn_about_potential_false_positives do
+RSpec.shared_context "with warn_about_potential_false_positives set to false" do
   original_value = RSpec::Expectations.configuration.warn_about_potential_false_positives?
 
   after(:context)  { RSpec::Expectations.configuration.warn_about_potential_false_positives = original_value }
+end
+
+RSpec.configure do |config|
+  config.include_context "with #should enabled", :uses_should
+  config.include_context "with #should exclusively enabled", :uses_only_should
+  config.include_context "with warn_about_potential_false_positives set to false", :warn_about_potential_false_positives
 end
 
 module MinitestIntegration
