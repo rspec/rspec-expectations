@@ -1,4 +1,4 @@
-# This file was generated on 2020-12-27T14:33:56+00:00 from the rspec-dev repo.
+# This file was generated on 2020-12-31T00:51:10+03:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -30,7 +30,7 @@ jobs:
           - 2.3
         env:
           -
-            BOGUS: ""
+            __UNUSED_VARIABLE: "Prevents build error when {matrix.env} is used."
         include:
           - ruby: ruby-head
             env:
