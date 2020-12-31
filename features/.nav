@@ -16,7 +16,6 @@
   - have_attributes.feature
   - include.feature
   - match.feature
-  - operators.feature
   - raise_error.feature
   - respond_to.feature
   - satisfy.feature
@@ -36,7 +35,6 @@
 - customized_message.feature
 - diffing.feature
 - implicit_docstrings.feature
-- syntax_configuration.feature
 - test_frameworks:
   - test_unit.feature
 - Changelog.md

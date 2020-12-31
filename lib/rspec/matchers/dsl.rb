@@ -373,7 +373,7 @@ module RSpec
         include BuiltIn::BaseMatcher::DefaultFailureMessages
 
         # @api private
-        # Used internally by objects returns by `should` and `should_not`.
+        # Used internally by handlers and compound matchers.
         def diffable?
           false
         end

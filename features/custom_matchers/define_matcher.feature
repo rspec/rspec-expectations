@@ -203,7 +203,7 @@ Feature: Define a custom matcher
       end
 
       RSpec.describe "these two arrays" do
-        specify "should be similar" do
+        it "is similar" do
           expect([1,2,3]).to have_same_elements_as([2,3,1])
         end
       end
@@ -278,7 +278,7 @@ Feature: Define a custom matcher
     Then the output should contain "3 examples, 0 failures"
 
   Scenario: Matcher with separate logic for expect().to and expect().not_to
-    Given a file named "matcher_with_separate_should_not_logic_spec.rb" with:
+    Given a file named "matcher_with_separate_not_to_logic_spec.rb" with:
       """ruby
       RSpec::Matchers.define :contain do |*expected|
         match do |actual|
@@ -299,7 +299,7 @@ Feature: Define a custom matcher
         it { is_expected.not_to contain(1, 4) }
       end
       """
-    When I run `rspec matcher_with_separate_should_not_logic_spec.rb`
+    When I run `rspec matcher_with_separate_not_to_logic_spec.rb`
     Then the output should contain all of these:
       | 4 examples, 2 failures                    |
       | expected [1, 2, 3] to contain 1 and 4     |

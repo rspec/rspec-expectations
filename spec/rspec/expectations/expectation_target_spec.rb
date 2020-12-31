@@ -68,13 +68,13 @@ module RSpec
         it 'does not support operator matchers from #to' do
           expect {
             expect(3).to == 3
-          }.to raise_error(ArgumentError)
+          }.to raise_error(ArgumentError, /The expect syntax does not support operator matchers, so you must pass a matcher to `#to`/)
         end
 
         it 'does not support operator matchers from #not_to' do
           expect {
             expect(3).not_to == 4
-          }.to raise_error(ArgumentError)
+          }.to raise_error(ArgumentError, /The expect syntax does not support operator matchers, so you must pass a matcher to `#not_to`/)
         end
       end
 

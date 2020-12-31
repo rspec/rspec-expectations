@@ -1,6 +1,6 @@
 module RSpec
   module Expectations
-    RSpec.describe Syntax do
+    RSpec.describe 'Syntax' do
       context "when passing a message to an expectation" do
         let(:warner) { ::Kernel }
 
@@ -68,18 +68,6 @@ module RSpec
             expect(warner).not_to receive(:warn)
             expect(3).not_to eq(4), callable_object
           end
-        end
-      end
-
-      describe "enabling the should syntax on something other than the default syntax host" do
-        include_context "with the default expectation syntax"
-
-        it "continues to warn about the should syntax" do
-          my_host = Class.new
-          expect(RSpec).to receive(:deprecate)
-          Syntax.enable_should(my_host)
-
-          3.should eq 3
         end
       end
     end
