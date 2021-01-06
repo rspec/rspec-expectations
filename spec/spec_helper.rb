@@ -40,7 +40,6 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
-    expectations.strict_predicate_matchers = true
   end
 
   config.mock_with :rspec do |mocks|
@@ -69,6 +68,19 @@ RSpec.shared_context "with warn_about_potential_false_positives set to false" do
   after(:context)  { RSpec::Expectations.configuration.warn_about_potential_false_positives = original_value }
 end
 RSpec.configuration.include_context "with warn_about_potential_false_positives set to false", :warn_about_potential_false_positives
+
+RSpec.shared_context "with modified configuration" do
+  around do |example|
+    configuration = example.metadata[:with_configuration]
+    key = configuration.keys.first
+    value = configuration.values.first
+    original = RSpec::Expectations.configuration.public_send(key)
+    RSpec::Expectations.configuration.public_send("#{key}=", value)
+    example.run
+    RSpec::Expectations.configuration.public_send("#{key}=", original)
+  end
+end
+RSpec.configuration.include_context "with modified configuration", :with_configuration
 
 module MinitestIntegration
   include ::RSpec::Support::InSubProcess

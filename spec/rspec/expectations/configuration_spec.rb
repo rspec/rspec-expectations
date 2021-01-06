@@ -61,6 +61,23 @@ module RSpec
         end
       end
 
+      describe "#strict_predicate_matchers?" do
+        it "is true by default" do
+          expect(config.strict_predicate_matchers?).to be(true)
+        end
+
+        it "can be set to false" do
+          config.strict_predicate_matchers = false
+          expect(config.strict_predicate_matchers?).to be(false)
+        end
+
+        it "can be set back to true" do
+          config.strict_predicate_matchers = false
+          config.strict_predicate_matchers = true
+          expect(config.strict_predicate_matchers?).to be(true)
+        end
+      end
+
       describe "#max_formatted_output_length=" do
         before do
           @orig_max_formatted_output_length = RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length
