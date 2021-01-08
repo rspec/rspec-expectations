@@ -8,6 +8,8 @@ Breaking Changes:
 * Turn `strict_predicate_matchers` on by default. (Phil Pirozhkov, #1277)
 * Remove deprecated `LegacyMacherAdapter`. (Phil Pirozhkov, #1253)
 * Remove support for legacy RSpec matchers (pre 3). (Phil Pirozhkov, #1253)
+* Remove `include_chain_clauses_in_custom_matcher_descriptions` option
+  and make it the default. (Phil Pirozhkov, #1279)
 
 Enhancements:
 

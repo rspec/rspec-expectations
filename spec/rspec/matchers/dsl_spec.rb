@@ -291,54 +291,19 @@ module RSpec::Matchers::DSL
       end
 
       context "when the matchers are chained" do
-        include_context "isolate include_chain_clauses_in_custom_matcher_descriptions"
-
-        context "without include_chain_clauses_in_custom_matcher_descriptions configured" do
-          before { RSpec::Expectations.configuration.include_chain_clauses_in_custom_matcher_descriptions = false }
-          let(:match) { matcher.and_smaller_than(10).and_divisible_by(3) }
-
-          it "provides a default description that does not include any of the chained matchers' descriptions" do
-            expect(match.description).to eq 'be bigger than 5'
-          end
-
-          it "provides a default positive expectation failure message that does not include any of the chained matchers' descriptions" do
-            expect { expect(8).to match }.to fail_with 'expected 8 to be bigger than 5'
-          end
-
-          it "provides a default negative expectation failure message that does not include the any of the chained matchers's descriptions" do
-            expect { expect(9).to_not match }.to fail_with 'expected 9 not to be bigger than 5'
-          end
+        it "provides a default description that includes the chained matchers' descriptions in they were used" do
+          expect(matcher.and_divisible_by(3).and_smaller_than(29).and_smaller_than(20).and_divisible_by(5).description).to \
+            eq 'be bigger than 5 and divisible by 3 and smaller than 29 and smaller than 20 and divisible by 5'
         end
 
-        context "with include_chain_clauses_in_custom_matcher_descriptions configured to be true" do
-          before do
-            expect(RSpec::Expectations.configuration.include_chain_clauses_in_custom_matcher_descriptions?).to be true
-          end
-
-          it "provides a default description that includes the chained matchers' descriptions in they were used" do
-            expect(matcher.and_divisible_by(3).and_smaller_than(29).and_smaller_than(20).and_divisible_by(5).description).to \
-              eq 'be bigger than 5 and divisible by 3 and smaller than 29 and smaller than 20 and divisible by 5'
-          end
-
-          it "provides a default positive expectation failure message that includes the chained matchers' failures" do
-            expect { expect(30).to matcher.and_smaller_than(29).and_divisible_by(3) }.to \
-              fail_with 'expected 30 to be bigger than 5 and smaller than 29 and divisible by 3'
-          end
-
-          it "provides a default negative expectation failure message that includes the chained matchers' failures" do
-            expect { expect(21).to_not matcher.and_smaller_than(29).and_divisible_by(3) }.to \
-              fail_with 'expected 21 not to be bigger than 5 and smaller than 29 and divisible by 3'
-          end
+        it "provides a default positive expectation failure message that includes the chained matchers' failures" do
+          expect { expect(30).to matcher.and_smaller_than(29).and_divisible_by(3) }.to \
+            fail_with 'expected 30 to be bigger than 5 and smaller than 29 and divisible by 3'
         end
 
-        it 'only decides if to include the chained clauses at the time description is invoked' do
-          matcher.and_divisible_by(3)
-
-          expect {
-            RSpec::Expectations.configuration.include_chain_clauses_in_custom_matcher_descriptions = false
-          }.to change { matcher.description }.
-            from('be bigger than 5 and divisible by 3').
-            to('be bigger than 5')
+        it "provides a default negative expectation failure message that includes the chained matchers' failures" do
+          expect { expect(21).to_not matcher.and_smaller_than(29).and_divisible_by(3) }.to \
+            fail_with 'expected 21 not to be bigger than 5 and smaller than 29 and divisible by 3'
         end
       end
     end
@@ -816,19 +781,8 @@ module RSpec::Matchers::DSL
           end
         end
 
-        context "with include_chain_clauses_in_custom_matcher_descriptions configured to false" do
-          include_context "isolate include_chain_clauses_in_custom_matcher_descriptions"
-          before { RSpec::Expectations.configuration.include_chain_clauses_in_custom_matcher_descriptions = false }
-
-          it "provides a default description that does not include any of the chained matchers' descriptions" do
-            expect(matcher.and_divisible_by(10).description).to eq 'be even and divisible by 10'
-          end
-        end
-
-        context "with include_chain_clauses_in_custom_matcher_descriptions configured to true" do
-          it "provides a default description that does includes the chained matchers' descriptions" do
-            expect(matcher.and_divisible_by(10).description).to eq 'be even and divisible by 10 and divisible by 10'
-          end
+        it "provides a default description that does includes the chained matchers' descriptions" do
+          expect(matcher.and_divisible_by(10).description).to eq 'be even and divisible by 10 and divisible by 10'
         end
       end
     end
