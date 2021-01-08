@@ -72,7 +72,6 @@ RSpec.configuration.include_context "with warn_about_potential_false_positives s
 RSpec.shared_context "with modified configuration" do
   around do |example|
     configuration = example.metadata[:with_configuration]
-    # Rework to use `slice` when we drop support for Ruby 2.3
     original = configuration.keys.each.with_object({}) do |key, config|
       config[key] = RSpec::Expectations.configuration.public_send(key)
     end
