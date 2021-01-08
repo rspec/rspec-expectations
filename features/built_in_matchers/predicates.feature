@@ -39,7 +39,7 @@ Feature: Predicate matchers
 
   In either case, RSpec provides nice, clear error messages, such as:
 
-    `expected zero? to be truthy, got false`
+    `expected zero? to return true, got false`
 
   Calling private methods will also fail:
 
@@ -60,7 +60,7 @@ Feature: Predicate matchers
       """
     When I run `rspec be_zero_spec.rb`
     Then the output should contain "2 examples, 1 failure"
-     And the output should contain "expected `7.zero?` to be truthy, got false"
+     And the output should contain "expected `7.zero?` to return true, got false"
 
   Scenario: is_expected.not_to be_empty (based on Array#empty?)
     Given a file named "not_to_be_empty_spec.rb" with:
@@ -75,7 +75,7 @@ Feature: Predicate matchers
       """
     When I run `rspec not_to_be_empty_spec.rb`
     Then the output should contain "2 examples, 1 failure"
-     And the output should contain "expected `[].empty?` to be falsey, got true"
+     And the output should contain "expected `[].empty?` to return false, got true"
 
    Scenario: is_expected.to have_key (based on Hash#has_key?)
     Given a file named "have_key_spec.rb" with:
@@ -88,7 +88,7 @@ Feature: Predicate matchers
       """
     When I run `rspec have_key_spec.rb`
     Then the output should contain "2 examples, 1 failure"
-     And the output should contain "expected `{:foo=>7}.has_key?(:bar)` to be truthy, got false"
+     And the output should contain "expected `{:foo=>7}.has_key?(:bar)` to return true, got false"
 
    Scenario: is_expected.to have_decimals (based on custom #have_decimals? method)
      Given a file named "have_decimals_spec.rb" with:
@@ -114,7 +114,7 @@ Feature: Predicate matchers
        """
      When I run `rspec have_decimals_spec.rb`
      Then the output should contain "2 examples, 1 failure"
-      And the output should contain "expected `42.0.has_decimals?` to be truthy, got false"
+      And the output should contain "expected `42.0.has_decimals?` to return true, got false"
 
    Scenario: matcher arguments are passed on to the predicate method
      Given a file named "predicate_matcher_argument_spec.rb" with:
@@ -136,8 +136,8 @@ Feature: Predicate matchers
        """
      When I run `rspec predicate_matcher_argument_spec.rb`
      Then the output should contain "4 examples, 2 failures"
-      And the output should contain "expected `12.multiple_of?(4)` to be falsey, got true"
-      And the output should contain "expected `12.multiple_of?(5)` to be truthy, got false"
+      And the output should contain "expected `12.multiple_of?(4)` to return false, got true"
+      And the output should contain "expected `12.multiple_of?(5)` to return true, got false"
 
     Scenario: the config `strict_predicate_matchers` impacts matching of results other than `true` and `false`
       Given a file named "strict_or_not.rb" with:
@@ -159,14 +159,14 @@ Feature: Predicate matchers
             end
           end
 
-          context 'with non-strict matchers (default)' do
-            let(:strict) { false }
+          context 'with strict matchers (default)' do
+            let(:strict) { true }
+            # deliberate failure
             it { is_expected.to have_strange_result }
           end
 
-          context 'with strict matchers' do
-            let(:strict) { true }
-            # deliberate failure
+          context 'with non-strict matchers' do
+            let(:strict) { false }
             it { is_expected.to have_strange_result }
           end
         end

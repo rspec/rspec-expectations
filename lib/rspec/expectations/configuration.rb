@@ -26,7 +26,7 @@ module RSpec
 
       def initialize
         @on_potential_false_positives = :warn
-        @strict_predicate_matchers = false
+        @strict_predicate_matchers = true
       end
 
       # Configures the maximum character length that RSpec will print while
@@ -126,9 +126,9 @@ module RSpec
         @on_potential_false_positives = behavior
       end
 
-      # Configures RSpec to check predicate matchers to `be(true)` / `be(false)` (strict),
-      # or `be_truthy` / `be_falsey` (not strict).
-      # Historically, the default was `false`, but `true` is recommended.
+      # Configures RSpec to check the values returned by predicate matchers
+      # to be exactly true/false (strict), or truthy/falsey (not strict).
+      # Before RSpec 4, the default was `false`.
       def strict_predicate_matchers=(flag)
         raise ArgumentError, "Pass `true` or `false`" unless flag == true || flag == false
         @strict_predicate_matchers = flag
