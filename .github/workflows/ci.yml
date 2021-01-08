@@ -1,4 +1,4 @@
-# This file was generated on 2020-12-27T14:29:49+00:00 from the rspec-dev repo.
+# This file was generated on 2021-01-08T09:17:13+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -66,6 +66,29 @@ jobs:
       - run: script/clone_all_rspec_repos
       - run: bundle install --binstubs --standalone
       - run: script/run_build
+
+  legacy:
+    name: Legacy Ruby Builds (${{ matrix.container.version }})
+    runs-on: ubuntu-20.04
+    container: ${{ matrix.container.tag }}
+    strategy:
+      fail-fast: false
+      matrix:
+        container:
+          - version: "2.0"
+            tag: rspec/ci:2.0.0
+          - version: "1.9.3"
+            tag: rspec/ci:1.9.3
+          - version: "JRuby 1.7"
+            tag: rspec/ci:jruby-1.7
+    env:
+      LEGACY_CI: true
+      JRUBY_OPTS: ${{ matrix.container.jruby_opts || '--dev' }}
+    steps:
+      - uses: actions/checkout@v2
+      - run: script/legacy_setup.sh
+      - run: bundle exec bin/rspec
+      - run: bundle exec script/cucumber.sh
 
   windows:
     name: Ruby ${{ matrix.ruby }} (Windows)
