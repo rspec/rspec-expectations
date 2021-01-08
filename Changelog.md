@@ -6,6 +6,8 @@ Breaking Changes:
 * Ruby < 2.3 is no longer supported. (Phil Pirozhkov, #1231)
 * Remove `should` and `should_not` syntax (including one-liners). (Phil Pirozhkov, #1245)
 * Turn `strict_predicate_matchers` on by default. (Phil Pirozhkov, #1277)
+* Remove deprecated `LegacyMacherAdapter`. (Phil Pirozhkov, #1253)
+* Remove support for legacy RSpec matchers (pre 3). (Phil Pirozhkov, #1253)
 
 Enhancements:
 

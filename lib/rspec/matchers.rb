@@ -981,8 +981,7 @@ module RSpec
       end
       return false unless obj.respond_to?(:matches?)
 
-      obj.respond_to?(:failure_message) ||
-      obj.respond_to?(:failure_message_for_should) # support legacy matchers
+      obj.respond_to?(:failure_message)
     end
 
     ::RSpec::Support.register_matcher_definition do |obj|
