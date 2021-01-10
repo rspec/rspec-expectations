@@ -38,10 +38,6 @@ RSpec.configure do |config|
   config.include CommonHelperMethods
   config.include RSpec::Support::InSubProcess
 
-  config.expect_with :rspec do |expectations|
-    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
-  end
-
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
   end
@@ -52,14 +48,6 @@ RSpec.configure do |config|
   # ...which isn't very helpful. Far better for it to find the expectation
   # call site in the spec.
   config.project_source_dirs -= ["lib"]
-end
-
-RSpec.shared_context "isolate include_chain_clauses_in_custom_matcher_descriptions" do
-  around do |ex|
-    orig = RSpec::Expectations.configuration.include_chain_clauses_in_custom_matcher_descriptions?
-    ex.run
-    RSpec::Expectations.configuration.include_chain_clauses_in_custom_matcher_descriptions = orig
-  end
 end
 
 RSpec.shared_context "with warn_about_potential_false_positives set to false" do

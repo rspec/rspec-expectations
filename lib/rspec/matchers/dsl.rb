@@ -262,10 +262,8 @@ module RSpec
         # Convenience for defining methods on this matcher to create a fluent
         # interface. The trick about fluent interfaces is that each method must
         # return self in order to chain methods together. `chain` handles that
-        # for you. If the method is invoked and the
-        # `include_chain_clauses_in_custom_matcher_descriptions` config option
-        # hash been enabled, the chained method name and args will be added to the
-        # default description and failure message.
+        # for you. If the method is invoked, the chained method name and args
+        # will be added to the default description and failure message.
         #
         # In the common case where you just want the chained method to store some
         # value(s) for later use (e.g. in `match`), you can provide one or more
@@ -371,8 +369,6 @@ module RSpec
       private
 
         def chained_method_clause_sentences
-          return '' unless Expectations.configuration.include_chain_clauses_in_custom_matcher_descriptions?
-
           @chained_method_clauses.map do |(method_name, method_args)|
             english_name = EnglishPhrasing.split_words(method_name)
             arg_list = EnglishPhrasing.list(method_args)

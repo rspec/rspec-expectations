@@ -80,18 +80,6 @@ module RSpec
                                  end
       end
 
-      # Sets if custom matcher descriptions and failure messages
-      # should include clauses from methods defined using `chain`.
-      # @param value [Boolean]
-      attr_writer :include_chain_clauses_in_custom_matcher_descriptions
-
-      # Indicates whether or not custom matcher descriptions and failure messages
-      # should include clauses from methods defined using `chain`. It is
-      # false by default for backwards compatibility.
-      def include_chain_clauses_in_custom_matcher_descriptions?
-        @include_chain_clauses_in_custom_matcher_descriptions ||= false
-      end
-
       # @api private
       # Null implementation of a backtrace formatter used by default
       # when rspec-core is not loaded. Does no filtering.
