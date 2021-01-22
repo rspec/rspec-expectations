@@ -1,4 +1,4 @@
-# RSpec Expectations [![Build Status](https://secure.travis-ci.org/rspec/rspec-expectations.svg?branch=main)](http://travis-ci.org/rspec/rspec-expectations) [![Code Climate](https://codeclimate.com/github/rspec/rspec-expectations.svg)](https://codeclimate.com/github/rspec/rspec-expectations)
+# RSpec Expectations [![Build Status](https://github.com/rspec/rspec-expectations/workflows/RSpec%20CI/badge.svg?branch=3-10-maintenance)](https://github.com/rspec/rspec-expectations/actions) [![Code Climate](https://codeclimate.com/github/rspec/rspec-expectations.svg)](https://codeclimate.com/github/rspec/rspec-expectations)
 
 RSpec::Expectations lets you express expected outcomes on an object in an
 example.
