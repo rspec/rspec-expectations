@@ -64,6 +64,12 @@ else
   gem "childprocess", "> 1.0.0"
 end
 
+if RUBY_VERSION < '2.0.0'
+  gem 'thor', '< 1.0.0'
+else
+  gem 'thor', '> 1.0.0'
+end
+
 if RUBY_VERSION < '1.9.2'
   gem 'contracts', '~> 0.15.0' # is a dependency of aruba
 end
