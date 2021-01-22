@@ -21,7 +21,9 @@ group :documentation do
   gem 'github-markup', :platform => :mri
 end
 
-gem 'simplecov'
+group :coverage do
+  gem 'simplecov'
+end
 
 if RUBY_VERSION < '2.4.0' && !!(RbConfig::CONFIG['host_os'] =~ /cygwin|mswin|mingw|bccwin|wince|emx/)
   gem 'ffi', '< 1.15'
