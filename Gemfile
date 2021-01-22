@@ -35,7 +35,9 @@ group :documentation do
   gem 'github-markup', :platform => :mri
 end
 
-gem 'simplecov'
+group :coverage do
+  gem 'simplecov'
+end
 
 if RUBY_VERSION < '2.0.0' || RUBY_ENGINE == 'java'
   gem 'json', '< 2.0.0' # is a dependency of simplecov
