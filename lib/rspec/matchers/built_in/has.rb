@@ -55,11 +55,7 @@ module RSpec
         end
 
         def predicate_result
-          @predicate_result = actual.__send__(predicate_method_name, *@args, &@block)
-        end
-
-        def predicate_method_name
-          predicate
+          @predicate_result = actual.__send__(predicate, *@args, &@block)
         end
 
         def predicate_matches?(value=true)
@@ -129,24 +125,12 @@ module RSpec
           @predicate ||= :"#{root}?"
         end
 
-        def predicate_method_name
-          actual.respond_to?(predicate) ? predicate : present_tense_predicate
-        end
-
         def failure_to_respond_explanation
           super || if predicate == :true?
                      " or perhaps you meant `be true` or `be_truthy`"
                    elsif predicate == :false?
                      " or perhaps you meant `be false` or `be_falsey`"
                    end
-        end
-
-        def predicate_accessible?
-          super || actual.respond_to?(present_tense_predicate)
-        end
-
-        def present_tense_predicate
-          :"#{root}s?"
         end
       end
     end

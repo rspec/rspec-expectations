@@ -30,9 +30,9 @@ RSpec.describe "expect(...).to be_predicate" do
     ]).to include a_happy_object
   end
 
-  it "passes when actual returns true for :predicates? (present tense)" do
-    actual = double("actual", :exists? => true, :exist? => true)
-    expect(actual).to be_exist
+  it "passes when actual returns true for :predicate?" do
+    actual = double("actual", :happy? => true)
+    expect(actual).to be_happy
   end
 
   context "when actual returns false for :predicate?" do
@@ -142,11 +142,14 @@ RSpec.describe "expect(...).to be_predicate" do
     expect { expect(object).to be_predicate(true) }.to raise_error(ArgumentError)
   end
 
-  it 'falls back to a present-tense form of the predicate when needed' do
+  it 'does not fall back to a present-tense form of the predicate' do
+    # NOTE: falling back to a present-tense form was removed in RSpec 4
     mouth = Object.new
-    def mouth.frowns?(return_val); return_val; end
+    def mouth.frowns?; end
 
-    expect(mouth).to be_frown(true)
+    expect {
+      expect(mouth).to be_frown
+    }.to fail_including("to respond to `frown?`")
   end
 
   it 'fails when :predicate? is private' do
@@ -183,14 +186,6 @@ RSpec.describe "expect(...).to be_predicate" do
     expect {
       expect(actual_class.new).to be_foo
     }.to raise_error(NameError, /aaaah/)
-  end
-
-  it "fails on error other than NameError (with the present tense predicate)" do
-    actual = double
-    expect(actual).to receive(:foos?).and_raise("aaaah")
-    expect {
-      expect(actual).to be_foo
-    }.to raise_error(/aaaah/)
   end
 
   it "does not support operator chaining like a basic `be` matcher does" do
@@ -356,56 +351,36 @@ RSpec.describe "expect(...).to be_predicate(&block)" do
     }.to fail_including("to respond to `happy?`")
   end
 
-  it 'passes the block on to the present-tense predicate form' do
+  it 'passes the block on to the predicate' do
     mouth = Object.new
-    def mouth.frowns?; yield; end
+    def mouth.frown?; yield; end
 
     expect(mouth).to be_frown { true }
     expect(mouth).not_to be_frown { false }
   end
 
-  it 'works with a do..end block for either predicate form' do
-    mouth1 = Object.new
-    def mouth1.frown?; yield; end
-    mouth2 = Object.new
-    def mouth2.frowns?; yield; end
+  it 'works with a do..end block' do
+    mouth = Object.new
+    def mouth.frown?; yield; end
 
-    expect(mouth1).to be_frown do
+    expect(mouth).to be_frown do
       true
     end
 
-    expect(mouth1).not_to be_frown do
-      false
-    end
-
-    expect(mouth2).to be_frown do
-      true
-    end
-
-    expect(mouth2).not_to be_frown do
+    expect(mouth).not_to be_frown do
       false
     end
   end
 
   it 'prefers a { ... } block to a do/end block because it binds more tightly' do
-    mouth1 = Object.new
-    def mouth1.frown?; yield; end
-    mouth2 = Object.new
-    def mouth2.frowns?; yield; end
+    mouth = Object.new
+    def mouth.frown?; yield; end
 
-    expect(mouth1).to be_frown { true } do
+    expect(mouth).to be_frown { true } do
       false
     end
 
-    expect(mouth1).not_to be_frown { false } do
-      true
-    end
-
-    expect(mouth2).to be_frown { true } do
-      false
-    end
-
-    expect(mouth2).not_to be_frown { false } do
+    expect(mouth).not_to be_frown { false } do
       true
     end
   end

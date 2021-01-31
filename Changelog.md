@@ -10,6 +10,7 @@ Breaking Changes:
 * Remove support for legacy RSpec matchers (pre 3). (Phil Pirozhkov, #1253)
 * Remove `include_chain_clauses_in_custom_matcher_descriptions` option
   and make it the default. (Phil Pirozhkov, #1279)
+* Remove support for present-tense dynamic predicate. (Phil Pirozhkov, #1286)
 
 Enhancements:
 
