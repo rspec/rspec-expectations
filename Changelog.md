@@ -1,5 +1,5 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.0...main)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.1...main)
 
 Breaking Changes:
 
@@ -15,6 +15,18 @@ Breaking Changes:
 Enhancements:
 
 * Return `true` from `aggregate_failures` when no exception occurs. (Jon Rowe, #1225)
+
+Deprecations:
+* Print a deprecation message when using the implicit block expectation syntax.
+  (Phil Pirozhkov, #1139)
+
+### 3.10.1 / 2020-12-27
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.0...v3.10.1)
+
+Bug Fixes:
+
+* Allow JRuby 9.2.x.x to generate backtraces normally rather than via our
+  backfill workaround. (#1230, Jon Rowe)
 
 ### 3.10.0 / 2020-10-30
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.9.3...v3.10.0)
@@ -123,7 +135,7 @@ Bug Fixes:
 * Prevent composed `all` matchers from leaking into their siblings leading to duplicate
   failures. (Jamie English, #1086)
 * Prevent objects which change their hash on comparison from failing change checks.
-  (Phil Pirozhkov, #1110)
+  (Phil Pirozhkov, #1100)
 * Issue an `ArgumentError` rather than a `NoMethodError` when `be_an_instance_of` and
   `be_kind_of` matchers encounter objects not supporting those methods.
   (Taichi Ishitani, #1107)
