@@ -94,6 +94,13 @@ module RSpec
           true
         end
 
+        # @api private
+        # Indicates this matcher matches against a block only.
+        # @return [False]
+        def supports_value_expectations?
+          false
+        end
+
       private
 
         def captured?
