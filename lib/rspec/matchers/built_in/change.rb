@@ -77,6 +77,11 @@ module RSpec
           true
         end
 
+        # @private
+        def supports_value_expectations?
+          false
+        end
+
       private
 
         def initialize(receiver=nil, message=nil, &block)
@@ -158,6 +163,11 @@ module RSpec
           true
         end
 
+        # @private
+        def supports_value_expectations?
+          false
+        end
+
       private
 
         def failure_reason
@@ -199,6 +209,11 @@ module RSpec
         # @private
         def supports_block_expectations?
           true
+        end
+
+        # @private
+        def supports_value_expectations?
+          false
         end
 
       private
@@ -337,6 +352,8 @@ module RSpec
       class ChangeDetails
         attr_reader :actual_after
 
+        UNDEFINED = Module.new.freeze
+
         def initialize(matcher_name, receiver=nil, message=nil, &block)
           if receiver && !message
             raise(
@@ -351,6 +368,11 @@ module RSpec
           @receiver = receiver
           @message = message
           @value_proc = block
+          # TODO: temporary measure to mute warning of access to an initialized
+          # instance variable when a deprecated implicit block expectation
+          # syntax is used. This may be removed once `fail` is used, and the
+          # matcher never issues this warning.
+          @actual_after = UNDEFINED
         end
 
         def value_representation
