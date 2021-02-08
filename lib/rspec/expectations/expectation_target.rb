@@ -111,16 +111,13 @@ module RSpec
       def enforce_value_expectation(matcher)
         return if supports_value_expectations?(matcher)
 
-        RSpec.deprecate(
-          "expect(value).to #{RSpec::Support::ObjectFormatter.format(matcher)}",
-          :message =>
-            "The implicit block expectation syntax is deprecated, you should pass " \
-            "a block rather than an argument to `expect` to use the provided " \
-            "block expectation matcher or the matcher must implement " \
-            "`supports_value_expectations?`. e.g  `expect { value }.to " \
-            "#{RSpec::Support::ObjectFormatter.format(matcher)}` not " \
-            "`expect(value).to #{RSpec::Support::ObjectFormatter.format(matcher)}`"
-        )
+        raise ArgumentError,
+          "The implicit block expectation syntax is not supported, you should pass " \
+          "a block rather than an argument to `expect` to use the provided " \
+          "block expectation matcher or the matcher must implement " \
+          "`supports_value_expectations?`. e.g  `expect { value }.to " \
+          "#{RSpec::Support::ObjectFormatter.format(matcher)}` not " \
+          "`expect(value).to #{RSpec::Support::ObjectFormatter.format(matcher)}`"
       end
 
       def supports_value_expectations?(matcher)

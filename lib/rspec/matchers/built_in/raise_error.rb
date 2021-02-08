@@ -234,7 +234,6 @@ module RSpec
         end
 
         def given_error
-          return " but was not given a block" unless Proc === @given_proc
           return " but nothing was raised" unless @actual_error
 
           backtrace = format_backtrace(@actual_error.backtrace)

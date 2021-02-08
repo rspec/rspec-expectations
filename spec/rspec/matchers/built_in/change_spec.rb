@@ -1038,7 +1038,7 @@ RSpec.describe RSpec::Matchers::BuiltIn::Change do
 end
 
 RSpec.describe RSpec::Matchers::BuiltIn::ChangeRelatively do
-  it_behaves_like "an RSpec block-only matcher", :disallows_negation => true, :skip_deprecation_check => true do
+  it_behaves_like "an RSpec block-only matcher", :disallows_negation => true do
     let(:matcher) { change { @k }.by(1) }
     before { @k = 0 }
     def valid_block
