@@ -54,12 +54,6 @@ module RSpec
         end
       end
 
-      # For RSpec 3.1, the base class was named `StartAndEndWith`. For SemVer reasons,
-      # we still provide this constant until 4.0.
-      # @deprecated Use StartOrEndWith instead.
-      # @private
-      StartAndEndWith = StartOrEndWith
-
       # @api private
       # Provides the implementation for `start_with`.
       # Not intended to be instantiated directly.
