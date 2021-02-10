@@ -77,12 +77,12 @@ RSpec.shared_examples "an RSpec block-only matcher" do |*options|
     end
   end
 
-  it 'prints a deprecation warning when given a value' do
+  it 'fails gracefully when given a value' do
     expect { expect(3).to matcher }
       .to raise_error(/implicit block expectation syntax is not supported/)
   end
 
-  it 'prints a deprecation warning when given a value and negated' do
+  it 'fails gracefully when given a value and negated' do
     expect { expect(3).not_to matcher }
       .to raise_error(/implicit block expectation syntax is not supported/)
   end unless options[:disallows_negation]
