@@ -278,14 +278,6 @@ module RSpec
 
     specify do
       expect(
-        match_regex(/foo/)
-      ).to be_aliased_to(
-        match(/foo/)
-      ).with_description('match regex /foo/')
-    end
-
-    specify do
-      expect(
         matching(/foo/)
       ).to be_aliased_to(
         match(/foo/)

@@ -13,6 +13,8 @@ Breaking Changes:
 * Remove support for present-tense dynamic predicate. (Phil Pirozhkov, #1286)
 * Prevent implicit blocks (e.g blocks as values) from being used with block matchers.
   (Phil Pirozhkov, #1285)
+* Remove deprecated `match_regex` matcher. (Phil Pirozhkov, #1288)
+* Remove deprecated `StartAndEndWith` matcher base class. (Phil Pirozhkov, #1288)
 
 Enhancements:
 
