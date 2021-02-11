@@ -349,8 +349,6 @@ module RSpec
       class ChangeDetails
         attr_reader :actual_after
 
-        UNDEFINED = Module.new.freeze
-
         def initialize(matcher_name, receiver=nil, message=nil, &block)
           if receiver && !message
             raise(
@@ -365,11 +363,6 @@ module RSpec
           @receiver = receiver
           @message = message
           @value_proc = block
-          # TODO: temporary measure to mute warning of access to an initialized
-          # instance variable when a deprecated implicit block expectation
-          # syntax is used. This may be removed once `fail` is used, and the
-          # matcher never issues this warning.
-          @actual_after = UNDEFINED
         end
 
         def value_representation
