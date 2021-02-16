@@ -15,7 +15,7 @@ RSpec.describe "expect(...).to satisfy { block }" do
   end
 
   context "when no custom description is provided" do
-    context 'in Ripper supported environment', :if => RSpec::Support::RubyFeatures.ripper_supported? do
+    context 'in Ripper supported environment', :skip => !RSpec::Support::RubyFeatures.ripper_supported? do
       it "fails with block snippet if block returns false" do
         expect {
           expect(false).to satisfy { |val| val }
@@ -39,7 +39,7 @@ RSpec.describe "expect(...).to satisfy { block }" do
       end
     end
 
-    context 'in Ripper unsupported environment', :unless => RSpec::Support::RubyFeatures.ripper_supported? do
+    context 'in Ripper unsupported environment', :skip => RSpec::Support::RubyFeatures.ripper_supported? do
       it "fails without block snippet if block returns false" do
         expect {
           expect(false).to satisfy { |val| val }
@@ -88,7 +88,7 @@ RSpec.describe "expect(...).not_to satisfy { block }" do
   end
 
   context "when no custom description is provided" do
-    context 'in Ripper supported environment', :if => RSpec::Support::RubyFeatures.ripper_supported? do
+    context 'in Ripper supported environment', :skip => !RSpec::Support::RubyFeatures.ripper_supported? do
       it "fails with block snippet if block returns true" do
         expect {
           expect(true).not_to satisfy { |val| val }
@@ -96,7 +96,7 @@ RSpec.describe "expect(...).not_to satisfy { block }" do
       end
     end
 
-    context 'in Ripper unsupported environment', :unless => RSpec::Support::RubyFeatures.ripper_supported? do
+    context 'in Ripper unsupported environment', :skip => RSpec::Support::RubyFeatures.ripper_supported? do
       it "fails without block snippet if block returns true" do
         expect {
           expect(true).not_to satisfy { |val| val }

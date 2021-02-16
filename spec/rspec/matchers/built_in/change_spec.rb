@@ -362,7 +362,7 @@ RSpec.describe "expect { ... }.to change { block }" do
     end.to raise_error(SyntaxError, /Block not received by the `change` matcher/)
   end
 
-  context 'in Ripper supported environment', :if => RSpec::Support::RubyFeatures.ripper_supported? do
+  context 'in Ripper supported environment', :skip => !RSpec::Support::RubyFeatures.ripper_supported? do
     context 'when the block body fits into a single line' do
       it "provides a #description with the block snippet" do
         expect(change { @instance.some_value }.description).to eq "change `@instance.some_value`"
@@ -396,7 +396,7 @@ RSpec.describe "expect { ... }.to change { block }" do
     end
   end
 
-  context 'in Ripper unsupported environment', :unless => RSpec::Support::RubyFeatures.ripper_supported? do
+  context 'in Ripper unsupported environment', :skip => RSpec::Support::RubyFeatures.ripper_supported? do
     it "provides a #description without the block snippet" do
       expect(change { @instance.some_value }.description).to eq "change result"
     end
@@ -584,13 +584,13 @@ RSpec.describe "expect { ... }.to change { block }.by(expected)" do
     end.to fail_with(/expected #{value_pattern} to have changed by 1, but was changed by -1/)
   end
 
-  context 'in Ripper supported environment', :if => RSpec::Support::RubyFeatures.ripper_supported? do
+  context 'in Ripper supported environment', :skip => !RSpec::Support::RubyFeatures.ripper_supported? do
     it "provides a #description with the block snippet" do
       expect(change { @instance.some_value }.by(3).description).to eq "change `@instance.some_value` by 3"
     end
   end
 
-  context 'in Ripper unsupported environment', :unless => RSpec::Support::RubyFeatures.ripper_supported? do
+  context 'in Ripper unsupported environment', :skip => RSpec::Support::RubyFeatures.ripper_supported? do
     it "provides a #description without the block snippet" do
       expect(change { @instance.some_value }.by(3).description).to eq "change result by 3"
     end
@@ -642,13 +642,13 @@ RSpec.describe "expect { ... }.to change { block }.by_at_least(expected)" do
     end.to fail_with(/expected #{value_pattern} to have changed by at least 2, but was changed by 1/)
   end
 
-  context 'in Ripper supported environment', :if => RSpec::Support::RubyFeatures.ripper_supported? do
+  context 'in Ripper supported environment', :skip => !RSpec::Support::RubyFeatures.ripper_supported? do
     it "provides a #description with the block snippet" do
       expect(change { @instance.some_value }.by_at_least(3).description).to eq "change `@instance.some_value` by at least 3"
     end
   end
 
-  context 'in Ripper unsupported environment', :unless => RSpec::Support::RubyFeatures.ripper_supported? do
+  context 'in Ripper unsupported environment', :skip => RSpec::Support::RubyFeatures.ripper_supported? do
     it "provides a #description without the block snippet" do
       expect(change { @instance.some_value }.by_at_least(3).description).to eq "change result by at least 3"
     end
@@ -700,13 +700,13 @@ RSpec.describe "expect { ... }.to change { block }.by_at_most(expected)" do
     end.to fail_with(/expected #{value_pattern} to have changed by at most 1, but was changed by 2/)
   end
 
-  context 'in Ripper supported environment', :if => RSpec::Support::RubyFeatures.ripper_supported? do
+  context 'in Ripper supported environment', :skip => !RSpec::Support::RubyFeatures.ripper_supported? do
     it "provides a #description with the block snippet" do
       expect(change { @instance.some_value }.by_at_most(3).description).to eq "change `@instance.some_value` by at most 3"
     end
   end
 
-  context 'in Ripper unsupported environment', :unless => RSpec::Support::RubyFeatures.ripper_supported? do
+  context 'in Ripper unsupported environment', :skip => RSpec::Support::RubyFeatures.ripper_supported? do
     it "provides a #description without the block snippet" do
       expect(change { @instance.some_value }.by_at_most(3).description).to eq "change result by at most 3"
     end
@@ -775,13 +775,13 @@ RSpec.describe "expect { ... }.to change { block }.from(old)" do
     end.to fail_with(/expected #{value_pattern} to have changed from "string", but did not change/)
   end
 
-  context 'in Ripper supported environment', :if => RSpec::Support::RubyFeatures.ripper_supported? do
+  context 'in Ripper supported environment', :skip => !RSpec::Support::RubyFeatures.ripper_supported? do
     it "provides a #description with the block snippet" do
       expect(change { @instance.some_value }.from(3).description).to eq "change `@instance.some_value` from 3"
     end
   end
 
-  context 'in Ripper unsupported environment', :unless => RSpec::Support::RubyFeatures.ripper_supported? do
+  context 'in Ripper unsupported environment', :skip => RSpec::Support::RubyFeatures.ripper_supported? do
     it "provides a #description without the block snippet" do
       expect(change { @instance.some_value }.from(3).description).to eq "change result from 3"
     end
