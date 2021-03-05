@@ -6,8 +6,13 @@ Enhancements:
 * Return `true` from `aggregate_failures` when no exception occurs. (Jon Rowe, #1225)
 
 Deprecations:
+
 * Print a deprecation message when using the implicit block expectation syntax.
   (Phil Pirozhkov, #1139)
+
+Bug Fixes:
+
+* Fix support for dynamic matchers for expectation target checks (Phil Pirozhkov, #1294)
 
 ### 3.10.1 / 2020-12-27
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.0...v3.10.1)
