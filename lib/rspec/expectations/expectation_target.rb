@@ -124,9 +124,7 @@ module RSpec
       end
 
       def supports_value_expectations?(matcher)
-        matcher.supports_value_expectations?
-      rescue NoMethodError
-        true
+        !matcher.respond_to?(:supports_value_expectations?) || matcher.supports_value_expectations?
       end
     end
 
@@ -158,9 +156,7 @@ module RSpec
       end
 
       def supports_block_expectations?(matcher)
-        matcher.supports_block_expectations?
-      rescue NoMethodError
-        false
+        matcher.respond_to?(:supports_block_expectations?) && matcher.supports_block_expectations?
       end
     end
   end
