@@ -118,9 +118,7 @@ module RSpec
       end
 
       def supports_block_expectations?(matcher)
-        matcher.supports_block_expectations?
-      rescue NoMethodError
-        false
+        matcher.respond_to?(:supports_block_expectations?) && matcher.supports_block_expectations?
       end
     end
   end
