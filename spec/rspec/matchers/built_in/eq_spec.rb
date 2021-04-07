@@ -41,6 +41,26 @@ module RSpec
         expect(matcher.failure_message).to eq "\nexpected: \"1\"\n     got: 1\n\n(compared using ==)\n"
       end
 
+      context "#failure_message with numbers" do
+        it "provides message, expected, actual, and diff on #failure_message with numbers" do
+          matcher = eq(1)
+          matcher.matches?(2)
+          expect(matcher.failure_message).to eq "\nexpected: 1\n     got: 2\n    diff: -1\n\n(compared using ==)\n"
+        end
+
+        it "provides message, expected, actual, and diff on #failure_message with numbers and expected nil" do
+          matcher = eq(nil)
+          matcher.matches?(2)
+          expect(matcher.failure_message).to eq "\nexpected: nil\n     got: 2\n    diff: -2\n\n(compared using ==)\n"
+        end
+
+        it "provides message, expected, actual, and diff on #failure_message with numbers and actual nil" do
+          matcher = eq(1)
+          matcher.matches?(nil)
+          expect(matcher.failure_message).to eq "\nexpected: 1\n     got: nil\n    diff: 1\n\n(compared using ==)\n"
+        end
+      end
+
       it "provides message, expected and actual on #negative_failure_message" do
         matcher = eq(1)
         matcher.matches?(1)

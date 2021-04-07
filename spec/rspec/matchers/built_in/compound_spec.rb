@@ -296,6 +296,7 @@ module RSpec::Matchers::BuiltIn
             |
             |expected: 4
             |     got: 3
+            |    diff: 1
             |
             |(compared using ==)
             |
@@ -311,6 +312,7 @@ module RSpec::Matchers::BuiltIn
             |
             |expected: 4
             |     got: 3
+            |    diff: 1
             |
             |(compared using ==)
             |
@@ -327,6 +329,7 @@ module RSpec::Matchers::BuiltIn
               |
               |   expected: 4
               |        got: 3
+              |       diff: 1
               |
               |   (compared using ==)
               |
@@ -617,6 +620,7 @@ module RSpec::Matchers::BuiltIn
               |
               |   expected: 4
               |        got: 3
+              |       diff: 1
               |
               |   (compared using ==)
               |
@@ -853,6 +857,7 @@ module RSpec::Matchers::BuiltIn
           |
           |   expected: 1
           |        got: 3
+          |       diff: -2
           |
           |   (compared using ==)
           |
@@ -860,6 +865,7 @@ module RSpec::Matchers::BuiltIn
           |
           |      expected: 2
           |           got: 3
+          |          diff: -1
           |
           |      (compared using ==)
           |
@@ -867,6 +873,7 @@ module RSpec::Matchers::BuiltIn
           |
           |      expected: 4
           |           got: 3
+          |          diff: 1
           |
           |      (compared using ==)
           |
