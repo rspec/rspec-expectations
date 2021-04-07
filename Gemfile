@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gemspec
 
 branch = File.read(File.expand_path("../maintenance-branch", __FILE__)).chomp
-%w[rspec rspec-core rspec-mocks rspec-support].each do |lib|
+%w[rspec rspec-mocks rspec-support].each do |lib|
   library_path = File.expand_path("../../#{lib}", __FILE__)
   if File.exist?(library_path) && !ENV['USE_GIT_REPOS']
     gem lib, :path => library_path
@@ -11,6 +11,7 @@ branch = File.read(File.expand_path("../maintenance-branch", __FILE__)).chomp
     gem lib, :git => "https://github.com/rspec/#{lib}.git", :branch => branch
   end
 end
+gem 'rspec-core', :git => "https://github.com/mcyoung/rspec-core.git", :branch => "eq-diff-matcher"
 
 if RUBY_VERSION < '1.9.3'
   gem 'rake', '< 11.0.0' # rake 11 requires Ruby 1.9.3 or later
