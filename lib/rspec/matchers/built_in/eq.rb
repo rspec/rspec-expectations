@@ -8,7 +8,11 @@ module RSpec
         # @api private
         # @return [String]
         def failure_message
-          "\nexpected: #{expected_formatted}\n     got: #{actual_formatted}\n\n(compared using ==)\n"
+          maybe_diff = ""
+          if (expected.nil? || expected.is_a?(Numeric)) && (actual.nil? || actual.is_a?(Numeric))
+            maybe_diff = "\n    diff: #{(expected || 0) - (actual || 0)}"
+          end
+          "\nexpected: #{expected_formatted}\n     got: #{actual_formatted}#{maybe_diff}\n\n(compared using ==)\n"
         end
 
         # @api private

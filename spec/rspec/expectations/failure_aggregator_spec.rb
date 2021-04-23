@@ -390,27 +390,27 @@ module RSpec::Expectations
         it 'strips the excess line breaks so that it formats well' do
           expect {
             aggregate_failures do
-              expect(1).to eq 2
-              expect(1).to eq 3
-              expect(1).to eq 4
+              expect("1").to eq 2
+              expect("1").to eq 3
+              expect("1").to eq 4
             end
           }.to fail_including { dedent <<-EOS }
             |  1) expected: 2
-            |          got: 1
+            |          got: "1"
             |
             |     (compared using ==)
             |
             |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 10}#{exception_complement(6)}
             |
             |  2) expected: 3
-            |          got: 1
+            |          got: "1"
             |
             |     (compared using ==)
             |
             |     ./spec/rspec/expectations/failure_aggregator_spec.rb:#{__LINE__ - 16}#{exception_complement(6)}
             |
             |  3) expected: 4
-            |          got: 1
+            |          got: "1"
             |
             |     (compared using ==)
             |

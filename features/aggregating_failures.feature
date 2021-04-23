@@ -35,6 +35,7 @@ Feature: Aggregating Failures
 
         1) expected: 200
                 got: 404
+               diff: -204
 
            (compared using ==)
 
