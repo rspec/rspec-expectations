@@ -1,6 +1,10 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.0...main)
 
+Deprecations:
+
+* Add RSpec 4 deprecation warnings. (Benoit Tigeot, Phil Pirozhkov #1301)
+
 ### 3.12.0 / 2022-10-26
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.1...v3.12.0)
 

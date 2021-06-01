@@ -13,40 +13,28 @@ module RSpec
       end
 
       # @api private
-      # Instructs rspec-expectations to warn on first usage of `should` or `should_not`.
-      # Enabled by default. This is largely here to facilitate testing.
-      def warn_about_should!
-        @warn_about_should = true
-      end
-
-      # @api private
-      # Generates a deprecation warning for the given method if no warning
-      # has already been issued.
-      def warn_about_should_unless_configured(method_name)
-        return unless @warn_about_should
-
+      # Generates a deprecation warning everytime should expectations is used
+      def warn_about_should
         RSpec.deprecate(
-          "Using `#{method_name}` from rspec-expectations' old `:should` syntax without explicitly enabling the syntax",
-          :replacement => "the new `:expect` syntax or explicitly enable `:should` with `config.expect_with(:rspec) { |c| c.syntax = :should }`"
+          "`should =`",
+          :replacement => "the new `:expect` syntax",
+          :message => "Using `should` from rspec-expectations' will be removed in RSpec 4"
         )
-
-        @warn_about_should = false
       end
 
       # @api private
       # Enables the `should` syntax.
       def enable_should(syntax_host=default_should_host)
-        @warn_about_should = false if syntax_host == default_should_host
         return if should_enabled?(syntax_host)
 
         syntax_host.module_exec do
           def should(matcher=nil, message=nil, &block)
-            ::RSpec::Expectations::Syntax.warn_about_should_unless_configured(::Kernel.__method__)
+            ::RSpec::Expectations::Syntax.warn_about_should
             ::RSpec::Expectations::PositiveExpectationHandler.handle_matcher(self, matcher, message, &block)
           end
 
           def should_not(matcher=nil, message=nil, &block)
-            ::RSpec::Expectations::Syntax.warn_about_should_unless_configured(::Kernel.__method__)
+            ::RSpec::Expectations::Syntax.warn_about_should
             ::RSpec::Expectations::NegativeExpectationHandler.handle_matcher(self, matcher, message, &block)
           end
         end

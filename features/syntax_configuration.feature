@@ -44,7 +44,7 @@ Feature: Syntax Configuration
       """
     When I run `rspec`
     Then the examples should all pass
-    And the output should contain "Using `should` from rspec-expectations' old `:should` syntax without explicitly enabling the syntax is deprecated"
+    And the output should contain "Using `should` from rspec-expectations' will be removed in RSpec 4"
 
   Scenario: Disable should syntax
     Given a file named "spec/spec_helper.rb" with:
@@ -88,5 +88,5 @@ Feature: Syntax Configuration
       """
     When I run `rspec`
     Then the examples should all pass
-     And the output should not contain "deprecated"
+     And the output should contain "Using `should` from rspec-expectations' will be removed in RSpec 4"
 
