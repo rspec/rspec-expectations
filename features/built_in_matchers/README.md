@@ -48,10 +48,10 @@ e.g.
 ## Truthiness and existentialism
 
     expect(actual).to be_truthy    # passes if actual is truthy (not nil or false)
-    expect(actual).to be true      # passes if actual == true
+    expect(actual).to be true      # passes if actual.equal?(true)
     expect(actual).to be_falsey    # passes if actual is falsy (nil or false)
-    expect(actual).to be false     # passes if actual == false
-    expect(actual).to be_nil       # passes if actual is nil
+    expect(actual).to be false     # passes if actual.equal?(false)
+    expect(actual).to be_nil       # passes if actual.nil?
     expect(actual).to exist        # passes if actual.exist? and/or actual.exists? are truthy
     expect(actual).to exist(*args) # passes if actual.exist?(*args) and/or actual.exists?(*args) are truthy
 
