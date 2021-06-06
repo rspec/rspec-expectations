@@ -120,11 +120,11 @@ expect(actual).to be_a_kind_of(expected)      # another alias
 
 ```ruby
 expect(actual).to be_truthy   # passes if actual is truthy (not nil or false)
-expect(actual).to be true     # passes if actual == true
+expect(actual).to be true     # passes if actual.equal?(true)
 expect(actual).to be_falsy    # passes if actual is falsy (nil or false)
-expect(actual).to be false    # passes if actual == false
-expect(actual).to be_nil      # passes if actual is nil
-expect(actual).to_not be_nil  # passes if actual is not nil
+expect(actual).to be false    # passes if actual.equal?(false)
+expect(actual).to be_nil      # passes if actual.nil?
+expect(actual).to_not be_nil  # passes if !actual.nil?
 ```
 
 ### Expecting errors
