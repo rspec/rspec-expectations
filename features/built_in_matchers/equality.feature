@@ -92,6 +92,8 @@ Feature: Equality matchers
   Scenario: compare using equal (equal?)
     Given a file named "compare_using_equal.rb" with:
       """ruby
+      # frozen_string_literal: false
+
       RSpec.describe "a string" do
         it "is equal to itself" do
           string = "this string"
@@ -114,6 +116,8 @@ Feature: Equality matchers
   Scenario: compare using be (equal?)
     Given a file named "compare_using_be.rb" with:
       """ruby
+      # frozen_string_literal: false
+
       RSpec.describe "a string" do
         it "is equal to itself" do
           string = "this string"

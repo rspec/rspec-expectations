@@ -582,7 +582,7 @@ module RSpec
     #
     # @example
     #   expect(5).to       equal(5)   # Integers are equal
-    #   expect("5").not_to equal("5") # Strings that look the same are not the same object
+    #   expect(5).not_to equal(5.0) # Integer and Float are not the same object
     def equal(expected)
       BuiltIn::Equal.new(expected)
     end
