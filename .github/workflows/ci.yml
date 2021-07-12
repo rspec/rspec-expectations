@@ -1,4 +1,4 @@
-# This file was generated on 2021-04-23T09:17:30+01:00 from the rspec-dev repo.
+# This file was generated on 2021-07-12T14:59:04+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -64,7 +64,9 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
       - run: script/update_rubygems_and_install_bundler
       - run: script/clone_all_rspec_repos
-      - run: bundle install --binstubs --standalone
+      - run: bundle install --standalone
+      - run: bundle binstubs --all
+      - run: ls bin
       - run: script/run_build
 
   legacy:
