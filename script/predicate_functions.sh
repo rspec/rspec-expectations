@@ -1,4 +1,4 @@
-# This file was generated on 2020-12-31T00:51:10+03:00 from the rspec-dev repo.
+# This file was generated on 2021-07-13T11:08:51+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 function is_mri {
@@ -129,9 +129,13 @@ function documentation_enforced {
 }
 
 function style_and_lint_enforced {
- if [ -x ./bin/rubocop ]; then
-   return 0
- else
+  if is_ruby_head; then
    return 1
+ else
+   if [ -x ./bin/rubocop ]; then
+     return 0
+   else
+     return 1
+   fi
  fi
 }

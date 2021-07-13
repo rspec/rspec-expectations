@@ -1,4 +1,4 @@
-# This file was generated on 2020-12-31T00:51:10+03:00 from the rspec-dev repo.
+# This file was generated on 2021-07-13T11:08:51+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -139,10 +139,7 @@ function check_binstubs {
     echo "  $ bundle binstubs$gems"
     echo
     echo "  # To binstub all gems"
-    echo "  $ bundle install --binstubs"
-    echo
-    echo "  # To binstub all gems and avoid loading bundler"
-    echo "  $ bundle install --binstubs --standalone"
+    echo "  $ bundle binstubs --all"
   fi
 
   return $success
