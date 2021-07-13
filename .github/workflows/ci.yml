@@ -1,4 +1,4 @@
-# This file was generated on 2020-12-31T00:51:10+03:00 from the rspec-dev repo.
+# This file was generated on 2021-07-13T11:08:51+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -50,11 +50,12 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ruby/setup-ruby@v1
         with:
-          bundler: ${{ matrix.bundler || 2 }}
+          bundler: ${{ matrix.bundler || '2.2.22' }}
           ruby-version: ${{ matrix.ruby }}
       - run: script/update_rubygems_and_install_bundler
       - run: script/clone_all_rspec_repos
-      - run: bundle install --binstubs --standalone
+      - run: bundle install --standalone
+      - run: bundle binstubs --all
       - run: script/run_build
 
   windows:
@@ -73,7 +74,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ruby/setup-ruby@v1
         with:
-          bundler: 2
+          bundler: '2.2.22'
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
       - run: cinst ansicon
