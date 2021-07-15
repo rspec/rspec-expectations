@@ -90,6 +90,7 @@ function run_spec_suite_for {
       unset BUNDLE_GEMFILE
       bundle_install_flags=`cat .github/workflows/ci.yml | grep "bundle install" | sed 's/.* bundle install//'`
       travis_retry eval "(unset RUBYOPT; exec bundle install $bundle_install_flags)"
+      travis_retry eval "(unset RUBYOPT; exec bundle binstubs --all)"
       run_specs_and_record_done
       popd
     else
