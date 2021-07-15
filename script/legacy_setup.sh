@@ -1,5 +1,5 @@
 #!/bin/bash
-# This file was generated on 2021-04-23T10:26:08+01:00 from the rspec-dev repo.
+# This file was generated on 2021-07-15T12:41:20+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 set -e
