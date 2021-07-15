@@ -1,4 +1,4 @@
-# This file was generated on 2021-07-13T11:08:51+01:00 from the rspec-dev repo.
+# This file was generated on 2021-07-15T16:47:05+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -90,6 +90,7 @@ function run_spec_suite_for {
       unset BUNDLE_GEMFILE
       bundle_install_flags=`cat .github/workflows/ci.yml | grep "bundle install" | sed 's/.* bundle install//'`
       travis_retry eval "(unset RUBYOPT; exec bundle install $bundle_install_flags)"
+      travis_retry eval "(unset RUBYOPT; exec bundle binstubs --all)"
       run_specs_and_record_done
       popd
     else
