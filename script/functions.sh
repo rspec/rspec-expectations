@@ -1,4 +1,4 @@
-# This file was generated on 2021-04-23T10:26:08+01:00 from the rspec-dev repo.
+# This file was generated on 2021-07-15T12:41:20+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -90,6 +90,7 @@ function run_spec_suite_for {
       unset BUNDLE_GEMFILE
       bundle_install_flags=`cat .github/workflows/ci.yml | grep "bundle install" | sed 's/.* bundle install//'`
       travis_retry eval "(unset RUBYOPT; exec bundle install $bundle_install_flags)"
+      travis_retry eval "(unset RUBYOPT; exec bundle binstubs --all)"
       run_specs_and_record_done
       popd
     else
@@ -139,10 +140,7 @@ function check_binstubs {
     echo "  $ bundle binstubs$gems"
     echo
     echo "  # To binstub all gems"
-    echo "  $ bundle install --binstubs"
-    echo
-    echo "  # To binstub all gems and avoid loading bundler"
-    echo "  $ bundle install --binstubs --standalone"
+    echo "  $ bundle binstubs --all"
   fi
 
   return $success
