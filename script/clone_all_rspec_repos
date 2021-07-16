@@ -9,7 +9,7 @@ if is_mri; then
   pushd ..
 
   clone_repo "rspec"
-  clone_repo "rspec-core"
+  git clone https://github.com/rspec/rspec-core --depth 1 --branch 'add-major-update-deprecation-warnings'
   clone_repo "rspec-expectations"
   clone_repo "rspec-mocks"
   clone_repo "rspec-rails"
