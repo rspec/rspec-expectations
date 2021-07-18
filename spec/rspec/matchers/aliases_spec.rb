@@ -284,6 +284,13 @@ module RSpec
       ).with_description('match regex /foo/')
     end
 
+    it 'prints a deprecation warning for `match_regex`' do
+      expect(RSpec).
+        to receive(:deprecate).
+        with(/match_regex/, :replacement=>"`match`")
+      match_regex(/foo/).description
+    end
+
     specify do
       expect(
         matching(/foo/)

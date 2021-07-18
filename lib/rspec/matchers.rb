@@ -690,17 +690,22 @@ module RSpec
     #     }
     #   )
     #
+    def match(expected)
+      BuiltIn::Match.new(expected)
+    end
+    alias_matcher :an_object_matching, :match
+    alias_matcher :a_string_matching, :match
+    alias_matcher :matching, :match
+
     # @note The `match_regex` alias is deprecated and is not recommended for use.
     #       It was added in 2.12.1 to facilitate its use from within custom
     #       matchers (due to how the custom matcher DSL was evaluated in 2.x,
     #       `match` could not be used there), but is no longer needed in 3.x.
-    def match(expected)
-      BuiltIn::Match.new(expected)
+    # @deprecated
+    alias_matcher(:match_regex, :match) do |old_desc|
+      RSpec.deprecate("`match_regex`", :replacement => "`match`")
+      old_desc.sub(/match/, 'match regex')
     end
-    alias_matcher :match_regex, :match
-    alias_matcher :an_object_matching, :match
-    alias_matcher :a_string_matching, :match
-    alias_matcher :matching, :match
 
     # An alternate form of `contain_exactly` that accepts
     # the expected contents as a single array arg rather
