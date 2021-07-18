@@ -158,8 +158,16 @@ module RSpec
 
       # Sets if custom matcher descriptions and failure messages
       # should include clauses from methods defined using `chain`.
+      # @deprecated
       # @param value [Boolean]
-      attr_writer :include_chain_clauses_in_custom_matcher_descriptions
+      def include_chain_clauses_in_custom_matcher_descriptions=(value)
+        unless value
+          RSpec.deprecate("`include_chain_clauses_in_custom_matcher_descriptions` option will be removed in RSpec 4, and will default to true")
+        end
+        @include_chain_clauses_in_custom_matcher_descriptions = value
+      end
+
+      attr_reader :include_chain_clauses_in_custom_matcher_descriptions
 
       # Indicates whether or not custom matcher descriptions and failure messages
       # should include clauses from methods defined using `chain`. It is

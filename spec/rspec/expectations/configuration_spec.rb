@@ -85,6 +85,13 @@ module RSpec
           config.include_chain_clauses_in_custom_matcher_descriptions = false
           expect(config.include_chain_clauses_in_custom_matcher_descriptions?).to be false
         end
+
+        it "prints a deprecation warning" do
+          expect(RSpec).to receive(:deprecate).with(
+            "`include_chain_clauses_in_custom_matcher_descriptions` option will be removed in RSpec 4, and will default to true")
+          config.include_chain_clauses_in_custom_matcher_descriptions = true
+          config.include_chain_clauses_in_custom_matcher_descriptions = false
+        end
       end
 
       describe "#max_formatted_output_length=" do
