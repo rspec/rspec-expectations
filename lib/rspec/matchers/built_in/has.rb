@@ -75,7 +75,13 @@ module RSpec
           if RSpec::Expectations.configuration.strict_predicate_matchers?
             value == predicate_result
           else
-            value == !!predicate_result
+            predicate_actual = predicate_result
+            if value == !!predicate_actual && value != predicate_actual
+              RSpec.deprecate(
+                "`#{predicate_method_name}` returned neither `true` nor `false`, but rather `#{predicate_actual.inspect}`",
+                :replacement => "`expect(subject.#{predicate_method_name}).to #{value ? "be_truthy" : "be_falsey"}`")
+            end
+            value == !!predicate_actual
           end
         end
 

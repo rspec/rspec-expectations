@@ -85,6 +85,24 @@ RSpec.describe "expect(...).to be_predicate" do
         expect(actual).to be_happy
       }.to fail_with("expected `#{actual.inspect}.happy?` to be truthy, got false")
     end
+
+    context "when the predicate neither returns true or false" do
+      it "prints a deprecation warning when actual is truthy" do
+        expect(RSpec).
+          to receive(:deprecate).
+          with("`infinite?` returned neither `true` nor `false`, but rather `-1`",
+               :replacement => "`expect(subject.infinite?).to be_truthy`")
+        expect(-Float::INFINITY).to be_infinite
+      end
+
+      it "prints a deprecation warning when actual is truthy" do
+        expect(RSpec).
+          to receive(:deprecate).
+          with("`infinite?` returned neither `true` nor `false`, but rather `nil`",
+               :replacement => "`expect(subject.infinite?).to be_falsey`")
+        expect(1).to_not be_infinite
+      end
+    end
   end
 
   it "fails when actual does not respond to :predicate?" do
