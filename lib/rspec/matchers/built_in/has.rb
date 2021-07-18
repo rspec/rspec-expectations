@@ -149,6 +149,9 @@ module RSpec
         end
 
         def predicate_method_name
+          unless actual.respond_to?(predicate)
+            RSpec.deprecate("`#{predicate}` fall back to a present-tense form `#{present_tense_predicate}` will be removed in RSpec 4")
+          end
           actual.respond_to?(predicate) ? predicate : present_tense_predicate
         end
 

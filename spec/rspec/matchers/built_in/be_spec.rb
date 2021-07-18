@@ -31,7 +31,14 @@ RSpec.describe "expect(...).to be_predicate" do
   end
 
   it "passes when actual returns true for :predicates? (present tense)" do
-    actual = double("actual", :exists? => true, :exist? => true)
+    actual = double("actual", :exists? => true)
+    expect(actual).to be_exist
+  end
+
+  it "prints a deprecation warning for present tense fallback" do
+    expect(RSpec).to receive(:deprecate).with(
+      "`exist?` fall back to a present-tense form `exists?` will be removed in RSpec 4")
+    actual = double("actual", :exists? => true)
     expect(actual).to be_exist
   end
 
