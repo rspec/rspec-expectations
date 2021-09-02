@@ -16,13 +16,12 @@ module RSpec
 
         def matches?(block)
           @block = block
-          return false unless Proc === block
           @actual = @stream_capturer.capture(block)
           @expected ? values_match?(@expected, @actual) : captured?
         end
 
         def does_not_match?(block)
-          !matches?(block) && Proc === block
+          !matches?(block)
         end
 
         # @api public
