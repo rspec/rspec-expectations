@@ -48,6 +48,11 @@ Deprecations:
 * Print a deprecation message when using the implicit block expectation syntax.
   (Phil Pirozhkov, #1139)
 
+Bug Fixes:
+
+* Fix the diff for redefined `actual` and reassigned `@actual` in compound
+  expectations failure messages. (Phil Pirozhkov, #1319)
+
 ### 3.10.2 / 2022-01-14
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.1...v3.10.2)
 
