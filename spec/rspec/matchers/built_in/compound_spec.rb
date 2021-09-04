@@ -543,6 +543,98 @@ module RSpec::Matchers::BuiltIn
               expect(error.message).to include(expected_failure)
             end
           end
+
+          context 'when matcher transforms the actual' do
+            context 'when the matcher redefines `actual`' do
+              matcher :eq_downcase do |expected|
+                match do |actual|
+                  @matcher_internal_actual = actual.downcase
+                  values_match? expected, @matcher_internal_actual
+                end
+
+                def actual
+                  @matcher_internal_actual
+                end
+
+                diffable
+              end
+
+              it 'shows the redefined value in diff' do
+                expected_failure =
+                  dedent(<<-EOS)
+                    |   expected "HELLO\\nWORLD" to eq downcase "bonjour\\nmonde"
+                    |
+                    |...and:
+                    |
+                    |   expected "HELLO\\nWORLD" to eq downcase "hola\\nmon"
+                    |Diff for (eq downcase "bonjour\\nmonde"):
+                    |@@ -1,3 +1,3 @@
+                    |-bonjour
+                    |-monde
+                    |+hello
+                    |+world
+                    |
+                    |Diff for (eq downcase "hola\\nmon"):
+                    |@@ -1,3 +1,3 @@
+                    |-hola
+                    |-mon
+                    |+hello
+                    |+world
+                  EOS
+
+                expect {
+                  expect("HELLO\nWORLD")
+                    .to eq_downcase("bonjour\nmonde")
+                    .and eq_downcase("hola\nmon")
+                }.to fail do |error|
+                  expect(error.message).to include(expected_failure)
+                end
+              end
+            end
+
+            context 'when the matcher reassigns `@actual`' do
+              matcher :eq_downcase do |expected|
+                match do |actual|
+                  @actual = actual.downcase
+                  values_match? expected, @actual
+                end
+
+                diffable
+              end
+
+              it 'shows the reassigned value in diff' do
+                expected_failure =
+                  dedent(<<-EOS)
+                    |   expected "hello\\nworld" to eq downcase "bonjour\\nmonde"
+                    |
+                    |...and:
+                    |
+                    |   expected "hello\\nworld" to eq downcase "hola\\nmon"
+                    |Diff for (eq downcase "bonjour\\nmonde"):
+                    |@@ -1,3 +1,3 @@
+                    |-bonjour
+                    |-monde
+                    |+hello
+                    |+world
+                    |
+                    |Diff for (eq downcase "hola\\nmon"):
+                    |@@ -1,3 +1,3 @@
+                    |-hola
+                    |-mon
+                    |+hello
+                    |+world
+                  EOS
+
+                expect {
+                  expect("HELLO\nWORLD")
+                    .to eq_downcase("bonjour\nmonde")
+                    .and eq_downcase("hola\nmon")
+                }.to fail do |error|
+                  expect(error.message).to include(expected_failure)
+                end
+              end
+            end
+          end
         end
 
         context "when both matchers are not diffable" do

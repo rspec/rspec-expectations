@@ -51,10 +51,10 @@ module RSpec
         end
 
         # @api private
-        # @return [RSpec::Matchers::ExpectedsForMultipleDiffs]
+        # @return [RSpec::Matchers::MultiMatcherDiff]
         def expected
           return nil unless evaluator
-          ::RSpec::Matchers::ExpectedsForMultipleDiffs.for_many_matchers(diffable_matcher_list)
+          ::RSpec::Matchers::MultiMatcherDiff.for_many_matchers(diffable_matcher_list)
         end
 
       protected
