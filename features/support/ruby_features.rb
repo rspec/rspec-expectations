@@ -1,9 +1,8 @@
-Around "@skip-when-ripper-unsupported" do |scenario, block|
+Before "@skip-when-ripper-unsupported" do |scenario|
   require 'rspec/support/ruby_features'
 
-  if ::RSpec::Support::RubyFeatures.ripper_supported?
-    block.call
-  else
-    warn "Skipping scenario #{scenario.title} because Ripper is not supported"
+  unless ::RSpec::Support::RubyFeatures.ripper_supported?
+    warn "Skipping scenario #{scenario.name} because Ripper is not supported"
+    skip_this_scenario
   end
 end
