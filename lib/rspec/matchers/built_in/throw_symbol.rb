@@ -17,7 +17,6 @@ module RSpec
         # @private
         def matches?(given_proc)
           @block = given_proc
-          return false unless Proc === given_proc
 
           begin
             if @expected_symbol.nil?
@@ -63,7 +62,7 @@ module RSpec
         # rubocop:enable MethodLength
 
         def does_not_match?(given_proc)
-          !matches?(given_proc) && Proc === given_proc
+          !matches?(given_proc)
         end
 
         # @api private

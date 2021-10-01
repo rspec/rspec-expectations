@@ -53,8 +53,6 @@ module RSpec
           @eval_block = false
           @eval_block_passed = false
 
-          return false unless Proc === given_proc
-
           begin
             given_proc.call
           rescue Exception => @actual_error
@@ -78,7 +76,7 @@ module RSpec
         # @private
         def does_not_match?(given_proc)
           warn_for_negative_false_positives!
-          !matches?(given_proc, :negative_expectation) && Proc === given_proc
+          !matches?(given_proc, :negative_expectation)
         end
 
         # @private
