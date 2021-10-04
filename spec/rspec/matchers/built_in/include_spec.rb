@@ -161,6 +161,20 @@ RSpec.describe "#include matcher" do
     end
   end
 
+  shared_context "time range" do
+    let(:fmt) { RSpec::Support::ObjectFormatter }
+    let(:now) { Time.now.utc }
+    let(:start) { now - 20 }
+    let(:finish) { now - 10 }
+    let(:range) { (start..finish) }
+  end
+
+  shared_context "only runs for modern rubies" do
+    around(:example) do |example|
+      example.run if RUBY_VERSION >= "2.1.9"
+    end
+  end
+
   describe "expect(...).to include(with_one_arg)" do
     it_behaves_like "an RSpec value matcher", :valid_value => [1, 2], :invalid_value => [1] do
       let(:matcher) { include(2) }
@@ -195,6 +209,165 @@ RSpec.describe "#include matcher" do
         container = double("Container", :include? => true, :to_hash => { "foo" => "bar" })
         expect(container).to receive(:include?).with("foo").and_return(true)
         expect(container).to include("foo")
+      end
+    end
+
+    context "for a range target" do
+      include_context "only runs for modern rubies"
+
+      context "with elements that support iteration" do
+        let(:range) { 1..3 }
+
+        it "passes if target includes expected" do
+          expect(range).to include(2)
+        end
+
+        it "fails if target does not include expected" do
+          expect {
+            expect(range).to include(4)
+          }.to fail_matching("expected #{range} to include 4")
+        end
+
+        context "with exact count" do
+          it "fails if the block yields the wrong number of times" do
+            expect {
+              expect(range).to include(2).twice
+            }.to fail_with("expected #{range} to include 2 twice but it is included once")
+          end
+
+          it "passes if the block yields the specified number of times" do
+            expect(range).to include(2).once
+          end
+        end
+
+        context "with at least count" do
+          it "passes if the search term is included at least the number of times" do
+            expect(range).to include(1).at_least(1).times
+            expect(range).to include(1).at_least(:once)
+          end
+
+          it "fails if the search term is included too few times" do
+            expect {
+              expect(range).to include(1).at_least(:twice)
+            }.to fail_with("expected #{range} to include 1 at least twice but it is included once")
+          end
+        end
+
+        context "with at most count" do
+          it "passes if the search term is included at most the number of times" do
+            expect(range).to include(1).at_most(2).times
+            expect(range).to include(1).at_most(:twice)
+          end
+        end
+      end
+
+      context 'with elements that do not support iteration' do
+        context 'with floats' do
+          let(:range) { 1.0..3.0 }
+
+          it "passes if target includes expected" do
+            expect(range).to include(2.0)
+          end
+
+          it "fails if target does not include expected" do
+            expect {
+              expect(range).to include(4.0)
+            }.to fail_matching("expected #{range} to include 4.0")
+          end
+
+          context "with exact count" do
+            it "fails if the block yields the wrong number of times" do
+              expect {
+                expect(range).to include(2.0).twice
+              }.to fail_with("expected #{range} to include 2.0 twice but it is included once")
+            end
+
+            it "passes if the block yields the specified number of times" do
+              expect(range).to include(2.0).once
+            end
+          end
+
+          context "with at least count" do
+            it "passes if the search term is included at least the number of times" do
+              expect(range).to include(1.0).at_least(1).times
+              expect(range).to include(1.0).at_least(:once)
+            end
+
+            it "fails if the search term is included too few times" do
+              expect {
+                expect(range).to include(1.0).at_least(:twice)
+              }.to fail_with("expected #{range} to include 1.0 at least twice but it is included once")
+            end
+          end
+
+          context "with at most count" do
+            it "passes if the search term is included at most the number of times" do
+              expect(range).to include(1.0).at_most(2).times
+              expect(range).to include(1.0).at_most(:twice)
+            end
+          end
+        end
+
+        context "with times" do
+          include_context "time range"
+
+          it "passes if target includes expected" do
+            expect(range).to include(start)
+          end
+
+          it "fails if target does not include expected" do
+            expect {
+              expect(range).to include(start-1)
+            }.to fail_matching("expected #{range.inspect} to include #{fmt.format(start-1)}")
+          end
+
+          context "with exact count" do
+            it "fails if the block yields the wrong number of times" do
+              expect {
+                expect(range).to include(start).twice
+              }.to fail_matching("expected #{range.inspect} to include #{fmt.format(start)} twice but it is included once")
+            end
+
+            it "passes if the block yields the specified number of times" do
+              expect(range).to include(start).once
+            end
+          end
+
+          context "with at least count" do
+            it "passes if the search term is included at least the number of times" do
+              expect(range).to include(start).at_least(1).times
+              expect(range).to include(start).at_least(:once)
+            end
+
+            it "fails if the search term is included too few times" do
+              expect {
+                expect(range).to include(start).at_least(:twice)
+              }.to fail_matching("expected #{range.inspect} to include #{fmt.format(start)} at least twice but it is included once")
+            end
+          end
+
+          context "with at most count" do
+            it "passes if the search term is included at most the number of times" do
+              expect(range).to include(start).at_most(2).times
+              expect(range).to include(start).at_most(:twice)
+            end
+          end
+        end
+      end
+
+      it "fails when given differing null doubles" do
+        dbl_1 = double.as_null_object
+        dbl_2 = double.as_null_object
+
+        expect {
+          expect(dbl_1..dbl_1).to include(dbl_2)
+        }.to fail_matching("expected #{dbl_1.inspect}..#{dbl_1.inspect} to include")
+      end
+
+      it "passes when given the same null double" do
+        dbl = double.as_null_object
+
+        expect(dbl..dbl).to include(dbl)
       end
     end
 
@@ -394,6 +567,93 @@ RSpec.describe "#include matcher" do
       expect(matcher.description).to eq("include \"a\"")
     end
 
+    context "for a range target" do
+      include_context "only runs for modern rubies"
+
+      context "with elements that support iteration" do
+        let(:range) { 1..3 }
+
+        it "passes if target includes all items" do
+          expect(range).to include(1, 2)
+        end
+
+        it "fails if target does not include one of the items" do
+          expect {
+            expect(range).to include(2, 3, 4)
+          }.to fail_matching("expected #{range} to include 4")
+        end
+
+        it "fails if target does not include two of the items" do
+          expect {
+            expect(range).to include(3, 4, 5)
+          }.to fail_matching("expected #{range} to include 4 and 5")
+        end
+
+        it "fails if target does not include many of the items" do
+          expect {
+            expect(range).to include(3, 4, 5, 6, 7, 8)
+          }.to fail_matching("expected #{range} to include 4, 5, 6, 7, and 8")
+        end
+      end
+
+      context "with elements that do not support iteration" do
+        context "with floats" do
+          let(:range) { 1.0..3.0 }
+
+          it "passes if target includes all items" do
+            expect(range).to include(1.0, 2.0)
+          end
+
+          it "fails if target does not include one of the items" do
+            expect {
+              expect(range).to include(2.0, 3.0, 4.0)
+            }.to fail_matching("expected #{range} to include 4.0")
+          end
+
+          it "fails if target does not include two of the items" do
+            expect {
+              expect(range).to include(3.0, 4.0, 5.0)
+            }.to fail_matching("expected #{range} to include 4.0 and 5.0")
+          end
+
+          it "fails if target does not include many of the items" do
+            expect {
+              expect(range).to include(3.0, 4.0, 5.0, 6.0, 7.0, 8.0)
+            }.to fail_matching("expected #{range} to include 4.0, 5.0, 6.0, 7.0, and 8.0")
+          end
+        end
+
+        context "with times" do
+          include_context "time range"
+
+          it "passes if target includes all items" do
+            expect(range).to include(start, start+1)
+          end
+
+          it "fails if target does not include one of the items" do
+            expect {
+              expect(range).to include(start-1, start, start+1)
+            }.to fail_matching("expected #{range.inspect} to include #{fmt.format(start-1)}")
+          end
+
+          it "fails if target does not include two of the items" do
+            expect {
+              expect(range).to include(start-2, start-1, start)
+            }.to fail_matching("expected #{range.inspect} to include #{fmt.format(start-2)} and #{fmt.format(start-1)}")
+          end
+
+          it "fails if target does not include many of the items" do
+            missing = Array.new(5) { |i| start-i-1}
+            missing_str = missing[0...-1].map { |time| fmt.format(time) }.join(', ') + ", and #{fmt.format(start-5)}"
+
+            expect {
+              expect(range).to include(start, *missing)
+            }.to fail_matching("expected #{range.inspect} to include #{missing_str}")
+          end
+        end
+      end
+    end
+
     context "for a string target" do
       it "passes if target includes all items" do
         expect("a string").to include("str", "a")
@@ -530,6 +790,168 @@ RSpec.describe "#include matcher" do
       end
     end
 
+    context "for a range target" do
+      include_context "only runs for modern rubies"
+
+      context "with elements that support iteration" do
+        let(:range) { 1..3 }
+
+        it "passes if target does not include expected" do
+          expect(range).not_to include(4)
+        end
+
+        it "fails if target does include expected" do
+          expect {
+            expect(range).not_to include(3)
+          }.to fail_matching("expected #{range} not to include 3")
+        end
+
+        context "with exact count" do
+          it "passes if the block yields the wrong number of times" do
+            expect(range).not_to include(2).twice
+          end
+
+          it "fails if the block yields the specified number of times" do
+            expect {
+              expect(range).not_to include(2).once
+            }.to fail_with("expected #{range} not to include 2 once but it is included once")
+          end
+        end
+
+        context "with at least count" do
+          it "fails if the search term is included at least the number of times" do
+            expect {
+              expect(range).not_to include(1).at_least(1).times
+            }.to fail_with("expected #{range} not to include 1 at least once but it is included once")
+            expect {
+              expect(range).not_to include(1).at_least(:once)
+            }.to fail_with("expected #{range} not to include 1 at least once but it is included once")
+          end
+
+          it "passes if the search term is included too few times" do
+            expect(range).not_to include(1).at_least(:twice)
+          end
+        end
+
+        context "with at most count" do
+          it "fails if the search term is included at most the number of times" do
+            expect {
+              expect(range).not_to include(1).at_most(2).times
+            }.to fail_with("expected #{range} not to include 1 at most twice but it is included once")
+            expect {
+              expect(range).not_to include(1).at_most(:twice)
+            }.to fail_with("expected #{range} not to include 1 at most twice but it is included once")
+          end
+        end
+      end
+
+      context "with elements that do not support iteration" do
+        context "with floats" do
+          let(:range) { 1.0..3.0 }
+
+          it "passes if target does not include expected" do
+            expect(range).not_to include(4.0)
+          end
+
+          it "fails if target does include expected" do
+            expect {
+              expect(range).not_to include(3.0)
+            }.to fail_matching("expected #{range} not to include 3.0")
+          end
+
+          context "with exact count" do
+            it "passes if the block yields the wrong number of times" do
+              expect(range).not_to include(2.0).twice
+            end
+
+            it "fails if the block yields the specified number of times" do
+              expect {
+                expect(range).not_to include(2.0).once
+              }.to fail_with("expected #{range} not to include 2.0 once but it is included once")
+            end
+          end
+
+          context "with at least count" do
+            it "fails if the search term is included at least the number of times" do
+              expect {
+                expect(range).not_to include(1.0).at_least(1).times
+              }.to fail_with("expected #{range} not to include 1.0 at least once but it is included once")
+              expect {
+                expect(range).not_to include(1.0).at_least(:once)
+              }.to fail_with("expected #{range} not to include 1.0 at least once but it is included once")
+            end
+
+            it "passes if the search term is included too few times" do
+              expect(range).not_to include(1.0).at_least(:twice)
+            end
+          end
+
+          context "with at most count" do
+            it "fails if the search term is included at most the number of times" do
+              expect {
+                expect(range).not_to include(1.0).at_most(2).times
+              }.to fail_with("expected #{range} not to include 1.0 at most twice but it is included once")
+              expect {
+                expect(range).not_to include(1.0).at_most(:twice)
+              }.to fail_with("expected #{range} not to include 1.0 at most twice but it is included once")
+            end
+          end
+        end
+
+        context "with times" do
+          include_context "time range"
+
+          it "passes if target does not include expected" do
+            expect(range).not_to include(start-1)
+          end
+
+          it "fails if target does include expected" do
+            expect {
+              expect(range).not_to include(start)
+            }.to fail_matching("expected #{range.inspect} not to include #{fmt.format(start)}")
+          end
+
+          context "with exact count" do
+            it "passes if the block yields the wrong number of times" do
+              expect(range).not_to include(start).twice
+            end
+
+            it "fails if the block yields the specified number of times" do
+              expect {
+                expect(range).not_to include(start).once
+              }.to fail_matching("expected #{range.inspect} not to include #{fmt.format(start)} once but it is included once")
+            end
+          end
+
+          context "with at least count" do
+            it "fails if the search term is included at least the number of times" do
+              expect {
+                expect(range).not_to include(start).at_least(1).times
+              }.to fail_matching("expected #{range.inspect} not to include #{fmt.format(start)} at least once but it is included once")
+              expect {
+                expect(range).not_to include(start).at_least(:once)
+              }.to fail_matching("expected #{range.inspect} not to include #{fmt.format(start)} at least once but it is included once")
+            end
+
+            it "passes if the search term is included too few times" do
+              expect(range).not_to include(start).at_least(:twice)
+            end
+          end
+
+          context "with at most count" do
+            it "fails if the search term is included at most the number of times" do
+              expect {
+                expect(range).not_to include(start).at_most(2).times
+              }.to fail_matching("expected #{range.inspect} not to include #{fmt.format(start)} at most twice but it is included once")
+              expect {
+                expect(range).not_to include(start).at_most(2).times
+              }.to fail_matching("expected #{range.inspect} not to include #{fmt.format(start)} at most twice but it is included once")
+            end
+          end
+        end
+      end
+    end
+
     context "for a string target" do
       it "passes if target does not include expected" do
         expect("abc").not_to include("d")
@@ -613,10 +1035,111 @@ RSpec.describe "#include matcher" do
         }.to fail_matching('expected {:key => "value"} not to include :key')
       end
     end
-
   end
 
   describe "expect(...).not_to include(with, multiple, args)" do
+    context "for a range target" do
+      include_context "only runs for modern rubies"
+
+      context "with elements that support iteration" do
+        let(:range) { 1..3 }
+
+        it "passes if the target does not include any of the expected" do
+          expect(range).not_to include(4, 5, 6)
+        end
+
+        it "fails if the target includes one (but not all) of the expected" do
+          expect {
+            expect(range).not_to include(3, 4, 5)
+          }.to fail_with("expected #{range} not to include 3")
+        end
+
+        it "fails if the target includes two (but not all) of the expected" do
+          expect {
+            expect(range).not_to include(2, 3, 4)
+          }.to fail_with("expected #{range} not to include 2 and 3")
+        end
+
+        it "fails if the target includes many (but not all) of the expected" do
+          expect {
+            expect(range).not_to include(1, 2, 3, 4)
+          }.to fail_with("expected #{range} not to include 1, 2, and 3")
+        end
+
+        it "fails if the target includes all of the expected" do
+          expect {
+            expect(range).not_to include(1, 2)
+          }.to fail_with("expected #{range} not to include 1 and 2")
+        end
+      end
+
+      context "with elements that do not support iteration" do
+        context "with floats" do
+          let(:range) { 1.0..3.0 }
+
+          it "passes if the target does not include any of the expected" do
+            expect(range).not_to include(4.0, 5.0, 6.0)
+          end
+
+          it "fails if the target includes one (but not all) of the expected" do
+            expect {
+              expect(range).not_to include(3.0, 4.0, 5.0)
+            }.to fail_with("expected #{range} not to include 3.0")
+          end
+
+          it "fails if the target includes two (but not all) of the expected" do
+            expect {
+              expect(range).not_to include(2.0, 3.0, 4.0)
+            }.to fail_with("expected #{range} not to include 2.0 and 3.0")
+          end
+
+          it "fails if the target includes many (but not all) of the expected" do
+            expect {
+              expect(range).not_to include(1.0, 2.0, 3.0, 4.0)
+            }.to fail_with("expected #{range} not to include 1.0, 2.0, and 3.0")
+          end
+
+          it "fails if the target includes all of the expected" do
+            expect {
+              expect(range).not_to include(1.0, 2.0)
+            }.to fail_with("expected #{range} not to include 1.0 and 2.0")
+          end
+        end
+
+        context "with times" do
+          include_context "time range"
+
+          it "passes if the target does not include any of the expected" do
+            expect(range).not_to include(start-3, start-2, start-1)
+          end
+
+          it "fails if the target includes one (but not all) of the expected" do
+            expect {
+              expect(range).not_to include(start-2, start-1, start)
+            }.to fail_matching("expected #{range.inspect} not to include #{fmt.format(start)}")
+          end
+
+          it "fails if the target includes two (but not all) of the expected" do
+            expect {
+              expect(range).not_to include(start-1, start, start+1)
+            }.to fail_matching("expected #{range.inspect} not to include #{fmt.format(start)} and #{fmt.format(start+1)}")
+          end
+
+          it "fails if the target includes many (but not all) of the expected" do
+            expect {
+              expect(range).not_to include(start-1, start, start+1, start+2)
+            }.to fail_matching("expected #{range.inspect} not to include #{fmt.format(start)}, #{fmt.format(start+1)}, and #{fmt.format(start+2)}")
+          end
+
+          it "fails if the target includes all of the expected" do
+            expect {
+              expect(range).not_to include(start, start+1)
+            }.to fail_matching("expected #{range.inspect} not to include #{fmt.format(start)} and #{fmt.format(start+1)}")
+          end
+        end
+      end
+    end
+
     context "for a string target" do
       it "passes if the target does not include any of the expected" do
         expect("abc").not_to include("d", "e", "f")
@@ -950,6 +1473,40 @@ RSpec.describe "#include matcher" do
         expect {
           expect(['foo', 'bar', 'baz']).to include(a_string_containing("ar"), a_string_containing("abc"))
         }.to fail_matching("expected #{['foo', 'bar', 'baz'].inspect} to include (a string containing 'abc')")
+      end
+    end
+
+    describe "expect(range).to include(matcher)" do
+      include_context "only runs for modern rubies"
+
+      it "passes when the matcher matches one of the values" do
+        expect(10..30).to include( a_value_within(5).of(24) )
+      end
+
+      it "fails with a clear message when the matcher matches none of the values" do
+        expect {
+          expect(10..30).to include( a_value_within(5).of(4) )
+        }.to fail_matching("expected 10..30 to include (a value within 5 of 4)")
+      end
+
+      it "works with comparison matchers" do
+        expect {
+          expect((100..200)).to include(a_value < 90)
+        }.to fail_matching("expected 100..200 to include (a value < 90)")
+
+        expect(100..200).to include(a_value > 150)
+      end
+    end
+
+    describe "expect(range).to include(multiple, matcher, arguments)" do
+      it "passes if target includes items satisfying all matchers" do
+        expect("aa".."az").to include(a_string_containing("ab"), a_string_containing('ac'))
+      end
+
+      it "fails if target does not include an item satisfying any one of the items" do
+        expect {
+          expect("aa".."az").to include(a_string_containing("ab"), a_string_containing("abc"))
+        }.to fail_matching("expected #{("aa".."az").inspect} to include (a string containing 'abc')")
       end
     end
 
