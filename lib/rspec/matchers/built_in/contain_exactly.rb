@@ -6,6 +6,19 @@ module RSpec
       # Provides the implementation for `contain_exactly` and `match_array`.
       # Not intended to be instantiated directly.
       class ContainExactly < BaseMatcher
+        def initialize(expected=nil)
+          super
+          @transitive = false
+        end
+
+        # @api public
+        # Specifies that elements contained in actual and expected
+        # obey transitivity.  This lets match run much faster.
+        def transitive
+          @transitive = true
+          self
+        end
+
         # @api private
         # @return [String]
         def failure_message
@@ -36,6 +49,7 @@ module RSpec
         def generate_failure_message
           message = expected_collection_line
           message += actual_collection_line
+          @extra_items, @missing_items = fast_calculate_extra_missing if @transitive
           message += missing_elements_line unless missing_items.empty?
           message += extra_elements_line unless extra_items.empty?
           message
@@ -72,7 +86,9 @@ module RSpec
 
         def match(_expected, _actual)
           return false unless convert_actual_to_an_array
-          match_when_sorted? || (extra_items.empty? && missing_items.empty?)
+          matched_when_sorted = match_when_sorted?
+          return matched_when_sorted if matched_when_sorted || @transitive
+          (extra_items.empty? && missing_items.empty?)
         end
 
         # This cannot always work (e.g. when dealing with unsortable items,
@@ -80,7 +96,8 @@ module RSpec
         # the slowness of the full matching algorithm, and in common cases this
         # works, so it's worth a try.
         def match_when_sorted?
-          values_match?(safe_sort(expected), safe_sort(actual))
+          @sorted_expected, @sorted_actual = safe_sort(expected), safe_sort(actual)
+          values_match?(@sorted_expected, @sorted_actual)
         end
 
         def convert_actual_to_an_array
@@ -96,6 +113,7 @@ module RSpec
         def safe_sort(array)
           array.sort
         rescue Support::AllExceptionsExceptOnesWeMustNotRescue
+          raise "Invalid use of `.transitive` with unsortable array #{array}" if @transitive
           array
         end
 
@@ -123,6 +141,47 @@ module RSpec
             actual[index]
           end
         end
+
+        # We use this to determine extra and missing items between expected
+        # and actual arrays.  This runs in O(n) time which is a big improvement
+        # over the O(n!) work incurred by PairingsMaximizer to evaluate all possible
+        # matchings between arrays
+        # rubocop:disable MethodLength
+        # rubocop:disable Metrics/AbcSize
+        def fast_calculate_extra_missing
+          extra, missing = [], []
+          i, j = 0, 0
+
+          # Use 2-pointer approach to find elements in sorted_actual
+          # that aren't in sorted_expected and vice versa
+          while i < @sorted_actual.size && j < @sorted_expected.size
+            current_actual, current_expected = @sorted_actual[i], @sorted_expected[j]
+
+            if current_actual < current_expected
+              extra << current_actual
+              i += 1
+            elsif current_actual > current_expected
+              missing << current_expected
+              j += 1
+            else
+              i += 1
+              j += 1
+            end
+          end
+
+          while i < @sorted_actual.size
+            extra << current_actual
+            i += 1
+          end
+          while j < @sorted_expected.size
+            missing << current_expected
+            j += 1
+          end
+
+          [extra, missing]
+        end
+        # rubocop:enable MethodLength
+        # rubocop:enable Metrics/AbcSize
 
         def best_solution
           @best_solution ||= pairings_maximizer.find_best_solution

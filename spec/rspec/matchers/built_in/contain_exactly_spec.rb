@@ -95,6 +95,92 @@ RSpec.describe "should_not =~ [:with, :multiple, :args]", :uses_should do
 end
 
 RSpec.describe "using contain_exactly with expect" do
+  # users have reported using contains_exactly with 50 elements
+  # never finishing!
+  context "with transitive enabled" do
+    require 'benchmark'
+    context "with actual and expected containing unsortable elements" do
+      it "raises" do
+        expect {
+          expect([be_positive, be_negative]).to contain_exactly(be_positive, be_negative).transitive
+        }.to raise_error(/Invalid use of/)
+      end
+    end
+
+    context "with expected containing unsortable elements" do
+      it "raises" do
+        expect {
+          expect([1, -1]).to contain_exactly(be_positive, be_negative).transitive
+        }.to raise_error(/Invalid use of/)
+      end
+    end
+
+    context "with actual and expected containing sortable elements" do
+      shared_examples "runs very fast" do
+        it do
+          time = Benchmark.realtime do
+            subject
+          end
+          # this is in seconds
+          expect(time).to be < 0.3
+        end
+      end
+
+      let(:a) { Array.new(10_000) { rand(10) } }
+
+      context "with a positive expectation" do
+        subject { expect(a).to contain_exactly(*b).transitive }
+
+        context "that is valid" do
+          let(:b) { a.shuffle }
+
+          it "matches" do
+            subject
+          end
+
+          include_examples "runs very fast"
+        end
+
+        context "that is not valid" do
+          let(:b) { Array.new(10_000) { rand(10) } }
+
+          it "fails quickly" do
+            time = Benchmark.realtime do
+              expect { subject }.to fail_with(/expected collection contained/)
+            end
+            expect(time).to be < 1
+          end
+
+        end
+      end
+
+      context "with a negative expectation" do
+        subject { expect(a).not_to contain_exactly(*b).transitive }
+
+        context "that is valid" do
+          let(:b) { Array.new(10_000) { rand(10) } }
+
+          it "does not match" do
+            subject
+          end
+
+          include_examples "runs very fast"
+        end
+
+        context "that is not valid" do
+          let(:b) { a.shuffle }
+
+          it "fails quickly" do
+            time = Benchmark.realtime do
+              expect { expect(a).not_to contain_exactly(*b).transitive }.to fail_with(/not to contain exactly/)
+            end
+            expect(time).to be < 1
+          end
+        end
+      end
+    end
+  end
+
   it "passes a valid positive expectation" do
     expect([1, 2]).to contain_exactly(2, 1)
   end
