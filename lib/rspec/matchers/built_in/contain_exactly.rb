@@ -86,8 +86,12 @@ module RSpec
 
         def match(_expected, _actual)
           return false unless convert_actual_to_an_array
+
           matched_when_sorted = match_when_sorted?
-          return matched_when_sorted if matched_when_sorted || @transitive
+
+          return true if matched_when_sorted
+          return matched_when_sorted if @transitive
+
           (extra_items.empty? && missing_items.empty?)
         end
 
