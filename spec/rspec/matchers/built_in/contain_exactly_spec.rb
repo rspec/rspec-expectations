@@ -99,21 +99,6 @@ RSpec.describe "using contain_exactly with expect" do
   # never finishing!
   context "with transitive enabled" do
     require 'benchmark'
-    context "with actual and expected containing unsortable elements" do
-      it "raises" do
-        expect {
-          expect([be_positive, be_negative]).to contain_exactly(be_positive, be_negative).transitive
-        }.to raise_error(/Invalid use of/)
-      end
-    end
-
-    context "with expected containing unsortable elements" do
-      it "raises" do
-        expect {
-          expect([1, -1]).to contain_exactly(be_positive, be_negative).transitive
-        }.to raise_error(/Invalid use of/)
-      end
-    end
 
     context "with actual and expected containing sortable elements" do
       shared_examples "runs very fast" do
@@ -129,7 +114,7 @@ RSpec.describe "using contain_exactly with expect" do
       let(:a) { Array.new(10_000) { rand(10) } }
 
       context "with a positive expectation" do
-        subject { expect(a).to contain_exactly(*b).transitive }
+        subject { expect(a).to contain_exactly(*b) }
 
         context "that is valid" do
           let(:b) { a.shuffle }
@@ -155,7 +140,7 @@ RSpec.describe "using contain_exactly with expect" do
       end
 
       context "with a negative expectation" do
-        subject { expect(a).not_to contain_exactly(*b).transitive }
+        subject { expect(a).not_to contain_exactly(*b) }
 
         context "that is valid" do
           let(:b) { Array.new(10_000) { rand(10) } }
@@ -172,7 +157,7 @@ RSpec.describe "using contain_exactly with expect" do
 
           it "fails quickly" do
             time = Benchmark.realtime do
-              expect { expect(a).not_to contain_exactly(*b).transitive }.to fail_with(/not to contain exactly/)
+              expect { expect(a).not_to contain_exactly(*b) }.to fail_with(/not to contain exactly/)
             end
             expect(time).to be < 1
           end

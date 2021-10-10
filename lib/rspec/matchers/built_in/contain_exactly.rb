@@ -6,19 +6,6 @@ module RSpec
       # Provides the implementation for `contain_exactly` and `match_array`.
       # Not intended to be instantiated directly.
       class ContainExactly < BaseMatcher
-        def initialize(expected=nil)
-          super
-          @transitive = false
-        end
-
-        # @api public
-        # Specifies that elements contained in actual and expected
-        # obey transitivity.  This lets match run much faster.
-        def transitive
-          @transitive = true
-          self
-        end
-
         # @api private
         # @return [String]
         def failure_message
@@ -100,6 +87,7 @@ module RSpec
         # the slowness of the full matching algorithm, and in common cases this
         # works, so it's worth a try.
         def match_when_sorted?
+          @transitive = true # Be optimistic. Let `safe_sort` reveal non-transitivity.
           @sorted_expected, @sorted_actual = safe_sort(expected), safe_sort(actual)
           values_match?(@sorted_expected, @sorted_actual)
         end
@@ -117,7 +105,7 @@ module RSpec
         def safe_sort(array)
           array.sort
         rescue Support::AllExceptionsExceptOnesWeMustNotRescue
-          raise "Invalid use of `.transitive` with unsortable array #{array}" if @transitive
+          @transitive = false
           array
         end
 
