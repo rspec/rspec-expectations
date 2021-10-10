@@ -162,11 +162,11 @@ module RSpec
           end
 
           while i < @sorted_actual.size
-            extra << current_actual
+            extra << @sorted_actual[i]
             i += 1
           end
           while j < @sorted_expected.size
-            missing << current_expected
+            missing << @sorted_expected[j]
             j += 1
           end
 
