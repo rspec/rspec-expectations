@@ -95,77 +95,6 @@ RSpec.describe "should_not =~ [:with, :multiple, :args]", :uses_should do
 end
 
 RSpec.describe "using contain_exactly with expect" do
-  # users have reported using contains_exactly with 50 elements
-  # never finishing!
-  context "with transitive enabled" do
-    require 'benchmark'
-
-    context "with actual and expected containing sortable elements" do
-      shared_examples "runs very fast" do
-        it do
-          time = Benchmark.realtime do
-            subject
-          end
-          # this is in seconds
-          expect(time).to be < 0.3
-        end
-      end
-
-      let(:a) { Array.new(10_000) { rand(10) } }
-
-      context "with a positive expectation" do
-        subject { expect(a).to contain_exactly(*b) }
-
-        context "that is valid" do
-          let(:b) { a.shuffle }
-
-          it "matches" do
-            subject
-          end
-
-          include_examples "runs very fast"
-        end
-
-        context "that is not valid" do
-          let(:b) { Array.new(10_000) { rand(10) } }
-
-          it "fails quickly" do
-            time = Benchmark.realtime do
-              expect { subject }.to fail_with(/expected collection contained/)
-            end
-            expect(time).to be < 1
-          end
-
-        end
-      end
-
-      context "with a negative expectation" do
-        subject { expect(a).not_to contain_exactly(*b) }
-
-        context "that is valid" do
-          let(:b) { Array.new(10_000) { rand(10) } }
-
-          it "does not match" do
-            subject
-          end
-
-          include_examples "runs very fast"
-        end
-
-        context "that is not valid" do
-          let(:b) { a.shuffle }
-
-          it "fails quickly" do
-            time = Benchmark.realtime do
-              expect { expect(a).not_to contain_exactly(*b) }.to fail_with(/not to contain exactly/)
-            end
-            expect(time).to be < 1
-          end
-        end
-      end
-    end
-  end
-
   it "passes a valid positive expectation" do
     expect([1, 2]).to contain_exactly(2, 1)
   end
@@ -255,22 +184,90 @@ the missing elements were:      [1]
 MESSAGE
   end
 
-  def timeout_if_not_debugging(time)
-    in_sub_process_if_possible do
-      require 'timeout'
-      return yield if defined?(::Debugger)
-      Timeout.timeout(time) { yield }
+  # users have reported using contains_exactly with 50 elements
+  # never finishing!
+  context 'with comparable elements' do
+    def timeout_if_not_debugging(time)
+      in_sub_process_if_possible do
+        require 'timeout'
+        return yield if defined?(::Debugger)
+        Timeout.timeout(time) { yield }
+      end
     end
-  end
 
-  it 'fails a match of 11 items with duplicates in a reasonable amount of time' do
-    timeout_if_not_debugging(0.1) do
-      expected = [0, 1, 1,    3, 3, 3,    4, 4,    8, 8, 9   ]
-      actual   = [   1,    2, 3, 3, 3, 3,       7, 8, 8, 9, 9]
+    it 'fails a match of 11 items with duplicates in a reasonable amount of time' do
+      timeout_if_not_debugging(0.1) do
+        expected = [0, 1, 1,    3, 3, 3,    4, 4,    8, 8, 9   ]
+        actual   = [   1,    2, 3, 3, 3, 3,       7, 8, 8, 9, 9]
 
-      expect {
-        expect(actual).to contain_exactly(*expected)
-      }.to fail_including("the missing elements were:      [0, 1, 4, 4]")
+        expect {
+          expect(actual).to contain_exactly(*expected)
+        }.to fail_including("the missing elements were:      [0, 1, 4, 4]")
+      end
+    end
+
+    context "with actual and expected containing sortable elements" do
+      let(:max_runtime) { 1 }
+
+      shared_examples "succeeds fast" do
+        it do
+          timeout_if_not_debugging(max_runtime) do
+            subject
+          end
+        end
+      end
+
+      shared_examples "fails fast" do |failure_msg|
+        it do
+          timeout_if_not_debugging(max_runtime) do
+            expect {
+              subject
+            }.to fail_with(/#{Regexp.quote(failure_msg)}/)
+          end
+        end
+      end
+
+      let(:actual) { Array.new(10_000) { rand(10) } }
+
+      context "with a positive expectation" do
+        subject { expect(actual).to contain_exactly(*expected) }
+
+        context "that is valid" do
+          let(:expected) { actual.shuffle }
+
+          it "matches" do
+            subject
+          end
+
+          include_examples "succeeds fast"
+        end
+
+        context "that is not valid" do
+          let(:expected) { Array.new(10_000) { rand(10) } }
+
+          include_examples "fails fast", "expected collection contained"
+        end
+      end
+
+      context "with a negative expectation" do
+        subject { expect(actual).not_to contain_exactly(*expected) }
+
+        context "that is valid" do
+          let(:expected) { Array.new(10_000) { rand(10) } }
+
+          it "does not match" do
+            subject
+          end
+
+          include_examples "succeeds fast"
+        end
+
+        context "that is not valid" do
+          let(:expected) { actual.shuffle }
+
+          include_examples "fails fast", "not to contain exactly"
+        end
+      end
     end
   end
 
