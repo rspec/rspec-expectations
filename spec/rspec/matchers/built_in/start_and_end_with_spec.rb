@@ -102,11 +102,25 @@ RSpec.describe "expect(...).to start_with" do
   end
 
   context "with an object that does not respond to :[]" do
-    it "fails with a useful message" do
-      actual = Object.new
-      expect {
-        expect(actual).to start_with 0
-      }.to fail_with("expected #{actual.inspect} to start with 0, but it cannot be indexed using #[]")
+    context "with an object that responds to start_with?" do
+      it "relies on start_with?" do
+        my_struct = Struct.new(:foo) do
+          def start_with?(elem)
+            true
+          end
+        end
+
+        expect(my_struct.new("foo")).to start_with(0)
+      end
+    end
+
+    context "with an object that does not respond to start_with?" do
+      it "fails with a useful message" do
+        actual = Object.new
+        expect {
+          expect(actual).to start_with 0
+        }.to fail_with("expected #{actual.inspect} to start with 0, but it does not respond to start_with? and cannot be indexed using #[]")
+      end
     end
   end
 
@@ -310,11 +324,24 @@ RSpec.describe "expect(...).to end_with" do
   end
 
   context "with an object that does not respond to :[]" do
-    it "fails with a useful message" do
-      actual = Object.new
-      expect {
-        expect(actual).to end_with 0
-      }.to fail_with("expected #{actual.inspect} to end with 0, but it cannot be indexed using #[]")
+    context "with an object that responds to end_with?" do
+      it "relies on end_with?" do
+        my_struct = Struct.new(:foo) do
+          def end_with?(elem)
+            true
+          end
+        end
+        expect(my_struct.new("foo")).to end_with(0)
+      end
+    end
+
+    context "with an object that does not respond to end_with?" do
+      it "fails with a useful message" do
+        actual = Object.new
+        expect {
+          expect(actual).to end_with 0
+        }.to fail_with("expected #{actual.inspect} to end with 0, but it does not respond to end_with? and cannot be indexed using #[]")
+      end
     end
   end
 

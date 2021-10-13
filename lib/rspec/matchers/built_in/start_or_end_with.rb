@@ -13,11 +13,12 @@ module RSpec
         # @api private
         # @return [String]
         def failure_message
+          response_msg = ", but it does not respond to #{method} and cannot be indexed using #[]"
           super.tap do |msg|
             if @actual_does_not_have_ordered_elements
               msg << ", but it does not have ordered elements"
             elsif !actual.respond_to?(:[])
-              msg << ", but it cannot be indexed using #[]"
+              msg << response_msg
             end
           end
         end
@@ -33,7 +34,9 @@ module RSpec
 
       private
 
-        def match(_expected, actual)
+        def match(expected, actual)
+          # use an object's start_with? or end_with? as appropriate
+          return actual.send(method, expected) if actual.respond_to?(method)
           return false unless actual.respond_to?(:[])
 
           begin
@@ -73,6 +76,10 @@ module RSpec
         def element_matches?
           values_match?(expected, actual[0])
         end
+
+        def method
+          :start_with?
+        end
       end
 
       # @api private
@@ -87,6 +94,10 @@ module RSpec
 
         def element_matches?
           values_match?(expected, actual[-1])
+        end
+
+        def method
+          :end_with?
         end
       end
     end
