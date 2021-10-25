@@ -128,18 +128,18 @@ module RSpec
           @best_solution ||= pairings_maximizer.find_best_solution
         end
 
-        def pairings_maximizer
+        def pairings_maximizer # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
           @pairings_maximizer ||= begin
             expected_matches = Hash[Array.new(expected.size) { |i| [i, []] }]
             actual_matches   = Hash[Array.new(actual.size)   { |i| [i, []] }]
 
             # Set the reciprocal pairings for matching elements
             value_buckets = {}
-            expected.each_with_index {|v, i| (value_buckets[v] ||= []) << i }
-            actual.each_with_index   {|v, i| (value_buckets[v] ||= []) << -i-1 }
+            expected.each_with_index { |v, i| (value_buckets[v] ||= []) << i }
+            actual.each_with_index   { |v, i| (value_buckets[v] ||= []) << -i-1 }
             value_buckets.each do |_, indices|
-              e_indices = indices.select {|i| i >= 0}.map {|i| i }
-              a_indices = indices.select {|i| i < 0}.map {|i| -i-1 }
+              e_indices = indices.select { |i| i >= 0 }.map { |i| i }
+              a_indices = indices.select { |i| i < 0 }.map { |i| -i-1 }
               e_indices.zip(a_indices).each do |ei, ai|
                 break unless ai
                 expected_matches[ei] << ai
