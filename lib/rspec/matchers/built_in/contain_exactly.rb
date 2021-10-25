@@ -138,8 +138,8 @@ module RSpec
             expected.each_with_index {|v, i| (value_buckets[v] ||= []) << i }
             actual.each_with_index   {|v, i| (value_buckets[v] ||= []) << -i-1 }
             value_buckets.each do |_, indices|
-              e_indices = indices.filter {|i| i >= 0}.map {|i| i }
-              a_indices = indices.filter {|i| i < 0}.map {|i| -i-1 }
+              e_indices = indices.select {|i| i >= 0}.map {|i| i }
+              a_indices = indices.select {|i| i < 0}.map {|i| -i-1 }
               e_indices.zip(a_indices).each do |ei, ai|
                 break unless ai
                 expected_matches[ei] << ai
