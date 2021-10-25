@@ -203,6 +203,21 @@ MESSAGE
     end
   end
 
+  it 'fails a match of 1000 items with duplicates in a reasonable amount of time' do
+    timeout_if_not_debugging(0.1) do
+      a = Array.new(1000) { rand(1..9) }
+      b = a.reverse
+      actual = b.shift
+      b << 0
+      expect {
+        expect(a).to match_array(b)
+      }.to fail_including(<<-MESSAGE)
+the missing elements were:      [0]
+the extra elements were:        [#{actual}]
+MESSAGE
+    end
+  end
+
   it "fails if target includes extra items" do
     expect {
       expect([1, 2, 3, 4]).to contain_exactly(1, 2, 3)

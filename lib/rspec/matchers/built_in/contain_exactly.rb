@@ -133,8 +133,33 @@ module RSpec
             expected_matches = Hash[Array.new(expected.size) { |i| [i, []] }]
             actual_matches   = Hash[Array.new(actual.size)   { |i| [i, []] }]
 
+            # Set the reciprocal pairings for matching elements
+            value_buckets = {}
+            expected.each_with_index {|v, i| (value_buckets[v] ||= []) << i }
+            actual.each_with_index   {|v, i| (value_buckets[v] ||= []) << -i-1 }
+            value_buckets.each do |_, indices|
+              e_indices = indices.filter {|i| i >= 0}.map {|i| i }
+              a_indices = indices.filter {|i| i < 0}.map {|i| -i-1 }
+              e_indices.zip(a_indices).each do |ei, ai|
+                break unless ai
+                expected_matches[ei] << ai
+                actual_matches[ai] << ei
+              end
+            end
+
+            # Set the remaining elements to be paired
+            filtered_expected = []
+            filtered_actual = []
             expected.each_with_index do |e, ei|
-              actual.each_with_index do |a, ai|
+              filtered_expected << [e, ei] if expected_matches[ei].size == 0
+            end
+            actual.each_with_index do |a, ai|
+              filtered_actual << [a, ai] if actual_matches[ai].size == 0
+            end
+
+            # Set the pairing combinations of the remaining elements
+            filtered_expected.each do |e, ei|
+              filtered_actual.each do |a, ai|
                 next unless values_match?(e, a)
 
                 expected_matches[ei] << ai
