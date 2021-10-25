@@ -192,27 +192,16 @@ MESSAGE
     end
   end
 
-  it 'fails a match of 11 items with duplicates in a reasonable amount of time' do
-    timeout_if_not_debugging(0.1) do
-      expected = [0, 1, 1,    3, 3, 3,    4, 4,    8, 8, 9   ]
-      actual   = [   1,    2, 3, 3, 3, 3,       7, 8, 8, 9, 9]
-
-      expect {
-        expect(actual).to contain_exactly(*expected)
-      }.to fail_including("the missing elements were:      [0, 1, 4, 4]")
-    end
-  end
-
   it 'fails a match of 1000 items with duplicates in a reasonable amount of time' do
     timeout_if_not_debugging(0.1) do
-      a = Array.new(1000) { rand(1..9) }
+      a = Array.new(1000) { rand(10) }
       b = a.reverse
       actual = b.shift
-      b << 0
+      b << 10
       expect {
         expect(a).to match_array(b)
       }.to fail_including(<<-MESSAGE)
-the missing elements were:      [0]
+the missing elements were:      [10]
 the extra elements were:        [#{actual}]
 MESSAGE
     end
