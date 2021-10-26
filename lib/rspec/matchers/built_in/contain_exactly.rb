@@ -134,14 +134,18 @@ module RSpec
             actual_matches   = Hash[Array.new(actual.size)   { |i| [i, []] }]
 
             # Set the reciprocal pairings for matching elements
-            value_buckets = {}
-            expected.each_with_index { |v, i| (value_buckets[v] ||= []) << i }
-            actual.each_with_index   { |v, i| (value_buckets[v] ||= []) << -i-1 }
-            value_buckets.each do |_, indices|
-              e_indices = indices.select { |i| i >= 0 }.map { |i| i }
-              a_indices = indices.select { |i| i < 0 }.map { |i| -i-1 }
-              e_indices.zip(a_indices).each do |ei, ai|
+            value_buckets = Hash.new { |hash, key| hash[key] = [] }
+            expected.each_with_index { |v, i| value_buckets[[v, :expected]] << i }
+            actual.each_with_index   { |v, i| value_buckets[[v, :actual]] << i }
+            value_buckets.each do |key, indexes|
+              value, source = key
+              next unless source == :expected
+              next unless value_buckets.key? [value, :actual]
+
+              a_indexes = value_buckets[[value, :actual]]
+              indexes.zip(a_indexes).each do |ei, ai|
                 break unless ai
+
                 expected_matches[ei] << ai
                 actual_matches[ai] << ei
               end
@@ -151,10 +155,10 @@ module RSpec
             filtered_expected = []
             filtered_actual = []
             expected.each_with_index do |e, ei|
-              filtered_expected << [e, ei] if expected_matches[ei].size == 0
+              filtered_expected << [e, ei] if expected_matches[ei].empty?
             end
             actual.each_with_index do |a, ai|
-              filtered_actual << [a, ai] if actual_matches[ai].size == 0
+              filtered_actual << [a, ai] if actual_matches[ai].empty?
             end
 
             # Set the pairing combinations of the remaining elements
