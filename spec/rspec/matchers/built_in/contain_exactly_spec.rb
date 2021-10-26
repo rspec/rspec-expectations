@@ -193,16 +193,17 @@ MESSAGE
   end
 
   it 'fails a match of 1000 items with duplicates in a reasonable amount of time' do
-    timeout_if_not_debugging(0.1) do
-      a = Array.new(1000) { rand(10) }
-      b = a.reverse
-      actual = b.shift
-      b << 10
+    timeout_if_not_debugging(0.5) do
+      actual = Array.new(1000) { rand(10) }
+      expected = actual.reverse
+      extra = expected.shift
+      missing = 10
+      expected << missing
       expect {
-        expect(a).to match_array(b)
+        expect(actual).to match_array(expected)
       }.to fail_including(<<-MESSAGE)
-the missing elements were:      [10]
-the extra elements were:        [#{actual}]
+the missing elements were:      [#{missing}]
+the extra elements were:        [#{extra}]
 MESSAGE
     end
   end
