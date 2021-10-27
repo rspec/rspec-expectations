@@ -238,10 +238,10 @@ module RSpec
           return " but nothing was raised" unless @actual_error
 
           backtrace = format_backtrace(@actual_error.backtrace)
-          [
-            ", got #{description_of(@actual_error)} with backtrace:",
-            *backtrace
-          ].join("\n  # ")
+
+          ", got #{description_of(@actual_error)}" +
+            error_message_text +
+            text_with_indent(" with backtrace:", backtrace)
         end
 
         def expecting_specific_exception?
@@ -256,6 +256,25 @@ module RSpec
         def warning
           warning = "Actual error raised was #{description_of(@actual_error)}. "
           warning if @actual_error
+        end
+
+        private
+
+        def error_message_text
+          return '' if @actual_error.message.nil? || @actual_error.message.empty?
+          return '' if @actual_error.message == @actual_error.class.to_s
+
+          text_with_indent(" with message:", @actual_error.message.split(/\n/)) +
+            "\nand"
+        end
+
+        INDENT = ["\n  # ".freeze].freeze
+
+        def text_with_indent(prefix, text_lines)
+          text_lines = Array(text_lines)
+          message_text = [prefix]
+          message_text += ([INDENT] * text_lines.size).zip(text_lines)
+          message_text.join
         end
       end
       # rubocop:enable RescueException
