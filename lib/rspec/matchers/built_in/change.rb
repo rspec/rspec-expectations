@@ -6,6 +6,15 @@ module RSpec
       # Not intended to be instantiated directly.
       class Change < BaseMatcher
         # @api public
+        # Specifies the returning block's value.
+        def and_return(expected_value)
+          @expected_return = expected_value
+          @return_matcher = Eq.new(expected_value)
+
+          self
+        end
+
+        # @api public
         # Specifies the delta of the expected change.
         def by(expected_delta)
           ChangeRelatively.new(change_details, expected_delta, :by) do |actual_delta|
@@ -44,32 +53,45 @@ module RSpec
         # @private
         def matches?(event_proc)
           raise_block_syntax_error if block_given?
-          perform_change(event_proc) && change_details.changed?
+          valid, @result = perform_change(event_proc)
+          default_check = valid && change_details.changed?
+          return default_check unless defined?(@return_matcher)
+
+          default_check && @return_matcher.matches?(@result)
         end
 
         def does_not_match?(event_proc)
           raise_block_syntax_error if block_given?
-          perform_change(event_proc) && !change_details.changed?
+          valid, @result = perform_change(event_proc)
+          default_check = valid && !change_details.changed?
+          return default_check unless defined?(@return_matcher)
+
+          default_check && @return_matcher.matches?(@result)
         end
 
         # @api private
         # @return [String]
         def failure_message
-          "expected #{change_details.value_representation} to have changed, " \
-          "but #{positive_failure_reason}"
+          actual_and_return_part = defined?(@return_matcher) ? " and return #{@result}" : ''
+          expected_and_return_part = defined?(@return_matcher) ? " and return #{@expected_return}" : ''
+          "expected #{change_details.value_representation} to have changed#{expected_and_return_part}, " \
+          "but #{positive_failure_reason}#{actual_and_return_part}"
         end
 
         # @api private
         # @return [String]
         def failure_message_when_negated
-          "expected #{change_details.value_representation} not to have changed, " \
-          "but #{negative_failure_reason}"
+          actual_and_return_part = defined?(@return_matcher) ? " and return #{@result}" : ''
+          expected_and_return_part = defined?(@return_matcher) ? " and return #{@expected_return}" : ''
+          "expected #{change_details.value_representation} not to have changed#{expected_and_return_part}, " \
+          "but #{negative_failure_reason}#{actual_and_return_part}"
         end
 
         # @api private
         # @return [String]
         def description
-          "change #{change_details.value_representation}"
+          expected_and_return_part = defined?(@return_matcher) ? " and return #{@expected_return}" : ''
+          "change #{change_details.value_representation}#{expected_and_return_part}"
         end
 
         # @private
@@ -133,17 +155,34 @@ module RSpec
           @comparer       = comparer
         end
 
+        # @api public
+        # Specifies the returning block's value.
+        def and_return(expected_value)
+          @expected_return = expected_value
+          @return_matcher = Eq.new(expected_value)
+
+          self
+        end
+
         # @private
         def failure_message
+          expected_and_return_part = defined?(@return_matcher) ? " and return #{@expected_return}" : ''
+          actual_and_return_part = defined?(@return_matcher) ? " and return #{@result}" : ''
           "expected #{@change_details.value_representation} to have changed " \
           "#{@relativity.to_s.tr('_', ' ')} " \
-          "#{description_of @expected_delta}, but #{failure_reason}"
+          "#{description_of @expected_delta}#{expected_and_return_part}, but #{failure_reason}#{actual_and_return_part}"
         end
 
         # @private
         def matches?(event_proc)
           @event_proc = event_proc
-          @change_details.perform_change(event_proc) && @comparer.call(@change_details.actual_delta)
+
+          success, @result = @change_details.perform_change(event_proc)
+
+          relative_check = success && @comparer.call(@change_details.actual_delta)
+          return relative_check unless defined?(@return_matcher)
+
+          relative_check && @return_matcher.matches?(@result)
         end
 
         # @private
@@ -154,8 +193,9 @@ module RSpec
 
         # @private
         def description
+          expected_and_return_part = defined?(@return_matcher) ? " and return #{@expected_return}" : ''
           "change #{@change_details.value_representation} " \
-          "#{@relativity.to_s.tr('_', ' ')} #{description_of @expected_delta}"
+          "#{@relativity.to_s.tr('_', ' ')} #{description_of @expected_delta}#{expected_and_return_part}"
         end
 
         # @private
@@ -188,14 +228,30 @@ module RSpec
           @expected_after  = to
         end
 
+        # @api public
+        # Specifies the returning block's value.
+        def and_return(expected_value)
+          @expected_return = expected_value
+          @return_matcher = Eq.new(expected_value)
+
+          self
+        end
+
         # @private
         def matches?(event_proc)
-          perform_change(event_proc) && @change_details.changed? && @matches_before && matches_after?
+          valid, @result = perform_change(event_proc)
+
+          value_check = valid && @change_details.changed? && @matches_before && matches_after?
+          return value_check unless defined?(@return_matcher)
+
+          @return_check = @return_matcher.matches?(@result)
+          value_check && @return_check
         end
 
         # @private
         def description
-          "change #{@change_details.value_representation} #{change_description}"
+          expected_and_return_part = defined?(@return_matcher) ? " and return #{@expected_return}" : ''
+          "change #{@change_details.value_representation} #{change_description}#{expected_and_return_part}"
         end
 
         # @private
@@ -203,6 +259,7 @@ module RSpec
           return not_given_a_block_failure unless Proc === @event_proc
           return before_value_failure      unless @matches_before
           return did_not_change_failure    unless @change_details.changed?
+          return return_value_failure      if defined?(@return_check) && !@return_check
           after_value_failure
         end
 
@@ -252,7 +309,16 @@ module RSpec
           "to have changed #{change_description}, but did not change"
         end
 
+        def return_value_failure
+          "expected to return #{@expected_return}" \
+          ", but returned #{@result}"
+        end
+
         def did_change_failure
+          if !@change_details.changed? && defined?(@return_matcher)
+            return return_value_failure
+          end
+
           "expected #{@change_details.value_representation} not to have changed, but " \
           "did change from #{@actual_before_description} " \
           "to #{description_of @change_details.actual_after}"
@@ -288,7 +354,11 @@ module RSpec
               "is not supported"
           end
 
-          perform_change(event_proc) && !@change_details.changed? && @matches_before
+          valid, @result = perform_change(event_proc)
+          default_check = valid && !@change_details.changed? && @matches_before
+          return default_check unless defined?(@return_matcher)
+
+          default_check && @return_matcher.matches?(@result)
         end
 
         # @private
@@ -391,12 +461,12 @@ module RSpec
           @before_hash = @actual_before.hash
           yield @actual_before if block_given?
 
-          return false unless Proc === event_proc
-          event_proc.call
+          return [false, nil] unless Proc === event_proc
+          val = event_proc.call
 
           @actual_after = evaluate_value_proc
           @actual_hash = @actual_after.hash
-          true
+          [true, val]
         end
 
         def changed?
