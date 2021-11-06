@@ -193,7 +193,7 @@ MESSAGE
       end
     end
 
-    shared_examples "succeeds fast" do
+    shared_examples "for succeeding quickly" do
       it do
         timeout_if_not_debugging(max_runtime) do
           subject
@@ -201,7 +201,7 @@ MESSAGE
       end
     end
 
-    shared_examples "fails fast" do |failure_msg|
+    shared_examples "for failing fast with" do |failure_msg|
       it do
         timeout_if_not_debugging(max_runtime) do
           expect {
@@ -215,42 +215,46 @@ MESSAGE
     let(:actual) { Array.new(1000) { rand(10) } }
 
     context "with a positive expectation" do
-      subject { expect(actual).to contain_exactly(*expected) }
+      subject(:expect_actual_to_contain_exactly_expected) do
+        expect(actual).to contain_exactly(*expected)
+      end
 
       context "that is valid" do
         let(:expected) { actual.shuffle }
 
         it "matches" do
-          subject
+          expect_actual_to_contain_exactly_expected
         end
 
-        include_examples "succeeds fast"
+        include_examples "for succeeding quickly"
       end
 
       context "that is not valid" do
         let(:expected) { Array.new(1000) { rand(10) } }
 
-        include_examples "fails fast", "expected collection contained"
+        include_examples "for failing fast with", "expected collection contained"
       end
     end
 
     context "with a negative expectation" do
-      subject { expect(actual).not_to contain_exactly(*expected) }
+      subject(:expect_actual_not_to_contain_exactly_expected) do
+        expect(actual).not_to contain_exactly(*expected)
+      end
 
       context "that is valid" do
         let(:expected) { Array.new(1000) { rand(10) } }
 
         it "does not match" do
-          subject
+          expect_actual_not_to_contain_exactly_expected
         end
 
-        include_examples "succeeds fast"
+        include_examples "for succeeding quickly"
       end
 
       context "that is not valid" do
         let(:expected) { actual.shuffle }
 
-        include_examples "fails fast", "not to contain exactly"
+        include_examples "for failing fast with", "not to contain exactly"
       end
     end
   end

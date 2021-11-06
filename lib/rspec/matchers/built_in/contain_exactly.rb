@@ -128,6 +128,15 @@ module RSpec
           @best_solution ||= pairings_maximizer.find_best_solution
         end
 
+        # This implementation is complicated but it facilitates an enormous speedup.
+        # The previous implementation never finished when comparing arrays of 50
+        # random integers between 1 and 10 (I stopped the execution after a full day).
+        # This implementation finishes that task in .03s on my laptop.
+        # This represents a speedup of over 259,000x for that task!  The gap widens
+        # exponentially as the array size increases:
+        # Assuming the old implementation takes a day to compare arrays of 50 random
+        # integers, comparing arrays of 1000 elements would take 10^2486 billion years.
+        # The new implementation finishes this task in 1 second!
         def pairings_maximizer # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
           @pairings_maximizer ||= begin
             expected_matches = Hash[Array.new(expected.size) { |i| [i, []] }]
