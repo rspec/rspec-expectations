@@ -184,14 +184,6 @@ the missing elements were:      [1]
 MESSAGE
   end
 
-  def timeout_if_not_debugging(time)
-    in_sub_process_if_possible do
-      require 'timeout'
-      return yield if defined?(::Debugger)
-      Timeout.timeout(time) { yield }
-    end
-  end
-
   it 'fails a match of 11 items with duplicates in a reasonable amount of time' do
     timeout_if_not_debugging(0.1) do
       expected = [0, 1, 1,    3, 3, 3,    4, 4,    8, 8, 9   ]

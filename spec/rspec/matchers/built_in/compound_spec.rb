@@ -882,31 +882,39 @@ module RSpec::Matchers::BuiltIn
 
         context "with a failing first matcher" do
           it "generates a failure description quickly" do
-            compound = failing_matcher
-            15.times { compound = compound.and(passing_matcher) }
-            expect { expect([actual]).to compound }.to fail_including("expected [#{actual}] to include #{not_expected}")
+            timeout_if_not_debugging(0.2) do
+              compound = failing_matcher
+              15.times { compound = compound.and(passing_matcher) }
+              expect { expect([actual]).to compound }.to fail_including("expected [#{actual}] to include #{not_expected}")
+            end
           end
         end
 
         context "with a failing last matcher" do
           it "generates a failure description quickly" do
-            compound  = failing_matcher
-            15.times { compound = passing_matcher.and(compound) }
-            expect { expect([actual]).to compound }.to fail_including("expected [#{actual}] to include #{not_expected}")
+            timeout_if_not_debugging(0.2) do
+              compound  = failing_matcher
+              15.times { compound = passing_matcher.and(compound) }
+              expect { expect([actual]).to compound }.to fail_including("expected [#{actual}] to include #{not_expected}")
+            end
           end
         end
 
         context "with all failing matchers" do
           it "generates a failure description quickly with and" do
-            compound = failing_matcher
-            15.times { compound = compound.and(failing_matcher) }
-            expect { expect([actual]).to compound }.to fail_including("expected [#{actual}] to include #{not_expected}")
+            timeout_if_not_debugging(0.2) do
+              compound = failing_matcher
+              15.times { compound = compound.and(failing_matcher) }
+              expect { expect([actual]).to compound }.to fail_including("expected [#{actual}] to include #{not_expected}")
+            end
           end
 
           it "generates a failure description quickly with or" do
-            compound = failing_matcher
-            15.times { compound = compound.or(failing_matcher) }
-            expect { expect([actual]).to compound }.to fail_including("expected [#{actual}] to include #{not_expected}")
+            timeout_if_not_debugging(0.2) do
+              compound = failing_matcher
+              15.times { compound = compound.or(failing_matcher) }
+              expect { expect([actual]).to compound }.to fail_including("expected [#{actual}] to include #{not_expected}")
+            end
           end
         end
       end
