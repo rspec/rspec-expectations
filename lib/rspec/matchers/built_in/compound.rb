@@ -75,6 +75,8 @@ module RSpec
         end
 
         def match(_expected, actual)
+          @matcher_1_matches = nil
+          @matcher_2_matches = nil
           evaluator_klass = if supports_block_expectations? && Proc === actual
                               NestedEvaluator
                             else
@@ -97,11 +99,13 @@ module RSpec
         end
 
         def matcher_1_matches?
-          evaluator.matcher_matches?(matcher_1)
+          return @matcher_1_matches unless @matcher_1_matches.nil?
+          @matcher_1_matches = evaluator.matcher_matches?(matcher_1)
         end
 
         def matcher_2_matches?
-          evaluator.matcher_matches?(matcher_2)
+          return @matcher_2_matches unless @matcher_2_matches.nil?
+          @matcher_2_matches = evaluator.matcher_matches?(matcher_2)
         end
 
         def matcher_supports_block_expectations?(matcher)
