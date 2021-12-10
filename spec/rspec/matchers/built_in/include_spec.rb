@@ -256,6 +256,7 @@ RSpec.describe "#include matcher" do
         it 'passes if the block yields the specified number of times' do
           expect([1, 2, 1]).to include(1).twice
           expect([10, 20, 30]).to include(a_value_within(5).of(17)).once
+          expect([{ 'a' => 1 }]).to include('a' => 1).once
         end
       end
 
