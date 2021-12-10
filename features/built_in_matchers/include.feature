@@ -150,3 +150,31 @@ Feature: `include` matcher
       | expected {:a => 7, :b => 5} not to include :a                 |
       | expected {:a => 7, :b => 5} to include {:d => 3}              |
       | expected {:a => 7, :b => 5} not to include {:a => 7}          |
+
+  Scenario: counts usage
+    Given a file named "include_matcher_with_counts_spec.rb" with:
+      """ruby
+        RSpec.describe [{:c => 7}, {:a => 1}, {:b => 2}, {:c => 1}, {:a => 3}, {:c => 7}] do
+          it { is_expected.to include(:b => 2).exactly(1).times }
+          it { is_expected.to include(:b => 2).once }
+          it { is_expected.to include(have_key(:a)).twice }
+          it { is_expected.to include(have_key(:c)).at_least(2).times }
+          it { is_expected.to include(have_key(:a)).at_least(:once) }
+          it { is_expected.to include(have_key(:c)).at_least(:twice) }
+          it { is_expected.to include(have_key(:d)).at_most(:once) }
+          it { is_expected.to include(have_key(:b)).at_most(:twice) }
+
+          # deliberate failures
+          it { is_expected.not_to include(have_key(:b)).once }
+          it { is_expected.not_to include(have_key(:a)).twice }
+          it { is_expected.not_to include(have_key(:c)).at_least(2).times }
+          it { is_expected.not_to include(have_key(:d)).at_most(:once) }
+        end
+      """
+    When I run `rspec include_matcher_with_counts_spec.rb`
+    Then the output should contain all of these:
+      | 12 examples, 4 failures                                                                                                 |
+      | expected [{:c => 7}, {:a => 1}, {:b => 2}, {:c => 1}, {:a => 3}, {:c => 7}] not to include (have key :b) once           |
+      | expected [{:c => 7}, {:a => 1}, {:b => 2}, {:c => 1}, {:a => 3}, {:c => 7}] not to include (have key :a) twice          |
+      | expected [{:c => 7}, {:a => 1}, {:b => 2}, {:c => 1}, {:a => 3}, {:c => 7}] not to include (have key :c) at least twice |
+      | expected [{:c => 7}, {:a => 1}, {:b => 2}, {:c => 1}, {:a => 3}, {:c => 7}] not to include (have key :d) at most once   |

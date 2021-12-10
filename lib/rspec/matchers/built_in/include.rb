@@ -176,7 +176,7 @@ module RSpec
           when String
             actual.scan(expected.first).length
           when Enumerable
-            count_enumerable(expected.first)
+            count_enumerable(Hash === expected ? expected : expected.first)
           else
             raise NotImplementedError, 'Count constraints are implemented for Enumerable and String values only'
           end
