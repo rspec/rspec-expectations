@@ -60,7 +60,7 @@ RSpec.describe "should =~ array", :uses_should do
 
   context "when the array undefines `=~`" do
     it 'still works' do
-      array_klass = Class.new(Array) { undef =~ }
+      array_klass = Class.new(Array) { undef =~ if respond_to?(:=~) }
       array = array_klass.new([1, 2])
 
       array.should =~ [1, 2]

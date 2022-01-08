@@ -51,7 +51,11 @@ jobs:
         include:
           - ruby: ruby-head
             env:
+              RAILS_VERSION: '~> 7.0.0'
               RUBY_HEAD: true
+          - ruby: '3.1'
+            env:
+              RAILS_VERSION: '~> 7.0.0'
           - ruby: jruby-9.2.13.0
             env:
               JRUBY_OPTS: "--dev"
