@@ -4,8 +4,8 @@ module RSpec
       # @api private
       # Provides the implementation for `raise_error`.
       # Not intended to be instantiated directly.
-      # rubocop:disable ClassLength
-      # rubocop:disable RescueException
+      # rubocop:disable Metrics/ClassLength
+      # rubocop:disable Lint/RescueException
       class RaiseError
         include Composable
 
@@ -43,7 +43,7 @@ module RSpec
           self
         end
 
-        # rubocop:disable MethodLength
+        # rubocop:disable Metrics/MethodLength
         # @private
         def matches?(given_proc, negative_expectation=false, &block)
           @given_proc = given_proc
@@ -73,7 +73,7 @@ module RSpec
 
           expectation_matched?
         end
-        # rubocop:enable MethodLength
+        # rubocop:enable Metrics/MethodLength
 
         # @private
         def does_not_match?(given_proc)
@@ -264,8 +264,8 @@ module RSpec
           warning if @actual_error
         end
       end
-      # rubocop:enable RescueException
-      # rubocop:enable ClassLength
+      # rubocop:enable Lint/RescueException
+      # rubocop:enable Metrics/ClassLength
     end
   end
 end
