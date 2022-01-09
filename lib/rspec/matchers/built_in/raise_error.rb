@@ -59,7 +59,7 @@ module RSpec
             given_proc.call
           rescue Exception => @actual_error
             if values_match?(@expected_error, @actual_error) ||
-               values_match?(@expected_error, @actual_error.message)
+               values_match?(@expected_error, actual_error_message)
               @raised_expected_error = true
               @with_expected_message = verify_message
             end
@@ -99,7 +99,7 @@ module RSpec
         # @api private
         # @return [String]
         def failure_message
-          @eval_block ? @actual_error.message : "expected #{expected_error}#{given_error}"
+          @eval_block ? actual_error_message : "expected #{expected_error}#{given_error}"
         end
 
         # @api private
@@ -115,6 +115,12 @@ module RSpec
         end
 
       private
+
+        def actual_error_message
+          return nil unless @actual_error
+
+          @actual_error.respond_to?(:original_message) ? @actual_error.original_message : @actual_error.message
+        end
 
         def expectation_matched?
           error_and_message_match? && block_matches?
@@ -144,7 +150,7 @@ module RSpec
 
         def verify_message
           return true if @expected_message.nil?
-          values_match?(@expected_message, @actual_error.message.to_s)
+          values_match?(@expected_message, actual_error_message.to_s)
         end
 
         def warn_for_negative_false_positives!
