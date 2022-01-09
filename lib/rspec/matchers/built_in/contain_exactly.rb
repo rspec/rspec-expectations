@@ -1,7 +1,7 @@
 module RSpec
   module Matchers
     module BuiltIn
-      # rubocop:disable ClassLength
+      # rubocop:disable Metrics/ClassLength
       # @api private
       # Provides the implementation for `contain_exactly` and `match_array`.
       # Not intended to be instantiated directly.
@@ -304,7 +304,7 @@ module RSpec
           end
         end
       end
-      # rubocop:enable ClassLength
+      # rubocop:enable Metrics/ClassLength
     end
   end
 end

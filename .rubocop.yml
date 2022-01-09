@@ -1,24 +1,21 @@
 inherit_from:
+  - .rubocop_todo.yml
   - .rubocop_rspec_base.yml
 
 AllCops:
-  TargetRubyVersion: 2.1
+  TargetRubyVersion: 2.4
   DisplayCopNames: true
   Exclude:
     - bin/*
     - tmp/**/*
 
 # Over time we'd like to get this down, but this is what we're at now.
-LineLength:
+Layout/LineLength:
   Max: 186
 
 # Offense count: 1
 Style/BlockComments:
   Enabled: false
-
-Style/BracesAroundHashParameters:
-  Exclude:
-    - spec/**/*
 
 Style/ClassAndModuleChildren:
   Exclude:
@@ -67,7 +64,7 @@ Security/Eval:
     - Gemfile
 
 Metrics/AbcSize:
-  Max: 26
+  Max: 27
 
 # Offense count: 2
 # Configuration parameters: CountComments, ExcludedMethods.
@@ -87,12 +84,12 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Max: 14
 
-AccessModifierIndentation:
+Layout/AccessModifierIndentation:
   Exclude:
     - 'lib/rspec/expectations/syntax.rb' # Too much diff to fix
 
 # Offense count: 7
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   Enabled: false
 
 Layout/SpaceInsideArrayLiteralBrackets:
@@ -111,7 +108,7 @@ Lint/AmbiguousRegexpLiteral:
   Exclude:
     - 'features/step_definitions/*'
 
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Exclude:
     - benchmarks/**/*
 

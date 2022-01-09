@@ -91,7 +91,7 @@ platforms :jruby do
 end
 
 if RUBY_VERSION >= '2.4' && RUBY_ENGINE == 'ruby'
-  gem 'rubocop', "~> 0.52.1"
+  gem 'rubocop', "~> 1.0", "< 1.12"
 end
 
 if RUBY_VERSION < '2.0.0'
