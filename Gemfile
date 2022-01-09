@@ -39,7 +39,7 @@ end
 gem "jruby-openssl", platforms: :jruby
 
 if RUBY_VERSION >= '2.4' && RUBY_ENGINE == 'ruby'
-  gem 'rubocop', "~> 0.52.1"
+  gem 'rubocop', "~> 1.0", "< 1.12"
 end
 
 eval File.read('Gemfile-custom') if File.exist?('Gemfile-custom')
