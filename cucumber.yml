@@ -1,10 +1,15 @@
 <%
-def tags(tag)
+
+USE_TILDE_TAGS = !defined?(::RUBY_ENGINE_VERSION) || (::RUBY_ENGINE_VERSION < '2.0.0')
+NOT_WIP_TAG = USE_TILDE_TAGS ? '~@wip' : '"not @wip"'
+NOT_RUBY_1_9_TAG = USE_TILDE_TAGS ? '~@ruby-1.9' : '"not @ruby-1.9"'
+
+def tags(tag = NOT_WIP_TAG)
   tags = [tag]
-  tags << "~@ruby-1.9" if RUBY_VERSION.to_f < 1.9
+  tags << NOT_RUBY_1_9_TAG if RUBY_VERSION.to_f < 1.9
   tags.join(" --tags ")
 end
 %>
 
-default: --require features --tags <%= tags("~@wip") %> --format progress
+default: --require features --tags <%= tags %> --format progress
 wip: --require features --tags @wip:3 --wip features
