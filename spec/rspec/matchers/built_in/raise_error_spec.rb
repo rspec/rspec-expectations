@@ -245,7 +245,7 @@ RSpec.describe "expect { ... }.to raise_error(message)" do
   it "fails if any other error is raised with the wrong message" do
     expect do
       expect { raise NameError.new('blarg') }.to raise_error('blah')
-    end.to fail_with(/expected Exception with \"blah\", got #<NameError: blarg>/)
+    end.to fail_with(/expected Exception with \"blah\", got #<NameError: blarg/)
   end
 
   it 'includes the backtrace of any other error in the failure message' do
@@ -286,7 +286,7 @@ RSpec.describe "expect { ... }.to raise_error.with_message(message)" do
   it "fails if any other error is raised with the wrong message" do
     expect do
       expect { raise NameError.new('blarg') }.to raise_error.with_message('blah')
-    end.to fail_with(/expected Exception with \"blah\", got #<NameError: blarg>/)
+    end.to fail_with(/expected Exception with \"blah\", got #<NameError: blarg/)
   end
 end
 
