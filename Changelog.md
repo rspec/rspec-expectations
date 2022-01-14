@@ -1,5 +1,5 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.1...main)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.2...main)
 
 Enhancements:
 
@@ -9,6 +9,9 @@ Deprecations:
 
 * Print a deprecation message when using the implicit block expectation syntax.
   (Phil Pirozhkov, #1139)
+
+### 3.10.2 / 2022-01-14
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.1...v3.10.2)
 
 Bug Fixes:
 
