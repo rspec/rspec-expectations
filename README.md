@@ -119,7 +119,7 @@ expect(actual).to be_a_kind_of(expected)      # another alias
 ### Truthiness
 
 ```ruby
-expect(actual).to be_truthy   # passes if actual is truthy (not nil or false)
+expect(actual).to be_truthy   # passes if actual is truthy (not nil nor false)
 expect(actual).to be true     # passes if actual == true
 expect(actual).to be_falsy    # passes if actual is falsy (nil or false)
 expect(actual).to be false    # passes if actual == false
