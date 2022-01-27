@@ -1,4 +1,4 @@
-# This file was generated on 2022-01-26T13:58:53+00:00 from the rspec-dev repo.
+# This file was generated on 2022-01-27T11:25:54+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 function is_mri {
@@ -95,22 +95,9 @@ function is_ruby_25_plus {
   fi
 }
 
-function is_ruby_31_plus {
-  if ruby -e "exit(RUBY_VERSION.to_f >= 3.1)"; then
-    return 0
-  else
-    return 1
-  fi
-}
-
 function rspec_rails_compatible {
   if is_ruby_25_plus; then
-    # TODO remove when RSpec-Rails build is 3.1 safe by default
-    if is_ruby_31_plus; then
-      return 1
-    else
-      return 0
-    fi
+    return 0
   else
     return 1
   fi
