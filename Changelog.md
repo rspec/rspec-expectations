@@ -128,7 +128,7 @@ Bug Fixes:
 * Prevent composed `all` matchers from leaking into their siblings leading to duplicate
   failures. (Jamie English, #1086)
 * Prevent objects which change their hash on comparison from failing change checks.
-  (Phil Pirozhkov, #1110)
+  (Phil Pirozhkov, #1100)
 * Issue an `ArgumentError` rather than a `NoMethodError` when `be_an_instance_of` and
   `be_kind_of` matchers encounter objects not supporting those methods.
   (Taichi Ishitani, #1107)
