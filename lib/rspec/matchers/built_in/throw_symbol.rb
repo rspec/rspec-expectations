@@ -88,6 +88,8 @@ module RSpec
         end
 
         # @api private
+        # Indicates this matcher matches against a block.
+        # @return [True]
         def supports_block_expectations?
           true
         end
