@@ -1,6 +1,11 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.0...main)
 
+Enhancements:
+
+* Add `an_array_matching` alias for `match_array` to improve readability as an argument
+  matcher. (Mark Schneider, #1361)
+
 ### 3.11.0 / 2022-02-09
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.2...v3.11.0)
 
