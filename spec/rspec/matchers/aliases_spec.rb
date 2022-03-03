@@ -294,6 +294,14 @@ module RSpec
 
     specify do
       expect(
+        an_array_matching([1, 2])
+      ).to be_aliased_to(
+        match_array([1, 2])
+      ).with_description('an array containing exactly 1 and 2')
+    end
+
+    specify do
+      expect(
         a_block_outputting('foo').to_stdout
       ).to be_aliased_to(
         output('foo').to_stdout
