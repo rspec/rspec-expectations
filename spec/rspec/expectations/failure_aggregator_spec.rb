@@ -440,6 +440,10 @@ module RSpec::Expectations
         def exception_complement(block_levels)
           ""
         end
+      elsif RSpec::Support::Ruby.truffleruby?
+        def exception_complement(block_levels)
+          ":in `block (#{block_levels} levels) in <module:Expectations>'"
+        end
       elsif RUBY_VERSION > "2.0.0"
         def exception_complement(block_levels)
           ":in `block in Expectations'"
