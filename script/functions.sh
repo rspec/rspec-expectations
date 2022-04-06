@@ -1,4 +1,4 @@
-# This file was generated on 2022-01-30T10:38:31+00:00 from the rspec-dev repo.
+# This file was generated on 2022-04-05T22:34:37+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -192,6 +192,9 @@ function run_all_spec_suites {
   fold "rspec-expectations specs" run_spec_suite_for "rspec-expectations"
   fold "rspec-mocks specs" run_spec_suite_for "rspec-mocks"
   if rspec_rails_compatible; then
+    if ! is_ruby_27_plus; then
+      export RAILS_VERSION='~> 6.1.0'
+    fi
     fold "rspec-rails specs" run_spec_suite_for "rspec-rails"
   fi
 
