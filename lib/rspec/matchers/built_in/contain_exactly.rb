@@ -31,6 +31,14 @@ module RSpec
           "contain exactly#{list}"
         end
 
+        def matches?(actual)
+          @pairings_maximizer = nil
+          @best_solution = nil
+          @extra_items = nil
+          @missing_items = nil
+          super(actual)
+        end
+
       private
 
         def generate_failure_message

@@ -473,6 +473,32 @@ RSpec.describe "Composing `contain_exactly` with other matchers" do
   end
 end
 
+RSpec.describe "Reusing a matcher that memoizes state" do
+  require "rspec/matchers/fail_matchers"
+
+  it "works properly in spite of the memoization" do
+    matcher = contain_exactly(eq(1))
+
+    expect {
+      expect([2]).to matcher
+    }.to fail_including(<<-MESSAGE)
+expected collection contained:  [(eq 1)]
+actual collection contained:    [2]
+the missing elements were:      [(eq 1)]
+the extra elements were:        [2]
+    MESSAGE
+
+    expect {
+      expect([3]).to matcher
+    }.to fail_including(<<-MESSAGE)
+expected collection contained:  [(eq 1)]
+actual collection contained:    [3]
+the missing elements were:      [(eq 1)]
+the extra elements were:        [3]
+    MESSAGE
+  end
+end
+
 module RSpec
   module Matchers
     module BuiltIn
