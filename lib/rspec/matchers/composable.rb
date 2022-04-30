@@ -126,7 +126,7 @@ module RSpec
       # this method when using `values_match?`, so that any memoization
       # does not "leak" between checks.
       def with_matchers_cloned(object)
-        if Matchers.is_a_matcher?(object)
+        if Matchers.is_a_matcher?(object) && !(::RSpec::Matchers::BuiltIn::HaveAttributes === object)
           object.clone
         elsif Hash === object
           Hash[with_matchers_cloned(object.to_a)]

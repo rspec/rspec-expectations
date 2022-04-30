@@ -115,6 +115,18 @@ RSpec.describe "#have_attributes matcher" do
         }.to fail_including("expected #{object_inspect person} to have attributes {:age => (a value < 10)}")
       end
     end
+
+    describe "expect([...]).to match(have_attributes(with_one_attribute))" do
+      it "fails with a clear message when attributes does not match" do
+        expect {
+          expect(person).to have_attributes(:age => 10)
+        }.to fail_including("expected #{object_inspect person} to have attributes {:age => 10} but had attributes {:age => 33}")
+
+        expect {
+          expect([person]).to match [have_attributes(:age => 10)]
+        }.to fail_including("expected [#{object_inspect person}] to match [(have attributes {:age => 10} but had attributes {:age => 33})]")
+      end
+    end
   end
 
   describe "expect(...).to_not have_attributes(with_one_attribute)" do
