@@ -454,3 +454,36 @@ Feature: Define a custom matcher
       """
     When I run `rspec ./alias_spec.rb --format documentation`
     Then the exit status should be 0
+
+  Scenario: With expectation errors that bubble up
+
+    By default the match block will swallow expectation errors (e.g. caused by using an expectation such as `expect(1).to eq 2`), if you wish to allow these to bubble up, pass in the option `:notify_expectation_failures => true`.
+
+    Given a file named "bubbling_expectation_errors_spec.rb" with:
+      """ruby
+      RSpec::Matchers.define :be_a_palindrome do
+        match(:notify_expectation_failures => true) do |actual|
+          expect(actual).to be_a(String)
+          expect(actual.reverse).to eq(actual)
+        end
+      end
+
+      RSpec.describe "a custom matcher that bubbles up expectation errors" do
+        it "bubbles expectation errors" do
+          expect("carriage").to be_a_palindrome
+        end
+      end
+      """
+    When I run `rspec bubbling_expectation_errors_spec.rb`
+    Then the output should contain all of these:
+      | Failures:                                                                           |
+
+      |   1) a custom matcher that bubbles up expectation errors bubbles expectation errors |
+      |      Failure/Error: expect(actual.reverse).to eq(actual)                            |
+
+      |        expected: "carriage"                                                         |
+      |             got: "egairrac"                                                         |
+
+      |        (compared using ==)                                                          |
+      |      # ./bubbling_expectation_errors_spec.rb:4                                      |
+      |      # ./bubbling_expectation_errors_spec.rb:10                                     |
