@@ -454,3 +454,34 @@ Feature: Define a custom matcher
       """
     When I run `rspec ./alias_spec.rb --format documentation`
     Then the exit status should be 0
+
+  Scenario: With expectation errors that bubble up
+
+    By default the match block will swallow expectation errors (e.g. caused by using an expectation such as `expect(1).to eq 2`), if you with to allow these to bubble up, pass in the option `:notify_expectation_failures => true`.
+
+    Given a file named "bubbling_expectation_errors_spec.rb" with:
+      """ruby
+      RSpec::Matchers.define :be_close_to_pi do
+        match(:notify_expectation_failures => true) do |actual|
+          expect(actual).to be_a(Float)
+          expect(actual).to be_within(0.0015).of(Math::PI)
+        end
+      end
+
+      RSpec.describe "a custom matcher that bubbles up expectation errors" do
+        it "bubbles expectation errors" do
+          expect(3.0).to be_close_to_pi
+        end
+      end
+      """
+    When I run `rspec ./bubbling_expectation_errors_spec.rb`
+    Then it should fail with:
+      """
+      Failures:
+
+        1) a custom matcher that bubbles up expectation errors bubbles expectation errors
+           Failure/Error: expect(actual).to be_within(0.0015).of(Math::PI)
+             expected 3.0 to be within 0.0015 of 3.141592653589793
+           # ./bubbling_expectation_errors_spec.rb:4:in `block (2 levels) in <top (required)>'
+           # ./bubbling_expectation_errors_spec.rb:10:in `block (2 levels) in <top (required)>'
+      """
