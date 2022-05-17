@@ -457,7 +457,7 @@ Feature: Define a custom matcher
 
   Scenario: With expectation errors that bubble up
 
-    By default the match block will swallow expectation errors (e.g. caused by using an expectation such as `expect(1).to eq 2`), if you with to allow these to bubble up, pass in the option `:notify_expectation_failures => true`.
+    By default the match block will swallow expectation errors (e.g. caused by using an expectation such as `expect(1).to eq 2`), if you wish to allow these to bubble up, pass in the option `:notify_expectation_failures => true`.
 
     Given a file named "bubbling_expectation_errors_spec.rb" with:
       """ruby
