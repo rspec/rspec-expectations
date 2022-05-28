@@ -461,27 +461,29 @@ Feature: Define a custom matcher
 
     Given a file named "bubbling_expectation_errors_spec.rb" with:
       """ruby
-      RSpec::Matchers.define :be_close_to_pi do
+      RSpec::Matchers.define :be_a_palindrome do
         match(:notify_expectation_failures => true) do |actual|
-          expect(actual).to be_a(Float)
-          expect(actual).to be_within(0.0015).of(Math::PI)
+          expect(actual).to be_a(String)
+          expect(actual.reverse).to eq(actual)
         end
       end
 
       RSpec.describe "a custom matcher that bubbles up expectation errors" do
         it "bubbles expectation errors" do
-          expect(3.0).to be_close_to_pi
+          expect("carriage").to be_a_palindrome
         end
       end
       """
-    When I run `rspec ./bubbling_expectation_errors_spec.rb`
-    Then it should fail with:
-      """
-      Failures:
+    When I run `rspec bubbling_expectation_errors_spec.rb`
+    Then the output should contain all of these:
+      | Failures:                                                                           |
 
-        1) a custom matcher that bubbles up expectation errors bubbles expectation errors
-           Failure/Error: expect(actual).to be_within(0.0015).of(Math::PI)
-             expected 3.0 to be within 0.0015 of 3.141592653589793
-           # ./bubbling_expectation_errors_spec.rb:4:in `block (2 levels) in <top (required)>'
-           # ./bubbling_expectation_errors_spec.rb:10:in `block (2 levels) in <top (required)>'
-      """
+      |   1) a custom matcher that bubbles up expectation errors bubbles expectation errors |
+      |      Failure/Error: expect(actual.reverse).to eq(actual)                            |
+
+      |        expected: "carriage"                                                         |
+      |             got: "egairrac"                                                         |
+
+      |        (compared using ==)                                                          |
+      |      # ./bubbling_expectation_errors_spec.rb:4                                      |
+      |      # ./bubbling_expectation_errors_spec.rb:10                                     |
