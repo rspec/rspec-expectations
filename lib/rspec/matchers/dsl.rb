@@ -306,6 +306,7 @@ module RSpec
             @chained_method_clauses.push([method_name, args])
             self
           end
+          ruby2_keywords method_name if respond_to?(:ruby2_keywords, true)
         end
 
         def assign_attributes(attr_names)
