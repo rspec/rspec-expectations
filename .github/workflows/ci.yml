@@ -1,4 +1,4 @@
-# This file was generated on 2022-04-05T21:59:01+01:00 from the rspec-dev repo.
+# This file was generated on 2022-06-01T12:52:45+02:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -20,7 +20,7 @@ jobs:
     name: Rubocop
     runs-on: 'ubuntu-20.04'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
@@ -72,7 +72,7 @@ jobs:
     continue-on-error: ${{ matrix.allow_failure || endsWith(matrix.ruby, 'head') }}
     env: ${{ matrix.env }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
           bundler: ${{ matrix.bundler || '2.2.22' }}
@@ -117,7 +117,7 @@ jobs:
       LEGACY_CI: true
       JRUBY_OPTS: ${{ matrix.container.jruby_opts || '--dev' }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: ${{ matrix.container.pre }}
       - run: script/legacy_setup.sh
       - run: bundle exec bin/rspec
@@ -138,7 +138,7 @@ jobs:
           - 2.1.9
       fail-fast: false
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
           bundler: '2.2.22'
