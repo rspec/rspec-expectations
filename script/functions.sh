@@ -1,4 +1,4 @@
-# This file was generated on 2022-06-01T12:52:45+02:00 from the rspec-dev repo.
+# This file was generated on 2022-09-08T12:42:03+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

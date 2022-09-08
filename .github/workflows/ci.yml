@@ -1,4 +1,4 @@
-# This file was generated on 2022-06-01T12:52:45+02:00 from the rspec-dev repo.
+# This file was generated on 2022-09-08T12:42:03+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -11,6 +11,8 @@ on:
   pull_request:
     branches:
       - '*'
+permissions:
+  contents: read
 env:
   RSPEC_CI: true
   # This tells rspec-rails what branch to run in ci
