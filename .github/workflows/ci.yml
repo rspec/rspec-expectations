@@ -1,4 +1,4 @@
-# This file was generated on 2022-01-10T22:24:10+00:00 from the rspec-dev repo.
+# This file was generated on 2022-09-09T14:27:55+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -11,6 +11,8 @@ on:
   pull_request:
     branches:
       - '*'
+permissions:
+  contents: read
 env:
   RSPEC_CI: true
   # This tells rspec-rails what branch to run in ci
@@ -20,7 +22,7 @@ jobs:
     name: Rubocop
     runs-on: 'ubuntu-20.04'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
@@ -62,7 +64,7 @@ jobs:
     continue-on-error: ${{ matrix.allow_failure || endsWith(matrix.ruby, 'head') }}
     env: ${{ matrix.env }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
           bundler: ${{ matrix.bundler || '2.2.22' }}
@@ -86,7 +88,7 @@ jobs:
           - 2.3
       fail-fast: false
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
         with:
           bundler: '2.2.22'
