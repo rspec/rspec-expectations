@@ -43,7 +43,7 @@ Feature: `change` matcher
         end
       end
       """
-    When I run `rspec spec/example_spec.rb`
+    When I run `rspec --order defined spec/example_spec.rb`
     Then the output should contain "1 failure"
     Then the output should contain "expected `Counter.count` to have changed by 2, but was changed by 1"
 
