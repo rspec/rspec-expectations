@@ -23,7 +23,11 @@ end
 
 gem 'simplecov'
 
-gem 'ffi', '~> 1.12.0'
+if RUBY_VERSION < '2.4.0' && !!(RbConfig::CONFIG['host_os'] =~ /cygwin|mswin|mingw|bccwin|wince|emx/)
+  gem 'ffi', '< 1.15'
+else
+  gem 'ffi', '~> 1.15'
+end
 
 # Version 5.12 of minitest requires Ruby 2.4
 if RUBY_VERSION < '2.4.0'
