@@ -125,6 +125,12 @@ RSpec.describe "exist matcher" do
           expect(File).to exist __FILE__
         end
       end
+
+      context 'FileTest has deprecated exists?' do
+        it 'will not call exists? triggering the warning' do
+          expect(FileTest).to exist __FILE__
+        end
+      end
     end
   end
 
