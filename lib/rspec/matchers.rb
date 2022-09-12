@@ -36,7 +36,7 @@ module RSpec
   #     expect([]).to be_empty     # => [].empty?() | passes
   #     expect([]).not_to be_empty # => [].empty?() | fails
   #
-  # In addtion to prefixing the predicate matchers with "be_", you can also use "be_a_"
+  # In addition to prefixing the predicate matchers with "be_", you can also use "be_a_"
   # and "be_an_", making your specs read much more naturally:
   #
   #     expect("a string").to be_an_instance_of(String) # =>"a string".instance_of?(String) # passes
@@ -753,8 +753,8 @@ module RSpec
 
     # With no args, matches if any error is raised.
     # With a named error, matches only if that specific error is raised.
-    # With a named error and messsage specified as a String, matches only if both match.
-    # With a named error and messsage specified as a Regexp, matches only if both match.
+    # With a named error and message specified as a String, matches only if both match.
+    # With a named error and message specified as a Regexp, matches only if both match.
     # Pass an optional block to perform extra verifications on the exception matched
     #
     # @example
