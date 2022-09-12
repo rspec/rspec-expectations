@@ -16,6 +16,8 @@ if RUBY_VERSION < '1.9.3'
   gem 'rake', '< 11.0.0' # rake 11 requires Ruby 1.9.3 or later
 elsif RUBY_VERSION < '2.0.0'
   gem 'rake', '< 12.0.0' # rake 12 requires Ruby 2.0.0 or later
+elsif RUBY_VERSION < '2.2.0'
+  gem 'rake', '12.3.2'
 else
   gem 'rake', '>= 12.3.3'
 end
