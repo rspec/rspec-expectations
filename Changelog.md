@@ -10,6 +10,8 @@ Bug Fixes:
 
 * Allow the `contain_exactly` matcher to be reused by resetting its
   internals on `matches?` (@bclayman-sq, #1326)
+* Using the exist matcher on `FileTest` no longer produces a deprecation warning.
+  (Ryo Nakamura, #1383)
 
 ### 3.11.0 / 2022-02-09
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.2...v3.11.0)
