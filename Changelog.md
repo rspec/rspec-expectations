@@ -1,10 +1,13 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.0...main)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.1...main)
 
 Enhancements:
 
 * Add `an_array_matching` alias for `match_array` to improve readability as an argument
   matcher. (Mark Schneider, #1361)
+
+### 3.11.1 / 2022-09-12
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.0...v3.11.1)
 
 Bug Fixes:
 
