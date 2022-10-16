@@ -235,6 +235,10 @@ Style/ClassEqualityComparison:
     - 'spec/rspec/matchers/aliases_spec.rb'
     - 'spec/support/matchers.rb'
 
+Metrics/ClassLength:
+  Exclude:
+    - lib/rspec/matchers/built_in/contain_exactly.rb
+
 # Offense count: 11
 # Cop supports --auto-correct.
 # Configuration parameters: Keywords.
