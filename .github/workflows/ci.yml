@@ -75,46 +75,6 @@ jobs:
       - run: bundle binstubs --all
       - run: script/run_build
 
-  legacy:
-    name: Legacy Ruby Builds (${{ matrix.container.version }})
-    runs-on: ubuntu-20.04
-    container:
-      image: ${{ matrix.container.tag }}
-      options: ${{ matrix.container.options || '--add-host github-complains-if-this-is-empty.com:127.0.0.1' }}
-    strategy:
-      fail-fast: false
-      matrix:
-        container:
-          - version: "2.0"
-            tag: rspec/ci:2.0.0
-          - version: "1.9.3"
-            tag: rspec/ci:1.9.3
-          - version: "1.9.2"
-            tag: rspec/ci:1.9.2
-            options: "--add-host rubygems.org:151.101.129.227 --add-host api.rubygems.org:151.101.129.227"
-          - version: "1.8.7"
-            tag: rspec/ci:1.8.7
-            options: "--add-host rubygems.org:151.101.129.227 --add-host api.rubygems.org:151.101.129.227"
-          - version: "REE"
-            tag: rspec/ci:ree
-            options: "--add-host rubygems.org:151.101.129.227 --add-host api.rubygems.org:151.101.129.227"
-          - version: "JRuby 1.7"
-            tag: rspec/ci:jruby-1.7
-          - version: "JRuby 1.7 1.8 mode"
-            tag: rspec/ci:jruby-1.7
-            jruby_opts: '--dev --1.8'
-            pre: gem uninstall jruby-openssl
-            options: "--add-host rubygems.org:151.101.129.227 --add-host api.rubygems.org:151.101.129.227"
-    env:
-      LEGACY_CI: true
-      JRUBY_OPTS: ${{ matrix.container.jruby_opts || '--dev' }}
-    steps:
-      - uses: actions/checkout@v3
-      - run: ${{ matrix.container.pre }}
-      - run: script/legacy_setup.sh
-      - run: bundle exec bin/rspec
-      - run: bundle exec script/cucumber.sh
-
   windows:
     name: Ruby ${{ matrix.ruby }} (Windows)
     runs-on: windows-latest
