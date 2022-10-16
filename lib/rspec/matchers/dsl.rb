@@ -114,7 +114,7 @@ module RSpec
         #
         # By default the match block will swallow expectation errors (e.g.
         # caused by using an expectation such as `expect(1).to eq 2`), if you
-        # with to allow these to bubble up, pass in the option
+        # wish to allow these to bubble up, pass in the option
         # `:notify_expectation_failures => true`.
         #
         # @param [Hash] options for defining the behavior of the match block.
@@ -143,7 +143,7 @@ module RSpec
         #
         # By default the match block will swallow expectation errors (e.g.
         # caused by using an expectation such as `expect(1).to eq 2`), if you
-        # with to allow these to bubble up, pass in the option
+        # wish to allow these to bubble up, pass in the option
         # `:notify_expectation_failures => true`.
         #
         # @param [Hash] options for defining the behavior of the match block.

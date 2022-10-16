@@ -1,5 +1,5 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.2...main)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.1...main)
 
 Breaking Changes:
 
@@ -15,6 +15,24 @@ Breaking Changes:
   (Phil Pirozhkov, #1285)
 * Remove deprecated `match_regex` matcher. (Phil Pirozhkov, #1288)
 * Remove deprecated `StartAndEndWith` matcher base class. (Phil Pirozhkov, #1288)
+
+Enhancements:
+
+* Add `an_array_matching` alias for `match_array` to improve readability as an argument
+  matcher. (Mark Schneider, #1361)
+
+### 3.11.1 / 2022-09-12
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.0...v3.11.1)
+
+Bug Fixes:
+
+* Allow the `contain_exactly` matcher to be reused by resetting its
+  internals on `matches?` (@bclayman-sq, #1326)
+* Using the exist matcher on `FileTest` no longer produces a deprecation warning.
+  (Ryo Nakamura, #1383)
+
+### 3.11.0 / 2022-02-09
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.10.2...v3.11.0)
 
 Enhancements:
 

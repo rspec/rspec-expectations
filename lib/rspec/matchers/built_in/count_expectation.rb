@@ -2,7 +2,7 @@ module RSpec
   module Matchers
     module BuiltIn
       # @api private
-      # Asbtract class to implement `once`, `at_least` and other
+      # Abstract class to implement `once`, `at_least` and other
       # count constraints.
       module CountExpectation
         # @api public

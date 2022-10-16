@@ -21,7 +21,9 @@ group :documentation do
   gem 'github-markup', :platform => :mri
 end
 
-gem 'simplecov'
+group :coverage do
+  gem 'simplecov'
+end
 
 if RUBY_VERSION < '2.4.0' && !!(RbConfig::CONFIG['host_os'] =~ /cygwin|mswin|mingw|bccwin|wince|emx/)
   gem 'ffi', '< 1.15'
@@ -37,7 +39,7 @@ end
 gem "jruby-openssl", platforms: :jruby
 
 if RUBY_VERSION >= '2.4' && RUBY_ENGINE == 'ruby'
-  gem 'rubocop', "~> 0.52.1"
+  gem 'rubocop', "~> 1.0", "< 1.12"
 end
 
 eval File.read('Gemfile-custom') if File.exist?('Gemfile-custom')

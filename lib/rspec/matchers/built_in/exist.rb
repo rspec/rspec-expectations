@@ -81,7 +81,7 @@ module RSpec
           end
 
           def deprecated(predicate, actual)
-            predicate == :exists? && File == actual
+            predicate == :exists? && (File == actual || FileTest == actual)
           end
         end
       end
