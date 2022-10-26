@@ -16,7 +16,7 @@ permissions:
 env:
   RSPEC_CI: true
   # This tells rspec-rails what branch to run in ci
-  RSPEC_VERSION: '= 3.12.0.pre'
+  RSPEC_VERSION: '~> 3.12.0'
 jobs:
   rubocop:
     name: Rubocop
