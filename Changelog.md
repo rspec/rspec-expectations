@@ -1,5 +1,5 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.1...main)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.0...main)
 
 Breaking Changes:
 
@@ -15,6 +15,9 @@ Breaking Changes:
   (Phil Pirozhkov, #1285)
 * Remove deprecated `match_regex` matcher. (Phil Pirozhkov, #1288)
 * Remove deprecated `StartAndEndWith` matcher base class. (Phil Pirozhkov, #1288)
+
+### 3.12.0 / 2022-10-26
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.1...v3.12.0)
 
 Enhancements:
 
