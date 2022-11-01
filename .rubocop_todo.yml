@@ -178,6 +178,11 @@ Lint/UselessTimes:
 Metrics/AbcSize:
   Max: 27
 
+# Offense count: 1
+Metrics/ClassLength:
+  Exclude:
+    - 'lib/rspec/matchers/built_in/contain_exactly.rb'
+
 # Offense count: 69
 # Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
 # AllowedNames: at, by, db, id, in, io, ip, of, on, os, pp, to
