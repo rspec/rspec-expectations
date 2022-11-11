@@ -1,6 +1,7 @@
 module RSpec
   module Matchers
     RSpec.describe AliasedMatcher do
+      let(:base_matcher_desc) { "my base matcher description" }
       RSpec::Matchers.define :my_base_matcher do
         match { |actual| actual == foo }
 
@@ -9,7 +10,7 @@ module RSpec
         end
 
         def description
-          "my base matcher description"
+          base_matcher_desc
         end
       end
       RSpec::Matchers.alias_matcher :alias_of_my_base_matcher, :my_base_matcher
@@ -77,6 +78,15 @@ module RSpec
       it 'provides a default description override based on the old and new games' do
         matcher = my_blockless_override
         expect(matcher.description).to eq("my blockless override description")
+      end
+
+      context "when the matcher's description starts with the matcher's name" do
+        let(:base_matcher_desc) { "my base matcher my base matcher" }
+
+        it 'only overrides the first instance of the name in the description' do
+          matcher = alias_of_my_base_matcher
+          expect(matcher.description).to eq("alias of my base matcher my base matcher")
+        end
       end
 
       it 'works properly with a chained method off a negated matcher' do

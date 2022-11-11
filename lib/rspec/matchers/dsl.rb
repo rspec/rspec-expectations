@@ -29,10 +29,8 @@ module RSpec
       #   logic. The yielded arg is the original description or failure message. If no
       #   block is provided, a default override is used based on the old and new names.
       # @see RSpec::Matchers
-      def alias_matcher(new_name, old_name, options={}, &description_override)
-        description_override ||= lambda do |old_desc|
-          old_desc.gsub(EnglishPhrasing.split_words(old_name), EnglishPhrasing.split_words(new_name))
-        end
+      def alias_matcher(new_name, old_name, options={}, &description_block)
+        description_override = AliasDescription.new(new_name, old_name, description_block)
         klass = options.fetch(:klass) { AliasedMatcher }
 
         define_method(new_name) do |*args, &block|
