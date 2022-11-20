@@ -15,6 +15,8 @@ Breaking Changes:
   (Phil Pirozhkov, #1285)
 * Remove deprecated `match_regex` matcher. (Phil Pirozhkov, #1288)
 * Remove deprecated `StartAndEndWith` matcher base class. (Phil Pirozhkov, #1288)
+* Raise an exception when a `nil` is passed as the first argument to `raise_error`.
+  (Phil Pirozhkov, #1389)
 
 ### 3.12.0 / 2022-10-26
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.1...v3.12.0)
