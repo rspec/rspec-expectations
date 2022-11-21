@@ -19,10 +19,10 @@ module RSpec
           @block = block
           @actual_error = nil
           @warn_about_bare_error = UndefinedValue === expected_error_or_message
-          @warn_about_nil_error = expected_error_or_message.nil?
+          raise_nil_argument_error! if expected_error_or_message.nil?
 
           case expected_error_or_message
-          when nil, UndefinedValue
+          when UndefinedValue
             @expected_error = Exception
             @expected_message = expected_message
           when String
@@ -65,7 +65,6 @@ module RSpec
 
           unless negative_expectation
             warn_about_bare_error! if warn_about_bare_error?
-            warn_about_nil_error! if warn_about_nil_error?
             eval_block if ready_to_eval_block?
           end
 
@@ -158,8 +157,6 @@ module RSpec
                          "`expect { }.not_to raise_error(SpecificErrorClass)`"
                        elsif @expected_message
                          "`expect { }.not_to raise_error(message)`"
-                       elsif @warn_about_nil_error
-                         "`expect { }.not_to raise_error(nil)`"
                        end
 
           return unless expression
@@ -175,10 +172,6 @@ module RSpec
           @warn_about_bare_error && @block.nil?
         end
 
-        def warn_about_nil_error?
-          @warn_about_nil_error
-        end
-
         def warn_about_bare_error!
           handle_warning("Using the `raise_error` matcher without providing a specific " \
                          "error or message risks false positives, since `raise_error` " \
@@ -192,17 +185,15 @@ module RSpec
                          "_positives = :nothing`")
         end
 
-        def warn_about_nil_error!
-          handle_warning("Using the `raise_error` matcher with a `nil` error is probably " \
-                         "unintentional, it risks false positives, since `raise_error` " \
-                         "will match when Ruby raises a `NoMethodError`, `NameError` or " \
-                         "`ArgumentError`, potentially allowing the expectation to pass " \
-                         "without even executing the method you are intending to call. " \
-                         "#{warning}"\
-                         "Instead consider providing a specific error class or message. " \
-                         "This message can be suppressed by setting: " \
-                         "`RSpec::Expectations.configuration.on_potential_false" \
-                         "_positives = :nothing`")
+        def raise_nil_argument_error!
+          raise ArgumentError, "Using the `raise_error` matcher with a `nil` " \
+                "value is probably unintentional, it risks false positives, since " \
+                "`raise_error` will match when Ruby raises a `NoMethodError`" \
+                ", `NameError` or `ArgumentError`, potentially allowing the " \
+                "expectation to pass without even executing the method you "\
+                "are intending to call. " \
+                "#{warning}"\
+                "Instead provide a specific error class or message."
         end
 
         def warn_about_negative_false_positive!(expression)
