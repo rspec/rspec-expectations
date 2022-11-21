@@ -186,13 +186,14 @@ module RSpec
         end
 
         def raise_nil_argument_error!
-          raise "Using the `raise_error` matcher with a `nil` error is probably " \
-                "unintentional, it risks false positives, since `raise_error` " \
-                "will match when Ruby raises a `NoMethodError`, `NameError` or " \
-                "`ArgumentError`, potentially allowing the expectation to pass " \
-                "without even executing the method you are intending to call. " \
+          raise ArgumentError, "Using the `raise_error` matcher with a `nil` " \
+                "value is probably unintentional, it risks false positives, since " \
+                "`raise_error` will match when Ruby raises a `NoMethodError`" \
+                ", `NameError` or `ArgumentError`, potentially allowing the " \
+                "expectation to pass without even executing the method you "\
+                "are intending to call. " \
                 "#{warning}"\
-                "Instead consider providing a specific error class or message."
+                "Instead provide a specific error class or message."
         end
 
         def warn_about_negative_false_positive!(expression)
