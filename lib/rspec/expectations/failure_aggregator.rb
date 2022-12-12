@@ -48,6 +48,8 @@ module RSpec
         @seen_source_ids[source_id] = true
         assign_backtrace(failure) unless failure.backtrace
         failures << failure
+
+        nil
       end
 
     private
