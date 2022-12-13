@@ -40,6 +40,7 @@ module RSpec
           matcher.matcher_name = new_name if matcher.respond_to?(:matcher_name=)
           klass.new(matcher, description_override)
         end
+        ruby2_keywords new_name if respond_to?(:ruby2_keywords, true)
       end
 
       # Defines a negated matcher. The returned matcher's `description` and `failure_message`
