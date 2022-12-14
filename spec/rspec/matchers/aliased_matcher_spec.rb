@@ -87,6 +87,38 @@ module RSpec
         }.to fail
       end
 
+      if RSpec::Support::RubyFeatures.kw_args_supported?
+        eval <<-'RUBY', nil, __FILE__, __LINE__ + 1
+          class MyKeywordMatcher
+            def initialize(**kwargs); end
+            def matches?(other); true === other; end
+          end
+        RUBY
+
+        if RSpec::Support::RubyFeatures.distincts_kw_args_from_positional_hash?
+          eval <<-'RUBY', nil, __FILE__, __LINE__ + 1
+            def my_keyword_matcher(...) = MyKeywordMatcher.new(...)
+          RUBY
+        else
+          eval <<-'RUBY', nil, __FILE__, __LINE__ + 1
+            def my_keyword_matcher(**kw); MyKeywordMatcher.new(**kw); end
+          RUBY
+        end
+
+        eval <<-'RUBY', nil, __FILE__, __LINE__ + 1
+          RSpec::Matchers.alias_matcher :my_keyword_override, :my_keyword_matcher
+          RSpec::Matchers.define_negated_matcher :not_keyword_override, :my_keyword_matcher
+
+          it 'works properly with a keyword arguments matcher' do
+            expect(true).to my_keyword_override(some: :arg)
+          end
+
+          it 'works properly with a negated keyword arguments matcher' do
+            expect(false).to not_keyword_override(some: :arg)
+          end
+        RUBY
+      end
+
       context "when negating a matcher that does not define `description` (which is an optional part of the matcher protocol)" do
         def matcher_without_description
           matcher = Object.new
