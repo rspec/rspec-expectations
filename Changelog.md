@@ -1,6 +1,10 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.0...main)
 
+Bug Fixes:
+
+* Pass keyword arguments through to aliased (and thus negated) matchers. (Jon Rowe, #1394)
+
 ### 3.12.0 / 2022-10-26
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.1...v3.12.0)
 
