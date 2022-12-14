@@ -267,6 +267,7 @@ module RSpec::Expectations
 
     describe 'with MockExpectationError' do
       it 'does not allow modifications of the failure list in the test example' do
+        other_message = "undefined method `<<' for AggregatedFailure: #<Double (anonymous)> received unexpected message :get with (2):RSpec::Expectations::AggregatedFailure"
         expect {
           aggregate_failures do
             dbl = double
@@ -279,7 +280,7 @@ module RSpec::Expectations
               be_a(RSpec::Mocks::MockExpectationError)
             ],
             :other_errors => [
-              be_a(NoMethodError).and(have_attributes(:message => "undefined method `<<' for nil:NilClass"))
+              be_a(NoMethodError).and(have_attributes(:message => other_message))
             ]
           )
         )

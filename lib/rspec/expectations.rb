@@ -78,5 +78,6 @@ module RSpec
 
     autoload :BlockSnippetExtractor, "rspec/expectations/block_snippet_extractor"
     autoload :FailureAggregator,     "rspec/expectations/failure_aggregator"
+    autoload :AggregatedFailure,     "rspec/expectations/aggregated_failure"
   end
 end

@@ -49,7 +49,7 @@ module RSpec
         assign_backtrace(failure) unless failure.backtrace
         failures << failure
 
-        nil
+        AggregatedFailure.build(failure)
       end
 
     private
