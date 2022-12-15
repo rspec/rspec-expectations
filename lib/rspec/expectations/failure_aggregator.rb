@@ -4,7 +4,9 @@ module RSpec
     class FailureAggregator
       attr_reader :block_label, :metadata
 
+      # @private
       class AggregatedFailure
+        # @private
         MESSAGE =
           'AggregatedFailure: This method caused a failure which has been supressed to be aggregated into our failure report by returning this value, further errors can be ignored.'
 
