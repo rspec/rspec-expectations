@@ -12,7 +12,6 @@ module RSpec
           'supressed to be aggregated into our failure report by returning ' \
           'this value, further errors can be ignored.'
 
-
         def inspect
           MESSAGE
         end
