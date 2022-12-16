@@ -4,6 +4,21 @@ module RSpec
     class FailureAggregator
       attr_reader :block_label, :metadata
 
+      # @private
+      class AggregatedFailure
+        # @private
+        MESSAGE =
+          'AggregatedFailure: This method caused a failure which has been ' \
+          'supressed to be aggregated into our failure report by returning ' \
+          'this value, further errors can be ignored.'
+
+        def inspect
+          MESSAGE
+        end
+      end
+
+      AGGREGATED_FAILURE = AggregatedFailure.new
+
       def aggregate
         RSpec::Support.with_failure_notifier(self) do
           begin
@@ -48,6 +63,8 @@ module RSpec
         @seen_source_ids[source_id] = true
         assign_backtrace(failure) unless failure.backtrace
         failures << failure
+
+        AGGREGATED_FAILURE
       end
 
     private
