@@ -8,7 +8,10 @@ module RSpec
       class AggregatedFailure
         # @private
         MESSAGE =
-          'AggregatedFailure: This method caused a failure which has been supressed to be aggregated into our failure report by returning this value, further errors can be ignored.'
+          'AggregatedFailure: This method caused a failure which has been ' \
+          'supressed to be aggregated into our failure report by returning ' \
+          'this value, further errors can be ignored.'
+
 
         def inspect
           MESSAGE
