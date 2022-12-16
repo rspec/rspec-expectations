@@ -267,11 +267,6 @@ module RSpec::Expectations
 
     describe 'with MockExpectationError' do
       it 'does not allow modifications of the failure list in the test example' do
-        other_error_message =
-          'undefined method `<<\' for AggregatedFailure: This method caused a failure which has been supressed '\
-          'to be aggregated into our failure report by returning this value, further errors can be ignored.'\
-          ':RSpec::Expectations::FailureAggregator::AggregatedFailure'
-
         expect {
           aggregate_failures do
             dbl = double
