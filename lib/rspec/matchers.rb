@@ -704,7 +704,7 @@ module RSpec
 
     # An alternate form of `contain_exactly` that accepts
     # the expected contents as a single array arg rather
-    # that splatted out as individual items.
+    # than splatted out as individual items.
     #
     # @example
     #   expect(results).to contain_exactly(1, 2)
