@@ -1,6 +1,10 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.1...main)
 
+Bug Fixes:
+
+* Fix `exist` matcher warning when used with `Dir`. (Steve Dierker, #1398)
+
 ### 3.12.1 / 2022-12-16
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.0...v3.12.1)
 
