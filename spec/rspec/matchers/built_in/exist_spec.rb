@@ -131,6 +131,14 @@ RSpec.describe "exist matcher" do
           expect(FileTest).to exist __FILE__
         end
       end
+
+      if RUBY_VERSION > "1.9"
+        context 'Dir has deprecated exists?' do
+          it 'will not call exists? triggering the warning' do
+            expect(Dir).to exist Dir.pwd
+          end
+        end
+      end
     end
   end
 
