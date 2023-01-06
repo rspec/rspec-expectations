@@ -83,7 +83,7 @@ module RSpec
         RSpec::Support::ObjectFormatter.format(object)
       end
 
-      # Transforms the given data structue (typically a hash or array)
+      # Transforms the given data structure (typically a hash or array)
       # into a new data structure that, when `#inspect` is called on it,
       # will provide descriptions of any contained matchers rather than
       # the normal `#inspect` output.
