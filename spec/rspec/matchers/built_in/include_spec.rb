@@ -1,6 +1,6 @@
 # This class fakes some behavior of
 # ActiveSupport::HashWithIndifferentAccess.
-# It dosen't convert recursively.
+# It doesn't convert recursively.
 class FakeHashWithIndifferentAccess < Hash
   class << self
     def from_hash(hsh)
