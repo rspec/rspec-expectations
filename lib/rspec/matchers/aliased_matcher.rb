@@ -99,14 +99,14 @@ module RSpec
       # by going through the effort of defining a negated matcher.
       #
       # However, if the override didn't actually change anything, then we
-      # should return the opposite failure message instead -- the overriden
+      # should return the opposite failure message instead -- the overridden
       # message is going to be confusing if we return it as-is, as it represents
       # the non-negated failure message for a negated match (or vice versa).
       def optimal_failure_message(same, inverted)
         if DefaultFailureMessages.has_default_failure_messages?(@base_matcher)
           base_message = @base_matcher.__send__(same)
-          overriden    = @description_block.call(base_message)
-          return overriden if overriden != base_message
+          overridden    = @description_block.call(base_message)
+          return overridden if overridden != base_message
         end
 
         @base_matcher.__send__(inverted)

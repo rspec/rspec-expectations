@@ -314,7 +314,7 @@ RSpec.describe "expect(...).to respond_to(:sym).with_unlimited_arguments" do
     expect(obj).to respond_to(:foo).with(3).arguments.and_unlimited_arguments
   end
 
-  it "passes when target is new and initialize responds to any number of aguments" do
+  it "passes when target is new and initialize responds to any number of arguments" do
     # note we can't use the metaobject definition for initialize
     klass_2 = Class.new { def initialize(*args); end }
     expect(klass_2).to respond_to(:new).with_unlimited_arguments

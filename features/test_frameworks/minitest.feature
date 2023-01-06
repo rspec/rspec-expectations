@@ -20,7 +20,7 @@ Feature: Minitest integration
         def be_an_int
           # This is actually an internal rspec-expectations API, but is used
           # here to demonstrate that deprecation warnings from within
-          # rspec-expectations work correcty without depending on rspec-core
+          # rspec-expectations work correctly without depending on rspec-core
           RSpec.deprecate(:be_an_int, :replacement => :be_an_integer)
           be_an_integer
         end

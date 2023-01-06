@@ -266,7 +266,7 @@ RSpec.describe "expect(...).not_to be_predicate" do
       expect(actual).not_to be_happy
     end
 
-    it "shows actual comparision made when it fails" do
+    it "shows actual comparison made when it fails" do
       actual = double("actual", :happy? => 42)
       expect {
         expect(actual).not_to be_happy
@@ -814,7 +814,7 @@ RSpec.describe "expect(...).not_to with comparison operators" do
               '<Class>'
             end
 
-            define_method(operator) { |arg| self.non_existant_attribute == operator }
+            define_method(operator) { |arg| self.non_existent_attribute == operator }
           end.new
         ).to_not be.send(operator, 1)
       }.to fail_with(%(`expect(<Class>).not_to be #{operator} 1` not only FAILED, it is a bit confusing.))

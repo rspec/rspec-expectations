@@ -31,7 +31,7 @@ RSpec.describe "operator matchers", :uses_should do
       subject.should == "orange"
     end
 
-    it "works when #method is overriden" do
+    it "works when #method is overridden" do
       myobj = MethodOverrideObject.new
       expect {
         myobj.should == myobj
