@@ -1,6 +1,6 @@
 # This class fakes some behavior of
 # ActiveSupport::HashWithIndifferentAccess.
-# It dosen't convert recursively.
+# It doesn't convert recursively.
 class FakeHashWithIndifferentAccess < Hash
   class << self
     def from_hash(hsh)
@@ -959,7 +959,7 @@ RSpec.describe "#include matcher" do
         }.to fail_matching("expected #{['foo', 'bar', 'baz'].inspect} not to include (a string containing 'ar') and (a string containing 'az')")
       end
 
-      it 'fails if the some (but not all) of the matchers are satisifed' do
+      it 'fails if the some (but not all) of the matchers are satisfied' do
         expect {
           expect(['foo', 'bar', 'baz']).not_to include(a_string_containing("ar"), a_string_containing('bz'))
         }.to fail_matching("expected #{['foo', 'bar', 'baz'].inspect} not to include (a string containing 'ar')")

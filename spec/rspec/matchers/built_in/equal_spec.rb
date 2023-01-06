@@ -23,7 +23,7 @@ module RSpec
         expect(matcher.description).to eq "equal 1"
       end
 
-      context "when the expected object is falsey in conditinal semantics" do
+      context "when the expected object is falsey in conditional semantics" do
         it "describes itself with the expected object" do
           matcher = equal(nil)
           matcher.matches?(nil)

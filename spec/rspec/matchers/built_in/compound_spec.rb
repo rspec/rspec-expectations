@@ -318,7 +318,7 @@ module RSpec::Matchers::BuiltIn
         end
       end
 
-      context "when both mathers fail" do
+      context "when both matchers fail" do
         context "when both matchers have multi-line failure messages" do
           it 'fails with a well formatted message containing both sub-messages' do
             expect {

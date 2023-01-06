@@ -103,7 +103,7 @@ module RSpec::Matchers::BuiltIn
         end
       end
 
-      context "for a DSL-defined custom macher" do
+      context "for a DSL-defined custom matcher" do
         include_examples "detecting default failure message" do
           def build_matcher(&block)
             definition = Proc.new do
