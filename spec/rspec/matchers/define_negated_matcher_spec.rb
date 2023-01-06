@@ -159,20 +159,20 @@ module RSpec
         end
       end
 
-      context 'when the negated description is overriden' do
+      context 'when the negated description is overridden' do
         RSpec::Matchers.define :be_bigger_than_ten do
           match { |actual| actual > 10 }
         end
         RSpec::Matchers.define_negated_matcher :be_smaller_than_ten, :be_bigger_than_ten do |desc|
-          "#{desc.sub('bigger', 'smaller')} (overriden)"
+          "#{desc.sub('bigger', 'smaller')} (overridden)"
         end
 
         it 'overrides the description with the provided block' do
-          expect(be_smaller_than_ten.description).to eq("be smaller than ten (overriden)")
+          expect(be_smaller_than_ten.description).to eq("be smaller than ten (overridden)")
         end
 
         it 'overrides the failure message with the provided block' do
-          expect { expect(12).to be_smaller_than_ten }.to fail_with("expected 12 to be smaller than ten (overriden)")
+          expect { expect(12).to be_smaller_than_ten }.to fail_with("expected 12 to be smaller than ten (overridden)")
         end
       end
 

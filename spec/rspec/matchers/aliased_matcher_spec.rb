@@ -58,18 +58,18 @@ module RSpec
 
       it 'can get a method object for `description`' do
         matcher = my_base_matcher
-        decorated = AliasedMatcher.new(matcher, Proc.new { "overriden description" })
+        decorated = AliasedMatcher.new(matcher, Proc.new { "overridden description" })
 
-        expect(decorated.method(:description).call).to eq("overriden description")
+        expect(decorated.method(:description).call).to eq("overridden description")
       end
 
-      RSpec::Matchers.alias_matcher :my_overriden_matcher, :my_base_matcher do |desc|
-        desc + " (overriden)"
+      RSpec::Matchers.alias_matcher :my_overridden_matcher, :my_base_matcher do |desc|
+        desc + " (overridden)"
       end
 
       it 'overrides the description with the provided block' do
-        matcher = my_overriden_matcher
-        expect(matcher.description).to eq("my base matcher description (overriden)")
+        matcher = my_overridden_matcher
+        expect(matcher.description).to eq("my base matcher description (overridden)")
       end
 
       RSpec::Matchers.alias_matcher :my_blockless_override, :my_base_matcher
