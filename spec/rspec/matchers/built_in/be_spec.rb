@@ -266,7 +266,7 @@ RSpec.describe "expect(...).not_to be_predicate" do
       expect(actual).not_to be_happy
     end
 
-    it "shows actual comparision made when it fails" do
+    it "shows actual comparison made when it fails" do
       actual = double("actual", :happy? => 42)
       expect {
         expect(actual).not_to be_happy
