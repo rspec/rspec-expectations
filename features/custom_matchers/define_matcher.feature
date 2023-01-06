@@ -390,7 +390,7 @@ Feature: Define a custom matcher
 
   Scenario: Error handling
 
-    Make sure your matcher returns either `true` or `false`. Take care to handle exceptions appropriately in your matcher, e.g. most cases you might want your matcher to return `false` if an exception - e.g. ArgumentError - occures, but there might be edge cases where you want to pass the exception to the user.
+    Make sure your matcher returns either `true` or `false`. Take care to handle exceptions appropriately in your matcher, e.g. most cases you might want your matcher to return `false` if an exception - e.g. ArgumentError - occurs, but there might be edge cases where you want to pass the exception to the user.
 
     You should handle each `StandardError` with care! Do not handle them all in one.
 
