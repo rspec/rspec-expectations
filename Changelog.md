@@ -1,6 +1,9 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.1...main)
 
+### 3.12.2 / 2023-01-07
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.1...v3.12.2)
+
 Bug Fixes:
 
 * Prevent deprecation warning when using the `exist` matcher with `Dir`.
