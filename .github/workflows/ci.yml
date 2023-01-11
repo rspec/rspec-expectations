@@ -1,4 +1,4 @@
-# This file was generated on 2023-01-07T14:11:41+11:00 from the rspec-dev repo.
+# This file was generated on 2023-01-11T22:30:28+03:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -13,6 +13,9 @@ on:
       - '*'
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 env:
   RSPEC_CI: true
   # This tells rspec-rails what branch to run in ci
