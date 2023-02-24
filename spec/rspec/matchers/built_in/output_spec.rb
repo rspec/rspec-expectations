@@ -194,5 +194,26 @@ module RSpec
         expect(output("foo").description).to eq('output "foo" to some stream')
       end
     end
+
+    RSpec.describe "can capture stdin and stderr" do
+      it "prints diff for both when both fail" do
+        expect {
+          expect { print "foo"; $stderr.print("bar") }
+            .to output(/baz/).to_stdout
+            .and output(/qux/).to_stderr
+        }
+          .to fail_including(
+            'expected block to output /baz/ to stdout, but output "foo"',
+            '...and:',
+            'expected block to output /qux/ to stderr, but output "bar"',
+            'Diff for (output /baz/ to stdout):',
+            '-/baz/',
+            '+"foo"',
+            'Diff for (output /qux/ to stderr):',
+            '-/qux/',
+            '+"bar"'
+          )
+      end
+    end
   end
 end
