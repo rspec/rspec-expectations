@@ -1,4 +1,4 @@
-# This file was generated on 2023-01-11T19:04:43+03:00 from the rspec-dev repo.
+# This file was generated on 2023-03-09T21:09:51+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -61,11 +61,6 @@ jobs:
           - ruby: jruby-9.2.13.0
             env:
               JRUBY_OPTS: "--dev"
-          - ruby: jruby-9.1.17.0
-            bundler: 1
-            os: ubuntu-18.04
-            env:
-              JRUBY_OPTS: "--dev"
           - ruby: 2.7
             name_extra: "with diff-lcs 1.3"
             env:
@@ -118,6 +113,9 @@ jobs:
             tag: rspec/ci:jruby-1.7
             jruby_opts: '--dev --1.8'
             pre: gem uninstall jruby-openssl
+            options: "--add-host rubygems.org:151.101.129.227 --add-host api.rubygems.org:151.101.129.227"
+          - version: "JRuby 9.1.17.0"
+            tag: rspec/ci:jruby-9.1.17.0
             options: "--add-host rubygems.org:151.101.129.227 --add-host api.rubygems.org:151.101.129.227"
     env:
       LEGACY_CI: true
