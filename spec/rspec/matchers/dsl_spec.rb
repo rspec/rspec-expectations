@@ -1338,7 +1338,7 @@ module RSpec::Matchers::DSL
         end
 
         expected_msg = "RSpec::Matchers::DSL::Matcher"
-        expected_msg = "#{expected_msg} __raise_no_method_error" unless rbx?
+        expected_msg = "#{expected_msg} __raise_no_method_error" unless rbx? || RUBY_VERSION.to_f > 3.2
 
         expect {
           expect(example).to __raise_no_method_error
