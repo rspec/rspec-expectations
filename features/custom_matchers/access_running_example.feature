@@ -1,4 +1,4 @@
-Feature: access running example
+Feature: Access the running example
 
   In the context of a custom matcher, you can call helper methods that are available from the
   current example's example group. This is used, for example, by rspec-rails in order to wrap

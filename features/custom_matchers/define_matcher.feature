@@ -1,4 +1,4 @@
-Feature: Define a custom matcher
+Feature: Defining a custom matcher
 
   rspec-expectations provides a DSL for defining custom matchers. These are often useful for expressing expectations in the domain of your application.
 

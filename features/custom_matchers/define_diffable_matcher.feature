@@ -1,4 +1,4 @@
-Feature: define diffable matcher
+Feature: Defining a diffable matcher
 
   When a matcher is defined as diffable, the output will include a diff of the submitted objects when the objects are more than simple primitives.
 
