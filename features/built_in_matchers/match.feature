@@ -12,7 +12,7 @@ Feature: `match` matcher
 
   You can also use this matcher to match nested data structures when composing matchers.
 
-  Scenario: string usage
+  Scenario: String usage
     Given a file named "string_match_spec.rb" with:
       """ruby
       RSpec.describe "a string" do
@@ -30,7 +30,7 @@ Feature: `match` matcher
       | expected "a string" not to match /str/ |
       | expected "a string" to match /foo/     |
 
-  Scenario: regular expression usage
+  Scenario: Regular expression usage
     Given a file named "regexp_match_spec.rb" with:
       """ruby
       RSpec.describe /foo/ do

@@ -2,7 +2,7 @@ Feature: Diffing
 
   When appropriate, failure messages will automatically include a diff.
 
-  Scenario: diff for a multiline string
+  Scenario: Diff for a multiline string
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "a multiline string" do
@@ -33,7 +33,7 @@ Feature: Diffing
       """
 
   @skip-when-diff-lcs-1.3
-  Scenario: diff for a multiline string and a regexp on diff-lcs 1.4
+  Scenario: Diff for a multiline string and a regexp on diff-lcs 1.4
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "a multiline string" do
@@ -60,7 +60,7 @@ Feature: Diffing
       """
 
   @skip-when-diff-lcs-1.4
-  Scenario: diff for a multiline string and a regexp on diff-lcs 1.3
+  Scenario: Diff for a multiline string and a regexp on diff-lcs 1.3
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "a multiline string" do
@@ -86,7 +86,7 @@ Feature: Diffing
              +    string
       """
 
-  Scenario: no diff for a single line strings
+  Scenario: No diff for a single line strings
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "a single line string" do
@@ -100,7 +100,7 @@ Feature: Diffing
     When I run `rspec example_spec.rb`
     Then the output should not contain "Diff:"
 
-  Scenario: no diff for numbers
+  Scenario: No diff for numbers
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "a number" do

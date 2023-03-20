@@ -11,7 +11,7 @@ Feature: `cover` matcher
     expect(1..10).not_to cover(11)
     ```
 
-  Scenario: range usage
+  Scenario: Range usage
     Given a file named "range_cover_matcher_spec.rb" with:
       """ruby
       RSpec.describe (1..10) do

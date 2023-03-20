@@ -38,7 +38,7 @@ Feature: `yield` matchers
       end
       """
 
-  Scenario: yield_control matcher
+  Scenario: The `yield_control` matcher
     Given a file named "yield_control_spec.rb" with:
       """ruby
       require './my_class'
@@ -69,7 +69,7 @@ Feature: `yield` matchers
       | expected given block not to yield control at least twice  |
       | expected given block not to yield control at most 3 times |
 
-  Scenario: yield_with_args matcher
+  Scenario: The `yield_with_args` matcher
     Given a file named "yield_with_args_spec.rb" with:
       """ruby
       require './my_class'
@@ -102,7 +102,7 @@ Feature: `yield` matchers
       | expected given block not to yield with arguments, but yielded with expected arguments |
       | expected given block to yield with arguments, but yielded with unexpected arguments   |
 
-  Scenario: yield_with_no_args matcher
+  Scenario: The `yield_with_no_args` matcher
     Given a file named "yield_with_no_args_spec.rb" with:
       """ruby
       require './my_class'
@@ -125,7 +125,7 @@ Feature: `yield` matchers
       | expected given block to yield with no arguments, but did not yield                 |
       | expected given block to yield with no arguments, but yielded with arguments: ["a"] |
 
-  Scenario: yield_successive_args matcher
+  Scenario: The `yield_successive_args` matcher
     Given a file named "yield_successive_args_spec.rb" with:
       """ruby
       def array

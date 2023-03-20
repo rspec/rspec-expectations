@@ -18,7 +18,7 @@ Feature: `all` matcher
 
   If you are looking for "any" member of a collection that passes an expectation, look at the `include`-matcher.
 
-  Scenario: array usage
+  Scenario: Array usage
     Given a file named "array_all_matcher_spec.rb" with:
       """ruby
       RSpec.describe [1, 3, 5] do
@@ -39,7 +39,7 @@ Feature: `all` matcher
       | expected [1, 3, 5] to all be a kind of String |
       | expected [1, 3, 5] to all be > 2              |
 
-  Scenario: compound matcher usage
+  Scenario: Compound matcher usage
     Given a file named "compound_all_matcher_spec.rb" with:
       """ruby
       RSpec.describe ['anything', 'everything', 'something'] do

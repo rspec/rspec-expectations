@@ -18,7 +18,7 @@ Feature: `output` matcher
   Note: `to_stdout_from_any_process` and `to_stderr_from_any_process` use tempfiles to
   capture output, and are thus significantly (~30x) slower than `to_stdout` and `to_stderr`.
 
-  Scenario: output_to_stdout matcher
+  Scenario: Using the `output_to_stdout` matcher
     Given a file named "output_to_stdout_spec.rb" with:
       """ruby
       RSpec.describe "output.to_stdout matcher" do
@@ -46,7 +46,7 @@ Feature: `output` matcher
       | expected block to output "foo" to stdout, but output nothing |
       | expected block to output /bar/ to stdout, but output "foo"   |
 
-  Scenario: output_to_stderr matcher
+  Scenario: Using the `output_to_stderr` matcher
     Given a file named "output_to_stderr.rb" with:
       """ruby
       RSpec.describe "output_to_stderr matcher" do
@@ -74,7 +74,7 @@ Feature: `output` matcher
       | expected block to output "foo" to stderr, but output nothing |
       | expected block to output /bar/ to stderr, but output "foo\n" |
 
-  Scenario: output_to_stdout_from_any_process matcher
+  Scenario: Using the `output_to_stdout_from_any_process` matcher
     Given a file named "output_to_stdout_from_any_process_spec.rb" with:
       """ruby
       RSpec.describe "output.to_stdout_from_any_process matcher" do
@@ -102,7 +102,7 @@ Feature: `output` matcher
       | expected block to output "foo" to stdout, but output nothing |
       | expected block to output /bar/ to stdout, but output "foo"   |
 
-  Scenario: output_to_stderr_from_any_process matcher
+  Scenario: Using the `output_to_stderr_from_any_process` matcher
     Given a file named "output_to_stderr_from_any_process_spec.rb" with:
       """ruby
       RSpec.describe "output.to_stderr_from_any_process matcher" do

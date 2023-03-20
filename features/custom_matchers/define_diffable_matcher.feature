@@ -3,7 +3,7 @@ Feature: Defining a diffable matcher
   When a matcher is defined as diffable, the output will include a diff of the submitted objects when the objects are more than simple primitives.
 
   @skip-when-diff-lcs-1.3
-  Scenario: define a diffable matcher (with diff-lcs 1.4)
+  Scenario: Define a diffable matcher (with diff-lcs 1.4)
     Given a file named "diffable_matcher_spec.rb" with:
       """ruby
       RSpec::Matchers.define :be_just_like do |expected|
@@ -28,7 +28,7 @@ Feature: Defining a diffable matcher
       """
 
   @skip-when-diff-lcs-1.4
-  Scenario: define a diffable matcher (with diff-lcs 1.3)
+  Scenario: Define a diffable matcher (with diff-lcs 1.3)
     Given a file named "diffable_matcher_spec.rb" with:
       """ruby
       RSpec::Matchers.define :be_just_like do |expected|

@@ -16,7 +16,7 @@ Feature: `have_attributes` matcher
     expect(person).to have_attributes(:name => "Jim", :color => 'red')
     ```
 
-  Scenario: basic usage
+  Scenario: Basic usage
     Given a file named "basic_have_attributes_matcher_spec.rb" with:
       """ruby
       Person = Struct.new(:name, :age)

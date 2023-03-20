@@ -6,7 +6,7 @@ Feature: `exist` matcher
     expect(obj).to exist # passes if obj.exist? or obj.exists?
     ```
 
-  Scenario: basic usage
+  Scenario: Basic usage
     Given a file named "exist_matcher_spec.rb" with:
       """ruby
       class Planet

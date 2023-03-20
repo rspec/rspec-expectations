@@ -31,7 +31,7 @@ Feature: `include` matcher
     expect(:a => 1, :b => 2).not_to include(:c => 3)
     ```
 
-  Scenario: array usage
+  Scenario: Array usage
     Given a file named "array_include_matcher_spec.rb" with:
       """ruby
       RSpec.describe [1, 3, 7] do
@@ -74,7 +74,7 @@ Feature: `include` matcher
       | expected [1, 3, 7] to include 9                                                 |
       | expected [1, 3, 7] not to include 1                                             |
 
-  Scenario: string usage
+  Scenario: String usage
     Given a file named "string_include_matcher_spec.rb" with:
       """ruby
       RSpec.describe "a string" do
@@ -101,7 +101,7 @@ Feature: `include` matcher
       | expected "a string" to include "foo"                                        |
       | expected "a string" not to include "str"                                    |
 
-  Scenario: hash usage
+  Scenario: Hash usage
     Given a file named "hash_include_matcher_spec.rb" with:
       """ruby
       RSpec.describe :a => 7, :b => 5 do
@@ -151,7 +151,7 @@ Feature: `include` matcher
       | expected {:a => 7, :b => 5} to include {:d => 3}              |
       | expected {:a => 7, :b => 5} not to include {:a => 7}          |
 
-  Scenario: counts usage
+  Scenario: Counts usage
     Given a file named "include_matcher_with_counts_spec.rb" with:
       """ruby
         RSpec.describe [{:c => 7}, {:a => 1}, {:b => 2}, {:c => 1}, {:a => 3}, {:c => 7}] do

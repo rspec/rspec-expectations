@@ -18,7 +18,7 @@ Feature: `satisfy` matcher
     ```
 
   @skip-when-ripper-unsupported
-  Scenario: basic usage
+  Scenario: Basic usage
     Given a file named "satisfy_matcher_spec.rb" with:
       """ruby
       RSpec.describe 10 do
