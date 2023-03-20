@@ -1,4 +1,4 @@
-Feature: define matcher outside rspec
+Feature: Defining a matcher outside rspec
 
   You can define custom matchers when using rspec-expectations outside of rspec-core.
 

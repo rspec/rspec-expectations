@@ -1,4 +1,4 @@
-Feature: implicit docstrings
+Feature: Implicit docstrings
 
   When you use rspec-expectations with rspec-core, RSpec is able to auto-generate the
   docstrings for examples for you based on the last expectation in the example. This can be

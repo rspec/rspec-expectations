@@ -1,3 +1,5 @@
+# RSpec Expectations
+
 rspec-expectations is used to define expected outcomes.
 
     RSpec.describe Account do

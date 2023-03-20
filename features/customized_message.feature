@@ -1,4 +1,4 @@
-Feature: customized message
+Feature: Customized message
 
   RSpec tries to provide useful failure messages, but for cases in which you want more
   specific information, you can define your own message right in the example.This works for

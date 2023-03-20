@@ -1,4 +1,4 @@
-Feature: diffing
+Feature: Diffing
 
   When appropriate, failure messages will automatically include a diff.
 

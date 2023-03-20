@@ -1,4 +1,4 @@
-Feature: define a matcher supporting block expectations
+Feature: Defining a matcher supporting block expectations
 
   When you wish to support block expectations (e.g. `expect { ... }.to matcher`) with
   your custom matchers you must specify this. You can do this manually (or determinately
