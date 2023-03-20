@@ -79,7 +79,7 @@ Feature: `raise_error` matcher
     When I run `rspec example_spec.rb`
     Then the example should pass
 
-  Scenario: Matching aing message with `with_message`
+  Scenario: Matching a message with `with_message`
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "matching error message with regex" do
