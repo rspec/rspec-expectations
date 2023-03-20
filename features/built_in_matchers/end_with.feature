@@ -9,7 +9,7 @@ Feature: `end_with` matcher
     expect([0, 1, 2]).to end_with 1, 2
     ```
 
-  Scenario: string usage
+  Scenario: String usage
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "this string" do
@@ -27,7 +27,7 @@ Feature: `end_with` matcher
       | expected "this string" not to end with "string" |
       | expected "this string" to end with "stringy"    |
 
-  Scenario: array usage
+  Scenario: Array usage
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe [0, 1, 2, 3, 4] do

@@ -9,7 +9,7 @@ Feature: `be` matchers
     expect(obj).to be         # passes if obj is truthy (not nil or false)
     ```
 
-  Scenario: be_truthy matcher
+  Scenario: The `be_truthy` matcher
     Given a file named "be_truthy_spec.rb" with:
       """ruby
       RSpec.describe "be_truthy matcher" do
@@ -55,7 +55,7 @@ Feature: `be` matchers
                   got: false
       """
 
-  Scenario: be_falsey matcher
+  Scenario: The `be_falsey` matcher
     Given a file named "be_falsey_spec.rb" with:
       """ruby
       RSpec.describe "be_falsey matcher" do
@@ -101,7 +101,7 @@ Feature: `be` matchers
                   got: "foo"
       """
 
-  Scenario: be_nil matcher
+  Scenario: The `be_nil` matcher
     Given a file named "be_nil_spec.rb" with:
       """ruby
       RSpec.describe "be_nil matcher" do
@@ -147,7 +147,7 @@ Feature: `be` matchers
                   got: "foo"
       """
 
-  Scenario: be matcher
+  Scenario: The `be` matcher
     Given a file named "be_spec.rb" with:
       """ruby
       RSpec.describe "be_matcher" do

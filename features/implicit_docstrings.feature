@@ -11,7 +11,7 @@ Feature: Implicit docstrings
   docstring you would write. Even then, many users prefer the explicitness of the full
   docstring, so use this feature with care (if at all).
 
-  Scenario: run passing examples
+  Scenario: Run passing examples
     Given a file named "implicit_docstrings_spec.rb" with:
     """ruby
     RSpec.describe "Examples with no docstrings generate their own:" do
@@ -27,7 +27,7 @@ Feature: Implicit docstrings
     And the output should contain "is expected to include 2"
     And the output should contain "is expected to respond to #size"
 
-  Scenario: run failing examples
+  Scenario: Run failing examples
     Given a file named "failing_implicit_docstrings_spec.rb" with:
     """ruby
     RSpec.describe "Failing examples with no descriptions" do

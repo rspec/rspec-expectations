@@ -27,7 +27,7 @@ Feature: `change` matcher
       """
 
   @skip-when-ripper-unsupported
-  Scenario: expect change
+  Scenario: Expect change
     Given a file named "spec/example_spec.rb" with:
       """ruby
       require "counter"
@@ -48,7 +48,7 @@ Feature: `change` matcher
     Then the output should contain "expected `Counter.count` to have changed by 2, but was changed by 1"
 
   @skip-when-ripper-unsupported
-  Scenario: expect no change
+  Scenario: Expect no change
     Given a file named "spec/example_spec.rb" with:
       """ruby
       require "counter"

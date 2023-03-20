@@ -20,7 +20,7 @@ Feature: `be_within` matcher
   Note that the difference between the actual and expected values must be smaller than your
   delta; if it is equal, the matcher will fail.
 
-  Scenario: basic usage
+  Scenario: Basic usage
     Given a file named "be_within_matcher_spec.rb" with:
       """ruby
       RSpec.describe 27.5 do

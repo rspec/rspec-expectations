@@ -29,7 +29,7 @@ Feature: `raise_error` matcher
     expect { raise "oops" }.to raise_error(an_instance_of(RuntimeError).and having_attributes(message: "oops"))
     ```
 
-  Scenario: expect any error
+  Scenario: Expecting any error
     Given a file named "example_spec" with:
       """
       RSpec.describe "calling a missing method" do
@@ -41,7 +41,7 @@ Feature: `raise_error` matcher
     When I run `rspec example_spec`
     Then the example should pass
 
-  Scenario: expect specific error
+  Scenario: Expecting a specific error
     Given a file named "example_spec" with:
       """
       RSpec.describe "calling a missing method" do
@@ -53,7 +53,7 @@ Feature: `raise_error` matcher
     When I run `rspec example_spec`
     Then the example should pass
 
-  Scenario: match message with a string
+  Scenario: Matching a message with a string
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "matching error message with string" do
@@ -66,7 +66,7 @@ Feature: `raise_error` matcher
     When I run `rspec example_spec.rb`
     Then the example should pass
 
-  Scenario: match message with a regexp
+  Scenario: Matching a message with a regexp
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "matching error message with regex" do
@@ -79,7 +79,7 @@ Feature: `raise_error` matcher
     When I run `rspec example_spec.rb`
     Then the example should pass
 
-  Scenario: matching message with `with_message`
+  Scenario: Matching aing message with `with_message`
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "matching error message with regex" do
@@ -92,7 +92,7 @@ Feature: `raise_error` matcher
     When I run `rspec example_spec.rb`
     Then the example should pass
 
-  Scenario: match class + message with string
+  Scenario: Matching a class + message with string
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "matching error message with string" do
@@ -105,7 +105,7 @@ Feature: `raise_error` matcher
     When I run `rspec example_spec.rb`
     Then the example should pass
 
-  Scenario: match class + message with regexp
+  Scenario: Matching a class + message with regexp
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "matching error message with regex" do
@@ -118,7 +118,7 @@ Feature: `raise_error` matcher
     When I run `rspec example_spec.rb`
     Then the example should pass
 
-  Scenario: set expectations on error object passed to block
+  Scenario: Setting expectations on error object passed to block
     Given a file named "example_spec" with:
       """
       RSpec.describe "#foo" do
@@ -132,7 +132,7 @@ Feature: `raise_error` matcher
       When I run `rspec example_spec`
       Then the example should pass
 
-  Scenario: set expectations on error object with chained matchers
+  Scenario: Setting expectations on an error object with chained matchers
     Given a file named "example_spec" with:
       """
       RSpec.describe "composing matchers" do
@@ -145,7 +145,7 @@ Feature: `raise_error` matcher
       When I run `rspec example_spec`
       Then the example should pass
 
-  Scenario: expect no error at all
+  Scenario: Expecting no error at all
     Given a file named "example_spec" with:
       """
       RSpec.describe "#to_s" do

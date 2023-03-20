@@ -6,7 +6,7 @@ Feature: Minitest integration
 
   To integrate rspec-expectations with minitest, require `rspec/expectations/minitest_integration`.
 
-  Scenario: use rspec/expectations with minitest
+  Scenario: Use rspec/expectations with minitest
     Given a file named "rspec_expectations_test.rb" with:
       """ruby
       require 'minitest/autorun'
@@ -51,7 +51,7 @@ Feature: Minitest integration
       And the output should contain "be_an_int is deprecated"
       And the output should contain "Got 2 failures from failure aggregation block"
 
-  Scenario: use rspec/expectations with minitest/spec
+  Scenario: Use rspec/expectations with minitest/spec
     Given a file named "rspec_expectations_spec.rb" with:
       """ruby
       require 'minitest/autorun'

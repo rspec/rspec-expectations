@@ -17,7 +17,7 @@ Feature: Type matchers
     expect(obj).to be_an_instance_of(type) # same as expect(obj).to be_instance_of(type)
     ```
 
-  Scenario: be_(a_)kind_of matcher
+  Scenario: With `be_(a_)kind_of` matcher
     Given a file named "be_kind_of_matcher_spec.rb" with:
       """ruby
       module MyModule; end
@@ -70,7 +70,7 @@ Feature: Type matchers
       | expected 17.0 not to be a kind of MyModule |
       | expected 17.0 to be a kind of String       |
 
-  Scenario: be_(an_)instance_of matcher
+  Scenario: With `be_(an_)instance_of` matcher
     Given a file named "be_instance_of_matcher_spec.rb" with:
       """ruby
       module MyModule; end

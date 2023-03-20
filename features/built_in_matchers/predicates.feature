@@ -47,7 +47,7 @@ Feature: Predicate matchers
 
   Any arguments passed to the matcher will be passed on to the predicate method.
 
-  Scenario: should be_zero (based on Integer#zero?)
+  Scenario: Expecting `subject` to `be_zero` (based on Integer#zero?)
     Given a file named "should_be_zero_spec.rb" with:
       """ruby
       RSpec.describe 0 do
@@ -62,7 +62,7 @@ Feature: Predicate matchers
     Then the output should contain "2 examples, 1 failure"
      And the output should contain "expected `7.zero?` to be truthy, got false"
 
-  Scenario: should_not be_empty (based on Array#empty?)
+  Scenario: Expecting `subject` to not `be_empty` (based on Array#empty?)
     Given a file named "should_not_be_empty_spec.rb" with:
       """ruby
       RSpec.describe [1, 2, 3] do
@@ -77,7 +77,7 @@ Feature: Predicate matchers
     Then the output should contain "2 examples, 1 failure"
      And the output should contain "expected `[].empty?` to be falsey, got true"
 
-   Scenario: should have_key (based on Hash#has_key?)
+   Scenario: Expecting `subject` to `have_key` (based on Hash#has_key?)
     Given a file named "should_have_key_spec.rb" with:
       """ruby
       RSpec.describe Hash do
@@ -90,7 +90,7 @@ Feature: Predicate matchers
     Then the output should contain "2 examples, 1 failure"
      And the output should contain "expected `{:foo=>7}.has_key?(:bar)` to be truthy, got false"
 
-   Scenario: should_not have_all_string_keys (based on custom #has_all_string_keys? method)
+   Scenario: Expecting `subject` to have all decimals (based on custom `has_decimals?` method)
      Given a file named "should_not_have_all_string_keys_spec.rb" with:
        """ruby
        class Float
@@ -116,7 +116,7 @@ Feature: Predicate matchers
      Then the output should contain "2 examples, 1 failure"
       And the output should contain "expected `42.0.has_decimals?` to be truthy, got false"
 
-   Scenario: matcher arguments are passed on to the predicate method
+   Scenario: Matcher arguments are passed on to the predicate method
      Given a file named "predicate_matcher_argument_spec.rb" with:
        """ruby
        class Integer
@@ -139,7 +139,7 @@ Feature: Predicate matchers
       And the output should contain "expected `12.multiple_of?(4)` to be falsey, got true"
       And the output should contain "expected `12.multiple_of?(5)` to be truthy, got false"
 
-    Scenario: the config `strict_predicate_matchers` impacts matching of results other than `true` and `false`
+    Scenario: The config `strict_predicate_matchers` impacts matching of results other than `true` and `false`
       Given a file named "strict_or_not.rb" with:
         """ruby
         class StrangeResult
@@ -175,7 +175,7 @@ Feature: Predicate matchers
       Then the output should contain "2 examples, 1 failure"
       And the output should contain "has_strange_result?` to return true, got 42"
 
-    Scenario: calling private method with be_predicate causes error
+    Scenario: Calling private method with be_predicate causes error
       Given a file named "attempting_to_match_private_method_spec.rb" with:
        """ruby
        class WithPrivateMethods
@@ -196,7 +196,7 @@ Feature: Predicate matchers
      Then the output should contain "1 example, 1 failure"
      And the output should contain "`secret?` is a private method"
 
-    Scenario: calling private method with have_predicate causes error
+    Scenario: Calling private method with have_predicate causes error
       Given a file named "attempting_to_match_private_method_spec.rb" with:
        """ruby
        class WithPrivateMethods

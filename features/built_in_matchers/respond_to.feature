@@ -36,7 +36,7 @@ Feature: `respond_to` matcher
   to a message via `#method_missing`, but does not indicate this via `#respond_to?`, then this
   matcher will give you false results.
 
-  Scenario: basic usage
+  Scenario: Basic usage
     Given a file named "respond_to_matcher_spec.rb" with:
       """ruby
       RSpec.describe "a string" do
@@ -67,7 +67,7 @@ Feature: `respond_to` matcher
       | expected "a string" to respond to :flatten                 |
       | expected "a string" not to respond to :length              |
 
-  Scenario: specify arguments
+  Scenario: Specify arguments
     Given a file named "respond_to_matcher_argument_checking_spec.rb" with:
       """ruby
       RSpec.describe 7 do
@@ -94,7 +94,7 @@ Feature: `respond_to` matcher
       | expected 7 not to respond to :between? with 2 arguments |
 
   @skip-when-splat-args-unsupported
-  Scenario: specify arguments range
+  Scenario: Specify arguments range
     Given a file named "respond_to_matcher_argument_range_checking_spec.rb" with:
       """ruby
       class MyClass
@@ -128,7 +128,7 @@ Feature: `respond_to` matcher
       | expected my_object to respond to :build with 0..3 arguments     |
 
   @skip-when-splat-args-unsupported
-  Scenario: specify unlimited arguments
+  Scenario: Specify unlimited arguments
   Given a file named "respond_to_matcher_unlimited_argument_checking_spec.rb" with:
       """ruby
       class MyClass
@@ -165,7 +165,7 @@ Feature: `respond_to` matcher
       | expected my_object to respond to :hail with 1 argument and unlimited arguments      |
 
   @skip-when-keyword-args-unsupported
-  Scenario: specify keywords
+  Scenario: Specify keywords
     Given a file named "respond_to_matcher_keyword_checking_spec.rb" with:
       """ruby
       class MyClass
@@ -202,7 +202,7 @@ Feature: `respond_to` matcher
       | expected my_object not to respond to :find with 1 argument and keywords :limit and :offset     |
 
   @skip-when-keyword-args-unsupported
-  Scenario: specify any keywords
+  Scenario: Specify any keywords
     Given a file named "respond_to_matcher_any_keywords_checking_spec.rb" with:
       """ruby
       class MyClass
@@ -239,7 +239,7 @@ Feature: `respond_to` matcher
       | expected my_object to respond to :create with keyword :name and any keywords |
 
   @skip-when-required-keyword-args-unsupported
-  Scenario: specify required keywords
+  Scenario: Specify required keywords
     Given a file named "respond_to_matcher_required_keyword_checking_spec.rb" with:
       """ruby
       class MyClass

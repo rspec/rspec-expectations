@@ -24,7 +24,7 @@ Feature: Equality matchers
     expect(a).to eq(b) # passes if a == b
     ```
 
-  Scenario: compare using eq (==)
+  Scenario: Compare using eq (==)
     Given a file named "compare_using_eq.rb" with:
       """ruby
       RSpec.describe "a string" do
@@ -46,7 +46,7 @@ Feature: Equality matchers
     When I run `rspec compare_using_eq.rb`
     Then the output should contain "3 examples, 0 failures"
 
-  Scenario: compare using ==
+  Scenario: Compare using ==
     Given a file named "compare_using_==.rb" with:
       """ruby
       RSpec.describe "a string" do
@@ -68,7 +68,7 @@ Feature: Equality matchers
     When I run `rspec compare_using_==.rb`
     Then the output should contain "3 examples, 0 failures"
 
-  Scenario: compare using eql (eql?)
+  Scenario: Compare using eql (eql?)
     Given a file named "compare_using_eql.rb" with:
       """ruby
       RSpec.describe "an integer" do
@@ -89,7 +89,7 @@ Feature: Equality matchers
     When I run `rspec compare_using_eql.rb`
     Then the output should contain "3 examples, 0 failures"
 
-  Scenario: compare using equal (equal?)
+  Scenario: Compare using equal (equal?)
     Given a file named "compare_using_equal.rb" with:
       """ruby
       RSpec.describe "a string" do
@@ -111,7 +111,7 @@ Feature: Equality matchers
     When I run `rspec compare_using_equal.rb`
     Then the output should contain "3 examples, 0 failures"
 
-  Scenario: compare using be (equal?)
+  Scenario: Compare using be (equal?)
     Given a file named "compare_using_be.rb" with:
       """ruby
       RSpec.describe "a string" do

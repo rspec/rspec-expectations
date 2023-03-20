@@ -4,7 +4,7 @@ Feature: Access the running example
   current example's example group. This is used, for example, by rspec-rails in order to wrap
   rails' built-in assertions (which depend on helper methods available in the test context).
 
-  Scenario: call method defined on example from matcher
+  Scenario: Call method defined on example from matcher
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec::Matchers.define :bar do
@@ -26,7 +26,7 @@ Feature: Access the running example
     When I run `rspec ./example_spec.rb`
     Then the output should contain "1 example, 0 failures"
 
-  Scenario: call method _not_ defined on example from matcher
+  Scenario: Call method _not_ defined on example from matcher
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec::Matchers.define :bar do

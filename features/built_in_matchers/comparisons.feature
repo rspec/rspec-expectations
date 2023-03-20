@@ -10,7 +10,7 @@ Feature: Comparison matchers
     expect('a').to be < 'b'
     ```
 
-  Scenario: numeric operator matchers
+  Scenario: Numeric operator matchers
     Given a file named "numeric_operator_matchers_spec.rb" with:
       """ruby
       RSpec.describe 18 do
@@ -80,7 +80,7 @@ Feature: Comparison matchers
       """
 
 
-  Scenario: string operator matchers
+  Scenario: String operator matchers
     Given a file named "string_operator_matchers_spec.rb" with:
       """ruby
       RSpec.describe "Strawberry" do

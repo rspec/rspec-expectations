@@ -9,7 +9,7 @@ Feature: `start_with` matcher
     expect([0,1,2]).to start_with(0, 1)
     ```
 
-  Scenario: with a string
+  Scenario: With a string
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe "this string" do
@@ -27,7 +27,7 @@ Feature: `start_with` matcher
       | expected "this string" not to start with "this" |
       | expected "this string" to start with "that"     |
 
-  Scenario: with an array
+  Scenario: With an array
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe [0, 1, 2, 3, 4] do

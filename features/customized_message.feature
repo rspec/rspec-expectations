@@ -4,7 +4,7 @@ Feature: Customized message
   specific information, you can define your own message right in the example.This works for
   any matcher _other than the operator matchers_.
 
-  Scenario: customize failure message
+  Scenario: Customize failure message
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe Array do
@@ -21,7 +21,7 @@ Feature: Customized message
     When I run `rspec example_spec.rb --format documentation`
     Then the output should contain "expected empty array, got [1]"
 
-  Scenario: customize failure message with a proc
+  Scenario: Customize failure message with a proc
     Given a file named "example_spec.rb" with:
       """ruby
       RSpec.describe Array do

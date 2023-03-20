@@ -19,7 +19,7 @@ Feature: `throw_symbol` matcher
     expect { throw :foo, 7 }.to throw_symbol(:foo, 7)
     ```
 
-  Scenario: basic usage
+  Scenario: Basic usage
     Given a file named "throw_symbol_matcher_spec.rb" with:
       """ruby
       RSpec.describe "throw" do
@@ -40,7 +40,7 @@ Feature: `throw_symbol` matcher
       | expected no Symbol to be thrown, got :bar   |
       | expected a Symbol to be thrown, got nothing |
 
-  Scenario: specify thrown symbol
+  Scenario: Specify thrown symbol
     Given a file named "throw_symbol_matcher_spec.rb" with:
       """ruby
       RSpec.describe "throw symbol" do
@@ -64,7 +64,7 @@ Feature: `throw_symbol` matcher
       | expected :foo to be thrown, got nothing         |
       | expected :foo to be thrown, got :bar            |
 
-  Scenario: specify thrown symbol and argument
+  Scenario: Specify thrown symbol and argument
     Given a file named "throw_symbol_argument_matcher_spec.rb" with:
       """ruby
       RSpec.describe "throw symbol with argument" do
