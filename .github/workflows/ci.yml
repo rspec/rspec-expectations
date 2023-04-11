@@ -1,4 +1,4 @@
-# This file was generated on 2023-03-16T21:03:44+00:00 from the rspec-dev repo.
+# This file was generated on 2023-04-11T15:33:34+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -50,7 +50,6 @@ jobs:
           - 2.4
           - 2.3
           - 2.2
-          - 2.1.9
         env:
           -
             DIFF_LCS_VERSION: "> 1.4.3"
@@ -94,6 +93,9 @@ jobs:
       fail-fast: false
       matrix:
         container:
+          - version: "2.1.9"
+            tag: ghcr.io/rspec/docker-ci:2.1.9
+            post: git config --global --add safe.directory `pwd`
           - version: "2.0"
             tag: ghcr.io/rspec/docker-ci:2.0.0
           - version: "1.9.3"
@@ -124,6 +126,7 @@ jobs:
       - uses: actions/checkout@v3
       - run: ${{ matrix.container.pre }}
       - run: script/legacy_setup.sh
+      - run: ${{ matrix.container.post }}
       - run: bundle exec bin/rspec
       - run: bundle exec script/cucumber.sh
 
@@ -139,7 +142,6 @@ jobs:
           - 2.4
           - 2.3
           - 2.2
-          - 2.1.9
       fail-fast: false
     steps:
       - uses: actions/checkout@v3
