@@ -153,8 +153,15 @@ module RSpec
         def actual_hash_has_key?(expected_key)
           # We check `key?` first for perf:
           # `key?` is O(1), but `any?` is O(N).
-          actual.key?(expected_key) ||
-          actual.keys.any? { |key| values_match?(expected_key, key) }
+
+          has_exact_key =
+            begin
+              actual.key?(expected_key)
+            rescue
+              false
+            end
+
+          has_exact_key || actual.keys.any? { |key| values_match?(expected_key, key) }
         end
 
         def actual_collection_includes?(expected_item)

@@ -33,6 +33,24 @@ class FakeHashWithIndifferentAccess < Hash
   end
 end
 
+# Some custom hashes don't support fuzzy matching
+class CaseInsensitiveHash < Hash
+  class << self
+    def from_hash(hsh)
+      new_hsh = new
+      hsh.each do |key, value|
+        new_hsh[key] = value
+      end
+      new_hsh
+    end
+  end
+
+  def include?(key)
+    super(key.downcase)
+  end
+  alias :key? :include?
+end
+
 RSpec.describe "#include matcher" do
   include RSpec::Support::Spec::DiffHelpers
 
@@ -337,6 +355,15 @@ RSpec.describe "#include matcher" do
         undef :use_string_keys_in_failure_message? # to prevent "method redefined" warning
         def use_string_keys_in_failure_message?
           true
+        end
+      end
+    end
+
+    context "for a target that subclasses Hash to perform custom key checks like downcasing" do
+      it_behaves_like "a Hash target" do
+        undef :build_target # to prevent "method redefined" warning
+        def build_target(hsh)
+          CaseInsensitiveHash.from_hash(hsh)
         end
       end
     end
@@ -696,6 +723,7 @@ RSpec.describe "#include matcher" do
 
         expect(hsh).to include(match(/KEY/i) => 'value')
         expect(FakeHashWithIndifferentAccess.from_hash(hsh)).to include(match(/KEY/i) => 'value')
+        expect(CaseInsensitiveHash.from_hash(hsh)).to include(match(/KEY/i) => 'value')
       end
 
       it "fails if target has a different value for key" do
