@@ -57,6 +57,10 @@ RSpec.describe "#include matcher" do
       expect(build_target(:key => 'value')).to include(:key)
     end
 
+    it 'passes if target has the expected as a key fuzzily matched' do
+      expect(build_target('KEY' => 'value')).to include(match(/key/i))
+    end
+
     it "fails if target does not include expected" do
       failure_string = %(expected {#{convert_key(:key)} => "value"} to include :other)
       expect {
@@ -101,6 +105,34 @@ RSpec.describe "#include matcher" do
 
       expect {
         expect(build_target(:foo => 1, :bar => 2)).to include(:foo => 1, :bar => 3)
+      }.to fail_including(failure_string)
+    end
+
+    it 'provides a valid diff for fuzzy matchers' do
+      allow(RSpec::Matchers.configuration).to receive(:color?).and_return(false)
+
+      failure_string = if use_string_keys_in_failure_message?
+                         dedent(<<-END)
+                           |Diff:
+                           |@@ -1,3 +1,3 @@
+                           |-(match /FOO/i) => 1,
+                           |-:bar => 3,
+                           |+"bar" => 2,
+                           |+"foo" => 1,
+                         END
+                       else
+                         dedent(<<-END)
+                           |Diff:
+                           |@@ -1,3 +1,3 @@
+                           |-(match /FOO/i) => 1,
+                           |-:bar => 3,
+                           |+:bar => 2,
+                           |+:foo => 1,
+                         END
+                       end
+
+      expect {
+        expect(build_target(:foo => 1, :bar => 2)).to include(match(/FOO/i) => 1, :bar => 3)
       }.to fail_including(failure_string)
     end
 
@@ -223,6 +255,10 @@ RSpec.describe "#include matcher" do
         expect([1, 2, 3]).to include(3)
       end
 
+      it "passes if target includes expected fuzzily matched" do
+        expect(["A", "B", "C"]).to include(match(/a/i))
+      end
+
       it "fails if target does not include expected" do
         expect {
           expect([1, 2, 3]).to include(4)
@@ -330,6 +366,7 @@ RSpec.describe "#include matcher" do
       matcher = include("a")
       expect(matcher.description).to eq("include \"a\"")
     end
+
     context "for a string target" do
       it "passes if target includes all items" do
         expect("a string").to include("str", "a")
@@ -357,6 +394,10 @@ RSpec.describe "#include matcher" do
     context "for an array target" do
       it "passes if target includes all items" do
         expect([1, 2, 3]).to include(1, 2, 3)
+      end
+
+      it "passes if target includes all items fuzzily matched" do
+        expect(["A", "B", "C"]).to include(match(/b/i), "A")
       end
 
       it "fails if target does not include one of the items" do
@@ -402,6 +443,10 @@ RSpec.describe "#include matcher" do
     context "for a hash target" do
       it 'passes if target includes all items as keys' do
         expect({ :key => 'value', :other => 'value' }).to include(:key, :other)
+      end
+
+      it "passes if target includes all items as keys fuzzily matched" do
+        expect({ "A" => "B", "C" => "D" }).to include(match(/c/i), "A")
       end
 
       it 'fails if target does not include one of the items as a key' do
@@ -644,6 +689,13 @@ RSpec.describe "#include matcher" do
 
       it "passes if target includes the key/value pair among others" do
         expect({ :key => 'value', :other => 'different' }).to include(:key => 'value')
+      end
+
+      it "passes if target includes the key/value pair fuzzily matched among others", :if => (RUBY_VERSION.to_f > 1.8) do
+        hsh = { :key => 'value', :other => 'different' }
+
+        expect(hsh).to include(match(/KEY/i) => 'value')
+        expect(FakeHashWithIndifferentAccess.from_hash(hsh)).to include(match(/KEY/i) => 'value')
       end
 
       it "fails if target has a different value for key" do
