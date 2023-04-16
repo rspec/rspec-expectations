@@ -1,5 +1,5 @@
 <!---
-This file was generated on 2020-12-25T18:48:30+00:00 from the rspec-dev repo.
+This file was generated on 2023-04-16T21:41:51+01:00 from the rspec-dev repo.
 DO NOT modify it by hand as your changes will get lost the next time it is generated.
 -->
 
@@ -50,7 +50,7 @@ project-specific threshold, the build will fail.
 ## Cukes
 
 RSpec uses [cucumber](https://cucumber.io/) for both acceptance testing
-and [documentation](https://relishapp.com/rspec). Since we publish our cukes
+and [documentation](https://rspec.info/documentation). Since we publish our cukes
 as documentation, please limit new cucumber scenarios to user-facing examples
 that help demonstrate usage. Any tests that exist purely to prevent regressions
 should be written as specs, even if they are written in an acceptance style.
