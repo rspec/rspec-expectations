@@ -331,10 +331,8 @@ Enhancements:
   can cause uses of `super` to trigger infinite recursion. (Myron Marston, #816)
 * Stop rescuing `NoMemoryError`, `SignalExcepetion`, `Interrupt` and
   `SystemExit`. It is dangerous to interfere with these. (Myron Marston, #845)
-* Add `#with_captures` to the
-  [match matcher](https://www.relishapp.com/rspec/rspec-expectations/docs/built-in-matchers/match-matcher)
-  which allows a user to specify expected captures when matching a regex
-  against a string. (Sam Phippen, #848)
+* Add `#with_captures` to the match matcher which allows a user to specify expected
+  captures when matching a regex against a string. (Sam Phippen, #848)
 * Always print compound failure messages in the multi-line form. Trying
   to print it all on a single line didn't read very well. (Myron Marston, #859)
 
