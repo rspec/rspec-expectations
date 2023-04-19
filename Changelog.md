@@ -1,6 +1,12 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.2...main)
 
+Bug Fixes:
+
+* Fix `include` matcher when fuzzy matching on keys with a hash-like actual which
+  has a non standard `key?` method which may raise.
+  (Jon Rowe, #1416)
+  
 ### 3.12.2 / 2023-01-07
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.1...v3.12.2)
 
