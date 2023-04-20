@@ -1,5 +1,8 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.2...main)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.3...main)
+
+### 3.12.3 / 2023-04-20
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.2...v3.12.3)
 
 Bug Fixes:
 
