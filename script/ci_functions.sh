@@ -1,9 +1,9 @@
-# This file was generated on 2023-04-11T15:33:34+01:00 from the rspec-dev repo.
+# This file was generated on 2023-06-26T14:08:07+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 # Taken from:
 # https://github.com/travis-ci/travis-build/blob/e9314616e182a23e6a280199cd9070bfc7cae548/lib/travis/build/script/templates/header.sh#L34-L53
-travis_retry() {
+ci_retry() {
   local result=0
   local count=1
   while [ $count -le 3 ]; do

@@ -1,4 +1,4 @@
-# This file was generated on 2023-04-11T15:33:34+01:00 from the rspec-dev repo.
+# This file was generated on 2023-06-26T14:08:07+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -25,7 +25,7 @@ function clone_repo {
       BRANCH_TO_CLONE="$2";
     fi;
 
-    travis_retry eval "git clone https://github.com/rspec/$1 --depth 1 --branch ${BRANCH_TO_CLONE?}"
+    ci_retry eval "git clone https://github.com/rspec/$1 --depth 1 --branch ${BRANCH_TO_CLONE?}"
   fi;
 }
 
@@ -89,16 +89,16 @@ function run_spec_suite_for {
       pushd ../$1
       unset BUNDLE_GEMFILE
       bundle_install_flags=`cat .github/workflows/ci.yml | grep "bundle install" | sed 's/.* bundle install//'`
-      travis_retry eval "(unset RUBYOPT; exec bundle install $bundle_install_flags)"
-      travis_retry eval "(unset RUBYOPT; exec bundle binstubs --all)"
+      ci_retry eval "(unset RUBYOPT; exec bundle install $bundle_install_flags)"
+      ci_retry eval "(unset RUBYOPT; exec bundle binstubs --all)"
       run_specs_and_record_done
       popd
     else
       echo ""
       echo "WARNING: The ../$1 directory does not exist. Usually the"
-      echo "travis build cds into that directory and run the specs to"
-      echo "ensure the specs still pass with your latest changes, but"
-      echo "we are going to skip that step."
+      echo "build cds into that directory and run the specs to ensure"
+      echo "the specs still pass with your latest changes, but we are"
+      echo "going to skip that step."
       echo ""
     fi;
   fi;
