@@ -34,6 +34,33 @@ module RSpec
         matcher.matches?(1)
         expect(matcher.failure_message_when_negated).to eq "\nexpected: value != 1\n     got: 1\n\n(compared using eql?)\n"
       end
+
+      # Older versions of Ruby do not have String#encoding available, they are an array of bytes
+      if RUBY_VERSION > "1.9"
+        context "with String encoding as UTF-16LE" do
+          it "provides message, expected and actual on #failure_message when string encoding is the same" do
+            matcher = eql('abc'.encode('UTF-16LE'))
+            matcher.matches?('def'.encode('UTF-16LE'))
+            expect(matcher.failure_message).to eq "\nexpected: \"abc\"\n     got: \"def\"\n\n(compared using eql?)\n"
+          end
+
+          it "matches when actual is BINARY encoding and expected is UTF-8 encoding with the same chars" do
+            expect('abc'.encode('BINARY')).to eq 'abc'.encode('UTF-8')
+          end
+
+          it "provides message, expected and actual with encoding details on #failure_message when string encoding is different" do
+            matcher = eql('abc'.encode('UTF-16LE'))
+            matcher.matches?('abc'.force_encoding('ASCII-8BIT'))
+            expect(matcher.failure_message).to eq "\nexpected: #<Encoding:UTF-16LE> \"abc\"\n     got: #<Encoding:ASCII-8BIT> \"abc\"\n\n(compared using eql?)\n"
+          end
+
+          it "provides message, expected and actual on #negative_failure_message" do
+            matcher = eql('abc'.encode('UTF-16LE'))
+            matcher.matches?('abc'.encode('UTF-16LE'))
+            expect(matcher.failure_message_when_negated).to eq "\nexpected: value != \"abc\"\n     got: \"abc\"\n\n(compared using eql?)\n"
+          end
+        end
+      end
     end
   end
 end

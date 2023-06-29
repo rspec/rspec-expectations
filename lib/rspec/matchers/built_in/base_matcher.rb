@@ -161,6 +161,32 @@ module RSpec
 
         include HashFormatting
 
+        # @private
+        module StringEncodingFormatting
+          # @api private
+          # @return [Boolean] True if the actual and expected string encoding are different.
+          #   i.e. the failure may be related to encoding differences and the encoding
+          #   should be shown to the user. false otherwise.
+          def string_encoding_differs?
+            actual.is_a?(String) && expected.is_a?(String) &&
+              # Older Ruby versions do not support #encoding
+              actual.respond_to?(:encoding) && expected.respond_to?(:encoding) &&
+              actual.encoding != expected.encoding
+          end
+          module_function :string_encoding_differs?
+
+          # @api private
+          # Formats a String's encoding as a human readable string
+          # @param value [String]
+          # @return [String]
+          def format_encoding(value)
+            "#<Encoding:#{value.encoding.name}>"
+          end
+          module_function :format_encoding
+        end
+
+        include StringEncodingFormatting
+
         # @api private
         # Provides default implementations of failure messages, based on the `description`.
         module DefaultFailureMessages
