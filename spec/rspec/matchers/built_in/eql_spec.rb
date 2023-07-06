@@ -35,8 +35,8 @@ module RSpec
         expect(matcher.failure_message_when_negated).to eq "\nexpected: value != 1\n     got: 1\n\n(compared using eql?)\n"
       end
 
-      # Older versions of Ruby do not have String#encoding available, they are an array of bytes
-      if RUBY_VERSION > "1.9"
+      # Older versions of Ruby such as less than 1.9 do not have String#encoding available, they are an array of bytes
+      if String.method_defined?(:encoding)
         context "with String encoding as UTF-16LE" do
           it "provides message, expected and actual on #failure_message when string encoding is the same" do
             matcher = eql('abc'.encode('UTF-16LE'))
