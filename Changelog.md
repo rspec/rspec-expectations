@@ -1,6 +1,11 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.3...main)
 
+Enhancements:
+
+* Update `eq` and `eql` matchers to better highlight difference in string encoding.
+  (Alan Foster, #1425)
+
 ### 3.12.3 / 2023-04-20
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.2...v3.12.3)
 
