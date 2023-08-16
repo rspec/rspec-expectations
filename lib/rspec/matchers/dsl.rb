@@ -130,6 +130,7 @@ module RSpec
         # @yield [Object] actual the actual value (i.e. the value wrapped by `expect`)
         def match(options={}, &match_block)
           define_user_override(:matches?, match_block) do |actual|
+            check_method_call_count
             @actual = actual
             RSpec::Support.with_failure_notifier(RAISE_NOTIFIER) do
               begin
@@ -159,6 +160,7 @@ module RSpec
         # @yield [Object] actual the actual value (i.e. the value wrapped by `expect`)
         def match_when_negated(options={}, &match_block)
           define_user_override(:does_not_match?, match_block) do |actual|
+            check_method_call_count
             begin
               @actual = actual
               RSpec::Support.with_failure_notifier(RAISE_NOTIFIER) do
@@ -458,6 +460,9 @@ module RSpec
         # The name of the matcher.
         attr_reader :name
 
+        # Keep track of how many times a custom matcher is called
+        attr_reader :call_count
+
         # @api private
         def initialize(name, declarations, matcher_execution_context, *expected, &block_arg)
           @name     = name
@@ -466,12 +471,16 @@ module RSpec
           @matcher_execution_context = matcher_execution_context
           @chained_method_clauses = []
           @block_arg = block_arg
+          @call_count = 1
 
           klass = class << self
             # See `Macros#define_user_override` above, for an explanation.
             include(@user_method_defs = Module.new)
             self
           end
+
+          override_custom_matcher_method(klass, name)
+
           RSpec::Support::WithKeywordsWhenNeeded.class_exec(klass, *expected, &declarations)
         end
 
@@ -518,6 +527,23 @@ module RSpec
         end
 
       private
+
+        def override_custom_matcher_method(klass, name)
+          klass.__send__(:define_method, name) do |*args, &block|
+            super(*args, &block).tap do |instance|
+              instance.instance_variable_set(:@call_count, call_count + 1)
+            end
+          end
+        end
+
+        def check_method_call_count
+          if (@call_count -= 1) > 0
+            RSpec.warning(
+              "The custom matcher `#{name}` or its negated method is called " \
+               'more than once in the test expectations without using `and` or `or`'
+            )
+          end
+        end
 
         def actual_arg_for(block)
           block.arity.zero? ? [] : [@actual]

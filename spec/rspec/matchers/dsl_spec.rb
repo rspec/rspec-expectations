@@ -81,6 +81,48 @@ RSpec.describe "a matcher defined using the matcher DSL" do
     expect(4).to be_just_like(4)
   end
 
+  describe 'check method call count' do
+    RSpec::Matchers.define :be_fine do
+      match { |actual| expect(actual).to eq('ok') }
+    end
+
+    RSpec::Matchers.define :have_keys do |attributes|
+      match { |actual| match_keys(actual, attributes) }
+
+      def match_keys(actual, attributes)
+        if attributes.is_a?(Array)
+          attributes.each do |attr|
+            expect(actual).to have_keys(attr)
+          end
+        else
+          expect(actual).to include(attributes)
+        end
+      end
+    end
+
+    it do
+      expect(RSpec).not_to receive(:warning)
+      expect(ok).to be_fine.and be_fine
+      expect(ok).to be_fine.or be_fine
+    end
+
+    context 'when custom matcher is called recursively' do
+      it 'does not raise a warning' do
+        expect(RSpec).not_to receive(:warning)
+        expect({ 'user' => 'Minh', 'id' => 1 }).to have_keys(%w[user id])
+      end
+    end
+
+    context 'when a custom matcher is called twice without using compound' do
+      it 'raises a warning' do
+        expect(RSpec).to receive(:warning).with(/The custom matcher `be_fine` or its negated method is called/)
+        expect(ok).to be_fine.and be_fine
+        expect(ok).to be_fine.or be_fine
+        expect(ok).to be_fine.be_fine
+      end
+    end
+  end
+
   describe '#block_arg' do
     before(:context) do
       RSpec::Matchers.define :be_lazily_equal_to do
@@ -1349,6 +1391,5 @@ module RSpec::Matchers::DSL
         defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
       end
     end
-
   end
 end
