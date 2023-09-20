@@ -105,11 +105,35 @@ RSpec.describe "expect { ... }.to raise_error" do
   end
 
   it "fails if a different error instance is thrown from the one that is expected" do
-    s = StandardError.new("Error 1")
+    error = StandardError.new("Error 1")
     to_raise = StandardError.new("Error 2")
     expect do
-      expect { raise to_raise }.to raise_error(s)
-    end.to fail_with(Regexp.new("expected #{s.inspect}, got #{to_raise.inspect} with backtrace"))
+      expect { raise to_raise }.to raise_error(error)
+    end.to fail_with(Regexp.new("expected #{error.inspect}, got #{to_raise.inspect} with message:\n  # Error 2\nand with backtrace:"))
+  end
+
+  it "fails without a message if a different error instance is thrown from the one that is expected" do
+    error = StandardError.new("Error 1")
+    to_raise = StandardError.new
+    expect do
+      expect { raise to_raise }.to raise_error(error)
+    end.to fail_with(Regexp.new("expected #{error.inspect}, got #{to_raise.inspect} with backtrace:"))
+  end
+
+  it "fails without a message if a generic runtime error is thrown instead of the one that is expected" do
+    error = RuntimeError.new("Error 1")
+    to_raise = RuntimeError
+    expect do
+      expect { raise }.to raise_error(error)
+    end.to fail_with(Regexp.new("expected #{error.inspect}, got #{to_raise.inspect} with backtrace:"))
+  end
+
+  it "fails without a message if an error with an empty message is thrown instead of the one that is expected" do
+    error = StandardError.new("Error 1")
+    to_raise = RuntimeError.new("")
+    expect do
+      expect { raise to_raise }.to raise_error(error)
+    end.to fail_with(Regexp.new("expected #{error.inspect}, got #{to_raise.inspect} with backtrace:"))
   end
 
   it "passes if an error class is expected and an instance of that class is thrown" do
@@ -242,6 +266,12 @@ RSpec.describe "expect { ... }.to raise_error(message)" do
     end.to fail_with(/expected Exception with \"blah\", got #<RuntimeError: blarg>/)
   end
 
+  it "fails if RuntimeError error is raised without a matching message" do
+    expect do
+      expect { raise "blarg\nblarg\nblam" }.to raise_error(/blah/)
+    end.to fail_with(/expected \/blah\/, got #<RuntimeError: blarg\nblarg\nblam>/)
+  end
+
   it "fails if any other error is raised with the wrong message" do
     expect do
       expect { raise NameError.new('blarg') }.to raise_error('blah')
@@ -281,6 +311,12 @@ RSpec.describe "expect { ... }.to raise_error.with_message(message)" do
     expect do
       expect { raise 'blarg' }.to raise_error.with_message('blah')
     end.to fail_with(/expected Exception with \"blah\", got #<RuntimeError: blarg>/)
+  end
+
+  it "fails if RuntimeError error is raised without a matching message" do
+    expect do
+      expect { raise "blarg\nblarg" }.to raise_error.with_message(/blah/)
+    end.to fail_with(/expected Exception with message matching \/blah\/, got #<RuntimeError: blarg\nblarg> with message:\n  # blarg\n  # blarg/)
   end
 
   it "fails if any other error is raised with the wrong message" do
