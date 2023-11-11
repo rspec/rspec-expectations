@@ -719,6 +719,17 @@ module RSpec
       desc.sub("contain exactly", "an array containing exactly")
     end
 
+    # Passes if the actual value matches the expected pattern with Ruby's pattern-matching.
+    #
+    # Note that the given pattern is processed with `#inspect`
+    # and then evaluated with pattern-matching by `#instance_eval`.
+    #
+    # @example
+    #   expect([1, 2, 3]).to match_pattern([Integer, Integer, Integer])
+    def match_pattern(expected)
+      BuiltIn::MatchPattern.new(expected)
+    end
+
     # With no arg, passes if the block outputs `to_stdout` or `to_stderr`.
     # With a string, passes if the block outputs that specific string `to_stdout` or `to_stderr`.
     # With a regexp or matcher, passes if the block outputs a string `to_stdout` or `to_stderr` that matches.
