@@ -115,7 +115,7 @@ module RSpec
           matcher = double("matcher", :failure_message => "message", :matches? => false)
           actual = Object.new
 
-          expect(::RSpec::Expectations).to receive(:fail_with).with("custom")
+          expect(::RSpec::Expectations).to receive(:fail_with).with("custom\nmessage")
 
           RSpec::Expectations::PositiveExpectationHandler.handle_matcher(actual, matcher, "custom")
         end
@@ -126,7 +126,7 @@ module RSpec
 
           failure_message = double("failure message", :call => "custom")
 
-          expect(::RSpec::Expectations).to receive(:fail_with).with("custom")
+          expect(::RSpec::Expectations).to receive(:fail_with).with("custom\nmessage")
 
           RSpec::Expectations::PositiveExpectationHandler.handle_matcher(actual, matcher, failure_message)
         end
@@ -209,7 +209,7 @@ module RSpec
           matcher = double("matcher", :failure_message_when_negated => "message", :matches? => true)
           actual = Object.new
 
-          expect(::RSpec::Expectations).to receive(:fail_with).with("custom")
+          expect(::RSpec::Expectations).to receive(:fail_with).with("custom\nmessage")
 
           RSpec::Expectations::NegativeExpectationHandler.handle_matcher(actual, matcher, "custom")
         end
@@ -220,7 +220,7 @@ module RSpec
 
           failure_message = double("failure message", :call => "custom")
 
-          expect(::RSpec::Expectations).to receive(:fail_with).with("custom")
+          expect(::RSpec::Expectations).to receive(:fail_with).with("custom\nmessage")
 
           RSpec::Expectations::NegativeExpectationHandler.handle_matcher(actual, matcher, failure_message)
         end
