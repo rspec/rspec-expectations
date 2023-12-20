@@ -583,9 +583,9 @@ module RSpec::Matchers::BuiltIn
                   EOS
 
                 expect {
-                  expect("HELLO\nWORLD")
-                    .to eq_downcase("bonjour\nmonde")
-                    .and eq_downcase("hola\nmon")
+                  expect(
+                    "HELLO\nWORLD"
+                  ).to eq_downcase("bonjour\nmonde").and eq_downcase("hola\nmon")
                 }.to fail do |error|
                   expect(error.message).to include(expected_failure)
                 end
@@ -626,9 +626,9 @@ module RSpec::Matchers::BuiltIn
                   EOS
 
                 expect {
-                  expect("HELLO\nWORLD")
-                    .to eq_downcase("bonjour\nmonde")
-                    .and eq_downcase("hola\nmon")
+                  expect(
+                    "HELLO\nWORLD"
+                  ).to eq_downcase("bonjour\nmonde").and eq_downcase("hola\nmon")
                 }.to fail do |error|
                   expect(error.message).to include(expected_failure)
                 end

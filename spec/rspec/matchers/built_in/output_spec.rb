@@ -198,9 +198,9 @@ module RSpec
     RSpec.describe "can capture stdin and stderr" do
       it "prints diff for both when both fail" do
         expect {
-          expect { print "foo"; $stderr.print("bar") }
-            .to output(/baz/).to_stdout
-            .and output(/qux/).to_stderr
+          expect {
+            print "foo"; $stderr.print("bar")
+          }.to output(/baz/).to_stdout.and output(/qux/).to_stderr
         }.to fail_including(
             'expected block to output /baz/ to stdout, but output "foo"',
             '...and:',
