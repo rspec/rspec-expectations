@@ -170,11 +170,9 @@ RSpec.describe "#include matcher" do
   end
 
   shared_context "runs for modern rubies, raises for old rubies" do
-    around(:example) do |example|
-      if RUBY_VERSION >= "2.1.9"
-        example.run
-      else
-        expect { example.run }.to raise_error(TypeError)
+    if RUBY_VERSION < "2.1.9"
+      def fail_matching(_message)
+        raise_error(TypeError)
       end
     end
   end
