@@ -1,6 +1,11 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.3...3-12-maintenance)
 
+Bug Fixes:
+
+* Fix the diff for redefined `actual` and reassigned `@actual` in compound
+  expectations failure messages. (Phil Pirozhkov, #1440)
+
 ### 3.12.3 / 2023-04-20
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.2...v3.12.3)
 

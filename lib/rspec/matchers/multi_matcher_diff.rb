@@ -1,9 +1,9 @@
 module RSpec
   module Matchers
     # @api private
-    # Handles list of expected values when there is a need to render
-    # multiple diffs. Also can handle one value.
-    class ExpectedsForMultipleDiffs
+    # Handles list of expected and actual value pairs when there is a need
+    # to render multiple diffs. Also can handle one pair.
+    class MultiMatcherDiff
       # @private
       # Default diff label when there is only one matcher in diff
       # output
@@ -19,22 +19,23 @@ module RSpec
 
       # @api private
       # Wraps provided expected value in instance of
-      # ExpectedForMultipleDiffs. If provided value is already an
-      # ExpectedForMultipleDiffs then it just returns it.
+      # MultiMatcherDiff. If provided value is already an
+      # MultiMatcherDiff then it just returns it.
       # @param [Any] expected value to be wrapped
-      # @return [RSpec::Matchers::ExpectedsForMultipleDiffs]
-      def self.from(expected)
+      # @param [Any] actual value
+      # @return [RSpec::Matchers::MultiMatcherDiff]
+      def self.from(expected, actual)
         return expected if self === expected
-        new([[expected, DEFAULT_DIFF_LABEL]])
+        new([[expected, DEFAULT_DIFF_LABEL, actual]])
       end
 
       # @api private
       # Wraps provided matcher list in instance of
-      # ExpectedForMultipleDiffs.
+      # MultiMatcherDiff.
       # @param [Array<Any>] matchers list of matchers to wrap
-      # @return [RSpec::Matchers::ExpectedsForMultipleDiffs]
+      # @return [RSpec::Matchers::MultiMatcherDiff]
       def self.for_many_matchers(matchers)
-        new(matchers.map { |m| [m.expected, diff_label_for(m)] })
+        new(matchers.map { |m| [m.expected, diff_label_for(m), m.actual] })
       end
 
       # @api private
@@ -42,10 +43,9 @@ module RSpec
       # factory and actual value if there are any
       # @param [String] message original failure message
       # @param [Proc] differ
-      # @param [Any] actual value
       # @return [String]
-      def message_with_diff(message, differ, actual)
-        diff = diffs(differ, actual)
+      def message_with_diff(message, differ)
+        diff = diffs(differ)
         message = "#{message}\n#{diff}" unless diff.empty?
         message
       end
@@ -65,8 +65,8 @@ module RSpec
         end
       end
 
-      def diffs(differ, actual)
-        @expected_list.map do |(expected, diff_label)|
+      def diffs(differ)
+        @expected_list.map do |(expected, diff_label, actual)|
           diff = differ.diff(actual, expected)
           next if diff.strip.empty?
           if diff == "\e[0m\n\e[0m"
