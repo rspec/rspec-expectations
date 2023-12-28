@@ -1,9 +1,9 @@
 module RSpec
   module Matchers
-    RSpec.describe ExpectedsForMultipleDiffs do
+    RSpec.describe MultiMatcherDiff do
 
       before do
-        stub_const("::RSpec::Matchers::ExpectedsForMultipleDiffs::DESCRIPTION_MAX_LENGTH", 30)
+        stub_const("::RSpec::Matchers::MultiMatcherDiff::DESCRIPTION_MAX_LENGTH", 30)
       end
 
       class FakeDiffer
@@ -17,11 +17,12 @@ module RSpec
       let(:message) { "a message" }
       let(:actual) { "actual value" }
 
-      let(:wrapped_value) { described_class.from("expected value") }
+      let(:wrapped_value) { described_class.from("expected value", actual) }
 
       def create_matcher(stubs)
         instance_double(BuiltIn::BaseMatcher, stubs.merge(
           :matches? => true,
+          :actual => actual,
           :failure_message => ""
         ))
       end
@@ -35,12 +36,12 @@ module RSpec
       let(:matcher_with_long_description) { create_matcher(:description => long_description, :expected => "expected value") }
 
       describe ".from" do
-        it "wraps provided value in ExpectedsForMultipleDiffs" do
+        it "wraps provided value in MultiMatcherDiff" do
           expect(wrapped_value).to be_a(described_class)
         end
 
         it "returns original value if it was already wrapped" do
-          expect(described_class.from(wrapped_value)).to be(wrapped_value)
+          expect(described_class.from(wrapped_value, actual)).to be(wrapped_value)
         end
       end
 
@@ -49,7 +50,7 @@ module RSpec
 
         it "has a diff for all matchers with their description" do
           expect(wrapped_value.message_with_diff(
-            message, differ, actual
+            message, differ
           )).to eq(dedent <<-EOS)
             |a message
             |Diff for (matcher 1 description):["actual value", "expected 1"]
@@ -63,7 +64,7 @@ module RSpec
         it "returns a message warning if the diff is empty" do
           allow(FakeDiffer).to receive(:diff) { "\e[0m\n\e[0m" }
           expect(wrapped_value.message_with_diff(
-            message, differ, actual
+            message, differ
           )).to eq(dedent <<-EOS)
             |a message
             |Diff:
@@ -74,7 +75,7 @@ module RSpec
         it "returns just provided message if diff is just whitespace" do
           allow(FakeDiffer).to receive(:diff) { "  \n   \t" }
           expect(wrapped_value.message_with_diff(
-            message, differ, actual
+            message, differ
           )).to eq(dedent <<-EOS)
             |a message
           EOS
@@ -82,7 +83,7 @@ module RSpec
 
         it "returns regular message with diff when single expected" do
           expect(wrapped_value.message_with_diff(
-            message, differ, actual
+            message, differ
           )).to eq(dedent <<-EOS)
             |a message
             |Diff:["actual value", "expected value"]
@@ -90,10 +91,12 @@ module RSpec
         end
 
         it "returns message with diff and matcher description when single expected with matcher" do
-          wrapped_value = described_class.for_many_matchers([include("expected value")])
+          matcher = include("expected value")
+          matcher.matches?(actual)
+          wrapped_value = described_class.for_many_matchers([matcher])
 
           expect(wrapped_value.message_with_diff(
-            message, differ, actual
+            message, differ
           )).to eq(dedent <<-EOS)
             |a message
             |Diff for (include "expected value"):["actual value", ["expected value"]]
@@ -104,7 +107,7 @@ module RSpec
           wrapped_value = described_class.for_many_matchers([matcher_with_long_description])
 
           expect(wrapped_value.message_with_diff(
-            message, differ, actual
+            message, differ
           )).to eq(dedent <<-EOS)
             |a message
             |Diff for (#{truncated_description}):["actual value", "expected value"]
