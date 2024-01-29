@@ -2,9 +2,9 @@ Feature: `exist` matcher
 
   The `exist` matcher is used to specify that something exists (as indicated by `#exist?` or `#exists?`):
 
-    ```ruby
+  ```ruby
     expect(obj).to exist # passes if obj.exist? or obj.exists?
-    ```
+  ```
 
   Scenario: Basic usage
     Given a file named "exist_matcher_spec.rb" with:

@@ -11,18 +11,18 @@ Feature: Equality matchers
 
   rspec-expectations ships with matchers that align with each of these methods:
 
-    ```ruby
+  ```ruby
     expect(a).to equal(b) # passes if a.equal?(b)
     expect(a).to eql(b)   # passes if a.eql?(b)
     expect(a).to be == b  # passes if a == b
-    ```
+  ```
 
   It also ships with two matchers that have more of a DSL feel to them:
 
-    ```ruby
+  ```ruby
     expect(a).to be(b) # passes if a.equal?(b)
     expect(a).to eq(b) # passes if a == b
-    ```
+  ```
 
   Scenario: Compare using eq (==)
     Given a file named "compare_using_eq.rb" with:
