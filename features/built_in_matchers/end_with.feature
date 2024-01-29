@@ -3,11 +3,11 @@ Feature: `end_with` matcher
   Use the `end_with` matcher to specify that a string or array ends with the expected
   characters or elements.
 
-    ```ruby
+  ```ruby
     expect("this string").to end_with "string"
     expect("this string").not_to end_with "stringy"
     expect([0, 1, 2]).to end_with 1, 2
-    ```
+  ```
 
   Scenario: String usage
     Given a file named "example_spec.rb" with:

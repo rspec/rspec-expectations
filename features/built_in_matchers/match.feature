@@ -3,12 +3,12 @@ Feature: `match` matcher
   The `match` matcher calls `#match` on the object, passing if `#match` returns a truthy (not
   `false` or `nil`) value. `Regexp` and `String` both provide a `#match` method.
 
-    ```ruby
+  ```ruby
     expect("a string").to match(/str/) # passes
     expect("a string").to match(/foo/) # fails
     expect(/foo/).to match("food")     # passes
     expect(/foo/).to match("drinks")   # fails
-    ```
+  ```
 
   You can also use this matcher to match nested data structures when composing matchers.
 
