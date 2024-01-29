@@ -2,40 +2,50 @@
 
 rspec-expectations is used to define expected outcomes.
 
+```ruby
     RSpec.describe Account do
       it "has a balance of zero when first created" do
         expect(Account.new.balance).to eq(Money.new(0))
       end
     end
+```
 
 ## Basic structure
 
 The basic structure of an rspec expectation is:
 
+```ruby
     expect(actual).to matcher(expected)
     expect(actual).not_to matcher(expected)
+```
 
 Note: You can also use `expect(..).to_not` instead of `expect(..).not_to`.
       One is an alias to the other, so you can use whichever reads better to you.
 
 #### Examples
 
+```ruby
     expect(5).to eq(5)
     expect(5).not_to eq(4)
+```
 
 ## What is a matcher?
 
 A matcher is any object that responds to the following methods:
 
+```ruby
     matches?(actual)
     failure_message
+```
 
 These methods are also part of the matcher protocol, but are optional:
 
+```ruby
     does_not_match?(actual)
     failure_message_when_negated
     description
     supports_block_expectations?
+```
 
 RSpec ships with a number of built-in matchers and a DSL for writing custom
 matchers.

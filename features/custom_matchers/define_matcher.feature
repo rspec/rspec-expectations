@@ -394,7 +394,7 @@ Feature: Defining a custom matcher
 
     You should handle each `StandardError` with care! Do not handle them all in one.
 
-    ```ruby
+  ```ruby
     match do |actual|
       begin
         '[...] Some code'
@@ -402,7 +402,7 @@ Feature: Defining a custom matcher
         false
       end
     end
-    ```
+  ```
 
     Given a file named "error_handling_spec.rb" with:
       """ruby

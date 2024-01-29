@@ -3,12 +3,12 @@ Feature: Comparison matchers
   RSpec provides a number of matchers that are based on Ruby's built-in operators. These
   can be used for generalized comparison of values. E.g.
 
-    ```ruby
+  ```ruby
     expect(9).to be > 6
     expect(3).to be <= 3
     expect(1).to be < 6
     expect('a').to be < 'b'
-    ```
+  ```
 
   Scenario: Numeric operator matchers
     Given a file named "numeric_operator_matchers_spec.rb" with:
