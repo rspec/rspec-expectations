@@ -354,8 +354,17 @@ module RSpec::Matchers::DSL
             (to_match <= five) || greater_than_ceiling(to_match) && not_divisible_by_divisor?(to_match)
           end
 
-          chain :and_smaller_than do |ceiling|
-            @ceiling = ceiling
+          if RSpec::Support::RubyFeatures.kw_args_supported?
+            binding.eval(<<-CODE, __FILE__, __LINE__)
+            chain :and_smaller_than do |ceiling, inclusive: false|
+              @ceiling = ceiling
+              @ceiling_inclusive = inclusive
+            end
+            CODE
+          else
+            chain :and_smaller_than do |ceiling|
+              @ceiling = ceiling
+            end
           end
 
           chain :and_divisible_by do |divisor|
@@ -364,8 +373,18 @@ module RSpec::Matchers::DSL
 
         private
 
-          def smaller_than_ceiling?(to_match)
-            to_match < @ceiling
+          if RSpec::Support::RubyFeatures.kw_args_supported?
+            def smaller_than_ceiling?(to_match)
+              if @ceiling_inclusive
+                to_match <= @ceiling
+              else
+                to_match < @ceiling
+              end
+            end
+          else
+            def smaller_than_ceiling?(to_match)
+              to_match < @ceiling
+            end
           end
 
           def greater_than_ceiling(to_match)
@@ -373,11 +392,11 @@ module RSpec::Matchers::DSL
           end
 
           def divisible_by_divisor?(to_match)
-            @divisor % to_match == 0
+            to_match % @divisor == 0
           end
 
           def not_divisible_by_divisor?(to_match)
-            @divisor % to_match != 0
+            to_match % @divisor != 0
           end
         end
       end
@@ -397,7 +416,7 @@ module RSpec::Matchers::DSL
             expect { expect(8).to match }.to fail_with 'expected 8 to be bigger than 5'
           end
 
-          it "provides a default negative expectation failure message that does not include the any of the chained matchers's descriptions" do
+          it "provides a default negative expectation failure message that does not include any of the chained matchers' descriptions" do
             expect { expect(9).to_not match }.to fail_with 'expected 9 not to be bigger than 5'
           end
         end
@@ -420,6 +439,15 @@ module RSpec::Matchers::DSL
           it "provides a default negative expectation failure message that includes the chained matchers' failures" do
             expect { expect(21).to_not matcher.and_smaller_than(29).and_divisible_by(3) }.to \
               fail_with 'expected 21 not to be bigger than 5 and smaller than 29 and divisible by 3'
+          end
+
+          if RSpec::Support::RubyFeatures.kw_args_supported?
+            binding.eval(<<-CODE, __FILE__, __LINE__)
+            it "allows passing keyword args to chain block" do
+              match = matcher.and_smaller_than(10, inclusive: true).and_divisible_by(1)
+              expect(10).to match
+            end
+            CODE
           end
         end
 
