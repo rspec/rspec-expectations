@@ -203,6 +203,10 @@ RSpec.describe "#include matcher" do
         expect("abc").to include("a")
       end
 
+      it "passes if target includes multiple expecteds" do
+        expect(" foo\nbar\nbazz").to include("foo", "bar", "baz")
+      end
+
       it "fails if target does not include expected" do
         expect {
           expect("abc").to include("d")
@@ -225,6 +229,12 @@ RSpec.describe "#include matcher" do
         expect {
           expect(" foo\nbar\nbazz").to include("foo", "bar", "gaz")
         }.to fail_with(a_string_not_matching(/Diff/i))
+      end
+
+      it "fails when matching a collection" do
+        expect {
+          expect("foo").to include({:bar => "baz"})
+        }.to fail_with(/expected "foo" to include {:bar => "baz"}/)
       end
 
       context "with exact count" do

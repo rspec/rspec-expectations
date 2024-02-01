@@ -165,6 +165,9 @@ module RSpec
         end
 
         def actual_collection_includes?(expected_item)
+          # if the actual is a String, the expected_item must also be a String
+          return false if actual.is_a?(String) && !expected_item.is_a?(String)
+
           return true if actual.include?(expected_item)
 
           # String lacks an `any?` method...
