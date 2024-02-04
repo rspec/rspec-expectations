@@ -6,6 +6,9 @@ Enhancements:
 * Update `eq` and `eql` matchers to better highlight difference in string encoding.
   (Alan Foster, #1425)
 
+### 3.12.4 / 2024-02-04
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.3...v3.12.4)
+
 Bug Fixes:
 
 * Fix the diff for redefined `actual` and reassigned `@actual` in compound
