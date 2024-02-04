@@ -19,7 +19,7 @@ concurrency:
 env:
   RSPEC_CI: true
   # This tells rspec-rails what branch to run in ci
-  RSPEC_VERSION: '= 3.13.0.pre'
+  RSPEC_VERSION: '= 3.14.0.pre'
 jobs:
   rubocop:
     name: Rubocop
