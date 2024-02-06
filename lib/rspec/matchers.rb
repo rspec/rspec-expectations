@@ -240,6 +240,7 @@ module RSpec
   #
   module Matchers # rubocop:disable Metrics/ModuleLength
     extend ::RSpec::Matchers::DSL
+    include ::RSpec::Matchers::DSL
 
     # @!macro [attach] alias_matcher
     #   @!parse
