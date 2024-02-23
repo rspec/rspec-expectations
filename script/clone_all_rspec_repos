@@ -1,5 +1,5 @@
 #!/bin/bash
-# This file was generated on 2023-12-25T16:07:49+00:00 from the rspec-dev repo.
+# This file was generated on 2024-02-23T14:21:35+00:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 set -e
@@ -8,11 +8,11 @@ source script/functions.sh
 if is_mri; then
   pushd ..
 
-  clone_repo "rspec"
+  clone_repo "rspec-metagem" "rspec"
   clone_repo "rspec-core"
   clone_repo "rspec-expectations"
   clone_repo "rspec-mocks"
-  clone_repo "rspec-rails" "6-1-maintenance"
+  clone_repo "rspec-rails" "rspec-rails" "6-1-maintenance"
 
   if rspec_support_compatible; then
     clone_repo "rspec-support"
