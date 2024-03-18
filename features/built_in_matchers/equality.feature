@@ -2,9 +2,11 @@ Feature: Equality matchers
 
   Ruby exposes several different methods for handling equality:
 
-      a.equal?(b) # object identity - a and b refer to the same object
-      a.eql?(b)   # object equivalence - a and b have the same value
-      a == b      # object equivalence - a and b have the same value with type conversions
+  ```ruby
+  a.equal?(b) # object identity - a and b refer to the same object
+  a.eql?(b)   # object equivalence - a and b have the same value
+  a == b      # object equivalence - a and b have the same value with type conversions
+  ```
 
   Note that these descriptions are guidelines but are not forced by the language. Any object
   can implement any of these methods with its own semantics.
@@ -12,16 +14,16 @@ Feature: Equality matchers
   rspec-expectations ships with matchers that align with each of these methods:
 
   ```ruby
-    expect(a).to equal(b) # passes if a.equal?(b)
-    expect(a).to eql(b)   # passes if a.eql?(b)
-    expect(a).to be == b  # passes if a == b
+  expect(a).to equal(b) # passes if a.equal?(b)
+  expect(a).to eql(b)   # passes if a.eql?(b)
+  expect(a).to be == b  # passes if a == b
   ```
 
   It also ships with two matchers that have more of a DSL feel to them:
 
   ```ruby
-    expect(a).to be(b) # passes if a.equal?(b)
-    expect(a).to eq(b) # passes if a == b
+  expect(a).to be(b) # passes if a.equal?(b)
+  expect(a).to eq(b) # passes if a == b
   ```
 
   Scenario: Compare using eq (==)

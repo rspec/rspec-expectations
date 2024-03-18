@@ -4,19 +4,19 @@ Feature: `throw_symbol` matcher
   basic form passes if any symbol is thrown:
 
   ```ruby
-    expect { throw :foo }.to throw_symbol
+  expect { throw :foo }.to throw_symbol
   ```
 
   You'll often want to specify that a particular symbol is thrown:
 
   ```ruby
-    expect { throw :foo }.to throw_symbol(:foo)
+  expect { throw :foo }.to throw_symbol(:foo)
   ```
 
   If you care about the additional argument given to throw, you can specify that as well:
 
   ```ruby
-    expect { throw :foo, 7 }.to throw_symbol(:foo, 7)
+  expect { throw :foo, 7 }.to throw_symbol(:foo, 7)
   ```
 
   Scenario: Basic usage

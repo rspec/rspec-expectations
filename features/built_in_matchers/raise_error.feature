@@ -4,13 +4,13 @@ Feature: `raise_error` matcher
   basic form passes if any error is thrown:
 
   ```ruby
-    expect { raise StandardError }.to raise_error
+  expect { raise StandardError }.to raise_error
   ```
 
   You can use `raise_exception` instead if you prefer that wording:
 
   ```ruby
-    expect { 3 / 0 }.to raise_exception
+  expect { 3 / 0 }.to raise_exception
   ```
 
   `raise_error` and `raise_exception` are functionally interchangeable, so use the one that
@@ -20,13 +20,13 @@ Feature: `raise_error` matcher
   error/exception:
 
   ```ruby
-    expect { raise "oops" }.to raise_error
-    expect { raise "oops" }.to raise_error(RuntimeError)
-    expect { raise "oops" }.to raise_error("oops")
-    expect { raise "oops" }.to raise_error(/op/)
-    expect { raise "oops" }.to raise_error(RuntimeError, "oops")
-    expect { raise "oops" }.to raise_error(RuntimeError, /op/)
-    expect { raise "oops" }.to raise_error(an_instance_of(RuntimeError).and having_attributes(message: "oops"))
+  expect { raise "oops" }.to raise_error
+  expect { raise "oops" }.to raise_error(RuntimeError)
+  expect { raise "oops" }.to raise_error("oops")
+  expect { raise "oops" }.to raise_error(/op/)
+  expect { raise "oops" }.to raise_error(RuntimeError, "oops")
+  expect { raise "oops" }.to raise_error(RuntimeError, /op/)
+  expect { raise "oops" }.to raise_error(an_instance_of(RuntimeError).and having_attributes(message: "oops"))
   ```
 
   Scenario: Expecting any error

@@ -15,7 +15,6 @@ Feature: Defining a matcher outside rspec
       end
 
       class TestMultiples < Minitest::Test
-
         def test_9_should_be_a_multiple_of_3
           expect(9).to be_a_multiple_of(3)
         end
@@ -23,7 +22,6 @@ Feature: Defining a matcher outside rspec
         def test_9_should_be_a_multiple_of_4
           expect(9).to be_a_multiple_of(4)
         end
-
       end
       """
     When I run `ruby test_multiples.rb`

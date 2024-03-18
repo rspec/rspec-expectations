@@ -3,18 +3,18 @@ Feature: Predicate matchers
   Ruby objects commonly provide predicate methods:
 
   ```ruby
-    7.zero?                  # => false
-    0.zero?                  # => true
-    [1].empty?               # => false
-    [].empty?                # => true
-    { :a => 5 }.has_key?(:b) # => false
-    { :b => 5 }.has_key?(:b) # => true
+  7.zero?                  # => false
+  0.zero?                  # => true
+  [1].empty?               # => false
+  [].empty?                # => true
+  { :a => 5 }.has_key?(:b) # => false
+  { :b => 5 }.has_key?(:b) # => true
   ```
 
   You could use a basic equality matcher to set expectations on these:
 
   ```ruby
-    expect(7.zero?).to eq true # fails with "expected true, got false (using ==)"
+  expect(7.zero?).to eq true # fails with "expected true, got false (using ==)"
   ```
 
   ...but RSpec provides dynamic predicate matchers that are more readable and provide
@@ -24,26 +24,26 @@ Feature: Predicate matchers
   method with `be_` and remove the question mark. Examples:
 
   ```ruby
-    expect(7).not_to be_zero       # calls 7.zero?
-    expect([]).to be_empty         # calls [].empty?
-    expect(x).to be_multiple_of(3) # calls x.multiple_of?(3)
+  expect(7).not_to be_zero       # calls 7.zero?
+  expect([]).to be_empty         # calls [].empty?
+  expect(x).to be_multiple_of(3) # calls x.multiple_of?(3)
   ```
 
   Alternately, for a predicate method that begins with `has_` like `Hash#has_key?`, RSpec allows
   you to use an alternate form since `be_has_key` makes no sense.
 
   ```ruby
-    expect(hash).to have_key(:foo)       # calls hash.has_key?(:foo)
-    expect(array).not_to have_odd_values # calls array.has_odd_values?
+  expect(hash).to have_key(:foo)       # calls hash.has_key?(:foo)
+  expect(array).not_to have_odd_values # calls array.has_odd_values?
   ```
 
   In either case, RSpec provides nice, clear error messages, such as:
 
-    `expected zero? to be truthy, got false`
+  `expected zero? to be truthy, got false`
 
   Calling private methods will also fail:
 
-    `expected private_method? to return true but it's a private method`
+  `expected private_method? to return true but it's a private method`
 
   Any arguments passed to the matcher will be passed on to the predicate method.
 

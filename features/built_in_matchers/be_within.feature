@@ -3,18 +3,20 @@ Feature: `be_within` matcher
   Normal equality expectations do not work well for floating point values.
   Consider this irb session:
 
-      > radius = 3
-        => 3
-      > area_of_circle = radius * radius * Math::PI
-        => 28.2743338823081
-      > area_of_circle == 28.2743338823081
-        => false
+  ```shell
+  > radius = 3
+    => 3
+  > area_of_circle = radius * radius * Math::PI
+    => 28.2743338823081
+  > area_of_circle == 28.2743338823081
+    => false
+  ```
 
   Instead, you should use the `be_within` matcher to check that the value is within a delta of
   your expected value:
 
   ```ruby
-    expect(area_of_circle).to be_within(0.1).of(28.3)
+  expect(area_of_circle).to be_within(0.1).of(28.3)
   ```
 
   Note that the difference between the actual and expected values must be smaller than your
