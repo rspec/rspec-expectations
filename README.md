@@ -13,7 +13,9 @@ If you want to use rspec-expectations with rspec, just install the rspec gem
 and RubyGems will also install rspec-expectations for you (along with
 rspec-core and rspec-mocks):
 
-    gem install rspec
+```shell
+gem install rspec
+```
 
 Want to run against the `main` branch? You'll need to include the dependent
 RSpec repos as well. Add the following to your `Gemfile`:
@@ -27,7 +29,9 @@ end
 If you want to use rspec-expectations with another tool, like Test::Unit,
 Minitest, or Cucumber, you can install it directly:
 
-    gem install rspec-expectations
+```shell
+gem install rspec-expectations
+```
 
 ## Contributing
 
@@ -67,8 +71,10 @@ The `describe` and `it` methods come from rspec-core.  The `Order`, `LineItem`, 
 expresses an expected outcome. If `order.total == Money.new(5.55, :USD)`, then
 the example passes. If not, it fails with a message like:
 
-    expected: #<Money @value=5.55 @currency=:USD>
-         got: #<Money @value=1.11 @currency=:USD>
+```
+  expected: #<Money @value=5.55 @currency=:USD>
+       got: #<Money @value=1.11 @currency=:USD>
+```
 
 ## Built-in matchers
 

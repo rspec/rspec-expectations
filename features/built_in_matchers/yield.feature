@@ -4,13 +4,13 @@ Feature: `yield` matchers
   how many times it yields, whether or not it yields with arguments, and what those
   arguments are.
 
-    * `yield_control` matches if the method-under-test yields, regardless of whether or not
-      arguments are yielded.
-    * `yield_with_args` matches if the method-under-test yields with arguments. If arguments
-      are provided to this matcher, it will only pass if the actual yielded arguments match the expected ones using `===` or `==`.
-    * `yield_with_no_args` matches if the method-under-test yields with no arguments.
-    * `yield_successive_args` is designed for iterators, and will match if the method-under-test
-       yields the same number of times as arguments passed to this matcher, and all actual yielded arguments match the expected ones using `===` or `==`.
+  * `yield_control` matches if the method-under-test yields, regardless of whether or not
+    arguments are yielded.
+  * `yield_with_args` matches if the method-under-test yields with arguments. If arguments
+    are provided to this matcher, it will only pass if the actual yielded arguments match the expected ones using `===` or `==`.
+  * `yield_with_no_args` matches if the method-under-test yields with no arguments.
+  * `yield_successive_args` is designed for iterators, and will match if the method-under-test
+    yields the same number of times as arguments passed to this matcher, and all actual yielded arguments match the expected ones using `===` or `==`.
 
   Note: your expect block _must_ accept an argument that is then passed on to the
   method-under-test as a block. This acts as a "probe" that allows the matcher to detect

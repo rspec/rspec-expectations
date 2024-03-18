@@ -3,17 +3,17 @@ Feature: `all` matcher
   Use the `all` matcher to specify that a collection's objects all pass an expected matcher. This works on any enumerable object.
 
   ```ruby
-    expect([1, 3, 5]).to all( be_odd )
-    expect([1, 3, 5]).to all( be_an(Integer) )
-    expect([1, 3, 5]).to all( be < 10 )
-    expect([1, 3, 4]).to all( be_odd ) # fails
+  expect([1, 3, 5]).to all( be_odd )
+  expect([1, 3, 5]).to all( be_an(Integer) )
+  expect([1, 3, 5]).to all( be < 10 )
+  expect([1, 3, 4]).to all( be_odd ) # fails
   ```
 
   The matcher also supports compound matchers:
 
   ```ruby
-    expect([1, 3, 5]).to all( be_odd.and be < 10 )
-    expect([1, 4, 21]).to all( be_odd.or be < 10 )
+  expect([1, 3, 5]).to all( be_odd.and be < 10 )
+  expect([1, 4, 21]).to all( be_odd.or be < 10 )
   ```
 
   If you are looking for "any" member of a collection that passes an expectation, look at the `include`-matcher.
