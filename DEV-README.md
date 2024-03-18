@@ -1,24 +1,32 @@
 ## Set up the dev environment
 
-    git clone https://github.com/rspec/rspec-expectations.git
-    cd rspec-expectations
-    gem install bundler
-    bundle install
+```shell
+git clone https://github.com/rspec/rspec-expectations.git
+cd rspec-expectations
+gem install bundler
+bundle install
+```
 
 Now you should be able to run any of:
 
-    rake
-    rake spec
-    rake cucumber
+```shell
+rake
+rake spec
+rake cucumber
+```
 
 Or, if you prefer to use the rspec and cucumber commands directly, you can either:
 
-    bundle exec rspec
+```shell
+bundle exec rspec
+```
 
 Or ...
 
-    bundle install --binstubs
-    bin/rspec
+```shell
+bundle install --binstubs
+bin/rspec
+```
 
 ## Customize the dev environment
 

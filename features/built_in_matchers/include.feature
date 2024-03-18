@@ -3,32 +3,32 @@ Feature: `include` matcher
   Use the `include` matcher to specify that a collection includes one or more expected objects. It succeeds if any object of the given collection passes the specified matcher. This works on any object that responds to `#include?` (such as a string or array):
 
   ```ruby
-    expect("a string").to include("a")
-    expect("a string").to include(/a|str/).twice
-    expect("a string").to include("str", "g")
-    expect("a string").not_to include("foo")
+  expect("a string").to include("a")
+  expect("a string").to include(/a|str/).twice
+  expect("a string").to include("str", "g")
+  expect("a string").not_to include("foo")
 
-    expect([1, 2]).to include(1)
-    expect([1, 2]).to include(1, 2)
-    expect([1, 2]).to include(a_kind_of(Integer))
-    expect([1, 2]).to include(be_odd.and be < 10 )
-    expect([1, 2]).to include(be_odd)
-    expect([1, 2]).to include(be < 10).at_least(2).times
-    expect([1, 2]).not_to include(17)
+  expect([1, 2]).to include(1)
+  expect([1, 2]).to include(1, 2)
+  expect([1, 2]).to include(a_kind_of(Integer))
+  expect([1, 2]).to include(be_odd.and be < 10 )
+  expect([1, 2]).to include(be_odd)
+  expect([1, 2]).to include(be < 10).at_least(2).times
+  expect([1, 2]).not_to include(17)
   ```
 
   The matcher also provides flexible handling for hashes:
 
   ```ruby
-    expect(:a => 1, :b => 2).to include(:a)
-    expect(:a => 1, :b => 2).to include(:a, :b)
-    expect(:a => 1, :b => 2).to include(:a => 1)
-    expect(:a => 1, :b => 2).to include(:b => 2, :a => 1)
-    expect(:a => 1, :b => 2).to include(match(/b/) => 2)
-    expect(:a => 1, :b => 2).to include(match(/b/) => be_even)
-    expect(:a => 1, :b => 2).not_to include(:c)
-    expect(:a => 1, :b => 2).not_to include(:a => 2)
-    expect(:a => 1, :b => 2).not_to include(:c => 3)
+  expect(:a => 1, :b => 2).to include(:a)
+  expect(:a => 1, :b => 2).to include(:a, :b)
+  expect(:a => 1, :b => 2).to include(:a => 1)
+  expect(:a => 1, :b => 2).to include(:b => 2, :a => 1)
+  expect(:a => 1, :b => 2).to include(match(/b/) => 2)
+  expect(:a => 1, :b => 2).to include(match(/b/) => be_even)
+  expect(:a => 1, :b => 2).not_to include(:c)
+  expect(:a => 1, :b => 2).not_to include(:a => 2)
+  expect(:a => 1, :b => 2).not_to include(:c => 3)
   ```
 
   Scenario: Array usage

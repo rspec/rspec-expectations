@@ -3,17 +3,17 @@ Feature: `have_attributes` matcher
   Use the have_attributes matcher to specify that an object's attributes match the expected attributes:
 
   ```ruby
-    Person = Struct.new(:name, :age)
-    person = Person.new("Jim", 32)
+  Person = Struct.new(:name, :age)
+  person = Person.new("Jim", 32)
 
-    expect(person).to have_attributes(:name => "Jim", :age => 32)
-    expect(person).to have_attributes(:name => a_string_starting_with("J"), :age => (a_value > 30) )
+  expect(person).to have_attributes(:name => "Jim", :age => 32)
+  expect(person).to have_attributes(:name => a_string_starting_with("J"), :age => (a_value > 30) )
   ```
 
   The matcher will fail if actual doesn't respond to any of the expected attributes:
 
   ```ruby
-    expect(person).to have_attributes(:name => "Jim", :color => 'red')
+  expect(person).to have_attributes(:name => "Jim", :color => 'red')
   ```
 
   Scenario: Basic usage

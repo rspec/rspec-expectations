@@ -16,7 +16,6 @@ Feature: Customized message
           end
         end
       end
-
       """
     When I run `rspec example_spec.rb --format documentation`
     Then the output should contain "expected empty array, got [1]"
@@ -33,7 +32,6 @@ Feature: Customized message
           end
         end
       end
-
       """
     When I run `rspec example_spec.rb --format documentation`
     Then the output should contain "expected empty array, got [1]"

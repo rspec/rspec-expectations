@@ -4,17 +4,17 @@ Feature: `satisfy` matcher
   specify. It passes if the block you provide returns true:
 
   ```ruby
-    expect(10).to satisfy { |v| v % 5 == 0 }
-    expect(7).not_to satisfy { |v| v % 5 == 0 }
+  expect(10).to satisfy { |v| v % 5 == 0 }
+  expect(7).not_to satisfy { |v| v % 5 == 0 }
   ```
 
   The default failure message ("expected [actual] to satisfy block") is not very descriptive or helpful.
   To add clarification, you can provide your own description as an argument:
 
   ```ruby
-    expect(10).to satisfy("be a multiple of 5") do |v|
-      v % 5 == 0
-    end
+  expect(10).to satisfy("be a multiple of 5") do |v|
+    v % 5 == 0
+  end
   ```
 
   @skip-when-ripper-unsupported
