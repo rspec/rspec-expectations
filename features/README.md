@@ -3,11 +3,11 @@
 rspec-expectations is used to define expected outcomes.
 
 ```ruby
-    RSpec.describe Account do
-      it "has a balance of zero when first created" do
-        expect(Account.new.balance).to eq(Money.new(0))
-      end
-    end
+RSpec.describe Account do
+  it "has a balance of zero when first created" do
+    expect(Account.new.balance).to eq(Money.new(0))
+  end
+end
 ```
 
 ## Basic structure
@@ -15,8 +15,8 @@ rspec-expectations is used to define expected outcomes.
 The basic structure of an rspec expectation is:
 
 ```ruby
-    expect(actual).to matcher(expected)
-    expect(actual).not_to matcher(expected)
+expect(actual).to matcher(expected)
+expect(actual).not_to matcher(expected)
 ```
 
 Note: You can also use `expect(..).to_not` instead of `expect(..).not_to`.
@@ -25,8 +25,8 @@ Note: You can also use `expect(..).to_not` instead of `expect(..).not_to`.
 #### Examples
 
 ```ruby
-    expect(5).to eq(5)
-    expect(5).not_to eq(4)
+expect(5).to eq(5)
+expect(5).not_to eq(4)
 ```
 
 ## What is a matcher?
@@ -34,17 +34,17 @@ Note: You can also use `expect(..).to_not` instead of `expect(..).not_to`.
 A matcher is any object that responds to the following methods:
 
 ```ruby
-    matches?(actual)
-    failure_message
+matches?(actual)
+failure_message
 ```
 
 These methods are also part of the matcher protocol, but are optional:
 
 ```ruby
-    does_not_match?(actual)
-    failure_message_when_negated
-    description
-    supports_block_expectations?
+does_not_match?(actual)
+failure_message_when_negated
+description
+supports_block_expectations?
 ```
 
 RSpec ships with a number of built-in matchers and a DSL for writing custom
