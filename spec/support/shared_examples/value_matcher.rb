@@ -36,10 +36,14 @@ RSpec.shared_examples "an RSpec value matcher" do |options|
 
   it 'can be used in a composed matcher expression' do
     expect([valid_value, invalid_value]).to include(matcher)
+    # matcher.description => "have attributes {:name => \"Correct name\"}"
+
+    expect([invalid_value]).not_to include(matcher)
+    # matcher.description => "have attributes {:name => \"Correct name\"} but had attributes {:name => \"Wrong Name\"}"
 
     expect {
       expect([invalid_value]).to include(matcher)
-    }.to fail_including("include (#{matcher.description})")
+    }.to fail_including("include (#{matcher.description})") # matcher.description contains description of the most recent assertion
   end
 
   it 'uses the `ObjectFormatter` for `failure_message`' do
