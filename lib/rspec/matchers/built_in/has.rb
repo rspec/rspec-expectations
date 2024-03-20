@@ -75,7 +75,13 @@ module RSpec
           if RSpec::Expectations.configuration.strict_predicate_matchers?
             value == predicate_result
           else
-            value == !!predicate_result
+            predicate_actual = predicate_result
+            if value == !!predicate_actual && value != predicate_actual
+              RSpec.deprecate(
+                "`#{predicate_method_name}` returned neither `true` nor `false`, but rather `#{predicate_actual.inspect}`",
+                :replacement => "`expect(subject.#{predicate_method_name}).to #{value ? "be_truthy" : "be_falsey"}`")
+            end
+            value == !!predicate_actual
           end
         end
 
@@ -143,6 +149,9 @@ module RSpec
         end
 
         def predicate_method_name
+          unless actual.respond_to?(predicate)
+            RSpec.deprecate("`#{predicate}` fall back to a present-tense form `#{present_tense_predicate}` will be removed in RSpec 4")
+          end
           actual.respond_to?(predicate) ? predicate : present_tense_predicate
         end
 
