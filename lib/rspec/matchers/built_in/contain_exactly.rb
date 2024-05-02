@@ -136,17 +136,55 @@ module RSpec
           @best_solution ||= pairings_maximizer.find_best_solution
         end
 
-        def pairings_maximizer
+        # This implementation is complicated but it facilitates an enormous speedup.
+        # The previous implementation never finished when comparing arrays of 50
+        # random integers between 1 and 10 (I stopped the execution after a full day).
+        # This implementation finishes that task in .03s on my laptop.
+        # This represents a speedup of over 259,000x for that task!  The gap widens
+        # exponentially as the array size increases:
+        # Assuming the old implementation takes a day to compare arrays of 50 random
+        # integers, comparing arrays of 1000 elements would take 10^2486 billion years.
+        # The new implementation finishes this task in 1 second!
+        def pairings_maximizer # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
           @pairings_maximizer ||= begin
             expected_matches = Hash[Array.new(expected.size) { |i| [i, []] }]
             actual_matches   = Hash[Array.new(actual.size)   { |i| [i, []] }]
 
-            expected.each_with_index do |e, ei|
-              actual.each_with_index do |a, ai|
+            # Set the reciprocal pairings for matching elements
+            value_buckets = Hash.new { |hash, key| hash[key] = [] }
+            expected.each_with_index { |v, i| value_buckets[[v, :expected]] << i }
+            actual.each_with_index   { |v, i| value_buckets[[v, :actual]] << i }
+            value_buckets.each do |key, indexes|
+              value, source = key
+              next unless source == :expected
+              next unless value_buckets.key? [value, :actual]
+
+              actual_indexes = value_buckets[[value, :actual]]
+              indexes.zip(actual_indexes).each do |expected_index, actual_index|
+                break unless actual_index
+
+                expected_matches[expected_index] << actual_index
+                actual_matches[actual_index] << expected_index
+              end
+            end
+
+            # Set the remaining elements to be paired
+            filtered_expected = []
+            filtered_actual = []
+            expected.each_with_index do |e, expected_index|
+              filtered_expected << [e, expected_index] if expected_matches[expected_index].empty?
+            end
+            actual.each_with_index do |a, actual_index|
+              filtered_actual << [a, actual_index] if actual_matches[actual_index].empty?
+            end
+
+            # Set the pairing combinations of the remaining elements
+            filtered_expected.each do |e, expected_index|
+              filtered_actual.each do |a, actual_index|
                 next unless values_match?(e, a)
 
-                expected_matches[ei] << ai
-                actual_matches[ai] << ei
+                expected_matches[expected_index] << actual_index
+                actual_matches[actual_index] << expected_index
               end
             end
 

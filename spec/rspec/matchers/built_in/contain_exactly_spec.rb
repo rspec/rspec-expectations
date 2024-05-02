@@ -184,22 +184,78 @@ the missing elements were:      [1]
 MESSAGE
   end
 
-  def timeout_if_not_debugging(time)
-    in_sub_process_if_possible do
-      require 'timeout'
-      return yield if defined?(::Debugger)
-      Timeout.timeout(time) { yield }
+  context "speed checks" do
+    def timeout_if_not_debugging(time)
+      in_sub_process_if_possible do
+        require 'timeout'
+        return yield if defined?(::Debugger)
+        Timeout.timeout(time) { yield }
+      end
     end
-  end
 
-  it 'fails a match of 11 items with duplicates in a reasonable amount of time' do
-    timeout_if_not_debugging(0.1) do
-      expected = [0, 1, 1,    3, 3, 3,    4, 4,    8, 8, 9   ]
-      actual   = [   1,    2, 3, 3, 3, 3,       7, 8, 8, 9, 9]
+    shared_examples "for succeeding quickly" do
+      it do
+        timeout_if_not_debugging(max_runtime) do
+          subject
+        end
+      end
+    end
 
-      expect {
+    shared_examples "for failing fast with" do |failure_msg|
+      it do
+        timeout_if_not_debugging(max_runtime) do
+          expect {
+            subject
+          }.to fail_with(/#{Regexp.quote(failure_msg)}/)
+        end
+      end
+    end
+
+    let(:max_runtime) { 0.5 }
+    let(:actual) { Array.new(1000) { rand(10) } }
+
+    context "with a positive expectation" do
+      subject(:expect_actual_to_contain_exactly_expected) do
         expect(actual).to contain_exactly(*expected)
-      }.to fail_including("the missing elements were:      [0, 1, 4, 4]")
+      end
+
+      context "that is valid" do
+        let(:expected) { actual.shuffle }
+
+        it "matches" do
+          expect_actual_to_contain_exactly_expected
+        end
+
+        include_examples "for succeeding quickly"
+      end
+
+      context "that is not valid" do
+        let(:expected) { Array.new(1000) { rand(10) } }
+
+        include_examples "for failing fast with", "expected collection contained"
+      end
+    end
+
+    context "with a negative expectation" do
+      subject(:expect_actual_not_to_contain_exactly_expected) do
+        expect(actual).not_to contain_exactly(*expected)
+      end
+
+      context "that is valid" do
+        let(:expected) { Array.new(1000) { rand(10) } }
+
+        it "does not match" do
+          expect_actual_not_to_contain_exactly_expected
+        end
+
+        include_examples "for succeeding quickly"
+      end
+
+      context "that is not valid" do
+        let(:expected) { actual.shuffle }
+
+        include_examples "for failing fast with", "not to contain exactly"
+      end
     end
   end
 
