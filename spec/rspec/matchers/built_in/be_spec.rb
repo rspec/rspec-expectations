@@ -85,6 +85,21 @@ RSpec.describe "expect(...).to be_predicate" do
         expect(actual).to be_happy
       }.to fail_with("expected `#{actual.inspect}.happy?` to be truthy, got false")
     end
+
+    it "does not allow non-supplied dynamic matchers to pass on spies" do
+      thing = spy("thing", has_recv?: true)
+
+      expect(thing).to have_recv(:foo)
+      expect(thing).to have_received(:has_recv?).with(:foo)
+
+      begin
+        expect(thing).to have_receivex(:foo)
+      rescue RSpec::Expectations::ExpectationNotMetError
+        @reached = true
+      end
+      expect(@reached).to be_truthy
+      expect(thing).not_to have_received(:has_receivex?)
+    end
   end
 
   it "fails when actual does not respond to :predicate?" do

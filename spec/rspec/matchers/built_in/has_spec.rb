@@ -159,6 +159,21 @@ RSpec.describe "expect(...).not_to have_sym(*args)" do
       actual = double("actual", :has_foo? => nil)
       expect(actual).not_to have_foo
     end
+
+    it "does not allow non-supplied dynamic matchers to pass on spies" do
+      thing = spy("thing", furg?: true)
+
+      expect(thing).to be_furg(:foo)
+      expect(thing).to have_received(:furg?).with(:foo)
+
+      begin
+        expect(thing).to be_blurm(:foo)
+      rescue RSpec::Expectations::ExpectationNotMetError
+        @reached = true
+      end
+      expect(@reached).to be_truthy
+      expect(thing).not_to have_received(:blurm?)
+    end
   end
 
   it "fails if #has_sym?(*args) returns true" do
