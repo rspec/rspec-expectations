@@ -290,9 +290,22 @@ RSpec.describe "expect { ... }.to raise_error.with_message(message)" do
   end
 end
 
-RSpec.describe "expect { ... }.not_to raise_error(message)" do
+RSpec.describe "expect { ... }.not_to raise_error('message')" do
   it "issues a warning" do
-    expect_warning_with_call_site __FILE__, __LINE__+1, /risks false positives/
+    expect_warning_with_call_site __FILE__, __LINE__+1, /not_to raise_error\(message\)` risks false positives/
+    expect { raise 'blarg' }.not_to raise_error("blah")
+  end
+
+  it "can supresses the warning when configured to do so", :warn_about_potential_false_positives do
+    RSpec::Expectations.configuration.warn_about_potential_false_positives = false
+    expect_no_warnings
+    expect { raise 'blarg' }.not_to raise_error("blah")
+  end
+end
+
+RSpec.describe "expect { ... }.not_to raise_error(/message/)" do
+  it "issues a warning" do
+    expect_warning_with_call_site __FILE__, __LINE__+1, /not_to raise_error\(message\)` risks false positives/
     expect { raise 'blarg' }.not_to raise_error(/blah/)
   end
 
