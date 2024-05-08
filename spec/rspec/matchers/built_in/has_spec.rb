@@ -160,19 +160,18 @@ RSpec.describe "expect(...).not_to have_sym(*args)" do
       expect(actual).not_to have_foo
     end
 
-    it "does not allow non-supplied dynamic matchers to pass on spies" do
+    it "allows dynamic matchers to pass for supplied methods on spies" do
       thing = spy("thing", furg?: true)
-
       expect(thing).to be_furg(:foo)
       expect(thing).to have_received(:furg?).with(:foo)
+    end
 
-      begin
-        expect(thing).to be_blurm(:foo)
-      rescue RSpec::Expectations::ExpectationNotMetError
-        @reached = true
-      end
-      expect(@reached).to be_truthy
-      expect(thing).not_to have_received(:blurm?)
+    it "does not allow dynamic matchers to pass for inferred methods on spies" do
+      thing = spy("thing")
+      expect {
+        expect(thing).to be_furg(:foo)
+      }.to fail
+      expect(thing).not_to have_received(:furg?)
     end
   end
 
