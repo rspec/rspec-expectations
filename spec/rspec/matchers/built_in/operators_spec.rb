@@ -228,22 +228,36 @@ RSpec.describe "operator matchers", :uses_should do
   end
 
   describe RSpec::Matchers::BuiltIn::PositiveOperatorMatcher do
+    let(:o) { Object.new }
+    before { def o.send(*_args); raise "DOH! Library developers shouldn't use #send!"; end }
+
     it "works when the target has implemented #send" do
-      o = Object.new
-      def o.send(*_args); raise "DOH! Library developers shouldn't use #send!" end
       expect {
         o.should == o
       }.not_to raise_error
     end
+
+    it "complains when negated" do
+      expect {
+        o.should != o
+      }.to raise_error(/does not support `should != .*Use `should_not ==/)
+    end
   end
 
   describe RSpec::Matchers::BuiltIn::NegativeOperatorMatcher do
+    let(:o) { Object.new }
+    before { def o.send(*_args); raise "DOH! Library developers shouldn't use #send!"; end }
+
     it "works when the target has implemented #send" do
-      o = Object.new
-      def o.send(*_args); raise "DOH! Library developers shouldn't use #send!" end
       expect {
         o.should_not == :foo
       }.not_to raise_error
+    end
+
+    it "complains when negated" do
+      expect {
+        o.should_not != :foo
+      }.to raise_error(/does not support `should_not != .*Use `should ==/)
     end
   end
 end
