@@ -993,5 +993,30 @@ module RSpec::Matchers::BuiltIn
         }.to raise_error(NotImplementedError, /matcher.or matcher` is not supported/)
       end
     end
+
+    describe "#expects_call_stack_jump?" do
+      subject(:expects_call_stack_jump?) { matcher.expects_call_stack_jump? }
+      let(:matcher) { described_class.new(matcher_1, matcher_2) }
+      let(:matcher_1) { double("Matcher 1") }
+      let(:matcher_2) { double("Matcher 2") }
+
+      context "when neither matcher expects a call-stack jump" do
+        let(:matcher_1) { double("Matcher 1", :expects_call_stack_jump? => false) }
+        let(:matcher_2) { double("Matcher 2", :expects_call_stack_jump? => false) }
+        it { is_expected.to be_falsey }
+      end
+
+      context "when one of the matchers expects a call-stack jump" do
+        let(:matcher_1) { double("Matcher 1", :expects_call_stack_jump? => false) }
+        let(:matcher_2) { double("Matcher 2", :expects_call_stack_jump? => true) }
+        it { is_expected.to be_truthy }
+      end
+
+      context "when neither matcher _specifies_ that it expects a call-stack jump" do
+        let(:matcher_1) { Object.new }
+        let(:matcher_2) { Object.new }
+        it { is_expected.to be_falsey }
+      end
+    end
   end
 end
