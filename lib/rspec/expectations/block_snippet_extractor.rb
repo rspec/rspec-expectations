@@ -46,11 +46,13 @@ module RSpec
           RSpec.world.source_from_file(file_path)
         end
       else
+        # :nocov:
         RSpec::Support.require_rspec_support 'source'
         def source
           raise TargetNotFoundError unless File.exist?(file_path)
           @source ||= RSpec::Support::Source.from_file(file_path)
         end
+        # :nocov:
       end
 
       def file_path
