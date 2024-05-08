@@ -242,6 +242,12 @@ RSpec.describe "operator matchers", :uses_should do
         o.should != o
       }.to raise_error(/does not support `should != .*Use `should_not ==/)
     end
+
+    it "is described correctly" do
+      matcher = 7.should
+      matcher.==(7)
+      expect(matcher.description).to eq("== 7")
+    end
   end
 
   describe RSpec::Matchers::BuiltIn::NegativeOperatorMatcher do
@@ -258,6 +264,12 @@ RSpec.describe "operator matchers", :uses_should do
       expect {
         o.should_not != :foo
       }.to raise_error(/does not support `should_not != .*Use `should ==/)
+    end
+
+    it "is described correctly" do
+      matcher = 7.should_not
+      matcher.==(8)
+      expect(matcher.description).to eq("== 8")
     end
   end
 end
