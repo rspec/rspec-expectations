@@ -55,6 +55,9 @@ module RSpec
           else
             @actual.respond_to?(method)
           end
+        rescue NoMethodError
+          # Proxied BasicObjects don't have `is_a?`, or basically anything else.
+          @actual.respond_to?(method)
         end
 
         def predicate_accessible?
