@@ -260,6 +260,26 @@ module RSpec::Matchers::BuiltIn
       end
     end
 
+    describe "expect(...).to custom_matcher.and(other_matcher)" do
+      it "treats a matcher that doesn't support value expectations correctly" do
+        expect {
+          expect([1, 2]).to include(1).and raise_error(/test/)
+        }.to fail_with(/but was not given a block/)
+      end
+
+      it "treats a matcher that does support value expectations correctly" do
+        expect([1, 2]).to include(1).and include(2)
+      end
+
+      it "treats a matcher that doesn't _specify_ as supporting value expectations" do
+        unsupporting_includes_class = Class.new(Object) do
+          def matches?(actual); actual.include?(2); end
+        end
+        unsupporting_includes = unsupporting_includes_class.new
+        expect([1, 2]).to include(1).and unsupporting_includes
+      end
+    end
+
     describe "expect(...).to matcher.and(other_matcher)" do
 
       it_behaves_like "an RSpec value matcher", :valid_value => 3, :invalid_value => 4, :disallows_negation => true do
