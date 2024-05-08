@@ -87,7 +87,7 @@ RSpec.describe "expect(...).to be_predicate" do
     end
 
     it "allows dynamic matchers to pass for supplied methods on spies" do
-      thing = spy("thing", has_recv?: true)
+      thing = spy("thing", :has_recv? => true)
       expect(thing).to have_recv(:foo)
       expect(thing).to have_received(:has_recv?).with(:foo)
     end
