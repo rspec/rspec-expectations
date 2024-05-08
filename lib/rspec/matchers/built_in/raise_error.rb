@@ -25,7 +25,7 @@ module RSpec
           when nil, UndefinedValue
             @expected_error = Exception
             @expected_message = expected_message
-          when String
+          when String, Regexp
             @expected_error = Exception
             @expected_message = expected_error_or_message
           else
