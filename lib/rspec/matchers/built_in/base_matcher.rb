@@ -126,22 +126,6 @@ module RSpec
 
       private
 
-        def assert_ivars(*expected_ivars)
-          return unless (expected_ivars - present_ivars).any?
-          ivar_list = EnglishPhrasing.list(expected_ivars)
-          raise "#{self.class.name} needs to supply#{ivar_list}"
-        end
-
-        if RUBY_VERSION.to_f < 1.9
-          # :nocov:
-          def present_ivars
-            instance_variables.map(&:to_sym)
-          end
-          # :nocov:
-        else
-          alias present_ivars instance_variables
-        end
-
         # @private
         module HashFormatting
           # `{ :a => 5, :b => 2 }.inspect` produces:
