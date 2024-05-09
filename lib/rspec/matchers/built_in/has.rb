@@ -51,7 +51,7 @@ module RSpec
         # queries `has_receiveddd?`, the spy _fakes_ the method, returning its (truthy) self.
         def really_responds_to?(method)
           if defined?(RSpec::Mocks::Double) && @actual.is_a?(RSpec::Mocks::Double)
-            @actual.respond_to?(method) && @actual.methods.include?(method)
+            @actual.respond_to?(method) && methods_include?(method)
           else
             @actual.respond_to?(method)
           end
@@ -70,10 +70,18 @@ module RSpec
           def private_predicate?
             @actual.private_methods.include? predicate.to_s
           end
+
+          def methods_include?(method)
+            @actual.methods.include?(method.to_s)
+          end
           # :nocov:
         else
           def private_predicate?
             @actual.private_methods.include? predicate
+          end
+
+          def methods_include?(method)
+            @actual.methods.include?(method)
           end
         end
 
