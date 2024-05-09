@@ -124,8 +124,6 @@ module RSpec
         end
         private_class_method :underscore
 
-      private
-
         # @private
         module HashFormatting
           # `{ :a => 5, :b => 2 }.inspect` produces:
