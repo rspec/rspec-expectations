@@ -13,6 +13,10 @@ module RSpec
         # argument. We can't use `nil` for that because we need to warn when `nil` is
         # passed in a different way. It's an Object, not a Module, since Module's `===`
         # does not evaluate to true when compared to itself.
+        #
+        # Note; this _is_ the default value supplied for expected_error_or_message, but
+        # because there are two method-calls involved, that default is actually supplied
+        # in the definition of the _matcher_ method, `RSpec::Matchers#raise_error`
         UndefinedValue = Object.new.freeze
 
         def initialize(expected_error_or_message, expected_message, &block)
