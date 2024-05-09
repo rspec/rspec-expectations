@@ -245,7 +245,7 @@ RSpec.describe "operator matchers", :uses_should do
 
     it "is described correctly" do
       matcher = 7.should
-      matcher.==(7)
+      expect(matcher == 7).to be_truthy
       expect(matcher.description).to eq("== 7")
     end
   end
@@ -268,7 +268,7 @@ RSpec.describe "operator matchers", :uses_should do
 
     it "is described correctly" do
       matcher = 7.should_not
-      matcher.==(8)
+      expect(matcher == 8).to be_falsey
       expect(matcher.description).to eq("== 8")
     end
   end
