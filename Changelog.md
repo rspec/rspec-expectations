@@ -1,5 +1,10 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.3...main)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.0...main)
+
+Bug Fixes:
+
+* Fix the false positive warning message for negated raise error with a regexp argument.
+  (Eric Mueller, #1456)
 
 ### 3.13.0 / 2024-02-04
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.4...v3.13.0)
