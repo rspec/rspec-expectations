@@ -136,13 +136,20 @@ module RSpec
       end
 
       # @private
+      class CapturedStream < StringIO
+        def tty?
+          true
+        end
+      end
+
+      # @private
       module CaptureStdout
         def self.name
           'stdout'
         end
 
         def self.capture(block)
-          captured_stream = StringIO.new
+          captured_stream = CapturedStream.new
 
           original_stream = $stdout
           $stdout = captured_stream
@@ -162,7 +169,7 @@ module RSpec
         end
 
         def self.capture(block)
-          captured_stream = StringIO.new
+          captured_stream = CapturedStream.new
 
           original_stream = $stderr
           $stderr = captured_stream

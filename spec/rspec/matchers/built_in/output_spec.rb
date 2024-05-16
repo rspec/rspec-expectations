@@ -159,6 +159,14 @@ module RSpec
       }
     end
 
+    RSpec.describe "output.to_stdout matcher when printing only if stdout is a TTY" do
+      include_examples "output_to_stream", :stdout, :to_stdout, Module.new {
+        def print_to_stream(msg)
+          $stdout.print(msg) if $stdout.tty?
+        end
+      }
+    end
+
     RSpec.describe "output.to_stderr_from_any_process matcher" do
       include_examples "output_to_stream", :stderr, :to_stderr_from_any_process, Module.new {
         def print_to_stream(msg)
