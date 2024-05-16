@@ -159,14 +159,6 @@ module RSpec
       }
     end
 
-    RSpec.describe "output.to_stdout matcher when printing only if stdout is a TTY" do
-      include_examples "output_to_stream", :stdout, :to_stdout, Module.new {
-        def print_to_stream(msg)
-          $stdout.print(msg) if $stdout.tty?
-        end
-      }
-    end
-
     RSpec.describe "output.to_stderr_from_any_process matcher" do
       include_examples "output_to_stream", :stderr, :to_stderr_from_any_process, Module.new {
         def print_to_stream(msg)
@@ -220,6 +212,26 @@ module RSpec
             '-/qux/',
             '+"bar"'
           )
+      end
+    end
+
+    RSpec.describe "can emulate that the output stream is a TTY" do
+      it "captures output written to a TTY" do
+        expect { print "foo" if $stdout.tty? }.to output("foo").to_stdout.as_tty
+      end
+
+      it "does not capture output only written to a TTY" do
+        expect { print "foo" if $stdout.tty? }.to_not output("foo").to_stdout
+      end
+
+      it "captures output written to a TTY through stderr" do
+        expect { $stderr.print "foo" if $stderr.tty? }.to output("foo").to_stderr.as_tty
+      end
+
+      it "errors out nicely when attempting it without having set the stream" do
+        expect {
+          expect { print "foo" }.to output("foo").as_tty # <- wrong call, `to_std(out|err)` is missing
+        }.to raise_error(/can only be used with `to_stdout` or `to_stderr`/)
       end
     end
   end
