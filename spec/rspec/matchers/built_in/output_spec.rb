@@ -233,6 +233,18 @@ module RSpec
           expect { print "foo" }.to output("foo").as_tty # <- wrong call, `to_std(out|err)` is missing
         }.to raise_error(/can only be used with `to_stdout` or `to_stderr`/)
       end
+
+      it "errors out nicely when attempting it with *_from_any_process" do
+        expect {
+          expect { print "foo" }.to output("foo").to_stdout_from_any_process.as_tty
+        }.to raise_error(/can only be used with `to_stdout` or `to_stderr`/)
+      end
+
+      it "can be chained" do
+        expect { print "foo" if $stdout.tty?; $stderr.print "bar" if $stderr.tty? }.
+          to output("foo").to_stdout.as_tty.
+          and output("bar").to_stderr.as_tty
+      end
     end
   end
 end
