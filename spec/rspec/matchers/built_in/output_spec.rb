@@ -139,6 +139,12 @@ RSpec.shared_examples "output_to_stream" do |stream_name, matcher_method, helper
       }.to fail_including("expected block to not output a string starting with \"f\" to #{stream_name}, but output \"foo\"\nDiff")
     end
   end
+
+  context "expect { ... }.to output(matcher1).#{matcher_method}.and output(matcher2).#{matcher_method}" do
+    it "passes if the block outputs lines to #{stream_name} matching both matchers" do
+      expect { print_to_stream "foo_bar" }.to matcher(/foo/).and matcher(/bar/)
+    end
+  end
 end
 
 module RSpec
