@@ -186,6 +186,7 @@ module RSpec
           captured_stream.string
         ensure
           $stdout = original_stream
+          $stdout.write(captured_stream.string) unless $stdout == STDOUT
         end
       end
 
@@ -209,6 +210,7 @@ module RSpec
           captured_stream.string
         ensure
           $stderr = original_stream
+          $stderr.write(captured_stream.string) unless $stderr == STDERR
         end
       end
 
