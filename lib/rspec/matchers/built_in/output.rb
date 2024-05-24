@@ -63,7 +63,7 @@ module RSpec
         # Tells the matcher to simulate the output stream being a TTY.
         # This is useful to test code like `puts '...' if $stdout.tty?`.
         def as_tty
-          raise '`as_tty` can only be used with `to_stdout` or `to_stderr`' unless @stream_capturer.respond_to?(:as_tty=)
+          raise ArgumentError, '`as_tty` can only be used after `to_stdout` or `to_stderr`' unless @stream_capturer.respond_to?(:as_tty=)
 
           @stream_capturer.as_tty = true
           self

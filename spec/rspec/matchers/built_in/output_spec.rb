@@ -231,7 +231,7 @@ module RSpec
       it "errors out nicely when attempting it without having set the stream" do
         expect {
           expect { print "foo" }.to output("foo").as_tty # <- wrong call, `to_std(out|err)` is missing
-        }.to raise_error(/can only be used with `to_stdout` or `to_stderr`/)
+        }.to raise_error(/can only be used after `to_stdout` or `to_stderr`/)
       end
 
       it "errors out nicely when attempting it with *_from_any_process" do
