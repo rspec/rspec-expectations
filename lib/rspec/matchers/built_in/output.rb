@@ -150,7 +150,8 @@ module RSpec
         attr_accessor :as_tty
 
         def tty?
-          as_tty || super
+          return super if as_tty.nil?
+          as_tty
         end
       end
 
