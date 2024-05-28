@@ -220,8 +220,12 @@ module RSpec
         expect { print "foo" if $stdout.tty? }.to output("foo").to_stdout.as_tty
       end
 
-      it "does not capture output only written to a TTY" do
+      it "does not capture output only written to a TTY by default" do
         expect { print "foo" if $stdout.tty? }.to_not output("foo").to_stdout
+      end
+
+      it "does not capture output only written to a TTY when forcing the stream to not be a TTY" do
+        expect { print "foo" if $stdout.tty? }.to_not output("foo").to_stdout.as_not_tty
       end
 
       it "captures output written to a TTY through stderr" do

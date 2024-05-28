@@ -69,6 +69,17 @@ module RSpec
           self
         end
 
+        # @api public
+        # Tells the matcher to simulate the output stream not being a TTY.
+        # Note that that's the default behaviour if you don't call `as_tty`
+        # (since `StringIO` is not a TTY).
+        def as_not_tty
+          raise ArgumentError, '`as_not_tty` can only be used after `to_stdout` or `to_stderr`' unless @stream_capturer.respond_to?(:as_tty=)
+
+          @stream_capturer.as_tty = false
+          self
+        end
+
         # @api private
         # @return [String]
         def failure_message
