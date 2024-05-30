@@ -6,6 +6,11 @@ Bug Fixes:
 * Fix the false positive warning message for negated raise error with a regexp argument.
   (Eric Mueller, #1456)
 
+Enhancements:
+
+* Improve the IO emulation in the output capture matchers (`output(...).to_stdout` et al)
+  by adding `as_tty` and `as_not_tty` to change the `tty?` flags. (Sergio Gil Pérez de la Manga, #1459)
+
 ### 3.13.0 / 2024-02-04
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.4...v3.13.0)
 
