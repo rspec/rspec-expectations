@@ -29,7 +29,7 @@ module RSpec
         # Tells the matcher to match against stdout.
         # Works only when the main Ruby process prints to stdout
         def to_stdout
-          @stream_capturer = CaptureStdout
+          @stream_capturer = CaptureStdout.new
           self
         end
 
@@ -37,7 +37,7 @@ module RSpec
         # Tells the matcher to match against stderr.
         # Works only when the main Ruby process prints to stderr
         def to_stderr
-          @stream_capturer = CaptureStderr
+          @stream_capturer = CaptureStderr.new
           self
         end
 
@@ -56,6 +56,27 @@ module RSpec
         # This is significantly (~30x) slower than `to_stderr`
         def to_stderr_from_any_process
           @stream_capturer = CaptureStreamToTempfile.new("stderr", $stderr)
+          self
+        end
+
+        # @api public
+        # Tells the matcher to simulate the output stream being a TTY.
+        # This is useful to test code like `puts '...' if $stdout.tty?`.
+        def as_tty
+          raise ArgumentError, '`as_tty` can only be used after `to_stdout` or `to_stderr`' unless @stream_capturer.respond_to?(:as_tty=)
+
+          @stream_capturer.as_tty = true
+          self
+        end
+
+        # @api public
+        # Tells the matcher to simulate the output stream not being a TTY.
+        # Note that that's the default behaviour if you don't call `as_tty`
+        # (since `StringIO` is not a TTY).
+        def as_not_tty
+          raise ArgumentError, '`as_not_tty` can only be used after `to_stdout` or `to_stderr`' unless @stream_capturer.respond_to?(:as_tty=)
+
+          @stream_capturer.as_tty = false
           self
         end
 
@@ -136,13 +157,26 @@ module RSpec
       end
 
       # @private
-      module CaptureStdout
-        def self.name
+      class CapturedStream < StringIO
+        attr_accessor :as_tty
+
+        def tty?
+          return super if as_tty.nil?
+          as_tty
+        end
+      end
+
+      # @private
+      class CaptureStdout
+        attr_accessor :as_tty
+
+        def name
           'stdout'
         end
 
-        def self.capture(block)
-          captured_stream = StringIO.new
+        def capture(block)
+          captured_stream = CapturedStream.new
+          captured_stream.as_tty = as_tty
 
           original_stream = $stdout
           $stdout = captured_stream
@@ -156,13 +190,16 @@ module RSpec
       end
 
       # @private
-      module CaptureStderr
-        def self.name
+      class CaptureStderr
+        attr_accessor :as_tty
+
+        def name
           'stderr'
         end
 
-        def self.capture(block)
-          captured_stream = StringIO.new
+        def capture(block)
+          captured_stream = CapturedStream.new
+          captured_stream.as_tty = as_tty
 
           original_stream = $stderr
           $stderr = captured_stream

@@ -214,5 +214,41 @@ module RSpec
           )
       end
     end
+
+    RSpec.describe "can emulate that the output stream is a TTY" do
+      it "captures output written to a TTY" do
+        expect { print "foo" if $stdout.tty? }.to output("foo").to_stdout.as_tty
+      end
+
+      it "does not capture output only written to a TTY by default" do
+        expect { print "foo" if $stdout.tty? }.to_not output("foo").to_stdout
+      end
+
+      it "does not capture output only written to a TTY when forcing the stream to not be a TTY" do
+        expect { print "foo" if $stdout.tty? }.to_not output("foo").to_stdout.as_not_tty
+      end
+
+      it "captures output written to a TTY through stderr" do
+        expect { $stderr.print "foo" if $stderr.tty? }.to output("foo").to_stderr.as_tty
+      end
+
+      it "errors out nicely when attempting it without having set the stream" do
+        expect {
+          expect { print "foo" }.to output("foo").as_tty # <- wrong call, `to_std(out|err)` is missing
+        }.to raise_error(/can only be used after `to_stdout` or `to_stderr`/)
+      end
+
+      it "errors out nicely when attempting it with *_from_any_process" do
+        expect {
+          expect { print "foo" }.to output("foo").to_stdout_from_any_process.as_tty
+        }.to raise_error(/can only be used after `to_stdout` or `to_stderr`/)
+      end
+
+      it "can be chained" do
+        expect { print "foo" if $stdout.tty?; $stderr.print "bar" if $stderr.tty? }.
+          to output("foo").to_stdout.as_tty.
+          and output("bar").to_stderr.as_tty
+      end
+    end
   end
 end
