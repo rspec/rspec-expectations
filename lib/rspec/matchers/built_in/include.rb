@@ -170,6 +170,9 @@ module RSpec
           # String lacks an `any?` method...
           return false unless actual.respond_to?(:any?)
 
+          # Some objects don't support iteration (e.g. Float, Time, etc.)
+          return false if non_iterable_range?(actual)
+
           actual.any? { |value| values_match?(expected_item, value) }
         end
 
@@ -179,8 +182,21 @@ module RSpec
           end
         else
           def count_enumerable(expected_item)
+            return actual.include?(expected_item) ? 1 : 0 if non_iterable_range?(actual)
             actual.count { |value| values_match?(expected_item, value) }
           end
+        end
+
+        # Determines if actual is a range and contains elements that do not support iteration.
+        # The usual requirement for a Range supporting iteration is that its beginning element
+        # implements `succ`. Time is different; it implements `succ` but that method is
+        # deprecated as of 1.9.2.  Attempting to iterate through a Range of Times raises a
+        # TypeError on many common Ruby implementations.  We treat Ranges of Time objects as
+        # non-iterable to ensure safety.
+        def non_iterable_range?(actual)
+          # leave old behavior untouched, but fix for modern rubies
+          return false unless RUBY_VERSION >= "2.1.9"
+          actual.is_a?(Range) && (!actual.min.respond_to?(:succ) || actual.min.is_a?(Time))
         end
 
         def count_inclusions
