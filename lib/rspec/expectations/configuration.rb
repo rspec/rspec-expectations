@@ -17,7 +17,7 @@ module RSpec
     #   # or
     #
     #   RSpec::Expectations.configuration
-    class Configuration
+    class Configuration # rubocop:disable Metrics/ClassLength
       # @private
       FALSE_POSITIVE_BEHAVIOURS =
         {
@@ -43,7 +43,12 @@ module RSpec
       #       c.syntax = [:should, :expect]
       #     end
       #   end
-      def syntax=(values)
+      def syntax=(values) # rubocop:disable Metrics/MethodLength
+        if self.class.warn_about_syntax?
+          RSpec.deprecate('Expectations syntax configuration',
+                          :replacement => 'the default `expect` syntax',
+                          :call_site => nil)
+        end
         if Array(values).include?(:expect)
           Expectations::Syntax.enable_expect
         else
@@ -51,11 +56,28 @@ module RSpec
         end
 
         if Array(values).include?(:should)
+          if self.class.warn_about_syntax?
+            RSpec.deprecate('`:should` Expectations syntax',
+                            :replacement => 'the default `expect` syntax',
+                            :call_site => nil)
+          end
           Expectations::Syntax.enable_should
         else
           Expectations::Syntax.disable_should
         end
       end
+
+      # @private
+      def self.warn_about_syntax?
+        @warn_about_syntax
+      end
+
+      # @private
+      def self.warn_about_syntax!
+        @warn_about_syntax = true
+      end
+
+      @warn_about_syntax = false
 
       # Configures the maximum character length that RSpec will print while
       # formatting an object. You can set length to nil to prevent RSpec from
@@ -136,8 +158,16 @@ module RSpec
 
       # Sets if custom matcher descriptions and failure messages
       # should include clauses from methods defined using `chain`.
+      # @deprecated
       # @param value [Boolean]
-      attr_writer :include_chain_clauses_in_custom_matcher_descriptions
+      def include_chain_clauses_in_custom_matcher_descriptions=(value)
+        unless value
+          RSpec.deprecate("`include_chain_clauses_in_custom_matcher_descriptions` option will be removed in RSpec 4, and will default to true")
+        end
+        @include_chain_clauses_in_custom_matcher_descriptions = value
+      end
+
+      attr_reader :include_chain_clauses_in_custom_matcher_descriptions
 
       # Indicates whether or not custom matcher descriptions and failure messages
       # should include clauses from methods defined using `chain`. It is
@@ -149,7 +179,6 @@ module RSpec
       # @private
       def reset_syntaxes_to_default
         self.syntax = [:should, :expect]
-        RSpec::Expectations::Syntax.warn_about_should!
       end
 
       # @api private
@@ -226,5 +255,6 @@ module RSpec
 
     # set default syntax
     configuration.reset_syntaxes_to_default
+    Configuration.warn_about_syntax!
   end
 end

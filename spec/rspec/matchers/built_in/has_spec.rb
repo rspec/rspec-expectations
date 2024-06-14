@@ -159,6 +159,26 @@ RSpec.describe "expect(...).not_to have_sym(*args)" do
       actual = double("actual", :has_foo? => nil)
       expect(actual).not_to have_foo
     end
+
+    context "when the predicate neither returns true or false" do
+      it "prints a deprecation warning when actual is falsey" do
+        expect(RSpec).
+          to receive(:deprecate).
+          with("`has_foo?` returned neither `true` nor `false`, but rather `nil`",
+               :replacement => "`expect(subject.has_foo?).to be_falsey`")
+        actual = double("actual", :has_foo? => nil)
+        expect(actual).not_to have_foo
+      end
+
+      it "prints a deprecation warning when actual is truthy" do
+        expect(RSpec).
+          to receive(:deprecate).
+          with('`has_foo?` returned neither `true` nor `false`, but rather `"bar"`',
+               :replacement => "`expect(subject.has_foo?).to be_truthy`")
+        actual = double("actual", :has_foo? => "bar")
+        expect(actual).to have_foo
+      end
+    end
   end
 
   it "fails if #has_sym?(*args) returns true" do

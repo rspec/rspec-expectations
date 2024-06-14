@@ -85,6 +85,13 @@ module RSpec
           config.include_chain_clauses_in_custom_matcher_descriptions = false
           expect(config.include_chain_clauses_in_custom_matcher_descriptions?).to be false
         end
+
+        it "prints a deprecation warning" do
+          expect(RSpec).to receive(:deprecate).with(
+            "`include_chain_clauses_in_custom_matcher_descriptions` option will be removed in RSpec 4, and will default to true")
+          config.include_chain_clauses_in_custom_matcher_descriptions = true
+          config.include_chain_clauses_in_custom_matcher_descriptions = false
+        end
       end
 
       describe "#max_formatted_output_length=" do
@@ -157,6 +164,24 @@ module RSpec
           configure_syntax(@orig_syntax)
         end
 
+        it "warns when should syntax is choosen" do
+          expect(RSpec).
+            to receive(:deprecate).
+            with("Expectations syntax configuration",
+                 :call_site=>nil,
+                 :replacement=>"the default `expect` syntax").
+            at_least(:once)
+
+          expect(RSpec).
+            to receive(:deprecate).
+            with("`:should` Expectations syntax",
+                 :call_site=>nil,
+                 :replacement=>"the default `expect` syntax").
+            at_least(:once)
+
+          configure_syntax :should
+        end
+
         it 'can limit the syntax to :should' do
           configure_syntax :should
           configured_syntax.should eq([:should])
@@ -189,37 +214,6 @@ module RSpec
 
           configure_syntax :expect
           configure_syntax :expect
-        end
-
-        describe "`:should` being enabled by default deprecation" do
-          before { configure_default_syntax }
-
-          it "warns when the should syntax is called by default" do
-            expected_arguments = [
-              /Using.*without explicitly enabling/,
-              { :replacement => "the new `:expect` syntax or explicitly enable `:should` with `config.expect_with(:rspec) { |c| c.syntax = :should }`" }
-            ]
-
-            expect(RSpec).to receive(:deprecate).with(*expected_arguments)
-            3.should eq(3)
-          end
-
-          it "includes the call site in the deprecation warning by default" do
-            expect_deprecation_with_call_site(__FILE__, __LINE__ + 1)
-            3.should eq(3)
-          end
-
-          it "does not warn when only the should syntax is explicitly configured" do
-            configure_syntax(:should)
-            RSpec.should_not receive(:deprecate)
-            3.should eq(3)
-          end
-
-          it "does not warn when both the should and expect syntaxes are explicitly configured" do
-            configure_syntax([:should, :expect])
-            expect(RSpec).not_to receive(:deprecate)
-            3.should eq(3)
-          end
         end
 
         it 'can re-enable the :should syntax' do

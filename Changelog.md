@@ -56,6 +56,10 @@ Bug Fixes:
 * When handling failures in an aggregated_failures block (or example) prevent
   the failure list leaking out. (Maciek Rząsa, #1392)
 
+Deprecations:
+
+* Add RSpec 4 deprecation warnings. (Benoit Tigeot, Phil Pirozhkov #1301)
+
 ### 3.12.0 / 2022-10-26
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.11.1...v3.12.0)
 

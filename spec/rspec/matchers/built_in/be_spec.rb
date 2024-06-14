@@ -31,7 +31,14 @@ RSpec.describe "expect(...).to be_predicate" do
   end
 
   it "passes when actual returns true for :predicates? (present tense)" do
-    actual = double("actual", :exists? => true, :exist? => true)
+    actual = double("actual", :exists? => true)
+    expect(actual).to be_exist
+  end
+
+  it "prints a deprecation warning for present tense fallback" do
+    expect(RSpec).to receive(:deprecate).with(
+      "`exist?` fall back to a present-tense form `exists?` will be removed in RSpec 4")
+    actual = double("actual", :exists? => true)
     expect(actual).to be_exist
   end
 
@@ -84,6 +91,24 @@ RSpec.describe "expect(...).to be_predicate" do
       expect {
         expect(actual).to be_happy
       }.to fail_with("expected `#{actual.inspect}.happy?` to be truthy, got false")
+    end
+
+    context "when the predicate neither returns true or false" do
+      it "prints a deprecation warning when actual is truthy" do
+        expect(RSpec).
+          to receive(:deprecate).
+          with("`infinite?` returned neither `true` nor `false`, but rather `-1`",
+               :replacement => "`expect(subject.infinite?).to be_truthy`")
+        expect(-Float::INFINITY).to be_infinite
+      end
+
+      it "prints a deprecation warning when actual is truthy" do
+        expect(RSpec).
+          to receive(:deprecate).
+          with("`infinite?` returned neither `true` nor `false`, but rather `nil`",
+               :replacement => "`expect(subject.infinite?).to be_falsey`")
+        expect(1).to_not be_infinite
+      end
     end
   end
 
