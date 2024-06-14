@@ -49,15 +49,18 @@ module RSpec
         # Catch a semi-frequent typo - if you have strict_predicate_matchers disabled and
         # expect(spy).to have_receieveddd(:foo) it would be evergreen - the dynamic matcher
         # queries `has_receiveddd?`, the spy _fakes_ the method, returning its (truthy) self.
-        def really_responds_to?(method)
-          if defined?(RSpec::Mocks::Double) && @actual.is_a?(RSpec::Mocks::Double)
-            @actual.respond_to?(method) && methods_include?(method)
-          else
+        if defined?(RSpec::Mocks::Double)
+          def really_responds_to?(method)
+            if RSpec::Mocks::Double === @actual
+              @actual.respond_to?(method) && methods_include?(method)
+            else
+              @actual.respond_to?(method)
+            end
+          end
+        else
+          def really_responds_to?(method)
             @actual.respond_to?(method)
           end
-        rescue NoMethodError
-          # Proxied BasicObjects don't have `is_a?`, or basically anything else.
-          @actual.respond_to?(method)
         end
 
         def predicate_accessible?
