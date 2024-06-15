@@ -1,6 +1,11 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.1...main)
 
+Bug Fixes:
+
+* When using null object doubles, prevent typos triggering dynamic matchers.
+  (Eric Mueller, #1455)
+
 Enhancements:
 
 * Improve the IO emulation in the output capture matchers (`output(...).to_stdout` et al)
