@@ -46,8 +46,25 @@ module RSpec
 
       private
 
+        # Catch a semi-frequent typo - if you have strict_predicate_matchers disabled and
+        # expect(spy).to have_receieveddd(:foo) it would be evergreen - the dynamic matcher
+        # queries `has_receiveddd?`, the spy _fakes_ the method, returning its (truthy) self.
+        if defined?(RSpec::Mocks::Double)
+          def really_responds_to?(method)
+            if RSpec::Mocks::Double === @actual
+              @actual.respond_to?(method) && methods_include?(method)
+            else
+              @actual.respond_to?(method)
+            end
+          end
+        else
+          def really_responds_to?(method)
+            @actual.respond_to?(method)
+          end
+        end
+
         def predicate_accessible?
-          @actual.respond_to? predicate
+          really_responds_to?(predicate)
         end
 
         # support 1.8.7, evaluate once at load time for performance
@@ -56,10 +73,18 @@ module RSpec
           def private_predicate?
             @actual.private_methods.include? predicate.to_s
           end
+
+          def methods_include?(method)
+            @actual.methods.include?(method.to_s)
+          end
           # :nocov:
         else
           def private_predicate?
             @actual.private_methods.include? predicate
+          end
+
+          def methods_include?(method)
+            @actual.methods.include?(method)
           end
         end
 
@@ -155,7 +180,7 @@ module RSpec
         end
 
         def predicate_accessible?
-          super || actual.respond_to?(present_tense_predicate)
+          super || really_responds_to?(present_tense_predicate)
         end
 
         def present_tense_predicate
