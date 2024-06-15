@@ -85,6 +85,20 @@ RSpec.describe "expect(...).to be_predicate" do
         expect(actual).to be_happy
       }.to fail_with("expected `#{actual.inspect}.happy?` to be truthy, got false")
     end
+
+    it "allows dynamic matchers to pass for supplied methods on spies" do
+      thing = spy("thing", :has_recv? => true)
+      expect(thing).to have_recv(:foo)
+      expect(thing).to have_received(:has_recv?).with(:foo)
+    end
+
+    it "does not allow dynamic matchers to pass for inferred methods on spies" do
+      thing = spy("thing")
+      expect {
+        expect(thing).to have_recv(:foo)
+      }.to fail
+      expect(thing).not_to have_received(:has_recv?)
+    end
   end
 
   it "fails when actual does not respond to :predicate?" do

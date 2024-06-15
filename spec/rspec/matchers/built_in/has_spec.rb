@@ -159,6 +159,20 @@ RSpec.describe "expect(...).not_to have_sym(*args)" do
       actual = double("actual", :has_foo? => nil)
       expect(actual).not_to have_foo
     end
+
+    it "allows dynamic matchers to pass for supplied methods on spies" do
+      thing = spy("thing", :furg? => true)
+      expect(thing).to be_furg(:foo)
+      expect(thing).to have_received(:furg?).with(:foo)
+    end
+
+    it "does not allow dynamic matchers to pass for inferred methods on spies" do
+      thing = spy("thing")
+      expect {
+        expect(thing).to be_furg(:foo)
+      }.to fail
+      expect(thing).not_to have_received(:furg?)
+    end
   end
 
   it "fails if #has_sym?(*args) returns true" do
