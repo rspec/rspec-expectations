@@ -1,6 +1,11 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.1...main)
 
+Enhancements:
+
+* Improve the IO emulation in the output capture matchers (`output(...).to_stdout` et al)
+  by adding `as_tty` and `as_not_tty` to change the `tty?` flags. (Sergio Gil Pérez de la Manga, #1459)
+
 ### 3.13.1 / 2024-06-13
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.0...v3.13.1)
 
@@ -8,11 +13,6 @@ Bug Fixes:
 
 * Fix the "false positive" warning message when using a negated `raise_error` matcher
   with a `RegExp` instance. (Eric Mueller, #1456)
-
-Enhancements:
-
-* Improve the IO emulation in the output capture matchers (`output(...).to_stdout` et al)
-  by adding `as_tty` and `as_not_tty` to change the `tty?` flags. (Sergio Gil Pérez de la Manga, #1459)
 
 ### 3.13.0 / 2024-02-04
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.4...v3.13.0)
