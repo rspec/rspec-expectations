@@ -1,6 +1,11 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.1...3-13-maintenance)
 
+Bug Fixes:
+
+* When using null object doubles, prevent typos triggering dynamic matchers.
+  (Eric Mueller, #1455)
+
 ### 3.13.1 / 2024-06-13
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.0...v3.13.1)
 
