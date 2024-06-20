@@ -1,4 +1,4 @@
-# This file was generated on 2024-02-23T14:21:35+00:00 from the rspec-dev repo.
+# This file was generated on 2024-06-20T22:22:25+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 name: RSpec CI
@@ -83,6 +83,13 @@ jobs:
       - run: bundle install --standalone
       - run: bundle binstubs --all
       - run: script/run_build
+      - name: Store coverage output for reference
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: coverage-report-${{ matrix.ruby }}
+          path: coverage/index.html
+          retention-days: 14
 
   legacy:
     name: Legacy Ruby Builds (${{ matrix.container.version }})
@@ -123,6 +130,7 @@ jobs:
     env:
       LEGACY_CI: true
       JRUBY_OPTS: ${{ matrix.container.jruby_opts || '--dev' }}
+      NO_COVERAGE: true
     steps:
       - uses: actions/checkout@v3
       - run: ${{ matrix.container.pre }}
