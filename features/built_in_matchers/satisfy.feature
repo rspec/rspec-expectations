@@ -17,6 +17,20 @@ Feature: `satisfy` matcher
   end
   ```
 
+  The `satisfy` matcher can also be used on block expectations to match the returned value of the block:
+
+  ```ruby
+  expect { 2 + 2 }.to satisfy { |returned_value| returned_value == 4 }
+  ```
+
+  This comes handy to check both the side effects of the subject under test and its returned value:
+
+  ```ruby
+  expect { request! }
+    .to change { Log.count }.by(1)
+    .and satisfy { |response| response.success? }
+  ```
+
   @skip-when-ripper-unsupported
   Scenario: Basic usage
     Given a file named "satisfy_matcher_spec.rb" with:
@@ -39,3 +53,20 @@ Feature: `satisfy` matcher
       | expected 10 to satisfy expression `v > 15`    |
       | expected 10 not to be greater than 5          |
       | expected 10 to be greater than 15             |
+
+  @skip-when-ripper-unsupported
+  Scenario: Matching the block expectation return value
+    Given a file named "satisfy_matcher_returned_value_spec.rb" with:
+      """ruby
+      RSpec.describe "double-purpose" do
+        it "adds an entry and returns the sum" do
+          ary = [1, 2, 3]
+          expect { ary.shift }
+            .to change { ary }.to([2, 3])
+            .and satisfy { |returned_value| returned_value == 1 }
+        end
+      end
+      """
+    When I run `rspec satisfy_matcher_returned_value_spec.rb`
+    Then the output should contain all of these:
+      | 1 example, 0 failures                        |

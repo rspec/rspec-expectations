@@ -795,8 +795,9 @@ module RSpec
     alias_matcher :an_object_responding_to, :respond_to
     alias_matcher :responding_to, :respond_to
 
-    # Passes if the submitted block returns true. Yields target to the
-    # block.
+    # Passes if the submitted block returns true.
+    # For value expectations, yields target to the block.
+    # For block expectations, yields the expectation's returned value to the block.
     #
     # Generally speaking, this should be thought of as a last resort when
     # you can't find any other way to specify the behaviour you wish to
@@ -810,6 +811,10 @@ module RSpec
     # @example
     #   expect(5).to satisfy { |n| n > 3 }
     #   expect(5).to satisfy("be greater than 3") { |n| n > 3 }
+    #
+    #   expect { ary.shift }
+    #     .to change { ary }.to(be_empty)
+    #     .and satisfy { |returned_value| returned_value == :last_on_the_list }
     def satisfy(description=nil, &block)
       BuiltIn::Satisfy.new(description, &block)
     end

@@ -6,6 +6,40 @@ RSpec.shared_examples "an RSpec block-only matcher" do |*options|
   # if it was passed.
   options = options.first || {}
 
+  include_examples "an RSpec block matcher", options
+
+  it 'fails gracefully when given a value' do
+    expect {
+      expect(3).to matcher
+    }.to fail_with(/was not( given)? a block/)
+
+    unless options[:disallows_negation]
+      expect {
+        expect(3).not_to matcher
+      }.to fail_with(/was not( given)? a block/)
+    end
+  end
+
+  it 'prints a deprecation warning when given a value' do
+    expect_warn_deprecation(/The implicit block expectation syntax is deprecated, you should pass/)
+    expect { expect(3).to matcher }.to fail
+  end unless options[:skip_deprecation_check] || options[:expects_lambda]
+
+  it 'prints a deprecation warning when given a value and negated' do
+    expect_warn_deprecation(/The implicit block expectation syntax is deprecated, you should pass/)
+    expect { expect(3).not_to matcher }.to fail
+  end unless options[:disallows_negation] || options[:expects_lambda]
+
+  it 'allows lambda expectation target' do
+    allow_deprecation
+    expect(valid_block_lambda).to matcher
+  end
+end
+
+RSpec.shared_examples "an RSpec block matcher" do |*options|
+  # See the note above
+  options = options.first || {}
+
   # Note: do not use `matcher` in 2 expectation expressions in a single
   # example here. In some cases (such as `change { x += 2 }.to(2)`), it
   # will fail because using it a second time will apply `x += 2` twice,
@@ -65,31 +99,4 @@ RSpec.shared_examples "an RSpec block-only matcher" do |*options|
       expect(error.message).to include("detailed inspect")
     end
   end unless options[:failure_message_uses_no_inspect]
-
-  it 'fails gracefully when given a value' do
-    expect {
-      expect(3).to matcher
-    }.to fail_with(/was not( given)? a block/)
-
-    unless options[:disallows_negation]
-      expect {
-        expect(3).not_to matcher
-      }.to fail_with(/was not( given)? a block/)
-    end
-  end
-
-  it 'prints a deprecation warning when given a value' do
-    expect_warn_deprecation(/The implicit block expectation syntax is deprecated, you should pass/)
-    expect { expect(3).to matcher }.to fail
-  end unless options[:skip_deprecation_check] || options[:expects_lambda]
-
-  it 'prints a deprecation warning when given a value and negated' do
-    expect_warn_deprecation(/The implicit block expectation syntax is deprecated, you should pass/)
-    expect { expect(3).not_to matcher }.to fail
-  end unless options[:disallows_negation] || options[:expects_lambda]
-
-  it 'allows lambda expectation target' do
-    allow_deprecation
-    expect(valid_block_lambda).to matcher
-  end
 end

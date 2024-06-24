@@ -119,7 +119,7 @@ module RSpec
 
         # This spec is merely to make sure we don't forget to make
         # a built-in matcher implement `===`. It doesn't check the
-        # semantics of that. Use the "an RSpec value matcher" and
+        # semantics of that. Use the "an RSpec value-only matcher" and
         # "an RSpec block-only matcher" shared example groups to
         # actually check the semantics.
         expect(missing_threequals).to eq([])

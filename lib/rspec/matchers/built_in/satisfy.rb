@@ -12,9 +12,14 @@ module RSpec
 
         # @private
         def matches?(actual, &block)
-          @block = block if block
-          @actual = actual
-          @block.call(actual)
+          if Proc === actual
+            @actual = actual.call
+            @block.call(@actual)
+          else
+            @block = block if block
+            @actual = actual
+            @block.call(actual)
+          end
         end
 
         # @private
@@ -32,6 +37,13 @@ module RSpec
         # @return [String]
         def failure_message_when_negated
           "expected #{actual_formatted} not to #{description}"
+        end
+
+        # @api private
+        # Indicates this matcher matches against a block.
+        # @return [True]
+        def supports_block_expectations?
+          true
         end
 
       private

@@ -162,8 +162,13 @@ module RSpec
 
             inner, outer = order_block_matchers
 
+            returned = nil
             @match_results[outer] = outer.matches?(Proc.new do |*args|
-              @match_results[inner] = inner.matches?(inner_matcher_block(args))
+              p = Proc.new { |*args2|
+                returned = inner_matcher_block(args).call(*args2)
+              }
+              @match_results[inner] = inner.matches?(p)
+              returned
             end)
           end
 

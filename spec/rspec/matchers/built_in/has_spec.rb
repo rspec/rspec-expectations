@@ -1,5 +1,5 @@
 RSpec.describe "expect(...).to have_sym(*args)" do
-  it_behaves_like "an RSpec value matcher", :valid_value => { :a => 1 },
+  it_behaves_like "an RSpec value-only matcher", :valid_value => { :a => 1 },
                                             :invalid_value => {} do
     let(:matcher) { have_key(:a) }
   end
