@@ -795,6 +795,10 @@ module RSpec
     alias_matcher :an_object_responding_to, :respond_to
     alias_matcher :responding_to, :respond_to
 
+    def return_value(value)
+      BuiltIn::ReturnValue.new(value)
+    end
+
     # Passes if the submitted block returns true. Yields target to the
     # block.
     #

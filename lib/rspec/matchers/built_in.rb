@@ -41,6 +41,7 @@ module RSpec
       autoload :PositiveOperatorMatcher, 'rspec/matchers/built_in/operators'
       autoload :RaiseError,              'rspec/matchers/built_in/raise_error'
       autoload :RespondTo,               'rspec/matchers/built_in/respond_to'
+      autoload :ReturnValue,             'rspec/matchers/built_in/return_value'
       autoload :Satisfy,                 'rspec/matchers/built_in/satisfy'
       autoload :StartWith,               'rspec/matchers/built_in/start_or_end_with'
       autoload :ThrowSymbol,             'rspec/matchers/built_in/throw_symbol'
