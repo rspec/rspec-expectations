@@ -25,6 +25,14 @@ module CommonHelperMethods
     string.gsub(/^\s+\|/, '').chomp
   end
 
+  def timeout_if_not_debugging(time)
+    in_sub_process_if_possible do
+      require 'timeout'
+      return yield if defined?(::Debugger)
+      Timeout.timeout(time) { yield }
+    end
+  end
+
   # We have to use Hash#inspect in examples that have multi-entry
   # hashes because the #inspect output on 1.8.7 is non-deterministic
   # due to the fact that hashes are not ordered. So we can't simply
