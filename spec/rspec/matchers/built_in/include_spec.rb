@@ -178,15 +178,21 @@ RSpec.describe "#include matcher" do
     end
 
     context "for an arbitrary object that responds to `include?`" do
-      it 'delegates to `include?`' do
-        container = double("Container")
-        allow(container).to receive(:include?) { |arg| arg == :stuff }
+      let(:container) { double("Container") }
+      before { allow(container).to receive(:include?) { |arg| arg == :stuff } }
 
+      it 'delegates to `include?`' do
         expect(container).to include(:stuff)
 
         expect {
           expect(container).to include(:space)
         }.to fail_matching("to include :space")
+      end
+
+      it 'refuses to count inclusions' do
+        expect {
+          expect(container).to include(:stuff).once
+        }.to raise_error(NotImplementedError, /Count constraints/)
       end
     end
 

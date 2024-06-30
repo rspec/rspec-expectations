@@ -12,6 +12,13 @@ module RSpec
         }.to fail_with(STDOUT.inspect)
       end
 
+      it "behaves correctly when surfacing descriptions from a readable IO object" do
+        allow(STDOUT).to receive(:each).and_yield
+        expect {
+          expect(3).to matcher_using_surface_descriptions_in(STDOUT)
+        }.to fail_with(STDOUT.to_s)
+      end
+
       it "does not blow up when surfacing descriptions from an unreadable Range object" do
         infinity = (1.0/0.0)
         infinite_range = -infinity..infinity

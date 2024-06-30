@@ -1018,6 +1018,7 @@ module RSpec
         # than _before_, like `append_features`. It's important we check this before
         # in order to find the cases where it was already previously included.
         # @api private
+        # :nocov:
         def append_features(mod)
           return super if mod < self # `mod < self` indicates a re-inclusion.
 
@@ -1038,6 +1039,7 @@ module RSpec
 
           super
         end
+        # :nocov:
       end
     end
   end

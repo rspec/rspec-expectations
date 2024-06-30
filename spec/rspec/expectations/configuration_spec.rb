@@ -146,6 +146,12 @@ module RSpec
           config.on_potential_false_positives = :raise
           expect(config.on_potential_false_positives).to eq :raise
         end
+
+        it 'cannot be set to :fooba' do
+          expect {
+            config.on_potential_false_positives = :fooba
+          }.to raise_error(ArgumentError, /Supported values are/)
+        end
       end
 
       shared_examples "configuring the expectation syntax" do
