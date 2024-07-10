@@ -186,6 +186,7 @@ module RSpec
           captured_stream.string
         ensure
           $stdout = original_stream
+          $stdout.write(captured_stream.string) unless $stdout == STDOUT # rubocop:disable Style/GlobalStdStream
         end
       end
 
@@ -209,6 +210,7 @@ module RSpec
           captured_stream.string
         ensure
           $stderr = original_stream
+          $stderr.write(captured_stream.string) unless $stderr == STDERR # rubocop:disable Style/GlobalStdStream
         end
       end
 
@@ -223,20 +225,47 @@ module RSpec
           # thread, fileutils, etc), so it's worth delaying it until this point.
           require 'tempfile'
 
+          # This is.. awkward-looking. But it's written this way because of how
+          # compound matchers work - we essentially need to be able to tell if
+          # we're in an _inner_ matcher, so we can pass the stream-output along
+          # to the outer matcher for further evaluation in that case. Added to
+          # that, it's fairly difficult to _tell_, because the only actual state
+          # we have access to is the stream itself, and in the case of stderr,
+          # that stream is really a RSpec::Support::StdErrSplitter (which is why
+          # we're testing `is_a?(File)` in such an obnoxious way).
+          inner_matcher = stream.to_io.is_a?(File)
+
+          # FIXME: stream.clone isn't sufficient right now - the StdErrSplitter
+          # clones with the same stream, and reopening the stream on either of
+          # them effectively updates both. Which means that the ensure-reopen
+          # further down doesn't really do anything currently.
           original_stream = stream.clone
+
           captured_stream = Tempfile.new(name)
 
           begin
             captured_stream.sync = true
             stream.reopen(captured_stream)
             block.call
-            captured_stream.rewind
-            captured_stream.read
+            read_contents(captured_stream)
           ensure
+            captured_content = inner_matcher ? read_contents(captured_stream) : nil
             stream.reopen(original_stream)
-            captured_stream.close
-            captured_stream.unlink
+            stream.write(captured_content) if captured_content
+            clean_up_tempfile(captured_stream)
           end
+        end
+
+        private
+
+        def read_contents(strm)
+          strm.rewind
+          strm.read
+        end
+
+        def clean_up_tempfile(tempfile)
+          tempfile.close
+          tempfile.unlink
         end
       end
     end
