@@ -14,7 +14,7 @@ module RSpec::Expectations
       @proc_object = block
     end
 
-    def another_method(*)
+    def another_method(*, &_block)
     end
 
     before do

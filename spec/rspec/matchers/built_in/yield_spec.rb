@@ -1,14 +1,14 @@
 module YieldHelpers
   # these helpers are prefixed with an underscore to prevent
   # collisions with the matchers (some of which have the same names)
-  def _dont_yield
+  def _dont_yield(&_block)
   end
 
   def _yield_with_no_args
     yield
   end
 
-  def _yield_with_args(*args)
+  def _yield_with_args(*args, &_block)
     yield(*args)
   end
 end
