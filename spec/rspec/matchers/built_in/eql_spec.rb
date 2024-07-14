@@ -50,7 +50,7 @@ module RSpec
 
           it "provides message, expected and actual with encoding details on #failure_message when string encoding is different" do
             matcher = eql('abc'.encode('UTF-16LE'))
-            matcher.matches?('abc'.force_encoding('ASCII-8BIT'))
+            matcher.matches?('abc'.dup.force_encoding('ASCII-8BIT'))
             expect(matcher.failure_message).to eq "\nexpected: #<Encoding:UTF-16LE> \"abc\"\n     got: #<Encoding:ASCII-8BIT> \"abc\"\n\n(compared using eql?)\n"
           end
 
