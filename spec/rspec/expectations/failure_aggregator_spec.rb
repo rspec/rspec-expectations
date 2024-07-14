@@ -457,7 +457,11 @@ module RSpec::Expectations
       # Each Ruby version return a different exception complement.
       # This method gets the current version and return the
       # right complement.
-      if RSpec::Support::Ruby.mri? && RUBY_VERSION > "1.8.7"
+      if RSpec::Support::Ruby.mri? && RUBY_VERSION.to_f > 3.3
+        def exception_complement(block_levels)
+          ":in 'block (#{block_levels} levels) in <module:Expectations>'"
+        end
+      elsif RSpec::Support::Ruby.mri? && RUBY_VERSION > "1.8.7"
         def exception_complement(block_levels)
           ":in `block (#{block_levels} levels) in <module:Expectations>'"
         end
