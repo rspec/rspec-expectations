@@ -1,4 +1,4 @@
-# This file was generated on 2024-07-09T08:51:39+02:00 from the rspec-dev repo.
+# This file was generated on 2024-07-15T21:58:52+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -66,6 +66,13 @@ function run_cukes {
     elif is_jruby; then
       # For some reason JRuby doesn't like our improved bundler setup
       RUBYOPT="-I${PWD}/../bundle -rbundler/setup" \
+         PATH="${PWD}/bin:$PATH" \
+         bin/cucumber --strict
+    elif is_ruby_head; then
+      # This is a monkey patch to fix an issue with cucumber using outdated hash syntax, remove when cucumber is updated or ruby 3.4 released
+      sed -i '$i\class Hash; alias :__initialize :initialize; def initialize(*args, **_kw, &block) = __initialize(*args, &block); end' bin/cucumber
+
+      RUBYOPT="${RUBYOPT} -I${PWD}/../bundle -rbundler/setup" \
          PATH="${PWD}/bin:$PATH" \
          bin/cucumber --strict
     else
