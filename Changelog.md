@@ -5,6 +5,7 @@ Bug Fixes:
 
 * When using null object doubles, prevent typos triggering dynamic matchers.
   (Eric Mueller, #1455)
+* Use `RSpec.warning` for an expectation warning rather than `Kernel.warn`. (Jon Rowe, #1472)
 
 Enhancements:
 
