@@ -145,6 +145,16 @@ module RSpec
 
           expect(handle_matcher_result.error_generator.opts).to eq({ :message => "custom" })
         end
+
+        it 'warns when the expectation message is not a string or proc' do
+          matcher = double("matcher", :matches? => true)
+          actual = Object.new
+          not_a_string_or_proc = Object.new
+
+          expect(capture_warnings {
+            RSpec::Expectations::PositiveExpectationHandler.handle_matcher(actual, matcher, not_a_string_or_proc)
+          }).to contain_exactly(a_string_matching(/since it is not a string or a proc/))
+        end
       end
     end
 

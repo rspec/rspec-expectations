@@ -4,11 +4,10 @@ module RSpec
     module ExpectationHelper
       def self.check_message(msg)
         unless msg.nil? || msg.respond_to?(:to_str) || msg.respond_to?(:call)
-          ::Kernel.warn [
-            "WARNING: ignoring the provided expectation message argument (",
-            msg.inspect,
-            ") since it is not a string or a proc."
-          ].join
+          RSpec.warning(
+            "ignoring the provided expectation message argument" \
+            "(#{ msg.inspect }) since it is not a string or a proc"
+          )
         end
       end
 

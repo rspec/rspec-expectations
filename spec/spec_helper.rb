@@ -25,6 +25,20 @@ module CommonHelperMethods
     string.gsub(/^\s+\|/, '').chomp
   end
 
+  def capture_warnings(&block)
+    warning_notifier = RSpec::Support.warning_notifier
+    warnings = []
+    RSpec::Support.warning_notifier = lambda { |warning| warnings << warning }
+
+    begin
+      block.call
+    ensure
+      RSpec::Support.warning_notifier = warning_notifier
+    end
+
+    warnings
+  end
+
   # We have to use Hash#inspect in examples that have multi-entry
   # hashes because the #inspect output on 1.8.7 is non-deterministic
   # due to the fact that hashes are not ordered. So we can't simply
