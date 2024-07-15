@@ -68,6 +68,12 @@ function run_cukes {
       RUBYOPT="-I${PWD}/../bundle -rbundler/setup" \
          PATH="${PWD}/bin:$PATH" \
          bin/cucumber --strict
+    elif is_ruby_head; then
+      sed -i '$i\class Hash; alias :__initialize :initialize; def initialize(*args, **_kw, &block) = __initialize(*args, &block); end' bin/cucumber
+
+      RUBYOPT="${RUBYOPT} -I${PWD}/../bundle -rbundler/setup" \
+         PATH="${PWD}/bin:$PATH" \
+         bin/cucumber --strict
     else
       # Prepare RUBYOPT for scenarios that are shelling out to ruby,
       # and PATH for those that are using `rspec` or `rake`.
