@@ -9,6 +9,8 @@ Then /^the output should contain all of these:$/ do |table|
   table.raw.flatten.each do |string|
     if RUBY_VERSION == '1.8.7' && string =~ /\{.+=>.+\}/
       warn "Skipping checking #{string} on 1.8.7 because hash ordering is not consistent"
+    elsif RUBY_VERSION.to_f > 3.3
+      expect(all_output).to include_output_string string.gsub('undefined method `', "undefined method '")
     else
       expect(all_output).to include_output_string string
     end
