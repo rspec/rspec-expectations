@@ -440,9 +440,11 @@ module RSpec
             Expectations::BlockSnippetExtractor.try_extracting_single_line_body_of(@value_proc, @matcher_name)
           end
         else
+          # :nocov:
           def extract_value_block_snippet
             nil
           end
+          # :nocov:
         end
       end
     end

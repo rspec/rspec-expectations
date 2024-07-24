@@ -61,9 +61,11 @@ module RSpec
             count.cover?(number)
           end
         else
+          # :nocov:
           def cover?(count, number)
             number >= count.first && number <= count.last
           end
+          # :nocov:
         end
 
         def expected_count_matches?(actual_count)

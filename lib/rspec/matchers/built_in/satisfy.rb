@@ -50,9 +50,11 @@ module RSpec
             Expectations::BlockSnippetExtractor.try_extracting_single_line_body_of(@block, matcher_name)
           end
         else
+          # :nocov:
           def block_representation
             'block'
           end
+          # :nocov:
         end
       end
     end

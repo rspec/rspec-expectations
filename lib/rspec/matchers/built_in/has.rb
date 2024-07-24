@@ -58,9 +58,11 @@ module RSpec
             end
           end
         else
+          # :nocov:
           def really_responds_to?(method)
             @actual.respond_to?(method)
           end
+          # :nocov:
         end
 
         def predicate_accessible?

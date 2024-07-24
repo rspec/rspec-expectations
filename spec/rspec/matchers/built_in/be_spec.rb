@@ -524,6 +524,22 @@ RSpec.describe "expect(...).to be_truthy" do
   end
 end
 
+RSpec.describe "expect(...).not_to be_truthy" do
+  it "passes when actual equal?(false)" do
+    expect(false).not_to be_truthy
+  end
+
+  it "passes when actual equal?(nil)" do
+    expect(nil).not_to be_truthy
+  end
+
+  it "fails when actual equal?(true)" do
+    expect {
+      expect(true).not_to be_truthy
+    }.to fail_with("expected: falsey value\n     got: true")
+  end
+end
+
 RSpec.describe "expect(...).to be_falsey" do
   it "passes when actual equal?(false)" do
     expect(false).to be_falsey
@@ -553,6 +569,22 @@ RSpec.describe "expect(...).to be_falsy" do
     expect {
       expect(true).to be_falsy
     }.to fail_with("expected: falsey value\n     got: true")
+  end
+end
+
+RSpec.describe "expect(...).not_to be_falsey" do
+  it "passes when actual equal?(true)" do
+    expect(true).not_to be_falsey
+  end
+
+  it "passes when actual is 1" do
+    expect(1).not_to be_falsey
+  end
+
+  it "fails when actual equal?(false)" do
+    expect {
+      expect(false).not_to be_falsey
+    }.to fail_with("expected: truthy value\n     got: false")
   end
 end
 

@@ -45,12 +45,14 @@ module RSpec
         # So here we replace `Kernel#Array` with our own warning-free implementation for 1.8.7.
         # @private
         # rubocop:disable Naming/MethodName
+        # :nocov:
         def self.Array(obj)
           case obj
           when Array then obj
           else [obj]
           end
         end
+        # :nocov:
         # rubocop:enable Naming/MethodName
       end
     end

@@ -156,9 +156,11 @@ module RSpec
           else
             # @api private
             # @return [Boolean] False always as the curent Ruby version does not support String encoding
+            # :nocov:
             def string_encoding_differs?
               false
             end
+            # :nocov:
           end
           module_function :string_encoding_differs?
 
@@ -175,9 +177,11 @@ module RSpec
             # Formats a String's encoding as a human readable string
             # @param _value [String]
             # @return [nil] nil as the curent Ruby version does not support String encoding
+            # :nocov:
             def format_encoding(_value)
               nil
             end
+            # :nocov:
           end
           module_function :format_encoding
         end

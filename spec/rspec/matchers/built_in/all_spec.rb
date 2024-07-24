@@ -12,6 +12,12 @@ module RSpec::Matchers::BuiltIn
       end
     end
 
+    it "refuses to invert" do
+      expect {
+        expect([5, 3, 3]).not_to all(be_odd)
+      }.to raise_error(NotImplementedError, /not_to all.*is not supported/)
+    end
+
     context 'when single matcher is given' do
 
       describe 'expect(...).to all(expected)' do

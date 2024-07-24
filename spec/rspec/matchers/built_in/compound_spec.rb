@@ -260,6 +260,26 @@ module RSpec::Matchers::BuiltIn
       end
     end
 
+    describe "expect(...).to custom_matcher.and(other_matcher)" do
+      it "treats a matcher that doesn't support value expectations correctly" do
+        expect {
+          expect([1, 2]).to include(1).and raise_error(/test/)
+        }.to fail_with(/but was not given a block/)
+      end
+
+      it "treats a matcher that does support value expectations correctly" do
+        expect([1, 2]).to include(1).and include(2)
+      end
+
+      it "treats a matcher that doesn't _specify_ as supporting value expectations" do
+        unsupporting_includes_class = Class.new(Object) do
+          def matches?(actual); actual.include?(2); end
+        end
+        unsupporting_includes = unsupporting_includes_class.new
+        expect([1, 2]).to include(1).and unsupporting_includes
+      end
+    end
+
     describe "expect(...).to matcher.and(other_matcher)" do
 
       it_behaves_like "an RSpec value matcher", :valid_value => 3, :invalid_value => 4, :disallows_negation => true do
@@ -971,6 +991,31 @@ module RSpec::Matchers::BuiltIn
         expect {
           expect(3).not_to eq(2).or be > 2
         }.to raise_error(NotImplementedError, /matcher.or matcher` is not supported/)
+      end
+    end
+
+    describe "#expects_call_stack_jump?" do
+      subject(:expects_call_stack_jump?) { matcher.expects_call_stack_jump? }
+      let(:matcher) { described_class.new(matcher_1, matcher_2) }
+      let(:matcher_1) { double("Matcher 1") }
+      let(:matcher_2) { double("Matcher 2") }
+
+      context "when neither matcher expects a call-stack jump" do
+        let(:matcher_1) { double("Matcher 1", :expects_call_stack_jump? => false) }
+        let(:matcher_2) { double("Matcher 2", :expects_call_stack_jump? => false) }
+        it { is_expected.to be_falsey }
+      end
+
+      context "when one of the matchers expects a call-stack jump" do
+        let(:matcher_1) { double("Matcher 1", :expects_call_stack_jump? => false) }
+        let(:matcher_2) { double("Matcher 2", :expects_call_stack_jump? => true) }
+        it { is_expected.to be_truthy }
+      end
+
+      context "when neither matcher _specifies_ that it expects a call-stack jump" do
+        let(:matcher_1) { Object.new }
+        let(:matcher_2) { Object.new }
+        it { is_expected.to be_falsey }
       end
     end
   end
