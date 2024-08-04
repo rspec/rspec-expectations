@@ -77,8 +77,11 @@ module RSpec
         def match(_expected, actual)
           evaluator_klass = if supports_block_expectations? && Proc === actual
                               NestedEvaluator
-                            else
+                            elsif supports_value_expectations?
                               SequentialEvaluator
+                            else
+                              # Can't raise an ArgumentError in this context, as it's rescued
+                              raise "Block and value matchers can't be combined in a compound expectation (#{matcher_1.description}, #{matcher_2.description})"
                             end
 
           @evaluator = evaluator_klass.new(actual, matcher_1, matcher_2)
