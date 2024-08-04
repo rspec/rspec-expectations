@@ -973,5 +973,20 @@ module RSpec::Matchers::BuiltIn
         }.to raise_error(NotImplementedError, /matcher.or matcher` is not supported/)
       end
     end
+
+    describe "composing block and value matchers" do
+      if RUBY_VERSION.to_f > 1.8 # The example can be adjusted to be compatible with Ruby 1.8, but it is then not indicative of the problem
+        binding.eval(<<-CODE, __FILE__, __LINE__)
+        it "is not supported" do
+          arr = []
+          expect {
+            expect { arr << :foo }
+              .to change { arr }.to be_one
+              .and change { arr }.to include(:foo) # There is a barely noticeable difference: the `.and` runs on the wrong matcher, `be_one` instead of `change`
+          }.to raise_error("Block and value matchers can't be combined in a compound expectation (be one, change result to include :foo)")
+        end
+        CODE
+      end
+    end
   end
 end
