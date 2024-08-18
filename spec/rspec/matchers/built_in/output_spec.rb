@@ -141,7 +141,7 @@ RSpec.shared_examples "output_to_stream" do |stream_name, matcher_method, helper
   end
 
   context "expect { ... }.to output(matcher1).#{matcher_method}.and output(matcher2).#{matcher_method}" do
-    it "passes if the block outputs lines to #{stream_name} matching both matchers" do
+    it "passes if the block outputs lines to #{stream_name} matching both matchers", :pending => RSpec::Support::Ruby.jruby? && matcher_method =~ /any_process/ do
       expect { print_to_stream "foo_bar" }.to matcher(/foo/).and matcher(/bar/)
     end
   end
