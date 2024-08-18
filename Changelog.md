@@ -12,6 +12,7 @@ Enhancements:
 
 * Improve the IO emulation in the output capture matchers (`output(...).to_stdout` et al)
   by adding `as_tty` and `as_not_tty` to change the `tty?` flags. (Sergio Gil Pérez de la Manga, #1459)
+* Add support for compound output matchers. (Eric Mueller, #1460)
 
 ### 3.13.1 / 2024-06-13
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.0...v3.13.1)
