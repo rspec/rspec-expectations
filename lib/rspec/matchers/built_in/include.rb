@@ -13,6 +13,7 @@ module RSpec
 
         # @api private
         def initialize(*expecteds)
+          raise(ArgumentError, 'Include matcher requires at least one argument') if expecteds.empty?
           @expecteds = expecteds
         end
 
