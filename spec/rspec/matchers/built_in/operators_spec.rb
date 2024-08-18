@@ -237,7 +237,7 @@ RSpec.describe "operator matchers", :uses_should do
       }.not_to raise_error
     end
 
-    it "complains when negated", :if => RUBY_VERSION.to_f >= 1.9 do
+    it "complains when negated", :skip => RUBY_VERSION.to_f < 1.9 do
       expect {
         o.should !~ o
       }.to raise_error(/does not support `should !~ .*Use `should_not =~/)
@@ -260,7 +260,7 @@ RSpec.describe "operator matchers", :uses_should do
       }.not_to raise_error
     end
 
-    it "complains when negated", :if => RUBY_VERSION.to_f >= 1.9 do
+    it "complains when negated", :skip => RUBY_VERSION.to_f < 1.9 do
       expect {
         o.should_not !~ :foo
       }.to raise_error(/does not support `should_not !~ .*Use `should =~/)
