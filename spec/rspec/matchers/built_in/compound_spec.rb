@@ -261,10 +261,17 @@ module RSpec::Matchers::BuiltIn
     end
 
     describe "expect(...).to custom_matcher.and(other_matcher)" do
-      it "treats a matcher that doesn't support value expectations correctly" do
-        expect {
-          expect([1, 2]).to include(1).and raise_error(/test/)
-        }.to fail_with(/but was not given a block/)
+      if RUBY_VERSION.to_f > 1.8 # The example can be adjusted to be compatible with Ruby 1.8, but it is then not indicative of the problem
+        binding.eval(<<-CODE, __FILE__, __LINE__)
+        it "does not allow composing incompatible matchers" do
+          arr = []
+          expect {
+            expect { arr << :foo }
+              .to change { arr }.to be_one
+              .and change { arr }.to include(:foo) # There is a barely noticeable difference: the `.and` runs on the wrong matcher, `be_one` instead of `change`
+          }.to raise_error("Block and value matchers can't be combined in a compound expectation (be one, change result to include :foo)")
+        end
+        CODE
       end
 
       it "treats a matcher that does support value expectations correctly" do
