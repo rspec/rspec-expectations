@@ -89,6 +89,7 @@ module RSpec
           ::RSpec.configuration.color_enabled?
         end
       else
+        # :nocov:
         # Indicates whether or not diffs should be colored.
         # Delegates to rspec-core's color option if rspec-core
         # is loaded; otherwise you can set it here.
@@ -100,8 +101,11 @@ module RSpec
         def color?
           defined?(@color) && @color
         end
+        # :nocov:
       end
 
+      # :nocov: Because this is only really _useful_ on 1.8, and hard to test elsewhere.
+      #
       # Adds `should` and `should_not` to the given classes
       # or modules. This can be used to ensure `should` works
       # properly on things like proxy objects (particular
@@ -114,6 +118,7 @@ module RSpec
           Expectations::Syntax.enable_should(mod)
         end
       end
+      # :nocov:
 
       # Sets or gets the backtrace formatter. The backtrace formatter should
       # implement `#format_backtrace(Array<String>)`. This is used

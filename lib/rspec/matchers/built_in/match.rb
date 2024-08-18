@@ -78,9 +78,11 @@ module RSpec
           # @api private
           # Returns match data names for named captures
           # @return Array
+          # :nocov:
           def names
             []
           end
+          # :nocov:
         else
           # @api private
           # Returns match data names for named captures

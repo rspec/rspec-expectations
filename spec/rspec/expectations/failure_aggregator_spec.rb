@@ -273,20 +273,19 @@ module RSpec::Expectations
             array = dbl.get(2)
             array << :foo
           end
-        }.to raise_error(
-          be_a(MultipleExpectationsNotMetError).and have_attributes(
-            :failures => [
-              be_a(RSpec::Mocks::MockExpectationError)
-            ],
-            :other_errors => [
-              # Checking only the class name, not the full message, because the hehaviour differes bettern Ruby 2 and 3.
-              # Ruby 3 uses #inspect in NoMethodError, while Ruby 2.x uses format that I can't override:
-              # NoMethodError (undefined method `<<' for #<RSpec::Expectations::FailureAggregator::AggregatedFailure:0x000055e4bac69ba8>)
-              # even if I override #to_s
-              be_a(NoMethodError).and(have_attributes(:message => /AggregatedFailure/))
-            ]
-          )
-        )
+        }.to raise_error do |err|
+          expect(err).to be_a(MultipleExpectationsNotMetError)
+          expect(err.failures).to contain_exactly(be_a(RSpec::Mocks::MockExpectationError))
+          expect(err.other_errors).to contain_exactly(be_a(NoMethodError))
+
+          # Checking only the class name, not the full message, because the behaviour across ruby versions.
+          # Some versions of Ruby 3 use #inspect in NoMethodError, but Ruby 2.x and 3.3 use formats that we
+          # can't control:
+          #
+          # Ruby2:   undefined method `<<' for #<RSpec::Expectations::FailureAggregator::AggregatedFailure:0x000055e4bac69ba8>
+          # Ruby3:   undefined method `<<' for an instance of RSpec::Expectations::FailureAggregator::AggregatedFailure
+          expect(err.other_errors.first.message).to match(/AggregatedFailure/)
+        end
       end
     end
 

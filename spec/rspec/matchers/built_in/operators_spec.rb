@@ -228,22 +228,48 @@ RSpec.describe "operator matchers", :uses_should do
   end
 
   describe RSpec::Matchers::BuiltIn::PositiveOperatorMatcher do
+    let(:o) { Object.new }
+    before { def o.send(*_args); raise "DOH! Library developers shouldn't use #send!"; end }
+
     it "works when the target has implemented #send" do
-      o = Object.new
-      def o.send(*_args); raise "DOH! Library developers shouldn't use #send!" end
       expect {
         o.should == o
       }.not_to raise_error
     end
+
+    it "complains when negated", :skip => RUBY_VERSION.to_f < 1.9 do
+      expect {
+        o.should !~ o
+      }.to raise_error(/does not support `should !~ .*Use `should_not =~/)
+    end
+
+    it "is described correctly" do
+      matcher = 7.should
+      expect(matcher == 7).to be_truthy
+      expect(matcher.description).to eq("== 7")
+    end
   end
 
   describe RSpec::Matchers::BuiltIn::NegativeOperatorMatcher do
+    let(:o) { Object.new }
+    before { def o.send(*_args); raise "DOH! Library developers shouldn't use #send!"; end }
+
     it "works when the target has implemented #send" do
-      o = Object.new
-      def o.send(*_args); raise "DOH! Library developers shouldn't use #send!" end
       expect {
         o.should_not == :foo
       }.not_to raise_error
+    end
+
+    it "complains when negated", :skip => RUBY_VERSION.to_f < 1.9 do
+      expect {
+        o.should_not !~ :foo
+      }.to raise_error(/does not support `should_not !~ .*Use `should =~/)
+    end
+
+    it "is described correctly" do
+      matcher = 7.should_not
+      expect(matcher == 8).to be_falsey
+      expect(matcher.description).to eq("== 8")
     end
   end
 end

@@ -6,6 +6,10 @@ module RSpec
 
       # @private
       class AggregatedFailure
+        # :nocov:
+        # `inspect` was apparently used by some versions early in ruby 3 while constructing
+        # NoMethodError, but seems to be no longer.
+        #
         # @private
         MESSAGE =
           'AggregatedFailure: This method caused a failure which has been ' \
@@ -15,6 +19,7 @@ module RSpec
         def inspect
           MESSAGE
         end
+        # :nocov:
       end
 
       AGGREGATED_FAILURE = AggregatedFailure.new
@@ -75,11 +80,13 @@ module RSpec
         # a backtrace that has a continuous common section with the raised `MultipleExpectationsNotMetError`,
         # so that rspec-core's truncation logic can work properly on it to list the backtrace
         # relative to the `aggregate_failures` block.
+        # :nocov:
         def assign_backtrace(failure)
           raise failure
         rescue failure.class => e
           failure.set_backtrace(e.backtrace)
         end
+        # :nocov:
       else
         # Using `caller` performs better (and is simpler) than `raise` on most Rubies.
         def assign_backtrace(failure)
