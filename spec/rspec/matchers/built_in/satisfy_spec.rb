@@ -120,3 +120,54 @@ RSpec.describe "expect(...).not_to satisfy { block }" do
     end
   end
 end
+
+RSpec.describe "expect { ... }.to satisfy { block }" do
+  it_behaves_like "an RSpec block matcher", :disallows_negation => true, :skip_deprecation_check => true do
+    let(:matcher) { satisfy { |v| v == 1 } }
+    before { @k = 0 }
+    def valid_block
+      1
+    end
+    def invalid_block
+      2
+    end
+  end
+
+  let(:ary) { [1, 2] }
+
+  it "matches the returned value" do
+    expect { ary.shift }.to satisfy { |returned_value| returned_value == 1 }
+  end
+
+  it "provides a sensible failure message", :skip => !RSpec::Support::RubyFeatures.ripper_supported? do
+    expect {
+      expect { ary.shift }.to satisfy { |returned_value| returned_value == :other }
+    }.to fail_with("expected 1 to satisfy expression `returned_value == :other`")
+  end
+
+  context "when negated" do
+    it "passes when the returned value doesn't match" do
+      expect { ary.shift }.not_to satisfy { |returned_value| returned_value == 2 }
+    end
+
+    it "fails when the retuned value matches", :skip => !RSpec::Support::RubyFeatures.ripper_supported? do
+      expect {
+        expect { ary.shift }.not_to satisfy { |returned_value| returned_value == 1 }
+      }.to fail_with("expected 1 not to satisfy expression `returned_value == 1`")
+    end
+  end
+
+  describe "composed usage" do
+    it "works as a root matcher" do
+      expect { ary.shift }.to satisfy { |returned_value| returned_value == 1 }.and change { ary }.to([2])
+    end
+
+    it "works as a supplemental matcher" do
+      expect { ary.shift }.to change { ary }.to([2]).and satisfy { |returned_value| returned_value == 1 }
+    end
+  end
+
+  pending "allows a matcher as an argument" do
+    expect { ary.shift }.to satisfy(eq(2))
+  end
+end
