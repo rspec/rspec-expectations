@@ -13,6 +13,7 @@ module RSpec
 
         # @api private
         def initialize(*expecteds)
+          raise(ArgumentError, 'include() is not supported, please supply an argument') if expecteds.empty?
           @expecteds = expecteds
         end
 
