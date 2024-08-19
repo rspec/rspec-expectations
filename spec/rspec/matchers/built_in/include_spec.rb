@@ -161,6 +161,12 @@ RSpec.describe "#include matcher" do
     end
   end
 
+  describe "expect(...).to include(with_no_args)" do
+    it "fails correctly" do
+      expect { expect([1, 2, 3]).to include }.to raise_error(ArgumentError)
+    end
+  end
+
   describe "expect(...).to include(with_one_arg)" do
     it_behaves_like "an RSpec value matcher", :valid_value => [1, 2], :invalid_value => [1] do
       let(:matcher) { include(2) }

@@ -7,6 +7,7 @@ Bug Fixes:
   (Eric Mueller, #1455)
 * Use `RSpec.warning` for an expectation warning rather than `Kernel.warn`. (Jon Rowe, #1472)
 * Prevent mismatched use of block and value matchers in compound expectations. (Phil Pirozhkov, #1476)
+* Raise an error when passing no arguments to the `include` matcher. (Eric Mueller, #1479)
 
 ### 3.13.1 / 2024-06-13
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.0...v3.13.1)
