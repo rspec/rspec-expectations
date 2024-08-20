@@ -1,5 +1,12 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.1...main)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.2...main)
+
+Enhancements:
+
+* Improve the IO emulation in the output capture matchers (`output(...).to_stdout` et al)
+  by adding `as_tty` and `as_not_tty` to change the `tty?` flags. (Sergio Gil Pérez de la Manga, #1459)
+
+### 3.13.2 / 2024-08-20
 
 Bug Fixes:
 
@@ -8,11 +15,6 @@ Bug Fixes:
 * Use `RSpec.warning` for an expectation warning rather than `Kernel.warn`. (Jon Rowe, #1472)
 * Prevent mismatched use of block and value matchers in compound expectations. (Phil Pirozhkov, #1476)
 * Raise an error when passing no arguments to the `include` matcher. (Eric Mueller, #1479)
-
-Enhancements:
-
-* Improve the IO emulation in the output capture matchers (`output(...).to_stdout` et al)
-  by adding `as_tty` and `as_not_tty` to change the `tty?` flags. (Sergio Gil Pérez de la Manga, #1459)
 
 ### 3.13.1 / 2024-06-13
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.0...v3.13.1)
