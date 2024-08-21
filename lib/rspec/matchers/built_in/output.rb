@@ -257,9 +257,9 @@ module RSpec
 
         private
 
-        def read_contents(strm)
-          strm.rewind
-          strm.read
+        def read_contents(captured_stream)
+          captured_stream.rewind
+          captured_stream.read
         end
 
         def clean_up_tempfile(tempfile)
