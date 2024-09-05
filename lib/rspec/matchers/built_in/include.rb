@@ -166,6 +166,7 @@ module RSpec
         end
 
         def actual_collection_includes?(expected_item)
+          return actual.scan(expected_item).size > 0 if Regexp === expected_item && String === actual
           return true if actual.include?(expected_item)
 
           # String lacks an `any?` method...
@@ -200,6 +201,7 @@ module RSpec
 
         def diff_would_wrongly_highlight_matched_item?
           return false unless actual.is_a?(String) && expected.is_a?(Array)
+          return false if Regexp === expecteds.first
 
           lines = actual.split("\n")
           expected.any? do |str|
