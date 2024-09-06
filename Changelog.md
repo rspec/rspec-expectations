@@ -1,6 +1,11 @@
 ### Development
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.2...3-13-maintenance)
 
+Bug Fixes:
+
+* Fix passing a regular expression to the `include` matcher without a count constraint.
+  (Jon Rowe, #1485)
+
 ### 3.13.2 / 2024-08-20
 [Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.1...v3.13.2)
 
@@ -29,7 +34,7 @@ Enhancements:
   (Alan Foster, #1425)
 
 ### 3.12.4 / 2024-02-04
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.3...v3.12.4)
+[Full Change12gglog](http://github.com/rspec/rspec-expectations/compare/v3.12.3...v3.12.4)
 
 Bug Fixes:
 
