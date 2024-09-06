@@ -6,6 +6,11 @@ Enhancements:
 * Improve the IO emulation in the output capture matchers (`output(...).to_stdout` et al)
   by adding `as_tty` and `as_not_tty` to change the `tty?` flags. (Sergio Gil Pérez de la Manga, #1459)
 
+Bug Fixes:
+
+* Fix passing a regular expression to the `include` matcher without a count constraint.
+  (Jon Rowe, #1485)
+
 ### 3.13.2 / 2024-08-20
 
 Bug Fixes:
@@ -33,7 +38,7 @@ Enhancements:
   (Alan Foster, #1425)
 
 ### 3.12.4 / 2024-02-04
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.3...v3.12.4)
+[Full Change12gglog](http://github.com/rspec/rspec-expectations/compare/v3.12.3...v3.12.4)
 
 Bug Fixes:
 
