@@ -4,6 +4,7 @@ Feature: `include` matcher
 
   ```ruby
   expect("a string").to include("a")
+  expect("a string").to include(/str..g/)
   expect("a string").to include(/a|str/).twice
   expect("a string").to include("str", "g")
   expect("a string").not_to include("foo")
@@ -80,6 +81,7 @@ Feature: `include` matcher
       RSpec.describe "a string" do
         it { is_expected.to include("str") }
         it { is_expected.to include("a", "str", "ng") }
+        it { is_expected.to include(/str..g/) }
         it { is_expected.to include(/a|str/).twice }
         it { is_expected.not_to include("foo") }
         it { is_expected.not_to include("foo", "bar") }
@@ -87,6 +89,7 @@ Feature: `include` matcher
         # deliberate failures
         it { is_expected.to include("foo") }
         it { is_expected.not_to include("str") }
+        it { is_expected.not_to include(/str..g/) }
         it { is_expected.to include("str").at_least(:twice) }
         it { is_expected.to include("str", "foo") }
         it { is_expected.not_to include("str", "foo") }
@@ -94,8 +97,9 @@ Feature: `include` matcher
       """
     When I run `rspec string_include_matcher_spec.rb`
     Then the output should contain all of these:
-      | 10 examples, 5 failures                                                     |
+      | 12 examples, 6 failures                                                     |
       | expected "a string" to include "foo"                                        |
+      | expected "a string" not to include /str..g/                                 |
       | expected "a string" not to include "str"                                    |
       | expected "a string" to include "str" at least twice but it is included once |
       | expected "a string" to include "foo"                                        |

@@ -215,6 +215,10 @@ RSpec.describe "#include matcher" do
         expect("abc").to include("a")
       end
 
+      it "passes if target matches a regexp" do
+        expect("abc").to include(/[cba]{3}/)
+      end
+
       it "fails if target does not include expected" do
         expect {
           expect("abc").to include("d")
@@ -240,16 +244,20 @@ RSpec.describe "#include matcher" do
       end
 
       context "with exact count" do
-        it 'fails if the block yields wrong number of times' do
+        it 'fails if the string contains the wrong number of occurences' do
           expect {
             expect('foo bar foo').to include('foo').once
           }.to fail_with(/expected "foo bar foo" to include "foo" once but it is included twice/)
+          expect {
+            expect('foo bar foo').to include(/[of]{3}/).once
+          }.to fail_with(/expected "foo bar foo" to include \/\[of\]\{3\}\/ once but it is included twice/)
         end
 
-        it 'passes if the block yields the specified number of times' do
+        it 'passes if the string contains the correct number of occurences' do
           expect('fooo bar').to include('oo').once
           expect('fooo bar').to include('o').thrice
           expect('fooo ooo oo bar foo').to include('oo').exactly(4).times
+          expect('fooo ooo oo bar foo').to include(/fo{2}/).exactly(2).times
         end
       end
 
