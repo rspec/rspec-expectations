@@ -38,7 +38,7 @@ Enhancements:
   (Alan Foster, #1425)
 
 ### 3.12.4 / 2024-02-04
-[Full Change12gglog](http://github.com/rspec/rspec-expectations/compare/v3.12.3...v3.12.4)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.12.3...v3.12.4)
 
 Bug Fixes:
 
