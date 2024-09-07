@@ -1,10 +1,13 @@
 ### Development
-[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.2...main)
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.3...main)
 
 Enhancements:
 
 * Improve the IO emulation in the output capture matchers (`output(...).to_stdout` et al)
   by adding `as_tty` and `as_not_tty` to change the `tty?` flags. (Sergio Gil Pérez de la Manga, #1459)
+
+### 3.13.3 / 2024-09-07
+[Full Changelog](http://github.com/rspec/rspec-expectations/compare/v3.13.2...v3.13.3)
 
 Bug Fixes:
 
