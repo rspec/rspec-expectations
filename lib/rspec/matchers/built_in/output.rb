@@ -46,7 +46,7 @@ module RSpec
         # Works when subprocesses print to stdout as well.
         # This is significantly (~30x) slower than `to_stdout`
         def to_stdout_from_any_process
-          @stream_capturer = CaptureStreamToTempfile.new("stdout", $stdout)
+          @stream_capturer = CaptureStreamToTempfile.new("stdout", STDOUT) # rubocop:disable Style/GlobalStdStream
           self
         end
 
@@ -55,7 +55,7 @@ module RSpec
         # Works when subprocesses print to stderr as well.
         # This is significantly (~30x) slower than `to_stderr`
         def to_stderr_from_any_process
-          @stream_capturer = CaptureStreamToTempfile.new("stderr", $stderr)
+          @stream_capturer = CaptureStreamToTempfile.new("stderr", STDERR) # rubocop:disable Style/GlobalStdStream
           self
         end
 
