@@ -169,6 +169,16 @@ module RSpec
           end
         end
       }
+
+      it "passes even if $stderr has previously been set to a StringIO" do
+        original_stderr = $stderr
+        begin
+          $stderr = StringIO.new
+          expect { print_to_stream("foo") }.to output("foo").to_stderr_from_any_process
+        ensure
+          $stderr = original_stderr
+        end
+      end
     end
 
     RSpec.describe "output.to_stdout_from_any_process matcher" do
@@ -181,6 +191,16 @@ module RSpec
           end
         end
       }
+
+      it "passes even if $stdout has previously been set to a StringIO" do
+        original_stdout = $stdout
+        begin
+          $stdout = StringIO.new
+          expect { print_to_stream("foo") }.to output("foo").to_stdout_from_any_process
+        ensure
+          $stdout = original_stdout
+        end
+      end
     end
 
     RSpec.describe "output (without `to_stdout` or `to_stderr`)" do
