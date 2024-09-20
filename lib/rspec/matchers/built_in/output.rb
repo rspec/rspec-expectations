@@ -46,7 +46,7 @@ module RSpec
         # Works when subprocesses print to stdout as well.
         # This is significantly (~30x) slower than `to_stdout`
         def to_stdout_from_any_process
-          @stream_capturer = CaptureStreamToTempfile.new("stdout", STDOUT) # rubocop:disable Style/GlobalStdStream
+          @stream_capturer = CaptureStreamToTempfile.new("stdout")
           self
         end
 
@@ -55,7 +55,7 @@ module RSpec
         # Works when subprocesses print to stderr as well.
         # This is significantly (~30x) slower than `to_stderr`
         def to_stderr_from_any_process
-          @stream_capturer = CaptureStreamToTempfile.new("stderr", STDERR) # rubocop:disable Style/GlobalStdStream
+          @stream_capturer = CaptureStreamToTempfile.new("stderr")
           self
         end
 
@@ -213,7 +213,7 @@ module RSpec
       end
 
       # @private
-      class CaptureStreamToTempfile < Struct.new(:name, :stream)
+      class CaptureStreamToTempfile < Struct.new(:name)
         def capture(block)
           # We delay loading tempfile until it is actually needed because
           # we want to minimize stdlibs loaded so that users who use a
@@ -223,19 +223,29 @@ module RSpec
           # thread, fileutils, etc), so it's worth delaying it until this point.
           require 'tempfile'
 
-          original_stream = stream.clone
+          stream = name == 'stdout' ? STDOUT : STDERR # rubocop:ignore Style/GlobalStdStream
           captured_stream = Tempfile.new(name)
 
           begin
+            if name == 'stdout'
+              $stdout = captured_stream
+            else
+              $stderr = captured_stream
+            end
             captured_stream.sync = true
             stream.reopen(captured_stream)
             block.call
             captured_stream.rewind
             captured_stream.read
           ensure
-            stream.reopen(original_stream)
+            stream.reopen(stream)
             captured_stream.close
             captured_stream.unlink
+            if name == 'stdout'
+              $stdout = stream
+            else
+              $stderr = stream
+            end
           end
         end
       end
