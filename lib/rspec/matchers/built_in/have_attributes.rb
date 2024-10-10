@@ -6,7 +6,7 @@ module RSpec
       # Not intended to be instantiated directly.
       class HaveAttributes < BaseMatcher
         # @private
-        attr_reader :respond_to_failed
+        attr_reader :respond_to_failed, :match_failed
 
         def initialize(expected)
           @expected = expected
@@ -42,6 +42,9 @@ module RSpec
         # @return [String]
         def description
           described_items = surface_descriptions_in(expected)
+
+          return improve_hash_formatting "have attributes #{RSpec::Support::ObjectFormatter.format(described_items)} but had attributes #{ formatted_values }" if match_failed
+
           improve_hash_formatting "have attributes #{RSpec::Support::ObjectFormatter.format(described_items)}"
         end
 
@@ -55,7 +58,7 @@ module RSpec
         # @return [String]
         def failure_message
           respond_to_failure_message_or do
-            "expected #{actual_formatted} to #{description} but had attributes #{ formatted_values }"
+            "expected #{actual_formatted} to #{description}"
           end
         end
 
@@ -77,9 +80,11 @@ module RSpec
 
         def perform_match(predicate)
           cache_all_values
-          expected.__send__(predicate) do |attribute_key, attribute_value|
+          result = expected.__send__(predicate) do |attribute_key, attribute_value|
             actual_has_attribute?(attribute_key, attribute_value)
           end
+          @match_failed = !result
+          result
         end
 
         def actual_has_attribute?(attribute_key, attribute_value)
