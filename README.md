@@ -1,5 +1,7 @@
 # RSpec Expectations [![Build Status](https://github.com/rspec/rspec-expectations/workflows/RSpec%20CI/badge.svg)](https://github.com/rspec/rspec-expectations/actions) [![Code Climate](https://codeclimate.com/github/rspec/rspec-expectations.svg)](https://codeclimate.com/github/rspec/rspec-expectations)
 
+**This is the old rspec expectations repository, please see the monorepo rspec/rspec for new issues and releases.**
+
 RSpec::Expectations lets you express expected outcomes on an object in an
 example.
 
